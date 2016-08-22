@@ -1,0 +1,78 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gw2_Serverselection"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Gw2_Serverselection.MainWindow"
+        mc:Ignorable="d"
+        Title="Gw2 Launchbuddy BETA" Height="792" Width="700" ResizeMode="NoResize" Icon="launchbuddy.ico">
+    <Grid Margin="0,0,0,3">
+        <Label x:Name="label" Content="Authentication Servers:" HorizontalAlignment="Left" Margin="10,113,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072"/>
+        <Label x:Name="label_Copy" Content="Assets Servers (early alpha):" HorizontalAlignment="Left" Margin="344,113,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072"/>
+        <Button x:Name="button" Content="Check Servers" HorizontalAlignment="Left" Margin="10,350,0,0" VerticalAlignment="Top" Width="667" Click="button_Click" Height="35"/>
+        <ListView x:Name="listview_auth" HorizontalAlignment="Left" Height="200" Margin="10,139,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="listview_auth_SelectionChanged">
+            <ListView.View>
+                <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
+                    <GridViewColumn Header="IP" HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding Path=IP}"/>
+                    <GridViewColumn Header="Port" HeaderStringFormat="" Width="65" DisplayMemberBinding="{Binding Path=Port}"/>
+                    <GridViewColumn Header="Type" HeaderStringFormat="" Width="70" DisplayMemberBinding="{Binding Path=Location}"/>
+                    <GridViewColumn Header="Ping [ms]" Width="60" DisplayMemberBinding="{Binding Path=Ping}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView x:Name="listview_assets" HorizontalAlignment="Left" Height="200" Margin="344,139,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="listview_assets_SelectionChanged">
+            <ListView.View>
+                <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
+                    <GridViewColumn Header="IP" HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding Path=IP}"/>
+                    <GridViewColumn Header="Port" HeaderStringFormat="" Width="65" DisplayMemberBinding="{Binding Path=Port}"/>
+                    <GridViewColumn Header="Location" HeaderStringFormat="" Width="75" DisplayMemberBinding="{Binding Path=Location}"/>
+                    <GridViewColumn Header="Ping [ms]" Width="60" DisplayMemberBinding="{Binding Path=Ping}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <CheckBox x:Name="checkb_auth" Content="Use Authentication Server :" HorizontalAlignment="Left" Margin="11,400,0,0" VerticalAlignment="Top" Width="385" FontSize="16" IsEnabled="False" Checked="checkb_auth_Checked" Unchecked="checkb_auth_Unchecked"/>
+        <CheckBox x:Name="checkb_assets" Content="Use Assets Server : " HorizontalAlignment="Left" Margin="11,426,0,0" VerticalAlignment="Top" Width="385" FontSize="16" IsEnabled="False" Checked="checkb_assets_Checked" Unchecked="checkb_assets_Unchecked"/>
+        <Button x:Name="bt_launch" Content="Launch Gw2" HorizontalAlignment="Left" Margin="12,630,0,0" VerticalAlignment="Top" Width="667" Height="50" Click="bt_launch_Click"/>
+        <Label x:Name="lab_version" Content="Build Version:" HorizontalAlignment="Left" Margin="11,25,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lab_para" Content="Latest Startparameters:" HorizontalAlignment="Left" Margin="11,51,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lab_path" Content="Installation Path:" HorizontalAlignment="Left" Margin="87,77,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="bt_installpath" Content="Change Directory" HorizontalAlignment="Left" Margin="561,77,0,0" VerticalAlignment="Top" Width="103" Click="bt_installpath_Click"/>
+        <GroupBox x:Name="groupBox" Header="Gw2 Client Info" HorizontalAlignment="Left" Height="98" Margin="9,10,0,0" VerticalAlignment="Top" Width="667"/>
+        <TextBox x:Name="tb_authport" HorizontalAlignment="Left" Height="23" Margin="533,398,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="tb_authport_TextChanged" IsEnabled="False"/>
+        <TextBox x:Name="tb_assetsport" HorizontalAlignment="Left" Height="23" Margin="533,427,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="tb_assetsport_TextChanged" IsEnabled="False"/>
+        <Label x:Name="lab_port_auth" Content="Port (optional):" HorizontalAlignment="Left" Margin="439,396,0,0" VerticalAlignment="Top" IsEnabled="False"/>
+        <Label x:Name="lab_port_assets" Content="Port (optional):" HorizontalAlignment="Left" Margin="439,425,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.543,1.769" IsEnabled="False"/>
+        <Label x:Name="label1" Content="Install Path:" HorizontalAlignment="Left" Margin="11,77,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label2" Content="Gw2 Launchbuddy by TheCheatsrichter" HorizontalAlignment="Left" Margin="463,-3,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="bt_shortcut" Content="Create Shortcut" HorizontalAlignment="Left" Margin="11,689,0,0" VerticalAlignment="Top" Width="668" Height="53" Click="bt_shortcut_Click"/>
+        <ListBox x:Name="arglistbox" HorizontalAlignment="Left" Height="133" Margin="12,483,0,0" VerticalAlignment="Top" Width="331" SelectionChanged="arglistbox_SelectionChanged" >
+            <CheckBox Content="-32"/>
+            <CheckBox Content="-repair"/>
+            <CheckBox Content="-bmp"/>
+            <CheckBox Content="-diag"/>
+            <CheckBox Content="-dx9single"/>
+            <CheckBox Content="-forwardrenderer"/>
+            <CheckBox Content="-image"/>
+            <CheckBox Content="-log"/>
+            <CheckBox Content="-maploadinfo"/>
+            <CheckBox Content="-mce"/>
+            <CheckBox Content="-nomusic"/>
+            <CheckBox Content="-noui"/>
+            <CheckBox Content="-nosound"/>
+            <CheckBox Content="-prefreset"/>
+            <CheckBox Content="-uispanallmonitors"/>
+            <CheckBox Content="-shareArchive"/>
+            <CheckBox Content="-uninstall"/>
+            <CheckBox Content="-useOldFov"/>
+            <CheckBox Content="-verify"/>
+            <CheckBox Content="-windowed"/>
+            <CheckBox Content="-umbra gpu"/>
+        </ListBox>
+        <Label x:Name="lab_descr" Content="Description (Wiki):" HorizontalAlignment="Left" Margin="353,457,0,0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textblock_descr" HorizontalAlignment="Left" Margin="359,483,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="112" Width="318"/>
+        <Label x:Name="lab_arglist" Content="Arguments:" HorizontalAlignment="Left" Margin="12,457,0,0" VerticalAlignment="Top"/>
+        <Separator HorizontalAlignment="Left" Height="11" Margin="10,452,0,0" VerticalAlignment="Top" Width="667"/>
+
+    </Grid>
+</Window>
