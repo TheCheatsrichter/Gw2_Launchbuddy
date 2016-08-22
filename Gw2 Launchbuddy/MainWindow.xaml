@@ -9,7 +9,7 @@
         Title="Gw2 Launchbuddy BETA" Height="792" Width="700" ResizeMode="NoResize" Icon="launchbuddy.ico">
     <Grid Margin="0,0,0,3">
         <Label x:Name="label" Content="Authentication Servers:" HorizontalAlignment="Left" Margin="10,113,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072"/>
-        <Label x:Name="label_Copy" Content="Assets Servers (early alpha):" HorizontalAlignment="Left" Margin="344,113,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072"/>
+        <Label x:Name="label_Copy" Content="Assets Servers (under development):" HorizontalAlignment="Left" Margin="344,113,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072"/>
         <Button x:Name="button" Content="Check Servers" HorizontalAlignment="Left" Margin="10,350,0,0" VerticalAlignment="Top" Width="667" Click="button_Click" Height="35"/>
         <ListView x:Name="listview_auth" HorizontalAlignment="Left" Height="200" Margin="10,139,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="listview_auth_SelectionChanged">
             <ListView.View>
@@ -21,7 +21,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView x:Name="listview_assets" HorizontalAlignment="Left" Height="200" Margin="344,139,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="listview_assets_SelectionChanged">
+        <ListView x:Name="listview_assets" HorizontalAlignment="Left" Height="200" Margin="344,139,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="listview_assets_SelectionChanged" IsEnabled="False">
             <ListView.View>
                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
                     <GridViewColumn Header="IP" HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding Path=IP}"/>
