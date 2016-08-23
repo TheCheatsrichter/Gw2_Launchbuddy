@@ -53,6 +53,16 @@
         <Label x:Name="label2" Content="Gw2 Launchbuddy by TheCheatsrichter" HorizontalAlignment="Right" Margin="0,-2,10,0" VerticalAlignment="Top" Grid.Column="2" Height="26" Width="217"/>
         <Button x:Name="bt_shortcut" Content="Create Shortcut" HorizontalAlignment="Left" Margin="0,829,0,0" VerticalAlignment="Top" Width="685" Height="35" Click="bt_shortcut_Click" Grid.ColumnSpan="2" Grid.Column="1"/>
         <ListBox x:Name="arglistbox" HorizontalAlignment="Left" Height="133" Margin="5,132,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="arglistbox_SelectionChanged" Grid.Column="1" >
+            <ListBox.Resources>
+                <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsMouseOver,RelativeSource={RelativeSource Self}}" 
+                         Value="True">
+                            <Setter Property="IsSelected" Value="True" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Resources>
             <CheckBox Content="-32" Margin="5,0,0,0"/>
             <CheckBox Content="-repair" Margin="5,0,0,0"/>
             <CheckBox Content="-bmp" Margin="5,0,0,0"/>
@@ -75,7 +85,7 @@
             <CheckBox Content="-windowed" Margin="5,0,0,0"/>
             <CheckBox Content="-umbra gpu" Margin="5,0,0,0"/>
         </ListBox>
-        <Label x:Name="lab_descr" Content="Description (Wiki):" HorizontalAlignment="Left" Margin="2,106,0,0" VerticalAlignment="Top" Grid.Column="2" Height="26" Width="106"/>
+        <Label x:Name="lab_descr" Content="Description (Wiki):" HorizontalAlignment="Left" Margin="2,106,0,0" VerticalAlignment="Top" Grid.Column="2" Height="26" Width="330"/>
         <TextBlock x:Name="textblock_descr" HorizontalAlignment="Left" Margin="5,132,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="133" Width="327" Grid.Column="2"/>
         <Label x:Name="lab_arglist" Content="Arguments:" HorizontalAlignment="Left" Margin="2,106,0,0" VerticalAlignment="Top" Height="26" Width="71" Grid.Column="1"/>
         <CheckBox x:Name="checkb_clientport" Content="Use Clientport: " HorizontalAlignment="Left" Margin="7,569,0,0" VerticalAlignment="Top" Width="385" FontSize="16" Checked="checkb_clientport_Checked" Unchecked="checkb_clientport_Unchecked" Height="21" Grid.ColumnSpan="2" Grid.Column="1"/>

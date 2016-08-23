@@ -437,102 +437,107 @@ namespace Gw2_Serverselection
         private void arglistbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Description switch. Should have used extern file / dictionary
-
-            object selecteditem = arglistbox.SelectedItem;
-            System.Windows.Controls.CheckBox item = (System.Windows.Controls.CheckBox)selecteditem;
-            switch(item.Content.ToString())
+            if (arglistbox.SelectedItem != null)
             {
-                case "-32":
-                    textblock_descr.Text = "Forces the game to run in 32 bit.";
-                    break;
 
-                case "-bmp":
-                    textblock_descr.Text = "Forces the game to create lossless screenshots as .BMP files. Use for creating high-quality screenshots at the expense of much larger files.";
-                    break;
+                object selecteditem = arglistbox.SelectedItem;
+                System.Windows.Controls.CheckBox item = (System.Windows.Controls.CheckBox)selecteditem;
+                lab_descr.Content = "Description ("+ item.Content.ToString() + "):";
 
-                case "-diag":
-                    textblock_descr.Text = "Instead of launching the game, this command creates a detailed diagnostic file that contains diagnostic data that can be used for troubleshooting. The file, NetworkDiag.log, will be located in your game directory or Documents/Guild Wars . If you want to use this feature, be sure to create a separate shortcut for it.";
-                    break;
+                switch (item.Content.ToString())
+                {
+                    case "-32":
 
-                case "-dx9single":
-                    textblock_descr.Text = "Enables the Direct3D 9c renderer in single-threaded mode. Improves performance in Wine with CSMT.";
-                    break;
+                        textblock_descr.Text = "Forces the game to run in 32 bit.";
+                        break;
 
-                case "-forwardrenderer":
-                    textblock_descr.Text = "Uses Forward Rendering instead of Deferred Rendering (unfinished). This currently may lead to shadows and lighting to not appear as expected.It may increase the framerate and responsiveness when using AMD graphics card";
-                    break;
+                    case "-bmp":
+                        textblock_descr.Text = "Forces the game to create lossless screenshots as .BMP files. Use for creating high-quality screenshots at the expense of much larger files.";
+                        break;
 
-                case "-image":
-                    textblock_descr.Text = "Runs the patch UI only in order to download any available updates; closes immediately without loading the login form. ";
-                    break;
+                    case "-diag":
+                        textblock_descr.Text = "Instead of launching the game, this command creates a detailed diagnostic file that contains diagnostic data that can be used for troubleshooting. The file, NetworkDiag.log, will be located in your game directory or Documents/Guild Wars . If you want to use this feature, be sure to create a separate shortcut for it.";
+                        break;
 
-                case "-log":
-                    textblock_descr.Text = ("Enables the creation of a log file, used mostly by Support. The path for the generated file usually is found in the APPDATA folder");
-                    break;
+                    case "-dx9single":
+                        textblock_descr.Text = "Enables the Direct3D 9c renderer in single-threaded mode. Improves performance in Wine with CSMT.";
+                        break;
 
-                case "-mce":
-                    textblock_descr.Text = "Start the client with Windows Media Center compatibility, switching the game to full screen and restarting Media Center (if available) after the client is closed.";
-                    break;
+                    case "-forwardrenderer":
+                        textblock_descr.Text = "Uses Forward Rendering instead of Deferred Rendering (unfinished). This currently may lead to shadows and lighting to not appear as expected.It may increase the framerate and responsiveness when using AMD graphics card";
+                        break;
 
-                case "-nomusic":
-                    textblock_descr.Text = "Disables music and background music.";
-                    break;
+                    case "-image":
+                        textblock_descr.Text = "Runs the patch UI only in order to download any available updates; closes immediately without loading the login form. ";
+                        break;
 
-                case "-noui":
-                    textblock_descr.Text = "Disables the user interface. This does the same thing as pressing Ctrl+Shift+H in the game.";
-                    break;
+                    case "-log":
+                        textblock_descr.Text = ("Enables the creation of a log file, used mostly by Support. The path for the generated file usually is found in the APPDATA folder");
+                        break;
 
-                case "-nosound":
-                    textblock_descr.Text = "Disables audio system completely.";
-                    break;
+                    case "-mce":
+                        textblock_descr.Text = "Start the client with Windows Media Center compatibility, switching the game to full screen and restarting Media Center (if available) after the client is closed.";
+                        break;
 
-                case "-prefreset":
-                    textblock_descr.Text = "Resets game settings.";
-                    break;
+                    case "-nomusic":
+                        textblock_descr.Text = "Disables music and background music.";
+                        break;
 
-                case "-repair":
-                    textblock_descr.Text = "Start the client, checks the files for errors and repairs them as needed. This can take a long time (1/2 hour or an hour) to run as it checks the entire contents of the 20-30 gigabyte archive.";
-                    break;
+                    case "-noui":
+                        textblock_descr.Text = "Disables the user interface. This does the same thing as pressing Ctrl+Shift+H in the game.";
+                        break;
 
-                case "-shareArchive":
-                    textblock_descr.Text = "Opens the Gw2.dat file in shared mode so that it can be accessed from other processes while the game is running.";
-                    break;
+                    case "-nosound":
+                        textblock_descr.Text = "Disables audio system completely.";
+                        break;
 
-                case "-uispanallmonitors":
-                    textblock_descr.Text = "Spreads user interface across all monitors in a triple monitor setup.";
-                    break;
+                    case "-prefreset":
+                        textblock_descr.Text = "Resets game settings.";
+                        break;
 
-                case "-uninstall":
-                    textblock_descr.Text = "Presents the uninstall dialog. If uninstall is accepted, it deletes the contents of the Guild Wars 2 installation folder except GW2.EXE itself and any manually created subfolders. Contents in subfolders (if any) are not deleted.";
-                    break;
+                    case "-repair":
+                        textblock_descr.Text = "Start the client, checks the files for errors and repairs them as needed. This can take a long time (1/2 hour or an hour) to run as it checks the entire contents of the 20-30 gigabyte archive.";
+                        break;
 
-                case "-useOldFov":
-                    textblock_descr.Text = "Disables the widescreen field-of-view enhancements and restores the original field-of-view.";
-                    break;
+                    case "-shareArchive":
+                        textblock_descr.Text = "Opens the Gw2.dat file in shared mode so that it can be accessed from other processes while the game is running.";
+                        break;
 
-                case "-verify":
-                    textblock_descr.Text = "Used to verify the .dat file.";
-                    break;
+                    case "-uispanallmonitors":
+                        textblock_descr.Text = "Spreads user interface across all monitors in a triple monitor setup.";
+                        break;
 
-                case "-windowed":
-                    textblock_descr.Text = "Forces Guild Wars 2 to run in windowed mode. In game, you can switch to windowed mode by pressing Alt + Enter or clicking the window icon in the upper right corner.";
-                    break;
+                    case "-uninstall":
+                        textblock_descr.Text = "Presents the uninstall dialog. If uninstall is accepted, it deletes the contents of the Guild Wars 2 installation folder except GW2.EXE itself and any manually created subfolders. Contents in subfolders (if any) are not deleted.";
+                        break;
 
-                case "-umbra gpu":
-                    textblock_descr.Text = "Forces the use of umbra's GPU accelerated culling. In most cases, using this results in higher cpu usage and lower gpu usage decreasing the frame-rate.";
-                    break;
+                    case "-useOldFov":
+                        textblock_descr.Text = "Disables the widescreen field-of-view enhancements and restores the original field-of-view.";
+                        break;
 
-                case "-maploadinfo":
-                    textblock_descr.Text = "Shows diagnostic information during map loads, including load percentages and elapsed time.";
-                    break;
+                    case "-verify":
+                        textblock_descr.Text = "Used to verify the .dat file.";
+                        break;
 
-                default:
-                    textblock_descr.Text = "Description missing!. (PLS REPORT)";
-                    break;
+                    case "-windowed":
+                        textblock_descr.Text = "Forces Guild Wars 2 to run in windowed mode. In game, you can switch to windowed mode by pressing Alt + Enter or clicking the window icon in the upper right corner.";
+                        break;
+
+                    case "-umbra gpu":
+                        textblock_descr.Text = "Forces the use of umbra's GPU accelerated culling. In most cases, using this results in higher cpu usage and lower gpu usage decreasing the frame-rate.";
+                        break;
+
+                    case "-maploadinfo":
+                        textblock_descr.Text = "Shows diagnostic information during map loads, including load percentages and elapsed time.";
+                        break;
+
+                    default:
+                        textblock_descr.Text = "Description missing!. (PLS REPORT)";
+                        break;
+                }
+
             }
 
-
-           
         }
 
         private void bt_shortcut_Click(object sender, RoutedEventArgs e)
@@ -577,13 +582,18 @@ namespace Gw2_Serverselection
 
         void safeaccounts()
         {
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\Launchbuddy.bin";
-            using (Stream stream = System.IO.File.Open(path, FileMode.Create))
+            try
             {
-                var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\Launchbuddy.bin";
+                using (Stream stream = System.IO.File.Open(path, FileMode.Create))
+                {
+                    var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
-                bformatter.Serialize(stream, accountlist);
+                    bformatter.Serialize(stream, accountlist);
+                }
             }
+            catch (Exception e)
+            { MessageBox.Show(e.Message); }
         }
 
         void loadaccounts()
@@ -592,7 +602,7 @@ namespace Gw2_Serverselection
 
                 var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\Launchbuddy.bin";
 
-                if (System.IO.File.Exists(path) == false)
+                if (System.IO.File.Exists(path) == true)
                 {
                     using (Stream stream = System.IO.File.Open(path, FileMode.Open))
                     {
@@ -616,7 +626,7 @@ namespace Gw2_Serverselection
             {
                 if (tb_passw.Text.Length > 4)
                 {
-                    Account acc = new Account { Email= tb_email.Text, Password= tb_passw.Text, Time = DateTime.Today};
+                    Account acc = new Account { Email= tb_email.Text, Password= tb_passw.Text, Time = DateTime.Now};
                     accountlist.Add(acc);
                     listview_acc.ItemsSource = accountlist;
                 }
@@ -704,7 +714,8 @@ namespace Gw2_Serverselection
 
             if (cb_login.IsChecked == true)
             {
-                if (selected_acc.Email != "" && selected_acc.Password != "")
+               
+                if (selected_acc.Email != null && selected_acc.Password != null)
                 {
                     arguments += "-nopatchui -email " + selected_acc.Email + " -password " + selected_acc.Password;
                 }
