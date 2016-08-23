@@ -23,15 +23,11 @@ namespace Gw2_Serverselection
     {
         List<String> authlist = new List<String>();
         List<String> assetlist = new List<String>();
-        //List<String> arguments = new List<String>();
         ObservableCollection<Account> accountlist = new ObservableCollection<Account>();
-
 
         Server selected_authsv = new Server();
         Server selected_assetsv = new Server();
         Account selected_acc = new Account();
-
-
 
         string exepath,exename;
 
@@ -64,6 +60,7 @@ namespace Gw2_Serverselection
         void createlist()
         {
             //Harcoded server lists. Should later use .xml files
+            //Will use Server class when questions about auth1/auth2 and asset list are solved
 
             // Listed as auth1 servers (NA?)
             authlist.Add("64.25.38.51:6112:Auth1");
@@ -547,9 +544,9 @@ namespace Gw2_Serverselection
             {
                 Process.Start(exepath);
             }
-            catch
+            catch(Exception err)
             {
-
+                MessageBox.Show("Could not open file directory\n"+err.Message);
             }
         }
 
