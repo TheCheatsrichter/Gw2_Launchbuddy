@@ -588,16 +588,26 @@ namespace Gw2_Serverselection
 
         void loadaccounts()
         {
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\Launchbuddy.bin";
-            using (Stream stream = System.IO.File.Open(path, FileMode.Open))
-            {
-                var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            try {
+
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\Launchbuddy.bin";
+
+                if (System.IO.File.Exists(path) == false)
+                {
+                    using (Stream stream = System.IO.File.Open(path, FileMode.Open))
+                    {
+                        var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
 
-                accountlist = (ObservableCollection<Account>)bformatter.Deserialize(stream);
-                listview_acc.ItemsSource = accountlist;
+                        accountlist = (ObservableCollection<Account>)bformatter.Deserialize(stream);
+                        listview_acc.ItemsSource = accountlist;
 
+                    }
+                }
             }
+            catch(Exception e)
+            { MessageBox.Show(e.Message); }
+            
         }
 
         private void bt_addacc_Click(object sender, RoutedEventArgs e)
