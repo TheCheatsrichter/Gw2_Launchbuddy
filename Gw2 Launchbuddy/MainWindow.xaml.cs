@@ -8,6 +8,9 @@ using System.IO;
 using System.Diagnostics;
 using IWshRuntimeLibrary;
 using System.Reflection;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
+
 
 
 namespace Gw2_Serverselection
@@ -21,24 +24,40 @@ namespace Gw2_Serverselection
         List<String> authlist = new List<String>();
         List<String> assetlist = new List<String>();
         //List<String> arguments = new List<String>();
+        ObservableCollection<Account> accountlist = new ObservableCollection<Account>();
+
 
         Server selected_authsv = new Server();
         Server selected_assetsv = new Server();
+        Account selected_acc = new Account();
+
+
 
         string exepath,exename;
 
-        class Server
+        [Serializable]
+        public class Server
         {
-            public string IP;
-            public string Port;
-            public string Ping;
+            public string IP { get; set; }
+            public string Port { get; set; }
+            public string Ping { get; set; }
+        }
+
+        [Serializable]
+        public class Account
+        {
+            public string Email { get; set; }
+            public string Password { get; set; }
+            public DateTime Time { get; set; }
         }
 
         public MainWindow()
         {
             InitializeComponent();
+            accountlist.Clear();
             createlist();
             loadconfig();
+            loadaccounts();
             
         }
 
@@ -82,7 +101,7 @@ namespace Gw2_Serverselection
 
             //Find the newest xml file in APPDATA (the xml files share the same name as their exe files -> multiple .xml files possible!)
 
-            string[] configfiles = Directory.GetFiles(@"C:\Users\" + Environment.UserName + @"\AppData\Roaming\Guild Wars 2\","*.exe.xml");
+            string[] configfiles = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)+@"\Guild Wars 2\","*.exe.xml");
             string sourcepath="";
             long max = 0;
 
@@ -133,9 +152,8 @@ namespace Gw2_Serverselection
                             foreach (string parameter in parameters)
                             {
                                 lab_para.Content = lab_para.Content + " "+ parameter;
-
+                                
                             }
-
                             // Automatically  set checks of previously used arguments
 
                             foreach (CheckBox entry in arglistbox.Items)
@@ -530,6 +548,129 @@ namespace Gw2_Serverselection
             }
         }
 
+        private void checkb_clientport_Checked(object sender, RoutedEventArgs e)
+        {
+            tb_clientport.IsEnabled = true;
+            lab_port_client.IsEnabled = true;
+
+        }
+
+        private void checkb_clientport_Unchecked(object sender, RoutedEventArgs e)
+        {
+            tb_clientport.IsEnabled = false;
+            lab_port_client.IsEnabled = false;
+        }
+
+
+        bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        void safeaccounts()
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\Launchbuddy.bin";
+            using (Stream stream = System.IO.File.Open(path, FileMode.Create))
+            {
+                var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                bformatter.Serialize(stream, accountlist);
+            }
+        }
+
+        void loadaccounts()
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\Launchbuddy.bin";
+            using (Stream stream = System.IO.File.Open(path, FileMode.Open))
+            {
+                var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+
+                accountlist = (ObservableCollection<Account>)bformatter.Deserialize(stream);
+                listview_acc.ItemsSource = accountlist;
+
+            }
+        }
+
+        private void bt_addacc_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsValidEmail(tb_email.Text))
+            {
+                if (tb_passw.Text.Length > 4)
+                {
+                    Account acc = new Account { Email= tb_email.Text, Password= tb_passw.Text, Time = DateTime.Today};
+                    accountlist.Add(acc);
+                    listview_acc.ItemsSource = accountlist;
+                }
+                else
+                {
+                    MessageBox.Show("Invalid password");
+                }
+            
+            }
+            else
+            {
+                MessageBox.Show("Invalid Email!");
+            }
+        }
+
+        private void cb_login_Checked(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Autologin does only function when no second Authentication (SMS,Email,App) is used on this account.\n To avoid this make sure that you current network is an authorized network (check always trust this network at login) or deactivate the second authentication!", "ATTENTION", MessageBoxButton.OK, MessageBoxImage.Warning);
+            listview_acc.IsEnabled = true;
+            lab_email.IsEnabled = true;
+            lab_passw.IsEnabled = true;
+            tb_passw.IsEnabled = true;
+            tb_email.IsEnabled = true;
+            bt_addacc.IsEnabled = true;
+            bt_remacc.IsEnabled = true;
+        }
+
+        private void cb_login_Unchecked(object sender, RoutedEventArgs e)
+        {
+            listview_acc.IsEnabled = false;
+            lab_email.IsEnabled = false;
+            lab_passw.IsEnabled = false;
+            tb_passw.IsEnabled = false;
+            tb_email.IsEnabled = false;
+            bt_addacc.IsEnabled = false;
+            bt_remacc.IsEnabled = false;
+        }
+
+        private void listview_acc_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listview_acc.SelectedItem != null)
+            {
+                var selectedItem = (dynamic)listview_acc.SelectedItem;
+                cb_login.Content = "Use Autologin : " + selectedItem.Email;
+                selected_acc.Email = selectedItem.Email;
+                selected_acc.Password = selectedItem.Password;
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            safeaccounts();
+        }
+
+        private void bt_remacc_Click(object sender, RoutedEventArgs e)
+        {
+            if (listview_acc.SelectedItem != null)
+            {
+                accountlist.Remove(listview_acc.SelectedItem as Account);
+                listview_acc.SelectedIndex = -1;
+            }
+                
+        }
+
         private string getarguments()
         {
             //Gathers all arguments and converts them into a formated single string
@@ -538,12 +679,31 @@ namespace Gw2_Serverselection
 
             if (checkb_assets.IsChecked == true)
             {
-                arguments += " -assetsrv " + selected_assetsv.IP + ":" + tb_assetsport.Text;
+                arguments += " - assetsrv " + selected_assetsv.IP + ":" + tb_assetsport.Text;
             }
 
             if (checkb_auth.IsChecked == true)
             {
                 arguments += " -authsrv " + selected_authsv.IP + ":" + tb_authport.Text;
+            }
+
+            if (checkb_clientport.IsChecked == true)
+            {
+                arguments += " -clientport " + tb_clientport.Text;
+            }
+
+            if (cb_login.IsChecked == true)
+            {
+                if (selected_acc.Email != "" && selected_acc.Password != "")
+                {
+                    arguments += "-nopatchui -email " + selected_acc.Email + " -password " + selected_acc.Password;
+                }
+                else
+                {
+                    MessageBox.Show("No Account selected! Launching without autologin.");
+                }
+                    
+                
             }
 
             foreach (System.Windows.Controls.CheckBox entry in arglistbox.Items)
