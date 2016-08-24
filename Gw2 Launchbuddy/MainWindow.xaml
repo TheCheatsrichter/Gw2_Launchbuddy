@@ -14,25 +14,25 @@
             <ColumnDefinition Width="341*"/>
             <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
-        <Label x:Name="label" Content="Authentication Servers:" HorizontalAlignment="Left" Margin="5,279,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072" Height="26" Width="132" Grid.Column="1"/>
-        <Label x:Name="label_Copy" Content="Assets Servers (under development):" HorizontalAlignment="Left" Margin="5,279,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072" Height="26" Width="202" Grid.Column="2"/>
+        <Label x:Name="lab_authserverlist" Content="Authentication Servers:" HorizontalAlignment="Left" Margin="5,279,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072" Height="26" Width="330" Grid.Column="1"/>
+        <Label x:Name="lab_assetserverlist" Content="Assets Servers APLHA:" HorizontalAlignment="Left" Margin="5,279,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072" Height="26" Width="327" Grid.Column="2"/>
         <Button x:Name="button" Content="Check Servers" HorizontalAlignment="Left" Margin="5,467,0,0" VerticalAlignment="Top" Width="675" Click="button_Click" Height="35" Grid.ColumnSpan="2" Grid.Column="1"/>
         <ListView x:Name="listview_auth" HorizontalAlignment="Left" Height="157" Margin="5,305,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="listview_auth_SelectionChanged" Grid.Column="1">
             <ListView.View>
                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
-                    <GridViewColumn Header="IP" HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding Path=IP}"/>
-                    <GridViewColumn Header="Port" HeaderStringFormat="" Width="65" DisplayMemberBinding="{Binding Path=Port}"/>
-                    <GridViewColumn Header="Type" HeaderStringFormat="" Width="70" DisplayMemberBinding="{Binding Path=Location}"/>
-                    <GridViewColumn Header="Ping [ms]" Width="60" DisplayMemberBinding="{Binding Path=Ping}"/>
+                    <GridViewColumn Header="IP" HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding IP}"/>
+                    <GridViewColumn Header="Port" HeaderStringFormat="" Width="65" DisplayMemberBinding="{Binding Port}"/>
+                    <GridViewColumn Header="Type" HeaderStringFormat="" Width="70" DisplayMemberBinding="{Binding Type}"/>
+                    <GridViewColumn Header="Ping [ms]" Width="60" DisplayMemberBinding="{Binding Ping}"/>
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView x:Name="listview_assets" HorizontalAlignment="Left" Height="157" Margin="5,305,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="listview_assets_SelectionChanged" IsEnabled="False" Grid.Column="2">
+        <ListView x:Name="listview_assets" HorizontalAlignment="Left" Height="157" Margin="5,305,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="listview_assets_SelectionChanged" Grid.Column="2">
             <ListView.View>
                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
-                    <GridViewColumn Header="IP" HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding Path=IP}"/>
-                    <GridViewColumn Header="Port" HeaderStringFormat="" Width="65" DisplayMemberBinding="{Binding Path=Port}"/>
-                    <GridViewColumn Header="Location" HeaderStringFormat="" Width="75" DisplayMemberBinding="{Binding Path=Location}"/>
+                    <GridViewColumn Header="IP" HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding IP}"/>
+                    <GridViewColumn Header="Port" HeaderStringFormat="" Width="65" DisplayMemberBinding="{Binding Port}"/>
+                    <GridViewColumn Header="Location" HeaderStringFormat="" Width="75" DisplayMemberBinding="{Binding Location}"/>
                     <GridViewColumn Header="Ping [ms]" Width="60" DisplayMemberBinding="{Binding Path=Ping}"/>
                 </GridView>
             </ListView.View>
@@ -43,8 +43,8 @@
         <Label x:Name="lab_version" Content="Build Version:" HorizontalAlignment="Left" Margin="5,26,0,0" VerticalAlignment="Top" Height="26" Width="346" Grid.Column="1"/>
         <Label x:Name="lab_para" Content="Latest Startparameters:" HorizontalAlignment="Left" Margin="5,52,0,0" VerticalAlignment="Top" Height="26" Width="659" Grid.Column="1" Grid.ColumnSpan="2"/>
         <Label x:Name="lab_path" Content="Installation Path:" HorizontalAlignment="Left" Margin="70,78,0,0" VerticalAlignment="Top" Height="26" Width="511" Grid.Column="1" Grid.ColumnSpan="2"/>
-        <Button x:Name="bt_installpath" Content="Change Directory" HorizontalAlignment="Right" Margin="0,78,15,0" VerticalAlignment="Top" Width="103" Click="bt_installpath_Click" Grid.Column="2" Height="22"/>
-        <GroupBox x:Name="groupBox" Header="Gw2 Client Info" HorizontalAlignment="Left" Height="96" Margin="5,10,0,0" VerticalAlignment="Top" Width="680" Grid.ColumnSpan="2" Grid.Column="1"/>
+        <Button x:Name="bt_installpath" Content="Change Directory" HorizontalAlignment="Right" Margin="0,78,10,0" VerticalAlignment="Top" Width="103" Click="bt_installpath_Click" Grid.Column="2" Height="22"/>
+        <GroupBox x:Name="groupBox" Header="Gw2 Client Info" HorizontalAlignment="Left" Height="96" Margin="5,10,0,0" VerticalAlignment="Top" Width="684" Grid.ColumnSpan="2" Grid.Column="1"/>
         <TextBox x:Name="tb_authport" HorizontalAlignment="Left" Height="23" Margin="214,517,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="tb_authport_TextChanged" IsEnabled="False" Grid.Column="2"/>
         <TextBox x:Name="tb_assetsport" HorizontalAlignment="Left" Height="23" Margin="214,546,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="tb_assetsport_TextChanged" IsEnabled="False" Grid.Column="2"/>
         <Label x:Name="lab_port_auth" Content="Port (optional):" HorizontalAlignment="Left" Margin="117,515,0,0" VerticalAlignment="Top" IsEnabled="False" Height="26" Width="89" Grid.Column="2"/>
@@ -103,7 +103,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        
+
         <TextBox x:Name="tb_email" HorizontalAlignment="Left" Height="23" Margin="52,758,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="219" Grid.Column="1" IsEnabled="False"/>
         <TextBox x:Name="tb_passw" HorizontalAlignment="Left" Height="23" Margin="0,758,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="149" Grid.Column="2" IsEnabled="False"/>
         <Label x:Name="lab_email" Content="Email:" HorizontalAlignment="Left" Margin="6,755,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.684,-0.231" Grid.Column="1" IsEnabled="False"/>

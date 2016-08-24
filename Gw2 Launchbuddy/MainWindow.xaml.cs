@@ -10,6 +10,7 @@ using IWshRuntimeLibrary;
 using System.Reflection;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using System.Net;
 
 
 
@@ -21,8 +22,10 @@ namespace Gw2_Serverselection
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<String> authlist = new List<String>();
-        List<String> assetlist = new List<String>();
+        //List<String> authlist = new List<String>();
+        //List<String> assetlist = new List<String>()
+        ObservableCollection<Server> assetlist = new ObservableCollection<Server>();
+        ObservableCollection<Server> authlist = new ObservableCollection<Server>();
         ObservableCollection<Account> accountlist = new ObservableCollection<Account>();
 
         Server selected_authsv = new Server();
@@ -37,6 +40,8 @@ namespace Gw2_Serverselection
             public string IP { get; set; }
             public string Port { get; set; }
             public string Ping { get; set; }
+            public string Type { get; set; }
+            public string Location { get; set; }
         }
 
         [Serializable]
@@ -51,7 +56,7 @@ namespace Gw2_Serverselection
         {
             InitializeComponent();
             accountlist.Clear();
-            createlist();
+            //createlist();
             loadconfig();
             loadaccounts();
             
@@ -59,33 +64,87 @@ namespace Gw2_Serverselection
 
         void createlist()
         {
-            //Harcoded server lists. Should later use .xml files
-            //Will use Server class when questions about auth1/auth2 and asset list are solved
+            authlist.Clear();
+            assetlist.Clear();
 
-            // Listed as auth1 servers (NA?)
-            authlist.Add("64.25.38.51:6112:Auth1");
-            authlist.Add("64.25.38.54:6112:Auth1");
-            authlist.Add("64.25.38.205:6112:Auth1");
-            authlist.Add("64.25.38.171:6112:Auth1");
-            authlist.Add("64.25.38.172:6112:Auth1");
+            string default_auth1port = "6112";
+            string default_auth2port = "6112";
+            string default_assetport = "80";
 
-            // Listed as auth2 servers (EU?)
-            authlist.Add("206.127.146.73:6112:Auth2");
-            authlist.Add("206.127.159.107:6112:Auth2");
-            authlist.Add("206.127.146.74:6112:Auth2");
-            authlist.Add("206.127.159.109:6112:Auth2");
-            authlist.Add("206.127.159.108:6112:Auth2");
-            authlist.Add("206.127.159.77:6112:Auth2");
+            try {
+                IPAddress[] auth1ips = Dns.GetHostAddresses("auth1.101.ArenaNetworks.com");
+                IPAddress[] auth2ips = Dns.GetHostAddresses("auth2.101.ArenaNetworks.com");
+                IPAddress[] assetips = Dns.GetHostAddresses("assetcdn.101.ArenaNetworks.com");
 
-            // Assets servers (CDN Servers -> Ip changes and newer Images might not be on the same old servers) -> Get Assetlist from -diag (takes about 10 mins :( )
-            assetlist.Add("54.192.201.89:80");
-            assetlist.Add("54.192.201.14:80");
-            assetlist.Add("54.192.201.65:80");
-            assetlist.Add("54.192.201.68:80");
-            assetlist.Add("54.192.201.41:80");
-            assetlist.Add("54.192.201.155:80");
-            assetlist.Add("54.192.201.83:80");
-            assetlist.Add("54.192.201.5:80");
+                foreach (IPAddress ip in auth1ips)
+                {
+                    authlist.Add(new Server { IP = ip.ToString(), Port = default_auth1port, Type = "auth1", Ping = getping(ip.ToString()).ToString() });
+                }
+
+                foreach (IPAddress ip in auth2ips)
+                {
+
+                    authlist.Add(new Server { IP = ip.ToString(), Port = default_auth1port, Type = "auth2", Ping = getping(ip.ToString()).ToString() });
+
+                }
+
+                foreach (IPAddress ip in assetips)
+                {
+
+                    assetlist.Add(new Server { IP = ip.ToString(), Port = default_assetport, Type = "asset", Ping = getping(ip.ToString()).ToString(), Location = getlocation(ip.ToString()) });
+                }
+
+                listview_auth.ItemsSource = authlist;
+                listview_assets.ItemsSource = assetlist;
+                lab_authserverlist.Content = "Athentication Servers (" + authlist.Count + " servers found):";
+                lab_assetserverlist.Content = "Asset Servers APLHA (" + assetlist.Count + " servers found):";
+
+
+            }
+            catch
+            {
+                MessageBox.Show("Could not fetch Serverlist using hardcoded Serverlist!");
+
+                try
+                {
+                    //(OLD VERSION) Harcoded server lists. Will only be used if DNS query could not be resolved
+
+
+                    // Listed as auth1 servers (NA?)
+                    authlist.Add(new Server {IP= "64.25.38.51",Port= default_auth1port, Ping = getping("64.25.38.51").ToString() } );
+                    authlist.Add(new Server { IP = "64.25.38.54", Port = default_auth1port, Ping = getping("64.25.38.54").ToString() });
+                    authlist.Add(new Server { IP = "64.25.38.205", Port = default_auth1port, Ping = getping("64.25.38.205").ToString() });
+                    authlist.Add(new Server { IP = "64.25.38.171", Port = default_auth1port, Ping = getping("64.25.38.171").ToString() });
+                    authlist.Add(new Server { IP = "64.25.38.172", Port = default_auth1port, Ping = getping("64.25.38.172").ToString() });
+
+                    // Listed as auth2 servers (EU?)
+                    authlist.Add(new Server { IP = "206.127.146.73", Port = default_auth2port, Ping = getping("206.127.146.73").ToString() });
+                    authlist.Add(new Server { IP = "206.127.159.107", Port = default_auth2port, Ping = getping("206.127.159.107").ToString() });
+                    authlist.Add(new Server { IP = "206.127.146.74", Port = default_auth2port, Ping = getping("206.127.146.74").ToString() });
+                    authlist.Add(new Server { IP = "206.127.159.109", Port = default_auth2port, Ping = getping("206.127.159.109").ToString() });
+                    authlist.Add(new Server { IP = "206.127.159.108", Port = default_auth2port, Ping = getping("206.127.159.108").ToString() });
+                    authlist.Add(new Server { IP = "206.127.159.77", Port = default_auth2port, Ping = getping("206.127.159.77").ToString() });
+
+                    // Assets servers 
+                    assetlist.Add(new Server { IP = "54.192.201.89", Port = default_assetport, Ping = getping("54.192.201.89").ToString() });
+                    assetlist.Add(new Server { IP = "54.192.201.14", Port = default_assetport, Ping = getping("54.192.201.14").ToString() });
+                    assetlist.Add(new Server { IP = "54.192.201.65", Port = default_assetport, Ping = getping("54.192.201.65").ToString() });
+                    assetlist.Add(new Server { IP = "54.192.201.68", Port = default_assetport, Ping = getping("54.192.201.68").ToString() });
+                    assetlist.Add(new Server { IP = "54.192.201.41", Port = default_assetport, Ping = getping("54.192.201.41").ToString() });
+                    assetlist.Add(new Server { IP = "54.192.201.155", Port = default_assetport, Ping = getping("54.192.201.155").ToString() });
+                    assetlist.Add(new Server { IP = "54.192.201.83", Port = default_assetport, Ping = getping("54.192.201.83").ToString() });
+                    assetlist.Add(new Server { IP = "54.192.201.5", Port = default_assetport, Ping = getping("54.192.201.5").ToString() });
+                }
+                catch(Exception err)
+                {
+                    MessageBox.Show("Could not create serverlists with hardcoded ips.\n" + err.Message);
+                }                
+
+
+            }
+
+
+            
 
         }
 
@@ -216,6 +275,7 @@ namespace Gw2_Serverselection
 
         void pingservers()
         { 
+            /*
             // Check the ping for each Server
 
             listview_auth.Items.Clear();
@@ -271,6 +331,7 @@ namespace Gw2_Serverselection
                     });
 
             }
+            */
 
         }
 
@@ -283,7 +344,7 @@ namespace Gw2_Serverselection
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            pingservers();
+            createlist();
         }
 
         private void listview_assets_SelectionChanged(object sender, SelectionChangedEventArgs e)
