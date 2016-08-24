@@ -6,8 +6,12 @@
         xmlns:local="clr-namespace:Gw2_Launchbuddy"
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Gw2_Launchbuddy.MainWindow"
         mc:Ignorable="d"
-        Title="Gw2 Launchbuddy BETA" Height="913" Width="715" ResizeMode="NoResize" Icon="launchbuddy.ico" Closing="Window_Closing">
-    <Grid Margin="0,0,0,9">
+        Title="Gw2 Launchbuddy BETA" Height="913" Width="715" ResizeMode="NoResize" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
+
+
+
+
+    <Grid Margin="0,0,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*"/>
             <ColumnDefinition Width="338*"/>

@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Net.NetworkInformation;
-using System.Xml;
 using System.IO;
 using System.Diagnostics;
-using System.Reflection;
-using System.ComponentModel;
-using System.Collections.ObjectModel;
-using System.Net;
-using System.Windows.Data;
+
 
 namespace Gw2_Launchbuddy
 {
@@ -81,18 +73,22 @@ namespace Gw2_Launchbuddy
         {
             MessageBoxResult win = MessageBox.Show("When quaggan cleans the Appdata some gamesettings will get deleted!\nDeleting these files can however increase the overall fps of the game in some cases!\n\nClean Appdata?", "Clean Appdata Info", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-            if (win.ToString() == "Yes")
+            try
             {
-                var appdatapath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\";
-                string[] datfiles = Directory.GetFiles(appdatapath.ToString(), "*.dat");
-
-                foreach (string file in datfiles)
+                if (win.ToString() == "Yes")
                 {
-                    File.Delete(file);
-                }
+                    var appdatapath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\";
+                    string[] datfiles = Directory.GetFiles(appdatapath.ToString(), "*.dat");
 
-                MessageBox.Show("Quaggan cleaned " + datfiles.Length + " file(s) from Appdata");
+                    foreach (string file in datfiles)
+                    {
+                        File.Delete(file);
+                    }
+
+                    MessageBox.Show("Quaggan cleaned " + datfiles.Length + " file(s) from Appdata");
+                }
             }
+            catch (Exception err) { MessageBox.Show(err.Message); }
 
         }
 
@@ -100,17 +96,22 @@ namespace Gw2_Launchbuddy
         {
             MessageBoxResult win = MessageBox.Show("When quaggan updates the bin folder 3rd party shaders like Reshade,GemFX and SweetFX will get removed!\n\nThis can solve problems with non functioning 3rd party shaders and launcher crashes.\n\nUpdate bin folder?", "Update Bin folder Info", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-            if (win.ToString() == "Yes")
+            try
             {
-                if (Directory.Exists(exepath+"bin"))
+                if (win.ToString() == "Yes")
                 {
-                    Directory.Delete(exepath + "bin",true);
-                }
-                if (Directory.Exists(exepath + "bin64"))
-                {
-                    Directory.Delete(exepath + "bin64",true);
+                    if (Directory.Exists(exepath + "bin"))
+                    {
+                        Directory.Delete(exepath + "bin", true);
+                    }
+                    if (Directory.Exists(exepath + "bin64"))
+                    {
+                        Directory.Delete(exepath + "bin64", true);
+                    }
                 }
             }
+            catch (Exception err) { MessageBox.Show(err.Message); }
+            
 
         }
 
@@ -118,7 +119,6 @@ namespace Gw2_Launchbuddy
         {
             deletebinfolder();
             cleanappdata();
-            patchgame();
 
             MessageBoxResult win = MessageBox.Show("Should quaggan now search for errors in the Gw2 file? (can take up to 30 mins!)", "Update Bin folder Info", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
@@ -126,6 +126,7 @@ namespace Gw2_Launchbuddy
             {
                 verifygame();
             }
+            patchgame();
 
         }
 
