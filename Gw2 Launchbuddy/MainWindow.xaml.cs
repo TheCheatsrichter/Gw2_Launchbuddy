@@ -15,7 +15,7 @@ using System.Windows.Data;
 
 
 
-namespace Gw2_Serverselection
+namespace Gw2_Launchbuddy
 {
 
     /// <summary>
@@ -146,7 +146,7 @@ namespace Gw2_Serverselection
             {
                 listview_auth.ItemsSource = authlist;
                 listview_assets.ItemsSource = assetlist;
-                lab_authserverlist.Content = "Athentication Servers (" + authlist.Count + " servers found):";
+                lab_authserverlist.Content = "Authentication Servers (" + authlist.Count + " servers found):";
                 lab_assetserverlist.Content = "Asset Servers APLHA (" + assetlist.Count + " servers found):";
 
                 // Sorting authentication servers (ping). Not needed for assetservers because they use CDN (ping nealy doesnt differ)
@@ -762,6 +762,15 @@ namespace Gw2_Serverselection
                 listview_acc.SelectedIndex = -1;
             }
                 
+        }
+
+        private void bt_quaggan_Click(object sender, RoutedEventArgs e)
+        {
+            Clientfix clientfix = new Clientfix();
+            clientfix.exepath = exepath;
+            clientfix.exename = exename;
+            clientfix.Show();
+ 
         }
 
         private string getarguments()

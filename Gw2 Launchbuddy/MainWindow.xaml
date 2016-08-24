@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Gw2_Serverselection"
-        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Gw2_Serverselection.MainWindow"
+        xmlns:local="clr-namespace:Gw2_Launchbuddy"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Gw2_Launchbuddy.MainWindow"
         mc:Ignorable="d"
         Title="Gw2 Launchbuddy BETA" Height="913" Width="715" ResizeMode="NoResize" Icon="launchbuddy.ico" Closing="Window_Closing">
     <Grid Margin="0,0,0,9">
@@ -37,6 +37,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
+
         <CheckBox x:Name="checkb_auth" Content="Use Authentication Server :" HorizontalAlignment="Left" Margin="7,513,0,0" VerticalAlignment="Top" Width="385" FontSize="16" IsEnabled="False" Checked="checkb_auth_Checked" Unchecked="checkb_auth_Unchecked" Height="21" Grid.ColumnSpan="2" Grid.Column="1"/>
         <CheckBox x:Name="checkb_assets" Content="Use Assets Server : " HorizontalAlignment="Left" Margin="7,539,0,0" VerticalAlignment="Top" Width="385" FontSize="16" IsEnabled="False" Checked="checkb_assets_Checked" Unchecked="checkb_assets_Unchecked" Height="21" Grid.ColumnSpan="2" Grid.Column="1"/>
         <Button x:Name="bt_launch" Content="Launch Gw2" HorizontalAlignment="Left" Margin="0,788,0,0" VerticalAlignment="Top" Width="685" Height="35" Click="bt_launch_Click" Grid.ColumnSpan="2" Grid.Column="1"/>
@@ -50,7 +51,7 @@
         <Label x:Name="lab_port_auth" Content="Port (optional):" HorizontalAlignment="Left" Margin="117,515,0,0" VerticalAlignment="Top" IsEnabled="False" Height="26" Width="89" Grid.Column="2"/>
         <Label x:Name="lab_port_assets" Content="Port (optional):" HorizontalAlignment="Left" Margin="117,545,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.543,1.769" IsEnabled="False" Height="26" Width="89" Grid.Column="2"/>
         <Label x:Name="label1" Content="Install Path:" HorizontalAlignment="Left" Margin="5,78,0,0" VerticalAlignment="Top" Height="26" Width="71" Grid.Column="1"/>
-        <Label x:Name="label2" HorizontalAlignment="Right" Margin="0,-2,10,0" VerticalAlignment="Top" Grid.Column="2" Height="26" Width="217"/>
+        <Label x:Name="label2" HorizontalAlignment="Right" Margin="0,-2,8,0" VerticalAlignment="Top" Grid.Column="2" Height="26" Width="217" Content="Gw2 Launchbuddy by TheCheatsrichter"/>
         <Button x:Name="bt_shortcut" Content="Create Shortcut" HorizontalAlignment="Left" Margin="0,829,0,0" VerticalAlignment="Top" Width="685" Height="35" Click="bt_shortcut_Click" Grid.ColumnSpan="2" Grid.Column="1"/>
         <ListBox x:Name="arglistbox" HorizontalAlignment="Left" Height="133" Margin="5,132,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="arglistbox_SelectionChanged" Grid.Column="1" >
             <ListBox.Resources>
@@ -111,6 +112,14 @@
         <Button x:Name="bt_addacc" Content="Add" HorizontalAlignment="Left" Margin="174,757,0,0" VerticalAlignment="Top" Width="75" Grid.Column="2" Click="bt_addacc_Click" IsEnabled="False"/>
         <Button x:Name="bt_remacc" Content="Remove" HorizontalAlignment="Left" Margin="257,757,0,0" VerticalAlignment="Top" Width="75" Grid.Column="2" IsEnabled="False" Click="bt_remacc_Click"/>
         <CheckBox x:Name="cb_login" Content="Use Autologin" Grid.Column="1" HorizontalAlignment="Left" Margin="7,617,0,0" VerticalAlignment="Top" FontSize="16" Checked="cb_login_Checked" Unchecked="cb_login_Unchecked"/>
+        <Button x:Name="bt_quaggan"  Grid.Column="2" HorizontalAlignment="Left" Margin="255,24,0,0" VerticalAlignment="Top" Width="75" Height="75" Click="bt_quaggan_Click">
+            <Image Source="Resources/quaggan.png"/>
+        </Button>
+
+
 
     </Grid>
+
 </Window>
+
+

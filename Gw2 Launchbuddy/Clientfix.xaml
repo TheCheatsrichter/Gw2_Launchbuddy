@@ -1,0 +1,19 @@
+﻿<Window x:Class="Gw2_Launchbuddy.Clientfix"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gw2_Launchbuddy"
+        mc:Ignorable="d"
+        Title="Clientifix the Quaggan" Height="283.866" Width="303.025">
+    <Grid>
+        <Image x:Name="image" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" Source="Resources/quaggan.jpg"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="100,10,0,0" TextWrapping="Wrap" Text="Cuuu... Quaggan will fix your Client for youuu... Choose what quaggan can do for you." VerticalAlignment="Top" Height="76" Width="182"/>
+        <Button x:Name="bt_appdata" Content="Clean Appdata" HorizontalAlignment="Left" Margin="10,222,0,0" VerticalAlignment="Top" Width="272" Click="bt_appdata_Click" />
+        <Button x:Name="bt_repair" Content="Launch game in repairmode" HorizontalAlignment="Left" Margin="10,168,0,0" VerticalAlignment="Top" Width="272" Click="bt_repair_Click"/>
+        <Button x:Name="bt_patch" Content="Patch game" HorizontalAlignment="Left" Margin="10,195,0,0" VerticalAlignment="Top" Width="272" Click="bt_patch_Click" />
+        <Button x:Name="bt_auto" Content="Fix Client Wizard" HorizontalAlignment="Left" Margin="10,105,0,0" VerticalAlignment="Top" Width="272" Click="bt_auto_Click"/>
+        <Button x:Name="bt_bin" Content="Clean Bin folders" HorizontalAlignment="Left" Margin="10,141,0,0" VerticalAlignment="Top" Width="272" Click="bt_bin_Click"  />
+
+    </Grid>
+</Window>
