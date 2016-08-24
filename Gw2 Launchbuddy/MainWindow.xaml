@@ -15,7 +15,7 @@
             <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
         <Label x:Name="lab_authserverlist" Content="Authentication Servers:" HorizontalAlignment="Left" Margin="5,279,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072" Height="26" Width="330" Grid.Column="1"/>
-        <Label x:Name="lab_assetserverlist" Content="Assets Servers APLHA:" HorizontalAlignment="Left" Margin="5,279,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072" Height="26" Width="327" Grid.Column="2"/>
+        <Label x:Name="lab_assetserverlist" Content="Asset Servers APLHA:" HorizontalAlignment="Left" Margin="5,279,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072" Height="26" Width="327" Grid.Column="2"/>
         <Button x:Name="button" Content="Check Servers" HorizontalAlignment="Left" Margin="5,467,0,0" VerticalAlignment="Top" Width="675" Click="button_Click" Height="35" Grid.ColumnSpan="2" Grid.Column="1"/>
         <ListView x:Name="listview_auth" HorizontalAlignment="Left" Height="157" Margin="5,305,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="listview_auth_SelectionChanged" Grid.Column="1">
             <ListView.View>
@@ -43,14 +43,14 @@
         <Label x:Name="lab_version" Content="Build Version:" HorizontalAlignment="Left" Margin="5,26,0,0" VerticalAlignment="Top" Height="26" Width="346" Grid.Column="1"/>
         <Label x:Name="lab_para" Content="Latest Startparameters:" HorizontalAlignment="Left" Margin="5,52,0,0" VerticalAlignment="Top" Height="26" Width="659" Grid.Column="1" Grid.ColumnSpan="2"/>
         <Label x:Name="lab_path" Content="Installation Path:" HorizontalAlignment="Left" Margin="70,78,0,0" VerticalAlignment="Top" Height="26" Width="511" Grid.Column="1" Grid.ColumnSpan="2"/>
-        <Button x:Name="bt_installpath" Content="Change Directory" HorizontalAlignment="Right" Margin="0,78,10,0" VerticalAlignment="Top" Width="103" Click="bt_installpath_Click" Grid.Column="2" Height="22"/>
+        <Button x:Name="bt_installpath" Content="Change Directory" HorizontalAlignment="Right" Margin="0,79,102,0" VerticalAlignment="Top" Width="103" Click="bt_installpath_Click" Grid.Column="2" Height="22"/>
         <GroupBox x:Name="groupBox" Header="Gw2 Client Info" HorizontalAlignment="Left" Height="96" Margin="5,10,0,0" VerticalAlignment="Top" Width="684" Grid.ColumnSpan="2" Grid.Column="1"/>
         <TextBox x:Name="tb_authport" HorizontalAlignment="Left" Height="23" Margin="214,517,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="tb_authport_TextChanged" IsEnabled="False" Grid.Column="2"/>
         <TextBox x:Name="tb_assetsport" HorizontalAlignment="Left" Height="23" Margin="214,546,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="tb_assetsport_TextChanged" IsEnabled="False" Grid.Column="2"/>
         <Label x:Name="lab_port_auth" Content="Port (optional):" HorizontalAlignment="Left" Margin="117,515,0,0" VerticalAlignment="Top" IsEnabled="False" Height="26" Width="89" Grid.Column="2"/>
         <Label x:Name="lab_port_assets" Content="Port (optional):" HorizontalAlignment="Left" Margin="117,545,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.543,1.769" IsEnabled="False" Height="26" Width="89" Grid.Column="2"/>
         <Label x:Name="label1" Content="Install Path:" HorizontalAlignment="Left" Margin="5,78,0,0" VerticalAlignment="Top" Height="26" Width="71" Grid.Column="1"/>
-        <Label x:Name="label2" Content="Gw2 Launchbuddy by TheCheatsrichter" HorizontalAlignment="Right" Margin="0,-2,10,0" VerticalAlignment="Top" Grid.Column="2" Height="26" Width="217"/>
+        <Label x:Name="label2" HorizontalAlignment="Right" Margin="0,-2,10,0" VerticalAlignment="Top" Grid.Column="2" Height="26" Width="217"/>
         <Button x:Name="bt_shortcut" Content="Create Shortcut" HorizontalAlignment="Left" Margin="0,829,0,0" VerticalAlignment="Top" Width="685" Height="35" Click="bt_shortcut_Click" Grid.ColumnSpan="2" Grid.Column="1"/>
         <ListBox x:Name="arglistbox" HorizontalAlignment="Left" Height="133" Margin="5,132,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="arglistbox_SelectionChanged" Grid.Column="1" >
             <ListBox.Resources>

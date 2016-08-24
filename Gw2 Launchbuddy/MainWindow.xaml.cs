@@ -11,6 +11,7 @@ using System.Reflection;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Net;
+using System.Windows.Data;
 
 
 
@@ -72,6 +73,7 @@ namespace Gw2_Serverselection
             string default_assetport = "80";
 
             try {
+                
                 IPAddress[] auth1ips = Dns.GetHostAddresses("auth1.101.ArenaNetworks.com");
                 IPAddress[] auth2ips = Dns.GetHostAddresses("auth2.101.ArenaNetworks.com");
                 IPAddress[] assetips = Dns.GetHostAddresses("assetcdn.101.ArenaNetworks.com");
@@ -94,16 +96,13 @@ namespace Gw2_Serverselection
                     assetlist.Add(new Server { IP = ip.ToString(), Port = default_assetport, Type = "asset", Ping = getping(ip.ToString()).ToString(), Location = getlocation(ip.ToString()) });
                 }
 
-                listview_auth.ItemsSource = authlist;
-                listview_assets.ItemsSource = assetlist;
-                lab_authserverlist.Content = "Athentication Servers (" + authlist.Count + " servers found):";
-                lab_assetserverlist.Content = "Asset Servers APLHA (" + assetlist.Count + " servers found):";
+                
 
 
             }
             catch
             {
-                MessageBox.Show("Could not fetch Serverlist using hardcoded Serverlist!");
+                MessageBox.Show("Could not fetch Serverlist. Using hardcoded Serverlist!");
 
                 try
                 {
@@ -143,8 +142,24 @@ namespace Gw2_Serverselection
 
             }
 
+            try
+            {
+                listview_auth.ItemsSource = authlist;
+                listview_assets.ItemsSource = assetlist;
+                lab_authserverlist.Content = "Athentication Servers (" + authlist.Count + " servers found):";
+                lab_assetserverlist.Content = "Asset Servers APLHA (" + assetlist.Count + " servers found):";
 
-            
+                // Sorting authentication servers (ping). Not needed for assetservers because they use CDN (ping nealy doesnt differ)
+                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(listview_auth.ItemsSource);
+                view.SortDescriptions.Add(new SortDescription("IP", ListSortDirection.Ascending));
+
+            }
+            catch(Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
+
+
 
         }
 
@@ -352,7 +367,7 @@ namespace Gw2_Serverselection
             // UI Handling for selected Asset Server
             if (listview_assets.Items.Count != 0)
             {
-                var selectedItem = (dynamic)listview_assets.SelectedItems[0];
+                var selectedItem = (dynamic)listview_assets.SelectedItem;
                 selected_assetsv.IP = selectedItem.IP;
                 selected_assetsv.Port = selectedItem.Port;
                 selected_assetsv.Ping = selectedItem.Ping;
@@ -371,7 +386,7 @@ namespace Gw2_Serverselection
             // UI Handling for selected Auth Server
             if (listview_auth.Items.Count != 0)
             {
-                var selectedItem = (dynamic)listview_auth.SelectedItems[0];
+                var selectedItem = (dynamic)listview_auth.SelectedItem;
                 selected_authsv.IP = selectedItem.IP;
                 selected_authsv.Port = selectedItem.Port;
                 selected_authsv.Ping= selectedItem.Ping;
