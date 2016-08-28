@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:Gw2_Serverselection"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+
     </Application.Resources>
 </Application>

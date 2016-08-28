@@ -2,8 +2,11 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Gw2_Launchbuddy.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="exename" Type="System.String" Scope="User">
+    <Setting Name="unlockerpath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="usereshade" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

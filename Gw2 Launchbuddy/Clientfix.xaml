@@ -8,13 +8,13 @@
         Title="Clientifix the Quaggan" Height="298.487" Width="308.067" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Topmost="True" Icon="launchbuddy.ico">
     <Grid>
         <Image x:Name="image" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" Source="Resources/quaggan.jpg"/>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="100,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="53" Width="182"><Run Text="Cuuu... Quaggan will fix your Client for youuu... Choose what q"/><Run Text="uagg"/><Run Text="an can do for you."/></TextBlock>
+        <TextBlock x:Name="tbl_quaggan" HorizontalAlignment="Left" Margin="100,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="59" Width="182" FontSize="13.333" FontFamily="Comic Sans MS"><Run Text="C"/><Run Text="ooo"/><Run Text="! Quaggan will fix your Client for youuu. Choose what q"/><Run Text="uagg"/><Run Text="an can do for you."/></TextBlock>
         <Button x:Name="bt_appdata" Content="Clean Appdata" HorizontalAlignment="Left" Margin="10,227,0,0" VerticalAlignment="Top" Width="272" Click="bt_appdata_Click" />
         <Button x:Name="bt_repair" Content="Launch game in repairmode" HorizontalAlignment="Left" Margin="10,173,0,0" VerticalAlignment="Top" Width="272" Click="bt_repair_Click"/>
         <Button x:Name="bt_patch" Content="Patch game" HorizontalAlignment="Left" Margin="10,200,0,0" VerticalAlignment="Top" Width="272" Click="bt_patch_Click" />
         <Button x:Name="bt_auto" Content="Fix Client Wizard" HorizontalAlignment="Left" Margin="10,119,0,0" VerticalAlignment="Top" Width="272" Click="bt_auto_Click"/>
-        <Button x:Name="bt_bin" Content="Clean Bin folders" HorizontalAlignment="Left" Margin="10,146,0,0" VerticalAlignment="Top" Width="272" Click="bt_bin_Click"  />
-        <TextBlock x:Name="textBlock1" HorizontalAlignment="Left" Margin="15,95,0,0" TextWrapping="Wrap" Text="ATTENTION: This section does delete/modify files!" VerticalAlignment="Top" Foreground="#FFFF0505"/>
+        <Button x:Name="bt_bin" Content="Clean Bin folders" HorizontalAlignment="Left" Margin="10,146,0,0" VerticalAlignment="Top" Width="272" Click="bt_bin_Click" />
+        <TextBlock x:Name="tbl_warning" HorizontalAlignment="Left" Margin="15,95,0,0" TextWrapping="Wrap" Text="ATTENTION: This section does delete/modify files!" VerticalAlignment="Top" Foreground="#FFFF0505"/>
 
     </Grid>
 </Window>

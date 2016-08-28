@@ -2,6 +2,8 @@
 using System.Windows;
 using System.IO;
 using System.Diagnostics;
+using System.Threading;
+using System.Linq;
 
 
 namespace Gw2_Launchbuddy
@@ -13,7 +15,6 @@ namespace Gw2_Launchbuddy
     {
         public string exepath { get; set; }
         public string exename { get; set; }
-
 
         public Clientfix()
         {
@@ -39,13 +40,55 @@ namespace Gw2_Launchbuddy
 
         private void bt_repair_Click(object sender, RoutedEventArgs e)
         {
+            setbusy(true);
             verifygame();
+            setbusy(false);
         }
 
         private void bt_patch_Click(object sender, RoutedEventArgs e)
         {
+            setbusy(true);
             patchgame();
+            setbusy(false);
         }
+
+        void waitforlauncher()
+        {
+            setbusy(true);
+            Process[] processlist = Process.GetProcesses();
+            Process Gw2Process = null;
+            int i = 0;
+            bool islaunched = false;
+            int id=0;
+            while (Gw2Process == null && ++i <= 10)
+            {
+                foreach (Process theprocess in processlist)
+                {
+                    if (theprocess.ProcessName.Contains("Gw2") && theprocess.ProcessName.Contains("Gw2 Launchbuddy") == false)
+                    {
+                        Gw2Process = theprocess;
+                        id = Gw2Process.Id;
+                        islaunched = true;
+                    }
+
+                }
+                Thread.Sleep(1000);
+            }
+
+            if (!islaunched) MessageBox.Show("Gw2.exe did not launch!");
+
+            processlist = Process.GetProcesses();
+            while (islaunched && id != 0)
+            {
+                if(!Process.GetProcesses().Any(x => x.Id == id))
+                {
+                    islaunched = false;
+                    setbusy(false);
+                }
+                Thread.Sleep(1000);
+            }
+        }
+
 
         void patchgame()
         {
@@ -56,6 +99,12 @@ namespace Gw2_Launchbuddy
             try
             {
                 Process.Start(startInfo);
+
+                //Not needed waiting time
+                /*
+                Thread patcher = new Thread(waitforlauncher);
+                patcher.Start();
+                */
             }
             catch (Exception err)
             {
@@ -66,7 +115,9 @@ namespace Gw2_Launchbuddy
 
         private void bt_appdata_Click(object sender, RoutedEventArgs e)
         {
+            setbusy(true);
             cleanappdata();
+            setbusy(false);
         }
 
         void cleanappdata()
@@ -117,6 +168,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_auto_Click(object sender, RoutedEventArgs e)
         {
+            setbusy(true);
             deletebinfolder();
             cleanappdata();
 
@@ -127,12 +179,28 @@ namespace Gw2_Launchbuddy
                 verifygame();
             }
             patchgame();
+            setbusy(false);
 
         }
 
         private void bt_bin_Click(object sender, RoutedEventArgs e)
         {
+            setbusy(true);
             deletebinfolder();
+            setbusy(false);
+        }
+
+        void setbusy(bool busy)
+        {
+            bt_appdata.IsEnabled = !busy;
+            bt_auto.IsEnabled = !busy;
+            bt_bin.IsEnabled = !busy;
+            bt_patch.IsEnabled = !busy;
+            bt_repair.IsEnabled = !busy;
+
+            if (busy) tbl_quaggan.Text = "Quaggan is busy please wait";
+            if (!busy) tbl_quaggan.Text = "What else can quaggan do for youuu?";
+
         }
     }
 }
