@@ -25,6 +25,16 @@ namespace Gw2_Launchbuddy
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Object prefix keys:
+        /// 
+        ///     bt= button
+        ///     lab = label
+        ///     
+        /// 
+        /// 
+        /// </summary>
+
         //List<String> authlist = new List<String>();
         //List<String> assetlist = new List<String>()
         ObservableCollection<Server> assetlist = new ObservableCollection<Server>();
@@ -169,7 +179,7 @@ namespace Gw2_Launchbuddy
             listview_assets.ItemsSource = assetlist;
             lab_authserverlist.Content = "Authentication Servers (" + authlist.Count + " servers found):";
             lab_assetserverlist.Content = "Asset Servers APLHA (" + assetlist.Count + " servers found):";
-            bt_checkservers.Content = "Check Servers";
+            bt_checkservers.Content = "Check Servers (Last update: "+ DateTime.Now.ToString("h:mm:ss tt") + ")";
 
 
             // Sorting authentication servers (ping). Not needed for assetservers because they use CDN (ping nealy doesnt differ)

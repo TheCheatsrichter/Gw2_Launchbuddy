@@ -37,7 +37,7 @@
             <EventTrigger RoutedEvent="MouseLeave">
                 <BeginStoryboard>
                     <Storyboard >
-                        <DoubleAnimation Storyboard.TargetName="BackImage" Storyboard.TargetProperty="Opacity" To="0.15" Duration="0:0:03.00"/>
+                        <DoubleAnimation Storyboard.TargetName="BackImage" Storyboard.TargetProperty="Opacity" To="0.20" Duration="0:0:03.00"/>
                     </Storyboard>
                 </BeginStoryboard>
             </EventTrigger>
