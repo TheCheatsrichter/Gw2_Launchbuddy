@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Net.NetworkInformation;
@@ -12,7 +11,8 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Net;
 using System.Windows.Data;
-using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 
 
 
@@ -58,6 +58,7 @@ namespace Gw2_Launchbuddy
         public MainWindow()
         {
             InitializeComponent();
+            
             accountlist.Clear(); //clearing accountlist
             loadconfig(); // loading the gw2 xml config file from appdata
             loadaccounts(); // loading saved accounts from launchbuddy
@@ -66,8 +67,8 @@ namespace Gw2_Launchbuddy
 
         void createlist()
         {
-            authlist.Clear();
-            assetlist.Clear();
+            ObservableCollection<Server> tmp_authlist = new ObservableCollection<Server>();
+            ObservableCollection<Server> tmp_assetlist = new ObservableCollection<Server>();
 
             string default_auth1port = "6112";
             string default_auth2port = "6112";
@@ -82,24 +83,21 @@ namespace Gw2_Launchbuddy
 
                 foreach (IPAddress ip in auth1ips)
                 {
-                    authlist.Add(new Server { IP = ip.ToString(), Port = default_auth1port, Type = "auth1", Ping = getping(ip.ToString()).ToString() });
+                    tmp_authlist.Add(new Server { IP = ip.ToString(), Port = default_auth1port, Type = "auth1", Ping = getping(ip.ToString()).ToString() });
                 }
 
                 foreach (IPAddress ip in auth2ips)
                 {
 
-                    authlist.Add(new Server { IP = ip.ToString(), Port = default_auth1port, Type = "auth2", Ping = getping(ip.ToString()).ToString() });
+                    tmp_authlist.Add(new Server { IP = ip.ToString(), Port = default_auth1port, Type = "auth2", Ping = getping(ip.ToString()).ToString() });
 
                 }
 
                 foreach (IPAddress ip in assetips)
                 {
 
-                    assetlist.Add(new Server { IP = ip.ToString(), Port = default_assetport, Type = "asset", Ping = getping(ip.ToString()).ToString(), Location = getlocation(ip.ToString()) });
+                    tmp_assetlist.Add(new Server { IP = ip.ToString(), Port = default_assetport, Type = "asset", Ping = getping(ip.ToString()).ToString(), Location = getlocation(ip.ToString()) });
                 }
-
-
-
 
             }
             catch
@@ -112,29 +110,29 @@ namespace Gw2_Launchbuddy
 
 
                     // Listed as auth1 servers (NA?)
-                    authlist.Add(new Server { IP = "64.25.38.51", Port = default_auth1port, Ping = getping("64.25.38.51").ToString() });
-                    authlist.Add(new Server { IP = "64.25.38.54", Port = default_auth1port, Ping = getping("64.25.38.54").ToString() });
-                    authlist.Add(new Server { IP = "64.25.38.205", Port = default_auth1port, Ping = getping("64.25.38.205").ToString() });
-                    authlist.Add(new Server { IP = "64.25.38.171", Port = default_auth1port, Ping = getping("64.25.38.171").ToString() });
-                    authlist.Add(new Server { IP = "64.25.38.172", Port = default_auth1port, Ping = getping("64.25.38.172").ToString() });
+                    tmp_authlist.Add(new Server { IP = "64.25.38.51", Port = default_auth1port, Ping = getping("64.25.38.51").ToString() });
+                    tmp_authlist.Add(new Server { IP = "64.25.38.54", Port = default_auth1port, Ping = getping("64.25.38.54").ToString() });
+                    tmp_authlist.Add(new Server { IP = "64.25.38.205", Port = default_auth1port, Ping = getping("64.25.38.205").ToString() });
+                    tmp_authlist.Add(new Server { IP = "64.25.38.171", Port = default_auth1port, Ping = getping("64.25.38.171").ToString() });
+                    tmp_authlist.Add(new Server { IP = "64.25.38.172", Port = default_auth1port, Ping = getping("64.25.38.172").ToString() });
 
                     // Listed as auth2 servers (EU?)
-                    authlist.Add(new Server { IP = "206.127.146.73", Port = default_auth2port, Ping = getping("206.127.146.73").ToString() });
-                    authlist.Add(new Server { IP = "206.127.159.107", Port = default_auth2port, Ping = getping("206.127.159.107").ToString() });
-                    authlist.Add(new Server { IP = "206.127.146.74", Port = default_auth2port, Ping = getping("206.127.146.74").ToString() });
-                    authlist.Add(new Server { IP = "206.127.159.109", Port = default_auth2port, Ping = getping("206.127.159.109").ToString() });
-                    authlist.Add(new Server { IP = "206.127.159.108", Port = default_auth2port, Ping = getping("206.127.159.108").ToString() });
-                    authlist.Add(new Server { IP = "206.127.159.77", Port = default_auth2port, Ping = getping("206.127.159.77").ToString() });
+                    tmp_authlist.Add(new Server { IP = "206.127.146.73", Port = default_auth2port, Ping = getping("206.127.146.73").ToString() });
+                    tmp_authlist.Add(new Server { IP = "206.127.159.107", Port = default_auth2port, Ping = getping("206.127.159.107").ToString() });
+                    tmp_authlist.Add(new Server { IP = "206.127.146.74", Port = default_auth2port, Ping = getping("206.127.146.74").ToString() });
+                    tmp_authlist.Add(new Server { IP = "206.127.159.109", Port = default_auth2port, Ping = getping("206.127.159.109").ToString() });
+                    tmp_authlist.Add(new Server { IP = "206.127.159.108", Port = default_auth2port, Ping = getping("206.127.159.108").ToString() });
+                    tmp_authlist.Add(new Server { IP = "206.127.159.77", Port = default_auth2port, Ping = getping("206.127.159.77").ToString() });
 
                     // Assets servers 
-                    assetlist.Add(new Server { IP = "54.192.201.89", Port = default_assetport, Ping = getping("54.192.201.89").ToString() });
-                    assetlist.Add(new Server { IP = "54.192.201.14", Port = default_assetport, Ping = getping("54.192.201.14").ToString() });
-                    assetlist.Add(new Server { IP = "54.192.201.65", Port = default_assetport, Ping = getping("54.192.201.65").ToString() });
-                    assetlist.Add(new Server { IP = "54.192.201.68", Port = default_assetport, Ping = getping("54.192.201.68").ToString() });
-                    assetlist.Add(new Server { IP = "54.192.201.41", Port = default_assetport, Ping = getping("54.192.201.41").ToString() });
-                    assetlist.Add(new Server { IP = "54.192.201.155", Port = default_assetport, Ping = getping("54.192.201.155").ToString() });
-                    assetlist.Add(new Server { IP = "54.192.201.83", Port = default_assetport, Ping = getping("54.192.201.83").ToString() });
-                    assetlist.Add(new Server { IP = "54.192.201.5", Port = default_assetport, Ping = getping("54.192.201.5").ToString() });
+                    tmp_assetlist.Add(new Server { IP = "54.192.201.89", Port = default_assetport, Ping = getping("54.192.201.89").ToString() });
+                    tmp_assetlist.Add(new Server { IP = "54.192.201.14", Port = default_assetport, Ping = getping("54.192.201.14").ToString() });
+                    tmp_assetlist.Add(new Server { IP = "54.192.201.65", Port = default_assetport, Ping = getping("54.192.201.65").ToString() });
+                    tmp_assetlist.Add(new Server { IP = "54.192.201.68", Port = default_assetport, Ping = getping("54.192.201.68").ToString() });
+                    tmp_assetlist.Add(new Server { IP = "54.192.201.41", Port = default_assetport, Ping = getping("54.192.201.41").ToString() });
+                    tmp_assetlist.Add(new Server { IP = "54.192.201.155", Port = default_assetport, Ping = getping("54.192.201.155").ToString() });
+                    tmp_assetlist.Add(new Server { IP = "54.192.201.83", Port = default_assetport, Ping = getping("54.192.201.83").ToString() });
+                    tmp_assetlist.Add(new Server { IP = "54.192.201.5", Port = default_assetport, Ping = getping("54.192.201.5").ToString() });
                 }
                 catch (Exception err)
                 {
@@ -143,17 +141,12 @@ namespace Gw2_Launchbuddy
 
 
             }
-
+            
             try
             {
-                listview_auth.ItemsSource = authlist;
-                listview_assets.ItemsSource = assetlist;
-                lab_authserverlist.Content = "Authentication Servers (" + authlist.Count + " servers found):";
-                lab_assetserverlist.Content = "Asset Servers APLHA (" + assetlist.Count + " servers found):";
-
-                // Sorting authentication servers (ping). Not needed for assetservers because they use CDN (ping nealy doesnt differ)
-                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(listview_auth.ItemsSource);
-                view.SortDescriptions.Add(new SortDescription("IP", ListSortDirection.Ascending));
+                Application.Current.Dispatcher.BeginInvoke(
+                System.Windows.Threading.DispatcherPriority.Background,
+                new Action(() => updateserverlist(tmp_authlist, tmp_assetlist)));
 
             }
             catch (Exception err)
@@ -161,19 +154,43 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show(err.Message);
             }
 
+        }
+
+        void updateserverlist(ObservableCollection<Server> newauthlist, ObservableCollection<Server> newassetlist)
+        {
+            bt_checkservers.IsEnabled = true;
+
+            authlist.Clear();
+            assetlist.Clear();
+            authlist = newauthlist;
+            assetlist = newassetlist;
+
+            listview_auth.ItemsSource = authlist;
+            listview_assets.ItemsSource = assetlist;
+            lab_authserverlist.Content = "Authentication Servers (" + authlist.Count + " servers found):";
+            lab_assetserverlist.Content = "Asset Servers APLHA (" + assetlist.Count + " servers found):";
+            bt_checkservers.Content = "Check Servers";
 
 
+            // Sorting authentication servers (ping). Not needed for assetservers because they use CDN (ping nealy doesnt differ)
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(listview_auth.ItemsSource);
+            view.SortDescriptions.Add(new SortDescription("IP", ListSortDirection.Ascending));
         }
 
         void loadconfig()
         {
             //Checking if path for reshade unlocker is saved
-            if (Properties.Settings.Default.unlockerpath != "")
+
+            if (Properties.Settings.Default.reshadepath != "")
             {
-                unlockerpath = Properties.Settings.Default.unlockerpath;
+                try
+                {
+                    unlockerpath = Properties.Settings.Default.reshadepath;
+                }
+                catch { }
                 cb_reshade.IsEnabled = true;
             }
-            if (Properties.Settings.Default.usereshade && cb_reshade.IsEnabled == true) cb_reshade.IsChecked=true;
+            if (Properties.Settings.Default.use_reshade && cb_reshade.IsEnabled == true) cb_reshade.IsChecked=true;
 
             // Importing the XML file at AppData\Roaming\Guild Wars 2\
             // This file also contains infos about the graphic settings
@@ -197,7 +214,7 @@ namespace Gw2_Launchbuddy
 
             try
             {
-                if (Properties.Settings.Default.usereshade) cb_reshade.IsChecked = true;
+                if (Properties.Settings.Default.use_reshade) cb_reshade.IsChecked = true;
 
                 StreamReader stream = new System.IO.StreamReader(sourcepath);
                 XmlTextReader reader = null;
@@ -227,29 +244,34 @@ namespace Gw2_Launchbuddy
 
                         case "EXECCMD":
 
+                            //Filter arguments from path
                             lab_para.Content = "Latest Startparameters: ";
-                            string[] parameters = getvalue(reader).Split('"')[2].Split(' ');
-
-                            foreach (string parameter in parameters)
+                            
+                            Regex regex = new Regex(@"-\w*");
+                            string input = getvalue(reader);
+                            MatchCollection matchList = regex.Matches(input);
+                            
+                            foreach (Match parameter in matchList)
                             {
-                                lab_para.Content = lab_para.Content + " " + parameter;
+                                lab_para.Content = lab_para.Content + " " + parameter.Value;
 
                             }
                             // Automatically  set checks of previously used arguments
 
                             foreach (CheckBox entry in arglistbox.Items)
                             {
-                                foreach (string parameter in parameters)
+                                foreach (Match parameter in matchList)
                                 {
-                                    if (entry.Content.ToString() == parameter)
+                                    if (entry.Content.ToString() == parameter.Value)
                                     {
                                         entry.IsChecked = true;
                                     }
 
                                 }
                             }
-
+                            
                             break;
+                            
 
 
                     }
@@ -306,9 +328,12 @@ namespace Gw2_Launchbuddy
             return pingsender.Send(ip).RoundtripTime;
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private void bt_checkservers_Click(object sender, RoutedEventArgs e)
         {
-            createlist();
+            bt_checkservers.Content = "Loading Serverlist";
+            bt_checkservers.IsEnabled = false;
+            Thread serverthread = new Thread(createlist);
+            serverthread.Start();
         }
 
         private void listview_assets_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -379,7 +404,7 @@ namespace Gw2_Launchbuddy
 
             ProcessStartInfo gw2pro = new ProcessStartInfo();
             gw2pro.FileName = exepath + exename;
-            gw2pro.Arguments = "/c start \"\" \"" + unlockerpath + "\" && start \"\" \"" + exepath + exename + "\" " + getarguments();
+            gw2pro.Arguments = getarguments();
 
             try
             {
@@ -389,7 +414,6 @@ namespace Gw2_Launchbuddy
             {
                 System.Windows.MessageBox.Show("Could not launch Gw2. Invalid path?\n" + err.Message);
             }
-
 
             if (cb_reshade.IsChecked == true)
             {
@@ -404,7 +428,6 @@ namespace Gw2_Launchbuddy
                     MessageBox.Show("Could not launch ReshadeUnlocker. Invalid path?\n" + err.Message);
                 }
             }
-            
         }
 
 
@@ -424,7 +447,7 @@ namespace Gw2_Launchbuddy
                 exepath = Path.GetDirectoryName(filedialog.FileName) + @"\";
                 exename = Path.GetFileName(filedialog.Fi‌​leName);
                 lab_path.Content = exepath + exename;
-                Gw2_Launchbuddy.Properties.Settings.Default.unlockerpath = exename;
+                //Gw2_Launchbuddy.Properties.Settings.Default.reshadepath = exename;
             }
         }
 
@@ -740,7 +763,7 @@ namespace Gw2_Launchbuddy
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Properties.Settings.Default.usereshade = (bool)cb_reshade.IsChecked;
+            Properties.Settings.Default.use_reshade = (bool)cb_reshade.IsChecked;
             Properties.Settings.Default.Save();
             safeaccounts();
         }
@@ -803,22 +826,17 @@ namespace Gw2_Launchbuddy
             {
                 unlockerpath = filedialog.FileName;
                 cb_reshade.IsEnabled = true;
-                Gw2_Launchbuddy.Properties.Settings.Default.unlockerpath = unlockerpath;
+                Gw2_Launchbuddy.Properties.Settings.Default.reshadepath = unlockerpath;
             }
 
         }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.usereshade = false;
-            Properties.Settings.Default.unlockerpath= "";
-            Properties.Settings.Default.Save();
-        }
 
         private void cb_reshade_Checked(object sender, RoutedEventArgs e)
         {
             if (!System.IO.File.Exists(unlockerpath))
             {
+                cb_reshade.IsChecked = false;
                 MessageBox.Show("Reshade Unlocker exe not found at :\n" + exepath + "\nPlease select the ReshadeUnlocker.exe manually!");
                 System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
                 filedialog.DefaultExt = "exe";
@@ -829,11 +847,15 @@ namespace Gw2_Launchbuddy
                 if (filedialog.FileName == "" || !filedialog.FileName.EndsWith(".exe"))
                 {
                     MessageBox.Show("Invalid .exe file selected!");
-                    cb_reshade.IsChecked = false;
+
                 } else
                 {
                     unlockerpath = filedialog.FileName;
-                    Gw2_Launchbuddy.Properties.Settings.Default.unlockerpath = unlockerpath;
+                    try
+                    {
+                        Gw2_Launchbuddy.Properties.Settings.Default.reshadepath = unlockerpath;
+                    }
+                    catch { }
                 }
             }
         }

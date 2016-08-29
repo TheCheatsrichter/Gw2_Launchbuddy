@@ -25,25 +25,25 @@ namespace Gw2_Launchbuddy.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string unlockerpath {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool use_reshade {
             get {
-                return ((string)(this["unlockerpath"]));
+                return ((bool)(this["use_reshade"]));
             }
             set {
-                this["unlockerpath"] = value;
+                this["use_reshade"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool usereshade {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string reshadepath {
             get {
-                return ((bool)(this["usereshade"]));
+                return ((string)(this["reshadepath"]));
             }
             set {
-                this["usereshade"] = value;
+                this["reshadepath"] = value;
             }
         }
     }

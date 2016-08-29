@@ -51,7 +51,7 @@
         </Grid.ColumnDefinitions>
         <Label x:Name="lab_authserverlist" Content="Authentication Servers:" HorizontalAlignment="Left" Margin="5,285,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072" Height="26" Width="330" Grid.Column="1"/>
         <Label x:Name="lab_assetserverlist" Content="Asset Servers APLHA:" HorizontalAlignment="Left" Margin="5,285,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072" Height="26" Width="327" Grid.Column="2"/>
-        <Button x:Name="button" Content="Check Servers" HorizontalAlignment="Left" Margin="5,473,0,0" VerticalAlignment="Top" Width="675" Click="button_Click" Height="35" Grid.ColumnSpan="2" Grid.Column="1"/>
+        <Button x:Name="bt_checkservers" Content="Check Servers" HorizontalAlignment="Left" Margin="5,473,0,0" VerticalAlignment="Top" Width="675"  Height="35" Grid.ColumnSpan="2" Grid.Column="1" Click="bt_checkservers_Click" />
         <ListView x:Name="listview_auth" HorizontalAlignment="Left" Height="157" Margin="5,311,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="listview_auth_SelectionChanged" Grid.Column="1">
             <ListView.View>
                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
@@ -155,7 +155,6 @@
         <Button x:Name="bt_reshadepath" Content="Set ReshadeUnlocker Path" Grid.Column="2" HorizontalAlignment="Left" Margin="160,802,0,0" VerticalAlignment="Top" Width="172" Click="bt_reshadepath_Click"/>
         <Separator Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="3" Margin="5,791,0,0" VerticalAlignment="Top" Width="673" Grid.Column="1"/>
         <Separator Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="3" Margin="5,829,0,0" VerticalAlignment="Top" Width="673" Grid.Column="1"/>
-        <Button x:Name="button1" Content="Button" Grid.Column="2" HorizontalAlignment="Left" Margin="33,582,0,0" VerticalAlignment="Top" Width="75" Click="button1_Click"/>
 
 
 
