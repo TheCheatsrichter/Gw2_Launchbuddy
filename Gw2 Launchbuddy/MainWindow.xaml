@@ -7,7 +7,7 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Gw2_Launchbuddy.MainWindow"
         
         mc:Ignorable="d"
-        Title="Gw2 Launchbuddy BETA" Height="950" Width="715" ResizeMode="NoResize" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
+        Title="Gw2 Launchbuddy BETA" Height="957" Width="715" ResizeMode="NoResize" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="0,0,0,1">
         <Grid.Background>
@@ -75,7 +75,7 @@
 
         <CheckBox x:Name="checkb_auth" Content="Use Authentication Server : (Select Server)" HorizontalAlignment="Left" Margin="7,513,0,0" VerticalAlignment="Top" Width="385" FontSize="16" IsEnabled="False" Checked="checkb_auth_Checked" Unchecked="checkb_auth_Unchecked" Height="21" Grid.ColumnSpan="2" Grid.Column="1" FontWeight="Bold"/>
         <CheckBox x:Name="checkb_assets" Content="Use Assets Server : (Select Server)" HorizontalAlignment="Left" Margin="7,539,0,0" VerticalAlignment="Top" Width="385" FontSize="16" IsEnabled="False" Checked="checkb_assets_Checked" Unchecked="checkb_assets_Unchecked" Height="21" Grid.ColumnSpan="2" Grid.Column="1" FontWeight="Bold"/>
-        <Button x:Name="bt_launch" Content="Launch Gw2" HorizontalAlignment="Left" Margin="0,837,0,0" VerticalAlignment="Top" Width="685" Height="35" Click="bt_launch_Click" Grid.ColumnSpan="2" Grid.Column="1"/>
+        <Button x:Name="bt_launch" Content="Launch Gw2" HorizontalAlignment="Left" Margin="2,837,0,0" VerticalAlignment="Top" Width="680" Height="35" Click="bt_launch_Click" Grid.ColumnSpan="2" Grid.Column="1"/>
         <Label x:Name="lab_version" Content="Build Version:" HorizontalAlignment="Left" Margin="5,26,0,0" VerticalAlignment="Top" Height="26" Width="346" Grid.Column="1" Grid.ColumnSpan="2"/>
         <Label x:Name="lab_para" Content="Latest Startparameters:" HorizontalAlignment="Left" Margin="5,52,0,0" VerticalAlignment="Top" Height="26" Width="444" Grid.Column="1" Grid.ColumnSpan="2"/>
         <Label x:Name="lab_path" Content="" HorizontalAlignment="Left" Margin="70,78,0,0" VerticalAlignment="Top" Height="26" Width="511" Grid.Column="1" Grid.ColumnSpan="2"/>
@@ -86,7 +86,7 @@
         <Label x:Name="lab_port_assets" Content="Port (optional):" HorizontalAlignment="Left" Margin="94,542,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.543,1.769" IsEnabled="False" Height="34" Width="118" Grid.Column="2" FontSize="16"/>
         <Label x:Name="label1" Content="Install Path:" HorizontalAlignment="Left" Margin="5,78,0,0" VerticalAlignment="Top" Height="26" Width="71" Grid.Column="1"/>
         <Label x:Name="label2" HorizontalAlignment="Right" Margin="0,-2,8,0" VerticalAlignment="Top" Grid.Column="2" Height="26" Width="217" Content="Gw2 Launchbuddy by TheCheatsrichter"/>
-        <Button x:Name="bt_shortcut" Content="Create Shortcut" HorizontalAlignment="Left" Margin="4,872,0,0" VerticalAlignment="Top" Width="685" Height="35" Click="bt_shortcut_Click" Grid.ColumnSpan="3"/>
+        <Button x:Name="bt_shortcut" Content="Create Shortcut" HorizontalAlignment="Left" Margin="3,875,0,0" VerticalAlignment="Top" Width="679" Height="35" Click="bt_shortcut_Click" Grid.ColumnSpan="2" Grid.Column="1"/>
         <ListBox x:Name="arglistbox" HorizontalAlignment="Left" Height="133" Margin="5,138,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="arglistbox_SelectionChanged" Grid.Column="1" >
             <ListBox.Resources>
                 <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">

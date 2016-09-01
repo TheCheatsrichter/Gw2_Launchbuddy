@@ -18,25 +18,19 @@ using System.Threading;
 
 namespace Gw2_Launchbuddy
 {
-
-
-    /// <summary>
-    /// Gw2 Launchbuddy 
-    /// </summary>
     public partial class MainWindow : Window
     {
-        /// <summary>
-        /// Object prefix keys:
-        /// 
+        ///Gw2 Launchbuddy by TheCheatsrichter 2016
+        ///
+        ///Argument generator and shortcut creator for Guild Wars 2
+
+        /// Object prefix:
         ///     bt= button
         ///     lab = label
-        ///     
+        ///     cb = checkbox
         /// 
-        /// 
-        /// </summary>
+        ///##########################################
 
-        //List<String> authlist = new List<String>();
-        //List<String> assetlist = new List<String>()
         ObservableCollection<Server> assetlist = new ObservableCollection<Server>();
         ObservableCollection<Server> authlist = new ObservableCollection<Server>();
         ObservableCollection<Account> accountlist = new ObservableCollection<Account>();
@@ -70,7 +64,7 @@ namespace Gw2_Launchbuddy
             InitializeComponent();
             
             accountlist.Clear(); //clearing accountlist
-            loadconfig(); // loading the gw2 xml config file from appdata
+            loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
             loadaccounts(); // loading saved accounts from launchbuddy
 
         }
@@ -86,7 +80,6 @@ namespace Gw2_Launchbuddy
 
             try
             {
-
                 IPAddress[] auth1ips = Dns.GetHostAddresses("auth1.101.ArenaNetworks.com");
                 IPAddress[] auth2ips = Dns.GetHostAddresses("auth2.101.ArenaNetworks.com");
                 IPAddress[] assetips = Dns.GetHostAddresses("assetcdn.101.ArenaNetworks.com");
@@ -181,7 +174,6 @@ namespace Gw2_Launchbuddy
             lab_assetserverlist.Content = "Asset Servers APLHA (" + assetlist.Count + " servers found):";
             bt_checkservers.Content = "Check Servers (Last update: "+ DateTime.Now.ToString("h:mm:ss tt") + ")";
 
-
             // Sorting authentication servers (ping). Not needed for assetservers because they use CDN (ping nealy doesnt differ)
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(listview_auth.ItemsSource);
             view.SortDescriptions.Add(new SortDescription("IP", ListSortDirection.Ascending));
@@ -253,10 +245,8 @@ namespace Gw2_Launchbuddy
                             break;
 
                         case "EXECCMD":
-
                             //Filter arguments from path
                             lab_para.Content = "Latest Startparameters: ";
-                            
                             Regex regex = new Regex(@"-\w*");
                             string input = getvalue(reader);
                             MatchCollection matchList = regex.Matches(input);
@@ -266,6 +256,7 @@ namespace Gw2_Launchbuddy
                                 lab_para.Content = lab_para.Content + " " + parameter.Value;
 
                             }
+
                             // Automatically  set checks of previously used arguments
 
                             foreach (CheckBox entry in arglistbox.Items)
@@ -278,16 +269,10 @@ namespace Gw2_Launchbuddy
                                     }
 
                                 }
-                            }
-                            
+                            }               
                             break;
-                            
-
-
                     }
-
                 }
-
             }
             catch
             {
@@ -299,8 +284,7 @@ namespace Gw2_Launchbuddy
         {
             while (reader.MoveToNextAttribute())
             {
-                string value = reader.Value;
-                return value;
+                return reader.Value;
             }
             return null;
         }
@@ -309,6 +293,7 @@ namespace Gw2_Launchbuddy
         string getlocation(string ip)
         {
             //Getting the geolocation of the asset CDN servers
+            //This might be the origin of AV flagging the exe!
             try
             {
                 using (var objClient = new System.Net.WebClient())
@@ -340,6 +325,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_checkservers_Click(object sender, RoutedEventArgs e)
         {
+            //Starting servercheck thread
             bt_checkservers.Content = "Loading Serverlist";
             bt_checkservers.IsEnabled = false;
             Thread serverthread = new Thread(createlist);
@@ -513,10 +499,9 @@ namespace Gw2_Launchbuddy
 
         private void arglistbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Description switch. Should have used extern file / dictionary
+            // Description switch. Should have used extern file / dictionary?
             if (arglistbox.SelectedItem != null)
             {
-
                 object selecteditem = arglistbox.SelectedItem;
                 System.Windows.Controls.CheckBox item = (System.Windows.Controls.CheckBox)selecteditem;
                 lab_descr.Content = "Description (" + item.Content.ToString() + "):";
@@ -619,7 +604,6 @@ namespace Gw2_Launchbuddy
 
         private void bt_shortcut_Click(object sender, RoutedEventArgs e)
         {
-
             if (cb_login.IsChecked == true)
             {
                 try
@@ -630,13 +614,11 @@ namespace Gw2_Launchbuddy
                 {
                     MessageBox.Show(err.Message);
                 }
-
             }
             else
             {
                 CreateShortcut("Gw2_Custom_Launcher", exepath, exepath + exename);
             }
-
             try
             {
                 Process.Start(exepath);
@@ -651,7 +633,6 @@ namespace Gw2_Launchbuddy
         {
             tb_clientport.IsEnabled = true;
             lab_port_client.IsEnabled = true;
-
         }
 
         private void checkb_clientport_Unchecked(object sender, RoutedEventArgs e)
@@ -682,7 +663,6 @@ namespace Gw2_Launchbuddy
                 using (Stream stream = System.IO.File.Open(path, FileMode.Create))
                 {
                     var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-
                     bformatter.Serialize(stream, accountlist);
                 }
             }
@@ -702,11 +682,8 @@ namespace Gw2_Launchbuddy
                     using (Stream stream = System.IO.File.Open(path, FileMode.Open))
                     {
                         var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-
-
                         accountlist = (ObservableCollection<Account>)bformatter.Deserialize(stream);
                         listview_acc.ItemsSource = accountlist;
-
                     }
                 }
             }
@@ -729,7 +706,6 @@ namespace Gw2_Launchbuddy
                 {
                     MessageBox.Show("Invalid password");
                 }
-
             }
             else
             {
@@ -857,7 +833,6 @@ namespace Gw2_Launchbuddy
                 if (filedialog.FileName == "" || !filedialog.FileName.EndsWith(".exe"))
                 {
                     MessageBox.Show("Invalid .exe file selected!");
-
                 } else
                 {
                     unlockerpath = filedialog.FileName;
