@@ -7,9 +7,21 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Gw2_Launchbuddy.MainWindow"
         
         mc:Ignorable="d"
-        Title="Gw2 Launchbuddy BETA" Height="957" Width="715" ResizeMode="NoResize" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
+        Title="Gw2 Launchbuddy BETA" Height="960" Width="715" ResizeMode="NoResize" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Storyboard x:Key="arrow_anim"/>
+    </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource arrow_anim}"/>
+        </EventTrigger>
+    </Window.Triggers>
 
     <Grid Margin="0,0,0,1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="47*"/>
+        </Grid.RowDefinitions>
         <Grid.Background>
             <ImageBrush x:Name="BackImage" ImageSource="Resources\launchbuddyback.png" Opacity="0.5" Stretch="None" AlignmentX="Right" AlignmentY="Top">
                 <ImageBrush.Transform>
@@ -49,10 +61,10 @@
             <ColumnDefinition Width="349*"/>
             <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
-        <Label x:Name="lab_authserverlist" Content="Authentication Servers:" HorizontalAlignment="Left" Margin="5,285,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072" Height="26" Width="330" Grid.Column="1"/>
-        <Label x:Name="lab_assetserverlist" Content="Asset Servers APLHA:" HorizontalAlignment="Left" Margin="5,285,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072" Height="26" Width="327" Grid.Column="2"/>
-        <Button x:Name="bt_checkservers" Content="Check Servers" HorizontalAlignment="Left" Margin="5,473,0,0" VerticalAlignment="Top" Width="675"  Height="35" Grid.ColumnSpan="2" Grid.Column="1" Click="bt_checkservers_Click" />
-        <ListView x:Name="listview_auth" HorizontalAlignment="Left" Height="157" Margin="5,311,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="listview_auth_SelectionChanged" Grid.Column="1">
+        <Label x:Name="lab_authserverlist" Content="Authentication Servers:" HorizontalAlignment="Left" Margin="5,247,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072" Height="26" Width="330" Grid.Column="1" Grid.Row="1"/>
+        <Label x:Name="lab_assetserverlist" Content="Asset Servers APLHA:" HorizontalAlignment="Left" Margin="5,247,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.322,-0.072" Height="26" Width="327" Grid.Column="2" Grid.Row="1"/>
+        <Button x:Name="bt_checkservers" Content="Check Servers" HorizontalAlignment="Left" Margin="5,435,0,0" VerticalAlignment="Top" Width="675"  Height="35" Grid.ColumnSpan="2" Grid.Column="1" Click="bt_checkservers_Click" Grid.Row="1" />
+        <ListView x:Name="listview_auth" HorizontalAlignment="Left" Height="157" Margin="5,273,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="listview_auth_SelectionChanged" Grid.Column="1" Grid.Row="1" d:LayoutOverrides="VerticalAlignment">
             <ListView.View>
                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
                     <GridViewColumn Header="IP" HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding IP}"/>
@@ -62,7 +74,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView x:Name="listview_assets" HorizontalAlignment="Left" Height="157" Margin="5,311,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="listview_assets_SelectionChanged" Grid.Column="2">
+        <ListView x:Name="listview_assets" HorizontalAlignment="Left" Height="157" Margin="5,273,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="listview_assets_SelectionChanged" Grid.Column="2" Grid.Row="1" d:LayoutOverrides="VerticalAlignment">
             <ListView.View>
                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
                     <GridViewColumn Header="IP" HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding IP}"/>
@@ -73,21 +85,30 @@
             </ListView.View>
         </ListView>
 
-        <CheckBox x:Name="checkb_auth" Content="Use Authentication Server : (Select Server)" HorizontalAlignment="Left" Margin="7,513,0,0" VerticalAlignment="Top" Width="385" FontSize="16" IsEnabled="False" Checked="checkb_auth_Checked" Unchecked="checkb_auth_Unchecked" Height="21" Grid.ColumnSpan="2" Grid.Column="1" FontWeight="Bold"/>
-        <CheckBox x:Name="checkb_assets" Content="Use Assets Server : (Select Server)" HorizontalAlignment="Left" Margin="7,539,0,0" VerticalAlignment="Top" Width="385" FontSize="16" IsEnabled="False" Checked="checkb_assets_Checked" Unchecked="checkb_assets_Unchecked" Height="21" Grid.ColumnSpan="2" Grid.Column="1" FontWeight="Bold"/>
-        <Button x:Name="bt_launch" Content="Launch Gw2" HorizontalAlignment="Left" Margin="2,837,0,0" VerticalAlignment="Top" Width="680" Height="35" Click="bt_launch_Click" Grid.ColumnSpan="2" Grid.Column="1"/>
-        <Label x:Name="lab_version" Content="Build Version:" HorizontalAlignment="Left" Margin="5,26,0,0" VerticalAlignment="Top" Height="26" Width="346" Grid.Column="1" Grid.ColumnSpan="2"/>
-        <Label x:Name="lab_para" Content="Latest Startparameters:" HorizontalAlignment="Left" Margin="5,52,0,0" VerticalAlignment="Top" Height="26" Width="444" Grid.Column="1" Grid.ColumnSpan="2"/>
-        <Label x:Name="lab_path" Content="" HorizontalAlignment="Left" Margin="70,78,0,0" VerticalAlignment="Top" Height="26" Width="511" Grid.Column="1" Grid.ColumnSpan="2"/>
-        <Button x:Name="bt_installpath" Content="Set Directory" HorizontalAlignment="Left" Margin="79,78,0,0" VerticalAlignment="Top" Width="168" Click="bt_installpath_Click" Grid.Column="2" Height="22"/>
-        <TextBox x:Name="tb_authport" HorizontalAlignment="Left" Height="23" Margin="214,517,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"  IsEnabled="False" Grid.Column="2" LostKeyboardFocus="tb_authport_LostKeyboardFocus"/>
-        <TextBox x:Name="tb_assetsport" HorizontalAlignment="Left" Height="23" Margin="214,546,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"  IsEnabled="False" Grid.Column="2" LostKeyboardFocus="tb_assetsport_LostKeyboardFocus"/>
-        <Label x:Name="lab_port_auth" Content="Port (optional):" HorizontalAlignment="Left" Margin="93,510,0,0" VerticalAlignment="Top" IsEnabled="False" Height="32" Width="118" Grid.Column="2" FontSize="16"/>
-        <Label x:Name="lab_port_assets" Content="Port (optional):" HorizontalAlignment="Left" Margin="94,542,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.543,1.769" IsEnabled="False" Height="34" Width="118" Grid.Column="2" FontSize="16"/>
-        <Label x:Name="label1" Content="Install Path:" HorizontalAlignment="Left" Margin="5,78,0,0" VerticalAlignment="Top" Height="26" Width="71" Grid.Column="1"/>
-        <Label x:Name="label2" HorizontalAlignment="Right" Margin="0,-2,8,0" VerticalAlignment="Top" Grid.Column="2" Height="26" Width="217" Content="Gw2 Launchbuddy by TheCheatsrichter"/>
-        <Button x:Name="bt_shortcut" Content="Create Shortcut" HorizontalAlignment="Left" Margin="3,875,0,0" VerticalAlignment="Top" Width="679" Height="35" Click="bt_shortcut_Click" Grid.ColumnSpan="2" Grid.Column="1"/>
-        <ListBox x:Name="arglistbox" HorizontalAlignment="Left" Height="133" Margin="5,138,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="arglistbox_SelectionChanged" Grid.Column="1" >
+        <CheckBox x:Name="checkb_auth" Content="Use Authentication Server : (Select Server)" HorizontalAlignment="Left" Margin="7,475,-42,0" VerticalAlignment="Top" Width="385" FontSize="16" IsEnabled="False" Checked="checkb_auth_Checked" Unchecked="checkb_auth_Unchecked" Height="21" Grid.Column="1" FontWeight="Bold" Grid.Row="1"/>
+        <CheckBox x:Name="checkb_assets" Content="Use Assets Server : (Select Server)" HorizontalAlignment="Left" Margin="7,501,-42,0" VerticalAlignment="Top" Width="385" FontSize="16" IsEnabled="False" Checked="checkb_assets_Checked" Unchecked="checkb_assets_Unchecked" Height="21" Grid.Column="1" FontWeight="Bold" Grid.Row="1"/>
+        <Button x:Name="bt_launch" Content="Launch Gw2" HorizontalAlignment="Left" Margin="2,799,0,0" VerticalAlignment="Top" Width="680" Height="35" Click="bt_launch_Click" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="1"/>
+        <Label x:Name="lab_version" Content="Build Version:" HorizontalAlignment="Left" Margin="5,-12,-1,0" VerticalAlignment="Top" Height="26" Width="346" Grid.Column="1" Grid.Row="1"/>
+        <Label x:Name="lab_para" Content="Latest Startparameters:" HorizontalAlignment="Left" Margin="5,14,-99,0" VerticalAlignment="Top" Height="26" Width="444" Grid.Column="1" Grid.Row="1"/>
+        <Label x:Name="lab_path" Content="" HorizontalAlignment="Left" Margin="70,40,0,0" VerticalAlignment="Top" Height="26" Width="511" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"/>
+        <Button x:Name="bt_installpath" Content="Set Directory" HorizontalAlignment="Left" Margin="79,40,0,0" VerticalAlignment="Top" Width="168" Click="bt_installpath_Click" Grid.Column="2" Height="22" Grid.Row="1"/>
+        <TextBox x:Name="tb_authport" HorizontalAlignment="Left" Height="23" Margin="214,479,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"  IsEnabled="False" Grid.Column="2" LostKeyboardFocus="tb_authport_LostKeyboardFocus" Grid.Row="1"/>
+        <TextBox x:Name="tb_assetsport" HorizontalAlignment="Left" Height="23" Margin="214,508,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"  IsEnabled="False" Grid.Column="2" LostKeyboardFocus="tb_assetsport_LostKeyboardFocus" Grid.Row="1"/>
+        <Label x:Name="lab_port_auth" Content="Port (optional):" HorizontalAlignment="Left" Margin="93,472,0,0" VerticalAlignment="Top" IsEnabled="False" Height="32" Width="118" Grid.Column="2" FontSize="16" RenderTransformOrigin="0.5,0.5" Grid.Row="1">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Label x:Name="lab_port_assets" Content="Port (optional):" HorizontalAlignment="Left" Margin="94,504,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.543,1.769" IsEnabled="False" Height="34" Width="118" Grid.Column="2" FontSize="16" Grid.Row="1"/>
+        <Label x:Name="label1" Content="Install Path:" HorizontalAlignment="Left" Margin="5,40,0,0" VerticalAlignment="Top" Height="26" Width="71" Grid.Column="1" Grid.Row="1"/>
+        <Label x:Name="label2" HorizontalAlignment="Right" Margin="0,-2,8,14" Grid.Column="2" Width="217" Content="Gw2 Launchbuddy by TheCheatsrichter"/>
+        <Button x:Name="bt_shortcut" Content="Create Shortcut" HorizontalAlignment="Left" Margin="3,837,0,0" VerticalAlignment="Top" Width="679" Height="35" Click="bt_shortcut_Click" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="1"/>
+        <ListBox x:Name="arglistbox" HorizontalAlignment="Left" Height="133" Margin="5,100,0,0" VerticalAlignment="Top" Width="330" SelectionChanged="arglistbox_SelectionChanged" Grid.Column="1" Grid.Row="1" >
             <ListBox.Resources>
                 <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                     <Style.Triggers>
@@ -120,16 +141,16 @@
             <CheckBox Content="-windowed" Margin="5,0,0,0"/>
             <CheckBox Content="-umbra gpu" Margin="5,0,0,0"/>
         </ListBox>
-        <Label x:Name="lab_descr" Content="Description (Wiki):" HorizontalAlignment="Left" Margin="0,107,0,0" VerticalAlignment="Top" Grid.Column="2" Height="31" Width="330" FontSize="16" FontWeight="Bold"/>
-        <TextBlock x:Name="textblock_descr" HorizontalAlignment="Left" Margin="5,138,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="142" Width="327" Grid.Column="2" FontSize="14.667"/>
-        <Label x:Name="lab_arglist" Content="Arguments:" HorizontalAlignment="Left" Margin="2,106,0,0" VerticalAlignment="Top" Height="34" Width="122" Grid.Column="1" FontSize="16" FontWeight="Bold"/>
-        <CheckBox x:Name="checkb_clientport" Content="Use Clientport: " HorizontalAlignment="Left" Margin="7,569,0,0" VerticalAlignment="Top" Width="385" FontSize="16" Checked="checkb_clientport_Checked" Unchecked="checkb_clientport_Unchecked" Height="21" Grid.ColumnSpan="2" Grid.Column="1" FontWeight="Bold"/>
-        <Label x:Name="lab_port_client" Content="Port :" HorizontalAlignment="Left" Margin="162,569,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.543,1.769" IsEnabled="False" Height="29" Width="69" Grid.Column="2" FontSize="16"/>
-        <TextBox x:Name="tb_clientport" HorizontalAlignment="Left" Height="23" Margin="214,574,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsEnabled="False" Grid.Column="2" Text="443"/>
-        <Separator Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="3" Margin="5,282,0,0" VerticalAlignment="Top" Width="673" Grid.Column="1"/>
-        <Separator Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="3" Margin="5,609,0,0" VerticalAlignment="Top" Width="673" Grid.Column="1"/>
+        <Label x:Name="lab_descr" Content="Description (Wiki):" HorizontalAlignment="Left" Margin="0,69,0,0" VerticalAlignment="Top" Grid.Column="2" Height="31" Width="330" FontSize="16" FontWeight="Bold" Grid.Row="1"/>
+        <TextBlock x:Name="textblock_descr" HorizontalAlignment="Left" Margin="5,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="142" Width="327" Grid.Column="2" FontSize="14.667" Grid.Row="1"/>
+        <Label x:Name="lab_arglist" Content="Arguments:" HorizontalAlignment="Left" Margin="2,68,0,0" VerticalAlignment="Top" Height="34" Width="122" Grid.Column="1" FontSize="16" FontWeight="Bold" Grid.Row="1"/>
+        <CheckBox x:Name="checkb_clientport" Content="Use Clientport: " HorizontalAlignment="Left" Margin="7,531,-42,0" VerticalAlignment="Top" Width="385" FontSize="16" Checked="checkb_clientport_Checked" Unchecked="checkb_clientport_Unchecked" Height="21" Grid.Column="1" FontWeight="Bold" Grid.Row="1"/>
+        <Label x:Name="lab_port_client" Content="Port :" HorizontalAlignment="Left" Margin="162,531,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.543,1.769" IsEnabled="False" Height="29" Width="69" Grid.Column="2" FontSize="16" Grid.Row="1"/>
+        <TextBox x:Name="tb_clientport" HorizontalAlignment="Left" Height="23" Margin="214,536,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsEnabled="False" Grid.Column="2" Text="443" Grid.Row="1"/>
+        <Separator Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="3" Margin="5,244,0,0" VerticalAlignment="Top" Width="673" Grid.Column="1" Grid.Row="1"/>
+        <Separator Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="3" Margin="5,571,0,0" VerticalAlignment="Top" Width="673" Grid.Column="1" Grid.Row="1"/>
 
-        <ListView ItemsSource="{Binding}" x:Name="listview_acc" Grid.Column="1" HorizontalAlignment="Left" Height="116" Margin="5,638,0,0" VerticalAlignment="Top" Width="675" Grid.ColumnSpan="2" IsEnabled="False" SelectionChanged="listview_acc_SelectionChanged">
+        <ListView ItemsSource="{Binding}" x:Name="listview_acc" Grid.Column="1" HorizontalAlignment="Left" Height="116" Margin="5,600,0,0" VerticalAlignment="Top" Width="675" Grid.ColumnSpan="2" IsEnabled="False" SelectionChanged="listview_acc_SelectionChanged" Grid.Row="1">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Email" Width="200" DisplayMemberBinding="{Binding Email}" />
@@ -139,22 +160,22 @@
             </ListView.View>
         </ListView>
 
-        <TextBox x:Name="tb_email" HorizontalAlignment="Left" Height="23" Margin="52,758,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="219" Grid.Column="1" IsEnabled="False"/>
-        <TextBox x:Name="tb_passw" HorizontalAlignment="Left" Height="23" Margin="0,758,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="149" Grid.Column="2" IsEnabled="False"/>
-        <Label x:Name="lab_email" Content="Email:" HorizontalAlignment="Left" Margin="6,755,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.684,-0.231" Grid.Column="1" IsEnabled="False" Height="26" Width="41"/>
-        <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left" Margin="280,755,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.684,-0.231" Grid.Column="1" IsEnabled="False" Height="26" Width="63"/>
-        <Button x:Name="bt_addacc" Content="Add" HorizontalAlignment="Left" Margin="174,757,0,0" VerticalAlignment="Top" Width="75" Grid.Column="2" Click="bt_addacc_Click" IsEnabled="False" Height="22"/>
-        <Button x:Name="bt_remacc" Content="Remove" HorizontalAlignment="Left" Margin="257,757,0,0" VerticalAlignment="Top" Width="75" Grid.Column="2" IsEnabled="False" Click="bt_remacc_Click" Height="22"/>
-        <CheckBox x:Name="cb_login" Content="Use Autologin" Grid.Column="1" HorizontalAlignment="Left" Margin="7,615,0,0" VerticalAlignment="Top" FontSize="16" Checked="cb_login_Checked" Unchecked="cb_login_Unchecked" Height="21" Width="432" FontWeight="Bold" Grid.ColumnSpan="2"/>
-        <Button x:Name="bt_quaggan"  Grid.Column="2" HorizontalAlignment="Left" Margin="255,24,0,0" VerticalAlignment="Top" Width="75" Height="75" Click="bt_quaggan_Click">
+        <TextBox x:Name="tb_email" HorizontalAlignment="Left" Height="23" Margin="52,720,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="219" Grid.Column="1" IsEnabled="False" Grid.Row="1"/>
+        <TextBox x:Name="tb_passw" HorizontalAlignment="Left" Height="23" Margin="0,720,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="149" Grid.Column="2" IsEnabled="False" Grid.Row="1"/>
+        <Label x:Name="lab_email" Content="Email:" HorizontalAlignment="Left" Margin="6,717,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.684,-0.231" Grid.Column="1" IsEnabled="False" Height="26" Width="41" Grid.Row="1"/>
+        <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left" Margin="280,717,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.684,-0.231" Grid.Column="1" IsEnabled="False" Height="26" Width="63" Grid.Row="1"/>
+        <Button x:Name="bt_addacc" Content="Add" HorizontalAlignment="Left" Margin="174,719,0,0" VerticalAlignment="Top" Width="75" Grid.Column="2" Click="bt_addacc_Click" IsEnabled="False" Height="22" Grid.Row="1"/>
+        <Button x:Name="bt_remacc" Content="Remove" HorizontalAlignment="Left" Margin="257,719,0,0" VerticalAlignment="Top" Width="75" Grid.Column="2" IsEnabled="False" Click="bt_remacc_Click" Height="22" Grid.Row="1"/>
+        <CheckBox x:Name="cb_login" Content="Use Autologin" Grid.Column="1" HorizontalAlignment="Left" Margin="7,577,-89,0" VerticalAlignment="Top" FontSize="16" Checked="cb_login_Checked" Unchecked="cb_login_Unchecked" Height="21" Width="432" FontWeight="Bold" Grid.Row="1"/>
+        <Button x:Name="bt_quaggan"  Grid.Column="2" HorizontalAlignment="Left" Margin="255,-14,0,0" VerticalAlignment="Top" Width="75" Height="75" Click="bt_quaggan_Click" Grid.Row="1">
             <Image Source="Resources/quaggan.png"/>
         </Button>
-        <Separator Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="3" Margin="5,105,0,0" VerticalAlignment="Top" Width="673" Grid.Column="1"/>
-        <Label x:Name="label" Content="Client Details:" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Margin="3,0,0,0" FontSize="16"/>
-        <CheckBox x:Name="cb_reshade" Content="Use Reshade Unlocker" Grid.Column="1" HorizontalAlignment="Left" Margin="10,802,0,0" VerticalAlignment="Top" Width="200" Checked="cb_reshade_Checked" Unchecked="cb_reshade_Unchecked" FontSize="16" FontWeight="Bold" IsEnabled="False"/>
-        <Button x:Name="bt_reshadepath" Content="Set ReshadeUnlocker Path" Grid.Column="2" HorizontalAlignment="Left" Margin="160,802,0,0" VerticalAlignment="Top" Width="172" Click="bt_reshadepath_Click"/>
-        <Separator Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="3" Margin="5,791,0,0" VerticalAlignment="Top" Width="673" Grid.Column="1"/>
-        <Separator Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="3" Margin="5,829,0,0" VerticalAlignment="Top" Width="673" Grid.Column="1"/>
+        <Separator Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="3" Margin="5,67,0,0" VerticalAlignment="Top" Width="673" Grid.Column="1" Grid.Row="1"/>
+        <Label x:Name="label" Content="Client Details:" Grid.Column="1" HorizontalAlignment="Left" FontWeight="Bold" Margin="3,0,0,6.72" FontSize="16" d:LayoutOverrides="Height"/>
+        <CheckBox x:Name="cb_reshade" Content="Use Reshade Unlocker" Grid.Column="1" HorizontalAlignment="Left" Margin="10,764,0,0" VerticalAlignment="Top" Width="200" Checked="cb_reshade_Checked" Unchecked="cb_reshade_Unchecked" FontSize="16" FontWeight="Bold" IsEnabled="False" Grid.Row="1"/>
+        <Button x:Name="bt_reshadepath" Content="Set ReshadeUnlocker Path" Grid.Column="2" HorizontalAlignment="Left" Margin="160,764,0,0" VerticalAlignment="Top" Width="172" Click="bt_reshadepath_Click" Grid.Row="1"/>
+        <Separator Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="3" Margin="5,753,0,0" VerticalAlignment="Top" Width="673" Grid.Column="1" Grid.Row="1"/>
+        <Separator Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="3" Margin="5,791,0,0" VerticalAlignment="Top" Width="673" Grid.Column="1" Grid.Row="1"/>
 
 
 

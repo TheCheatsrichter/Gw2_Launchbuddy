@@ -4,6 +4,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Threading;
 using System.Linq;
+using System.Windows.Media.Animation;
 
 
 namespace Gw2_Launchbuddy
@@ -15,6 +16,7 @@ namespace Gw2_Launchbuddy
     {
         public string exepath { get; set; }
         public string exename { get; set; }
+        bool glasses = false;
 
         public Clientfix()
         {
@@ -200,7 +202,14 @@ namespace Gw2_Launchbuddy
 
             if (busy) tbl_quaggan.Text = "Quaggan is busy please wait";
             if (!busy) tbl_quaggan.Text = "What else can quaggan do for youuu?";
+            getglasses();
 
+        }
+
+        void getglasses ()
+        {
+            if (!glasses)BeginStoryboard(this.FindResource("anim_quaggan") as Storyboard);
+            glasses = true;
         }
     }
 }

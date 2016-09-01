@@ -6,8 +6,26 @@
         xmlns:local="clr-namespace:Gw2_Launchbuddy"
         mc:Ignorable="d"
         Title="Clientifix the Quaggan" Height="298.487" Width="308.067" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Topmost="True" Icon="launchbuddy.ico">
+    <Window.Resources>
+        <Storyboard x:Key="anim_quaggan">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="img_quaggan">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:5" Value="99.396"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+    </Window.Resources>
     <Grid>
-        <Image x:Name="image" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" Source="Resources/quaggan.jpg"/>
+        <Image x:Name="image" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" Source="Resources/quaggan.jpg" RenderTransformOrigin="0.5,0.5">
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Image.RenderTransform>
+        </Image>
         <TextBlock x:Name="tbl_quaggan" HorizontalAlignment="Left" Margin="100,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="59" Width="182" FontSize="13.333" FontFamily="Comic Sans MS"><Run Text="C"/><Run Text="ooo"/><Run Text="! Quaggan will fix your Client for youuu. Choose what q"/><Run Text="uagg"/><Run Text="an can do for you."/></TextBlock>
         <Button x:Name="bt_appdata" Content="Clean Appdata" HorizontalAlignment="Left" Margin="10,227,0,0" VerticalAlignment="Top" Width="272" Click="bt_appdata_Click" />
         <Button x:Name="bt_repair" Content="Launch game in repairmode" HorizontalAlignment="Left" Margin="10,173,0,0" VerticalAlignment="Top" Width="272" Click="bt_repair_Click"/>
@@ -15,6 +33,16 @@
         <Button x:Name="bt_auto" Content="Fix Client Wizard" HorizontalAlignment="Left" Margin="10,119,0,0" VerticalAlignment="Top" Width="272" Click="bt_auto_Click"/>
         <Button x:Name="bt_bin" Content="Clean Bin folders" HorizontalAlignment="Left" Margin="10,146,0,0" VerticalAlignment="Top" Width="272" Click="bt_bin_Click" />
         <TextBlock x:Name="tbl_warning" HorizontalAlignment="Left" Margin="15,95,0,0" TextWrapping="Wrap" Text="ATTENTION: This section does delete/modify files!" VerticalAlignment="Top" Foreground="#FFFF0505"/>
+        <Image x:Name="img_quaggan" HorizontalAlignment="Left" Margin="-71.004,33.501,0,0" Width="54.84" Height="9.172" VerticalAlignment="Top" Source="Resources/glasses.png" RenderTransformOrigin="0.5,0.5">
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Image.RenderTransform>
+        </Image>
 
     </Grid>
 </Window>

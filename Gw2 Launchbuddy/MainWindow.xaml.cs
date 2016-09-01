@@ -41,6 +41,8 @@ namespace Gw2_Launchbuddy
 
         string exepath, exename , unlockerpath;
 
+        AES crypt = new AES();
+
         [Serializable]
         public class Server
         {
@@ -657,13 +659,27 @@ namespace Gw2_Launchbuddy
 
         void safeaccounts()
         {
+            ObservableCollection<Account> aes_accountlist = new ObservableCollection<Account>();
+            try
+            {
+                aes_accountlist.Clear();
+                foreach (Account acc in accountlist)
+                {
+                    aes_accountlist.Add(new Account { Email = acc.Email, Password = crypt.Encrypt(acc.Password), Time = acc.Time });
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show("Could not encrypt passwords\n" + err.Message);
+            }
+
             try
             {
                 var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\Launchbuddy.bin";
                 using (Stream stream = System.IO.File.Open(path, FileMode.Create))
                 {
                     var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                    bformatter.Serialize(stream, accountlist);
+                    bformatter.Serialize(stream, aes_accountlist);
                 }
             }
             catch (Exception e)
@@ -673,19 +689,27 @@ namespace Gw2_Launchbuddy
         void loadaccounts()
         {
             try
-            {
-
+            { 
                 var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\Launchbuddy.bin";
 
                 if (System.IO.File.Exists(path) == true)
                 {
+                    accountlist.Clear();
                     using (Stream stream = System.IO.File.Open(path, FileMode.Open))
                     {
                         var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                        accountlist = (ObservableCollection<Account>)bformatter.Deserialize(stream);
+                        ObservableCollection<Account> aes_accountlist = (ObservableCollection<Account>)bformatter.Deserialize(stream);
+                        
+                        foreach (Account acc in aes_accountlist)
+                        {
+                            accountlist.Add(new Account{Email=acc.Email,Password=crypt.Decrypt(acc.Password),Time=acc.Time});
+                        }
+
                         listview_acc.ItemsSource = accountlist;
                     }
                 }
+
+                //listview_acc.ItemsSource = accountlist;
             }
             catch (Exception e)
             { MessageBox.Show(e.Message); }
