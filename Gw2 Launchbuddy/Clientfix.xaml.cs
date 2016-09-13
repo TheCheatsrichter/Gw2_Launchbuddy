@@ -97,10 +97,13 @@ namespace Gw2_Launchbuddy
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = exepath + exename;
             startInfo.Arguments = " -image";
+            Process gw2pro = new Process { StartInfo = startInfo };
 
             try
             {
-                Process.Start(startInfo);
+                gw2pro.Start();
+                gw2pro.WaitForExit();
+
 
                 //Not needed waiting time
                 /*
@@ -201,8 +204,10 @@ namespace Gw2_Launchbuddy
             bt_repair.IsEnabled = !busy;
 
             if (busy) tbl_quaggan.Text = "Quaggan is busy please wait";
-            if (!busy) tbl_quaggan.Text = "What else can quaggan do for youuu?";
-            getglasses();
+            if (!busy)
+            { tbl_quaggan.Text = "What else can quaggan do for youuu?";
+                getglasses();
+            }
 
         }
 

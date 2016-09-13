@@ -13,13 +13,17 @@ using System.Net;
 using System.Windows.Data;
 using System.Text.RegularExpressions;
 using System.Threading;
-
+using System.Windows.Documents;
+using System.Windows.Media;
+using System.Collections.Generic;
+using System.Linq;
 
 
 namespace Gw2_Launchbuddy
 {
     public partial class MainWindow : Window
     {
+        
         ///Gw2 Launchbuddy by TheCheatsrichter 2016
         ///
         ///Argument generator and shortcut creator for Guild Wars 2
@@ -30,6 +34,9 @@ namespace Gw2_Launchbuddy
         ///     cb = checkbox
         /// 
         ///##########################################
+        /// 
+        private SortAdorner listViewSortAdorner = null;
+        private GridViewColumnHeader listViewSortCol = null;
 
         ObservableCollection<Server> assetlist = new ObservableCollection<Server>();
         ObservableCollection<Server> authlist = new ObservableCollection<Server>();
@@ -37,9 +44,12 @@ namespace Gw2_Launchbuddy
 
         Server selected_authsv = new Server();
         Server selected_assetsv = new Server();
-        Account selected_acc = new Account();
+
+        List<Account> selected_accs = new List<Account>();
+        List<int> nomutexpros = new List<int>();
 
         string exepath, exename , unlockerpath;
+        bool ismultibox = false;
 
         AES crypt = new AES();
 
@@ -58,18 +68,33 @@ namespace Gw2_Launchbuddy
         {
             public string Email { get; set; }
             public string Password { get; set; }
+            public string DisplayPW {
+                get
+                {
+                    string stars = "";
+                    foreach (char ch in Password.ToCharArray())
+                    {
+                        stars += "*";
+                    }
+                    return stars;
+                }
+                set {
+                    DisplayPW = value;
+                }
+            }
             public DateTime Time { get; set; }
+            public string Nick { get; set; }
         }
 
         public MainWindow()
         {
             InitializeComponent();
-            
             accountlist.Clear(); //clearing accountlist
             loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
             loadaccounts(); // loading saved accounts from launchbuddy
 
         }
+
 
         void createlist()
         {
@@ -169,16 +194,21 @@ namespace Gw2_Launchbuddy
             assetlist.Clear();
             authlist = newauthlist;
             assetlist = newassetlist;
-
             listview_auth.ItemsSource = authlist;
             listview_assets.ItemsSource = assetlist;
             lab_authserverlist.Content = "Authentication Servers (" + authlist.Count + " servers found):";
             lab_assetserverlist.Content = "Asset Servers APLHA (" + assetlist.Count + " servers found):";
             bt_checkservers.Content = "Check Servers (Last update: "+ DateTime.Now.ToString("h:mm:ss tt") + ")";
 
-            // Sorting authentication servers (ping). Not needed for assetservers because they use CDN (ping nealy doesnt differ)
+
+            // Sorting  servers (ping).
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(listview_auth.ItemsSource);
-            view.SortDescriptions.Add(new SortDescription("IP", ListSortDirection.Ascending));
+            view.SortDescriptions.Add(new SortDescription("Ping", ListSortDirection.Descending));
+            CollectionView sview = (CollectionView)CollectionViewSource.GetDefaultView(listview_assets.ItemsSource);
+            sview.SortDescriptions.Add(new SortDescription("Ping", ListSortDirection.Descending));
+            sview.Refresh();
+
+
         }
 
         void loadconfig()
@@ -255,8 +285,7 @@ namespace Gw2_Launchbuddy
                             
                             foreach (Match parameter in matchList)
                             {
-                                lab_para.Content = lab_para.Content + " " + parameter.Value;
-
+                                if (parameter.Value != "-shareArchive") lab_para.Content = lab_para.Content + " " + parameter.Value;
                             }
 
                             // Automatically  set checks of previously used arguments
@@ -322,7 +351,7 @@ namespace Gw2_Launchbuddy
         {
             // Get Ping in ms
             Ping pingsender = new Ping();
-            return pingsender.Send(ip).RoundtripTime;
+            return (int)pingsender.Send(ip).RoundtripTime;
         }
 
         private void bt_checkservers_Click(object sender, RoutedEventArgs e)
@@ -399,36 +428,75 @@ namespace Gw2_Launchbuddy
         private void bt_launch_Click(object sender, RoutedEventArgs e)
         {
             //Launching the application with arguments
-
-            ProcessStartInfo gw2pro = new ProcessStartInfo();
-            gw2pro.FileName = exepath + exename;
-            gw2pro.Arguments = getarguments();
-
-            try
+            if (ismultibox)
             {
-                System.Diagnostics.Process.Start(gw2pro);
-            }
-            catch (Exception err)
+                for (int i = 0; i <= selected_accs.Count - 1; i++) launchgw2(i);
+            }else
             {
-                System.Windows.MessageBox.Show("Could not launch Gw2. Invalid path?\n" + err.Message);
-            }
-
-            if (cb_reshade.IsChecked == true)
-            {
-                try
-                {
-                    ProcessStartInfo unlockerpro = new ProcessStartInfo();
-                    unlockerpro.FileName = unlockerpath;
-                    Process.Start(unlockerpro);
-                }
-                catch (Exception err)
-                {
-                    MessageBox.Show("Could not launch ReshadeUnlocker. Invalid path?\n" + err.Message);
-                }
+                launchgw2(0);
             }
         }
 
+        void killmutex(int proid)
+        {
+            
+            
+        }
 
+
+        void launchgw2(int accnr)
+        {
+            try
+            {
+                ProcessStartInfo gw2proinfo = new ProcessStartInfo();
+                gw2proinfo.FileName = exepath + exename;
+                gw2proinfo.Arguments = getarguments(accnr);
+                Process gw2pro = new Process { StartInfo = gw2proinfo };
+
+
+                try
+                {
+                    gw2pro.Start();
+                }
+                catch (Exception err)
+                {
+                    System.Windows.MessageBox.Show("Could not launch Gw2. Invalid path?\n" + err.Message);
+                }
+                try
+                {
+                    gw2pro.WaitForInputIdle();
+                    MutexCloser mutexcloser = new MutexCloser();
+                    mutexcloser.CloseMutex(gw2pro.Id, "AN-Mutex-Window-Guild Wars 2");
+                }
+                catch
+                {
+
+                }
+
+                if (cb_reshade.IsChecked == true)
+                {
+                    try
+                    {
+                        ProcessStartInfo unlockerpro = new ProcessStartInfo();
+                        unlockerpro.FileName = unlockerpath;
+                        Process.Start(unlockerpro);
+                    }
+                    catch (Exception err)
+                    {
+                        MessageBox.Show("Could not launch ReshadeUnlocker. Invalid path?\n" + err.Message);
+                    }
+                }
+
+
+
+            }
+            catch(Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
+
+           
+        }
 
         private void bt_installpath_Click(object sender, RoutedEventArgs e)
         {
@@ -459,7 +527,7 @@ namespace Gw2_Launchbuddy
                 string shortcutLocation = System.IO.Path.Combine(shortcutPath, shortcutName + ".lnk");
                 WshShell shell = new WshShell();
                 IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
-                string arguments = getarguments();
+                string arguments = getarguments(0);
                 shortcut.IconLocation = Assembly.GetExecutingAssembly().Location;
                 shortcut.Description = "Created with Gw2 Launchbuddy, © TheCheatsrichter";
 
@@ -563,10 +631,6 @@ namespace Gw2_Launchbuddy
                         textblock_descr.Text = "Start the client, checks the files for errors and repairs them as needed. This can take a long time (1/2 hour or an hour) to run as it checks the entire contents of the 20-30 gigabyte archive.";
                         break;
 
-                    case "-shareArchive":
-                        textblock_descr.Text = "Opens the Gw2.dat file in shared mode so that it can be accessed from other processes while the game is running.";
-                        break;
-
                     case "-uispanallmonitors":
                         textblock_descr.Text = "Spreads user interface across all monitors in a triple monitor setup.";
                         break;
@@ -610,7 +674,7 @@ namespace Gw2_Launchbuddy
             {
                 try
                 {
-                    CreateShortcut("Gw2_Launcher_" + selected_acc.Email.Split('@')[0], exepath, exepath + exename);
+                    CreateShortcut("Gw2_Launcher_" + selected_accs[0].Nick, exepath, exepath + exename);
                 }
                 catch (Exception err)
                 {
@@ -659,13 +723,14 @@ namespace Gw2_Launchbuddy
 
         void safeaccounts()
         {
+            
             ObservableCollection<Account> aes_accountlist = new ObservableCollection<Account>();
             try
             {
                 aes_accountlist.Clear();
                 foreach (Account acc in accountlist)
                 {
-                    aes_accountlist.Add(new Account { Email = acc.Email, Password = crypt.Encrypt(acc.Password), Time = acc.Time });
+                    aes_accountlist.Add(new Account {Nick= acc.Nick, Email = acc.Email, Password = crypt.Encrypt(acc.Password), Time = acc.Time });
                 }
             }
             catch (Exception err)
@@ -702,7 +767,7 @@ namespace Gw2_Launchbuddy
                         
                         foreach (Account acc in aes_accountlist)
                         {
-                            accountlist.Add(new Account{Email=acc.Email,Password=crypt.Decrypt(acc.Password),Time=acc.Time});
+                            accountlist.Add(new Account{Nick = acc.Nick,Email=acc.Email,Password=crypt.Decrypt(acc.Password),Time=acc.Time});
                         }
 
                         listview_acc.ItemsSource = accountlist;
@@ -722,7 +787,7 @@ namespace Gw2_Launchbuddy
             {
                 if (tb_passw.Text.Length > 4)
                 {
-                    Account acc = new Account { Email = tb_email.Text, Password = tb_passw.Text, Time = DateTime.Now };
+                    Account acc = new Account {Nick= tb_nick.Text , Email = tb_email.Text, Password = tb_passw.Text, Time = DateTime.Now };
                     accountlist.Add(acc);
                     listview_acc.ItemsSource = accountlist;
                 }
@@ -747,6 +812,8 @@ namespace Gw2_Launchbuddy
             tb_email.IsEnabled = true;
             bt_addacc.IsEnabled = true;
             bt_remacc.IsEnabled = true;
+            tb_nick.IsEnabled = true;
+            lab_nick.IsEnabled = true;
         }
 
         private void cb_login_Unchecked(object sender, RoutedEventArgs e)
@@ -758,17 +825,37 @@ namespace Gw2_Launchbuddy
             tb_email.IsEnabled = false;
             bt_addacc.IsEnabled = false;
             bt_remacc.IsEnabled = false;
+            tb_nick.IsEnabled = false;
+            lab_nick.IsEnabled = false;
+            cb_login.Content = "Use Autologin:";
+
+            listview_acc.SelectedIndex = -1;
         }
 
         private void listview_acc_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (listview_acc.SelectedItem != null)
+            selected_accs = listview_acc.SelectedItems.Cast<Account>().ToList();
+
+            if (listview_acc.SelectedItems.Count != 0 && listview_acc.SelectedItems.Count<=1)
+            {
+                var selectedItems = (dynamic)listview_acc.SelectedItems;
+                cb_login.Content = "Use Autologin : " + selectedItems[0].Email;
+                selected_accs[0].Email = selectedItems[0].Email;
+                selected_accs[0].Password = selectedItems[0].Password;
+                bt_shortcut.IsEnabled = true;
+                ismultibox = false;
+            }
+
+            if (listview_acc.SelectedItems.Count != 0 && listview_acc.SelectedItems.Count > 1)
             {
                 var selectedItem = (dynamic)listview_acc.SelectedItem;
-                cb_login.Content = "Use Autologin : " + selectedItem.Email;
-                selected_acc.Email = selectedItem.Email;
-                selected_acc.Password = selectedItem.Password;
+                cb_login.Content = "Use Autologin (Multiboxing): " + listview_acc.SelectedItems.Count + " Accounts selected";
+                selected_accs[0].Email = selectedItem.Email;
+                selected_accs[0].Password = selectedItem.Password;
+                bt_shortcut.IsEnabled = false;
+                ismultibox = true;
             }
+
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -841,6 +928,25 @@ namespace Gw2_Launchbuddy
 
         }
 
+        private void exp_server_Collapsed(object sender, RoutedEventArgs e)
+        {
+            ServerselectionRow.Height = new GridLength(30);
+            Application.Current.MainWindow.Height-=345;
+        }
+
+        private void exp_server_Expanded(object sender, RoutedEventArgs e)
+        {
+            ServerselectionRow.Height = new GridLength(375);
+            Application.Current.MainWindow.Height = 920;
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(listview_auth.ItemsSource);
+            view.SortDescriptions.Add(new SortDescription("Ping", ListSortDirection.Ascending));
+            CollectionView sview = (CollectionView)CollectionViewSource.GetDefaultView(listview_assets.ItemsSource);
+            sview.SortDescriptions.Add(new SortDescription("Ping", ListSortDirection.Ascending));
+        }
 
         private void cb_reshade_Checked(object sender, RoutedEventArgs e)
         {
@@ -869,11 +975,11 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        private string getarguments()
+        private string getarguments(int accnr)
         {
             //Gathers all arguments and returns them as single string
 
-            string arguments = "";
+            string arguments = " -shareArchive";
 
             if (checkb_assets.IsChecked == true)
             {
@@ -890,17 +996,29 @@ namespace Gw2_Launchbuddy
                 arguments += " -clientport " + tb_clientport.Text;
             }
 
-            if (cb_login.IsChecked == true)
+            try
             {
-                if (selected_acc.Email != null && selected_acc.Password != null)
+                if (cb_login.IsChecked == true)
                 {
-                    arguments += "-nopatchui -email " + selected_acc.Email + " -password " + selected_acc.Password;
+                    if (selected_accs[accnr].Email != null && selected_accs[accnr].Password != null)
+                    {
+                        if (ismultibox)
+                        {
+                            arguments += " -windowed ";
+
+                        }
+                        arguments += "-nopatchui -email " + selected_accs[accnr].Email + " -password " + selected_accs[accnr].Password;
+                    }
                 }
-                else
-                {
-                    MessageBox.Show("No Account selected! Launching without autologin.");
-                }
+
             }
+            catch
+            {
+
+                    MessageBox.Show("No Account selected! Launching without autologin.");
+            }
+                
+           
 
             foreach (System.Windows.Controls.CheckBox entry in arglistbox.Items)
             {
@@ -911,6 +1029,113 @@ namespace Gw2_Launchbuddy
 
             }
             return arguments;
+        }
+
+        void sortbycolum (ListView list , object sender)
+        {
+            GridViewColumnHeader column = (sender as GridViewColumnHeader);
+            string sortBy = column.Tag.ToString();
+            if (listViewSortCol != null)
+            {
+                AdornerLayer.GetAdornerLayer(listViewSortCol).Remove(listViewSortAdorner);
+                list.Items.SortDescriptions.Clear();
+            }
+
+            ListSortDirection newDir = ListSortDirection.Ascending;
+            if (listViewSortCol == column && listViewSortAdorner.Direction == newDir)
+                newDir = ListSortDirection.Descending;
+
+            listViewSortCol = column;
+            listViewSortAdorner = new SortAdorner(listViewSortCol, newDir);
+            AdornerLayer.GetAdornerLayer(listViewSortCol).Add(listViewSortAdorner);
+            list.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
+        }
+
+        private void button_Click_1(object sender, RoutedEventArgs e)
+        {
+
+
+        }
+
+        void mutexkiller(int ProId)
+        {
+            if (!nomutexpros.Contains(ProId))
+            {
+                MutexCloser mutexcloser = new MutexCloser();
+                mutexcloser.CloseMutex(ProId, "AN-Mutex-Window-Guild Wars 2");
+            }
+        }
+
+        private void bt_donate_Click(object sender, RoutedEventArgs e)
+        {
+            string url = "";
+
+            string business = "thecheatsrichter@gmx.at";  // your paypal email
+            string description = "Gw2 Launchbuddy Donation";            // '%20' represents a space. remember HTML!
+            string currency = "EUR";                 // AUD, USD, etc.
+
+            url += "https://www.paypal.com/cgi-bin/webscr" +
+                "?cmd=" + "_donations" +
+                "&business=" + business +
+                //"&lc=" + country +
+                "&item_name=" + description +
+                "&currency_code=" + currency +
+                "&bn=" + "PP%2dDonationsBF";
+
+            System.Diagnostics.Process.Start(url);
+        }
+
+
+        private void listview_auth_Click(object sender, RoutedEventArgs e)
+        {
+            sortbycolum(listview_auth,sender);
+        }
+        private void listview_assets_Click(object sender, RoutedEventArgs e)
+        {
+            sortbycolum(listview_assets, sender);
+        }
+
+    }
+
+
+
+
+    public class SortAdorner : Adorner
+    {
+        private static Geometry ascGeometry =
+                Geometry.Parse("M 0 4 L 3.5 0 L 7 4 Z");
+
+        private static Geometry descGeometry =
+                Geometry.Parse("M 0 0 L 3.5 4 L 7 0 Z");
+
+        public ListSortDirection Direction { get; private set; }
+
+        public SortAdorner(UIElement element, ListSortDirection dir)
+                : base(element)
+        {
+            this.Direction = dir;
+        }
+
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            base.OnRender(drawingContext);
+
+            if (AdornedElement.RenderSize.Width < 20)
+                return;
+
+            TranslateTransform transform = new TranslateTransform
+                    (
+                            AdornedElement.RenderSize.Width - 15,
+                            (AdornedElement.RenderSize.Height - 5) / 2
+                    );
+            drawingContext.PushTransform(transform);
+
+            Geometry geometry = ascGeometry;
+            if (this.Direction == ListSortDirection.Descending)
+                geometry = descGeometry;
+            drawingContext.DrawGeometry(Brushes.Black, null, geometry);
+
+            drawingContext.Pop();
         }
     }
 }

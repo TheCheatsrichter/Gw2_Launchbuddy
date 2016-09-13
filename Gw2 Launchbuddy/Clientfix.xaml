@@ -5,18 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gw2_Launchbuddy"
         mc:Ignorable="d"
-        Title="Clientifix the Quaggan" Height="298.487" Width="308.067" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Topmost="True" Icon="launchbuddy.ico">
+        Title="Clientifix the Quaggan" Height="295.487" Width="300.567" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Topmost="True" Icon="launchbuddy.ico">
     <Window.Resources>
+
         <Storyboard x:Key="anim_quaggan">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="img_quaggan">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="img_glasses">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:5" Value="99.396"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:5" Value="112.056"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="img_glasses">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:5" Value="-1.334"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
 
     </Window.Resources>
+    <Window.Triggers>
+
+    </Window.Triggers>
     <Grid>
-        <Image x:Name="image" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" Source="Resources/quaggan.jpg" RenderTransformOrigin="0.5,0.5">
+        <Image x:Name="image" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" Source="Resources/quaggan.jpg" RenderTransformOrigin="0.5,0.5" Margin="0,-0.502,0,0">
             <Image.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -33,7 +41,7 @@
         <Button x:Name="bt_auto" Content="Fix Client Wizard" HorizontalAlignment="Left" Margin="10,119,0,0" VerticalAlignment="Top" Width="272" Click="bt_auto_Click"/>
         <Button x:Name="bt_bin" Content="Clean Bin folders" HorizontalAlignment="Left" Margin="10,146,0,0" VerticalAlignment="Top" Width="272" Click="bt_bin_Click" />
         <TextBlock x:Name="tbl_warning" HorizontalAlignment="Left" Margin="15,95,0,0" TextWrapping="Wrap" Text="ATTENTION: This section does delete/modify files!" VerticalAlignment="Top" Foreground="#FFFF0505"/>
-        <Image x:Name="img_quaggan" HorizontalAlignment="Left" Margin="-71.004,33.501,0,0" Width="54.84" Height="9.172" VerticalAlignment="Top" Source="Resources/glasses.png" RenderTransformOrigin="0.5,0.5">
+        <Image x:Name="img_glasses" HorizontalAlignment="Left" Height="9" Margin="-83,35.333,0,0" VerticalAlignment="Top" Width="58" Source="Resources/glasses.png" RenderTransformOrigin="0.5,0.5">
             <Image.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>

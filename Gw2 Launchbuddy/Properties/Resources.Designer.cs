@@ -61,12 +61,62 @@ namespace Gw2_Launchbuddy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap glasses {
+            get {
+                object obj = ResourceManager.GetObject("glasses", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon launchbuddy {
             get {
                 object obj = ResourceManager.GetObject("launchbuddy", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon launchbuddy1 {
+            get {
+                object obj = ResourceManager.GetObject("launchbuddy1", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap launchbuddyback {
+            get {
+                object obj = ResourceManager.GetObject("launchbuddyback", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap quaggan {
+            get {
+                object obj = ResourceManager.GetObject("quaggan", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap quaggan1 {
+            get {
+                object obj = ResourceManager.GetObject("quaggan1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }
