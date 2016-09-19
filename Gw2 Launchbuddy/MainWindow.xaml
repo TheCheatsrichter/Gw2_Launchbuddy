@@ -8,7 +8,7 @@
         x:Name="myWindow"
         
         mc:Ignorable="d"
-        Title="Gw2 Launchbuddy BETA" Height="832" Width="750" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Gw2 Launchbuddy BETA" Height="845" Width="700" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Storyboard x:Key="arrow_anim"/>
     </Window.Resources>
@@ -18,7 +18,7 @@
         </EventTrigger>
     </Window.Triggers>
 
-    <Grid >
+    <Grid Margin="0,5">
         <Grid.Background>
             <ImageBrush x:Name="BackImage" ImageSource="Resources\launchbuddyback.png" Opacity="0.5" Stretch="None" AlignmentX="Right" AlignmentY="Top">
                 <ImageBrush.Transform>
@@ -52,81 +52,129 @@
             </EventTrigger>
         </Grid.Triggers>
         <Grid.RowDefinitions>
-            <RowDefinition Height="105"/>
-            <RowDefinition Height="160"/>
-            <RowDefinition x:Name="ServerselectionRow" Height="290"/>
-            <RowDefinition Height="170"/>
-            <RowDefinition Height="130"/>
-
-
+            <RowDefinition Height="105*"/>
+            <RowDefinition Height="160*"/>
+            <RowDefinition Height="290*"/>
+            <RowDefinition Height="170*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="40*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-
-        </Grid.ColumnDefinitions>
 
 
 
-        <Button x:Name="bt_launch" Content="Launch Gw2" Margin="5,36,0,60" Click="bt_launch_Click" Grid.Row="4" HorizontalAlignment="Left" Width="367"/>
-
-        <Button x:Name="bt_shortcut" Content="Create Shortcut (No Multiboxing)" Margin="377,0,8,60" VerticalAlignment="Bottom" Height="35" Click="bt_shortcut_Click" Grid.Row="4"/>
-        <ListBox x:Name="arglistbox" Margin="7,22,0,11" SelectionChanged="arglistbox_SelectionChanged" Grid.Row="1" HorizontalAlignment="Left" Width="352" >
-            <ListBox.Resources>
-                <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsMouseOver,RelativeSource={RelativeSource Self}}" 
+        <Grid Grid.Row="1" Margin="5,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="100*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="50*"/>
+            </Grid.ColumnDefinitions>
+            <ListBox x:Name="arglistbox" SelectionChanged="arglistbox_SelectionChanged" Grid.Row="1" Grid.Column="0" Margin="0,0,5,0" >
+                <ListBox.Resources>
+                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsMouseOver,RelativeSource={RelativeSource Self}}" 
                          Value="True">
-                            <Setter Property="IsSelected" Value="True" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ListBox.Resources>
-            <CheckBox Content="-32" Margin="5,0,0,0"/>
-            <CheckBox Content="-repair" Margin="5,0,0,0"/>
-            <CheckBox Content="-bmp" Margin="5,0,0,0"/>
-            <CheckBox Content="-diag" Margin="5,0,0,0"/>
-            <CheckBox Content="-dx9single" Margin="5,0,0,0"/>
-            <CheckBox Content="-forwardrenderer" Margin="5,0,0,0"/>
-            <CheckBox Content="-image" Margin="5,0,0,0"/>
-            <CheckBox Content="-log" Margin="5,0,0,0"/>
-            <CheckBox Content="-maploadinfo" Margin="5,0,0,0"/>
-            <CheckBox Content="-mce" Margin="5,0,0,0"/>
-            <CheckBox Content="-nomusic" Margin="5,0,0,0"/>
-            <CheckBox Content="-noui" Margin="5,0,0,0"/>
-            <CheckBox Content="-nosound" Margin="5,0,0,0"/>
-            <CheckBox Content="-prefreset" Margin="5,0,0,0"/>
-            <CheckBox Content="-uispanallmonitors" Margin="5,0,0,0"/>
-            <CheckBox Content="-uninstall" Margin="5,0,0,0"/>
-            <CheckBox Content="-useOldFov" Margin="5,0,0,0"/>
-            <CheckBox Content="-verify" Margin="5,0,0,0"/>
-            <CheckBox Content="-umbra gpu" Margin="5,0,0,0"/>
-        </ListBox>
-        <Label x:Name="lab_descr" Content="Description (Wiki):" Margin="0,101,-29,0" VerticalAlignment="Top" Height="31" FontSize="16" FontWeight="Bold" HorizontalAlignment="Right" Width="404" Grid.RowSpan="2"/>
-        <TextBlock x:Name="textblock_descr" Margin="0,23,32,9" TextWrapping="Wrap" FontSize="13.333" Grid.Row="1" HorizontalAlignment="Right" Width="335"/>
-        <Label x:Name="lab_arglist" Content="Arguments:" HorizontalAlignment="Left" Margin="6,98,0,0" VerticalAlignment="Top" Height="34" Width="122" FontSize="16" FontWeight="Bold" Grid.RowSpan="2"/>
+                                <Setter Property="IsSelected" Value="True" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.Resources>
+                <CheckBox Content="-32" Margin="5,0,0,0"/>
+                <CheckBox Content="-repair" Margin="5,0,0,0"/>
+                <CheckBox Content="-bmp" Margin="5,0,0,0"/>
+                <CheckBox Content="-diag" Margin="5,0,0,0"/>
+                <CheckBox Content="-dx9single" Margin="5,0,0,0"/>
+                <CheckBox Content="-forwardrenderer" Margin="5,0,0,0"/>
+                <CheckBox Content="-image" Margin="5,0,0,0"/>
+                <CheckBox Content="-log" Margin="5,0,0,0"/>
+                <CheckBox Content="-maploadinfo" Margin="5,0,0,0"/>
+                <CheckBox Content="-mce" Margin="5,0,0,0"/>
+                <CheckBox Content="-nomusic" Margin="5,0,0,0"/>
+                <CheckBox Content="-noui" Margin="5,0,0,0"/>
+                <CheckBox Content="-nosound" Margin="5,0,0,0"/>
+                <CheckBox Content="-prefreset" Margin="5,0,0,0"/>
+                <CheckBox Content="-uispanallmonitors" Margin="5,0,0,0"/>
+                <CheckBox Content="-uninstall" Margin="5,0,0,0"/>
+                <CheckBox Content="-useOldFov" Margin="5,0,0,0"/>
+                <CheckBox Content="-verify" Margin="5,0,0,0"/>
+                <CheckBox Content="-umbra gpu" Margin="5,0,0,0"/>
+            </ListBox>
+            <Label x:Name="lab_descr" Content="Description (Wiki):"  FontSize="16" FontWeight="Bold"  Grid.Column="1"/>
+            <TextBlock x:Name="textblock_descr" TextWrapping="Wrap" FontSize="13.333" Grid.Row="1" Grid.Column="1" Margin="5,0,0,0"/>
+            <Label x:Name="lab_arglist" Content="Arguments:" FontSize="16" FontWeight="Bold" Grid.Row="0"/>
 
-        <ListView ItemsSource="{Binding}" SelectionMode="Multiple" x:Name="listview_acc" Margin="4,26,7,38" IsEnabled="False" SelectionChanged="listview_acc_SelectionChanged" Grid.Row="3">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Nickname" Width="150" DisplayMemberBinding="{Binding Nick}" />
-                    <GridViewColumn Header="Email" Width="200" DisplayMemberBinding="{Binding Email}" />
-                    <GridViewColumn Header="Password" Width="150" DisplayMemberBinding="{Binding DisplayPW}" />
-                    <GridViewColumn Header="Created at" Width="150" DisplayMemberBinding="{Binding Time}" />
+        </Grid>
 
-                </GridView>
-            </ListView.View>
-        </ListView>
 
-        <TextBox x:Name="tb_email" Height="23" Margin="50,0,0,8" TextWrapping="Wrap" VerticalAlignment="Bottom" IsEnabled="False" Grid.Row="3" HorizontalAlignment="Left" Width="130"/>
-        <TextBox x:Name="tb_passw" Height="23" Margin="252,0,385,8" TextWrapping="Wrap" VerticalAlignment="Bottom" IsEnabled="False" Grid.Row="3"/>
-        <Label x:Name="lab_email" Content="Email:" HorizontalAlignment="Left" Margin="5,0,0,6" VerticalAlignment="Bottom" RenderTransformOrigin="0.684,-0.231" Height="26" Width="41" Grid.Row="3"/>
-        <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left" Margin="185,0,0,6" VerticalAlignment="Bottom" RenderTransformOrigin="0.684,-0.231" IsEnabled="False" Height="26" Width="62" Grid.Row="3"/>
-        <Button x:Name="bt_addacc" Content="Add" Margin="0,0,110,9" VerticalAlignment="Bottom" Click="bt_addacc_Click" IsEnabled="False" Height="22" Grid.Row="3" HorizontalAlignment="Right" Width="72"/>
-        <Button x:Name="bt_remacc" Content="Remove" HorizontalAlignment="Right" Margin="0,0,24,9" VerticalAlignment="Bottom" Width="74" IsEnabled="False" Click="bt_remacc_Click" Height="22" Grid.Row="3"/>
-        <CheckBox x:Name="cb_login" Content="Use Autologin" Margin="5,4,178,0" FontSize="16" Checked="cb_login_Checked" Unchecked="cb_login_Unchecked" FontWeight="Bold" Grid.Row="3" Height="21" VerticalAlignment="Top" />
 
-        <CheckBox x:Name="cb_reshade" Content="Use Reshade Unlocker" Margin="6,1.5,197,0" VerticalAlignment="Top" Checked="cb_reshade_Checked" Unchecked="cb_reshade_Unchecked" FontSize="16" FontWeight="Bold" IsEnabled="False" Height="21.28" Grid.Row="4"/>
-        <Button x:Name="bt_reshadepath" Content="Set ReshadeUnlocker Path" Margin="0,0,8,0" VerticalAlignment="Top" Click="bt_reshadepath_Click" Grid.Row="4" Height="28" HorizontalAlignment="Right" Width="258"/>
-        <Expander x:Name="exp_server" Header="Serverselection" IsExpanded="True" Grid.Row="2" Margin="5,0" FontSize="16" FontWeight="Bold" Collapsed="exp_server_Collapsed" Expanded="exp_server_Expanded" >
+
+
+
+
+
+
+
+
+        <Grid Grid.Row="3" Margin="5,0"  >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="190*"/>
+                <ColumnDefinition Width="190*"/>
+                <ColumnDefinition Width="190*"/>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="100*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25*"/>
+                <RowDefinition Height="100*"/>
+                <RowDefinition Height="30*"/>
+            </Grid.RowDefinitions>
+            <Button x:Name="bt_addacc" Content="Add" Click="bt_addacc_Click" IsEnabled="False"  Grid.Row="3" Grid.Column="3" Margin="5,3"/>
+            <Button x:Name="bt_remacc" Content="Remove" IsEnabled="False" Click="bt_remacc_Click" Grid.Row="3" Grid.Column="4" Margin="5,3" />
+            <Label x:Name="lab_nick" Content="Nickname:" IsEnabled="False" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <TextBox x:Name="tb_nick" Height="23" Grid.Row="2" Grid.Column="2" Margin="68,3.5,0,3.5" IsEnabled="False"/>
+            <TextBox x:Name="tb_passw" Height="23"  TextWrapping="Wrap" IsEnabled="False" Grid.Row="2" Grid.Column="1" Margin="66,3.5,0,3.5"/>
+            <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left"  VerticalAlignment="Center"  IsEnabled="False" Height="26" Width="62" Grid.Row="2" Grid.Column="1" />
+            <TextBox x:Name="tb_email" Height="23" TextWrapping="Wrap" IsEnabled="False" Grid.Row="2" Margin="44,3.5,0,3.5" />
+            <Label x:Name="lab_email" Content="Email:"  Grid.Row="2" d:LayoutOverrides="Width" VerticalAlignment="Center"/>
+            <CheckBox x:Name="cb_login" Content="Use Autologin" FontSize="16" Checked="cb_login_Checked" Unchecked="cb_login_Unchecked" FontWeight="Bold" Grid.Row="0" Grid.ColumnSpan="4" />
+            <ListView ItemsSource="{Binding}" SelectionMode="Multiple" x:Name="listview_acc"  IsEnabled="False" SelectionChanged="listview_acc_SelectionChanged" Grid.Row="1" Grid.ColumnSpan="5">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Nickname" Width="150" DisplayMemberBinding="{Binding Nick}" />
+                        <GridViewColumn Header="Email" Width="200" DisplayMemberBinding="{Binding Email}" />
+                        <GridViewColumn Header="Password" Width="150" DisplayMemberBinding="{Binding DisplayPW}" />
+                        <GridViewColumn Header="Created at" Width="150" DisplayMemberBinding="{Binding Time}" />
+
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+
+        <Grid Grid.Row="4" Margin="5,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="50*"/>
+            </Grid.ColumnDefinitions>
+            <CheckBox x:Name="cb_reshade" Content="Use Reshade Unlocker" Checked="cb_reshade_Checked" Unchecked="cb_reshade_Unchecked" FontSize="16" FontWeight="Bold" IsEnabled="False"  VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Button x:Name="bt_reshadepath" Content="Set ReshadeUnlocker Path" Click="bt_reshadepath_Click" Grid.Column="1" Margin="5,5,0,5"/>
+        </Grid>
+
+        <Grid Grid.Row="5" Margin="5,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="50*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="bt_launch" Content="Launch Gw2"  Click="bt_launch_Click" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0"  />
+            <Button x:Name="bt_shortcut" Content="Create Shortcut (No Multiboxing)" Grid.Column="1" Grid.Row="1"  Click="bt_shortcut_Click" BorderThickness="1" Margin="5,0,0,0"/>
+        </Grid>
+
+
+
+
+        <Expander x:Name="exp_server" Header="Serverselection" IsExpanded="True"  FontSize="16" FontWeight="Bold" Collapsed="exp_server_Collapsed" Expanded="exp_server_Expanded" Grid.Row="2" Margin="5,0" >
 
             <Grid >
                 <Grid.ColumnDefinitions>
@@ -136,7 +184,7 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25"/>
-                    <RowDefinition Height="200*"/>
+                    <RowDefinition x:Name="ServerselectionRow" Height="100"/>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
@@ -219,12 +267,9 @@
             </Grid>
 
         </Border>
-        <Separator Margin="7.5,-1.5,6.5,0" Grid.Row="3" Height="6" VerticalAlignment="Top"/>
-        <Separator  Grid.Row="0" Height="6" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-        <Separator Margin="8,28,6,0" Grid.Row="4" Height="6" VerticalAlignment="Top"/>
-        <Separator Margin="8,164,6,0" Grid.Row="3" Height="6" VerticalAlignment="Top"/>
-        <TextBox x:Name="tb_nick" Height="23" Margin="428,0,191,9" TextWrapping="Wrap" VerticalAlignment="Bottom" Grid.Row="3"/>
-        <Label x:Name="lab_nick" Content="Nickname:" HorizontalAlignment="Left" Margin="362,0,0,7" VerticalAlignment="Bottom" RenderTransformOrigin="0.684,-0.231" IsEnabled="False" Height="26" Width="66" Grid.Row="3"/>
+
+
+
 
     </Grid>
 
