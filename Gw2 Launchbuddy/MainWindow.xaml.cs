@@ -17,6 +17,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO.Compression;
 
 
 namespace Gw2_Launchbuddy
@@ -90,9 +91,25 @@ namespace Gw2_Launchbuddy
         {
             InitializeComponent();
             accountlist.Clear(); //clearing accountlist
+            Thread th_setup = new Thread(checksetup);
+            th_setup.Start();
+
+            
             loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
             loadaccounts(); // loading saved accounts from launchbuddy
 
+
+        }
+
+        void checksetup()
+        {
+            if (!System.IO.File.Exists("handle64.exe") || !System.IO.File.Exists("handle.exe"))
+            {
+                WebClient downloadclient = new WebClient();
+                downloadclient.DownloadFile("https://download.sysinternals.com/files/Handle.zip", "Handle.zip");
+                ZipFile.ExtractToDirectory("Handle.zip",Directory.GetCurrentDirectory());
+                System.IO.File.Delete("Handle.zip");
+            }
         }
 
 
@@ -197,7 +214,7 @@ namespace Gw2_Launchbuddy
             listview_auth.ItemsSource = authlist;
             listview_assets.ItemsSource = assetlist;
             lab_authserverlist.Content = "Authentication Servers (" + authlist.Count + " servers found):";
-            lab_assetserverlist.Content = "Asset Servers APLHA (" + assetlist.Count + " servers found):";
+            lab_assetserverlist.Content = "Asset Servers (" + assetlist.Count + " servers found):";
             bt_checkservers.Content = "Check Servers (Last update: "+ DateTime.Now.ToString("h:mm:ss tt") + ")";
 
 
@@ -444,6 +461,57 @@ namespace Gw2_Launchbuddy
         }
 
 
+        void closemutex (int proid, string handlename , string handletype)
+        {
+            StreamReader outputReader = null;
+            Process prohandle = new Process();
+            ProcessStartInfo prohandle_info = new ProcessStartInfo();
+
+            if (Environment.Is64BitOperatingSystem)
+            {
+                prohandle_info.FileName="handle64.exe";
+            } else
+            {
+                prohandle_info.FileName="handle.exe";
+            }
+            prohandle_info.UseShellExecute = false;
+            prohandle_info.RedirectStandardInput = true;
+            prohandle_info.RedirectStandardOutput = true;
+            prohandle_info.CreateNoWindow = true;
+            prohandle_info.Arguments = "-p "+proid+" -a \""+ handlename + "\"";
+            prohandle.StartInfo = prohandle_info;
+            prohandle.Start();
+            outputReader = prohandle.StandardOutput;
+
+            string output = outputReader.ReadToEnd();
+            Regex regfilter = new Regex("....(:)");
+            MatchCollection matches = regfilter.Matches(output);
+
+            string tmp="";
+            foreach (Match entry in matches)
+            {
+                tmp= tmp + entry.Value + "\n";
+            }
+
+            string handlehexid = matches[matches.Count - 1].Value.Trim(':');
+            try
+            {
+                prohandle.Close();
+            }
+            catch
+            {
+
+            }
+            
+            prohandle_info.Arguments = "-p " + proid + " -c " + handlehexid + " -y";
+            prohandle.StartInfo = prohandle_info;
+            prohandle.Start();
+            output = outputReader.ReadToEnd();
+
+
+        }
+
+
         void launchgw2(int accnr)
         {
             try
@@ -465,12 +533,17 @@ namespace Gw2_Launchbuddy
                 try
                 {
                     gw2pro.WaitForInputIdle();
+                    closemutex(gw2pro.Id, "AN-Mutex-Window-Guild Wars 2", "Mutant");
+
+                    // OLD method, sadly only working on Win7
+                    /*
                     MutexCloser mutexcloser = new MutexCloser();
                     mutexcloser.CloseMutex(gw2pro.Id, "AN-Mutex-Window-Guild Wars 2");
+                    */
                 }
                 catch
                 {
-
+                    MessageBox.Show("TURTELS");
                 }
 
                 if (cb_reshade.IsChecked == true)
@@ -930,16 +1003,16 @@ namespace Gw2_Launchbuddy
 
         private void exp_server_Collapsed(object sender, RoutedEventArgs e)
         {
-            /*ServerselectionRow.Height = new GridLength(30);
-            Application.Current.MainWindow.Height-=345;
-            */
+            ServerUI.Height = new GridLength(30);
+            Application.Current.MainWindow.Height-=290;
+            
         }
 
         private void exp_server_Expanded(object sender, RoutedEventArgs e)
         {
-            /*.Height = new GridLength(375);
-            Application.Current.MainWindow.Height = 920;
-            */
+            ServerUI.Height = new GridLength(290);
+            Application.Current.MainWindow.Height = 845;
+            
         }
 
         private void button_Click(object sender, RoutedEventArgs e)

@@ -3,15 +3,29 @@
     using System.Runtime.InteropServices;
     using System.Diagnostics;
     using System.Text;
-    using System.Windows.Forms;
+    using System.IO;
 
-    namespace Gw2_Launchbuddy
+namespace Gw2_Launchbuddy
 
     {
 
         public class Win32API
         {
-            [DllImport("ntdll.dll")]
+        [DllImport(@"urlmon.dll", CharSet = CharSet.Auto)] private extern static System.UInt32 FindMimeFromData(
+        System.UInt32 pBC,
+        [MarshalAs(UnmanagedType.LPStr)] System.String pwzUrl,
+        [MarshalAs(UnmanagedType.LPArray)] byte[] pBuffer,
+        System.UInt32 cbSize,
+        [MarshalAs(UnmanagedType.LPStr)] System.String pwzMimeProposed,
+        System.UInt32 dwMimeFlags,
+        out System.UInt32 ppwzMimeOut,
+        System.UInt32 dwReserverd
+        );
+
+
+
+
+        [DllImport("ntdll.dll")]
             public static extern int NtQueryObject(IntPtr ObjectHandle, int
                 ObjectInformationClass, IntPtr ObjectInformation, int ObjectInformationLength,
                 ref int returnLength);
@@ -148,7 +162,37 @@
             public const uint STATUS_INFO_LENGTH_MISMATCH = 0xC0000004;
             public const int DUPLICATE_SAME_ACCESS = 0x2;
             public const int DUPLICATE_CLOSE_SOURCE = 0x1;
+
+
+
+        public static string getMimeFromFile(string filename)
+        {
+            if (!File.Exists(filename))
+                throw new FileNotFoundException(filename + " not found");
+
+            byte[] buffer = new byte[256];
+            using (FileStream fs = new FileStream(filename, FileMode.Open))
+            {
+                if (fs.Length >= 256)
+                    fs.Read(buffer, 0, 256);
+                else
+                    fs.Read(buffer, 0, (int)fs.Length);
+            }
+            try
+            {
+                System.UInt32 mimetype;
+                FindMimeFromData(0, null, buffer, 256, null, 0, out mimetype, 0);
+                System.IntPtr mimeTypePtr = new IntPtr(mimetype);
+                string mime = Marshal.PtrToStringUni(mimeTypePtr);
+                Marshal.FreeCoTaskMem(mimeTypePtr);
+                return mime;
+            }
+            catch (Exception e)
+            {
+                return "unknown/unknown";
+            }
         }
+    }
 
         public class Win32Processes
         {
@@ -204,8 +248,11 @@
                     ipTemp = objObjectType.Name.Buffer;
                 }
 
-                strObjectTypeName = Marshal.PtrToStringUni(ipTemp, objObjectType.Name.Length >> 1);
-                Marshal.FreeHGlobal(ipObjectType);
+            strObjectTypeName = Marshal.PtrToStringUni(ipTemp, objObjectType.Name.Length >> 1);
+
+
+
+            Marshal.FreeHGlobal(ipObjectType);
                 Win32API.CloseHandle(ipHandle);
                 return strObjectTypeName;
             }
@@ -285,7 +332,98 @@
                 return null;
             }
 
-            public static List<Win32API.SYSTEM_HANDLE_INFORMATION>
+
+        public static List<Win32API.SYSTEM_HANDLE_INFORMATION>
+    GetHandles(Process process = null, string IN_strObjectTypeName = null, string IN_strObjectName = null)
+        {
+            uint nStatus;
+            int nHandleInfoSize = 0x10000;
+            IntPtr ipHandlePointer = Marshal.AllocHGlobal(nHandleInfoSize);
+            int nLength = 0;
+            IntPtr ipHandle = IntPtr.Zero;
+
+            while ((nStatus = Win32API.NtQuerySystemInformation(CNST_SYSTEM_HANDLE_INFORMATION, ipHandlePointer,
+                                                                nHandleInfoSize, ref nLength)) ==
+                    STATUS_INFO_LENGTH_MISMATCH)
+            {
+                nHandleInfoSize = nLength;
+                Marshal.FreeHGlobal(ipHandlePointer);
+                ipHandlePointer = Marshal.AllocHGlobal(nLength);
+            }
+
+            byte[] baTemp = new byte[nLength];
+            Marshal.Copy(ipHandlePointer, baTemp, 0, nLength);
+
+            long lHandleCount = 0;
+            if (Is64Bits())
+            {
+                lHandleCount = Marshal.ReadInt64(ipHandlePointer);
+                ipHandle = new IntPtr(ipHandlePointer.ToInt64() + 8);
+            }
+            else
+            {
+                lHandleCount = Marshal.ReadInt32(ipHandlePointer);
+                ipHandle = new IntPtr(ipHandlePointer.ToInt32() + 4);
+            }
+
+            Win32API.SYSTEM_HANDLE_INFORMATION shHandle;
+            List<Win32API.SYSTEM_HANDLE_INFORMATION> lstHandles = new List<Win32API.SYSTEM_HANDLE_INFORMATION>();
+
+            for (long lIndex = 0; lIndex < lHandleCount; lIndex++)
+            {
+                shHandle = new Win32API.SYSTEM_HANDLE_INFORMATION();
+                if (Is64Bits())
+                {
+                    shHandle = (Win32API.SYSTEM_HANDLE_INFORMATION)Marshal.PtrToStructure(ipHandle, shHandle.GetType());
+                    ipHandle = new IntPtr(ipHandle.ToInt64() + Marshal.SizeOf(shHandle) + 8);
+                }
+                else
+                {
+                    ipHandle = new IntPtr(ipHandle.ToInt64() + Marshal.SizeOf(shHandle));
+                    shHandle = (Win32API.SYSTEM_HANDLE_INFORMATION)Marshal.PtrToStructure(ipHandle, shHandle.GetType());
+                }
+
+                if (process != null)
+                {
+                    if (shHandle.ProcessID != process.Id) continue;
+                }
+
+                string strObjectTypeName = "";
+                if (IN_strObjectTypeName != null)
+                {
+                    strObjectTypeName = getObjectTypeName(shHandle, Process.GetProcessById(shHandle.ProcessID));
+                    if (strObjectTypeName != IN_strObjectTypeName) continue;
+                }
+                
+                string strObjectName = IN_strObjectName;
+
+                if (IN_strObjectName != null)
+                {
+                    strObjectName = getObjectName(shHandle, Process.GetProcessById(shHandle.ProcessID));
+                    if (strObjectName != IN_strObjectName) continue;
+
+                }
+                
+
+                string strObjectTypeName2 = getObjectTypeName(shHandle, Process.GetProcessById(shHandle.ProcessID));
+                string strObjectName2 = getObjectName(shHandle, Process.GetProcessById(shHandle.ProcessID));
+                Console.WriteLine(shHandle.ProcessID.ToString() + "\n" + strObjectTypeName2.ToString() + "\n" + strObjectName2.ToString());
+
+                lstHandles.Add(shHandle);
+            }
+            return lstHandles;
+        }
+
+        public static bool Is64Bits()
+        {
+            return Marshal.SizeOf(typeof(IntPtr)) == 8 ? true : false;
+        }
+
+
+
+        /*
+
+        public static List<Win32API.SYSTEM_HANDLE_INFORMATION>
             GetHandles(Process process = null, string IN_strObjectTypeName = null, string IN_strObjectName = null)
             {
                 uint nStatus;
@@ -367,7 +505,10 @@
             {
                 return Marshal.SizeOf(typeof(IntPtr)) == 8 ? true : false;
             }
-        }
+            */
+    }
+
+
 
     class MutexCloser
     {
@@ -377,6 +518,7 @@
             try
             {
                 Process process = Process.GetProcessById(ProcessId);
+                var handles_new = Win32API.getMimeFromFile("gw2.exe");
                 var handles = Win32Processes.GetHandles(process, "Mutant", "\\Sessions\\1\\BaseNamedObjects\\" + MutexName);
                 if (handles.Count == 0) throw new System.ArgumentException("NoMutex", "original");
                 foreach (var handle in handles)
