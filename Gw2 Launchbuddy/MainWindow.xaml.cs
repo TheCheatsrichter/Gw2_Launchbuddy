@@ -24,7 +24,7 @@ namespace Gw2_Launchbuddy
 {
     public partial class MainWindow : Window
     {
-        
+
         ///Gw2 Launchbuddy by TheCheatsrichter 2016
         ///
         ///Argument generator and shortcut creator for Guild Wars 2
@@ -36,6 +36,8 @@ namespace Gw2_Launchbuddy
         /// 
         ///##########################################
         /// 
+
+        SetupInfo winsetupinfo = new SetupInfo();
         private SortAdorner listViewSortAdorner = null;
         private GridViewColumnHeader listViewSortCol = null;
 
@@ -50,6 +52,7 @@ namespace Gw2_Launchbuddy
         List<int> nomutexpros = new List<int>();
 
         string exepath, exename , unlockerpath;
+        string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
         bool ismultibox = false;
 
         AES crypt = new AES();
@@ -90,25 +93,95 @@ namespace Gw2_Launchbuddy
         public MainWindow()
         {
             InitializeComponent();
-            accountlist.Clear(); //clearing accountlist
-            Thread th_setup = new Thread(checksetup);
-            th_setup.Start();
 
-            
+            if (!Directory.Exists(AppdataPath))
+            {
+                Directory.CreateDirectory(AppdataPath);
+            }
+
+            accountlist.Clear(); //clearing accountlist
+            checksetup();
             loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
             loadaccounts(); // loading saved accounts from launchbuddy
 
 
         }
 
+
+        public static void UiInvoke(Action a)
+        {
+            Application.Current.Dispatcher.Invoke(a);
+        }
+
         void checksetup()
         {
-            if (!System.IO.File.Exists("handle64.exe") || !System.IO.File.Exists("handle.exe"))
+            try {
+                if (!System.IO.File.Exists(AppdataPath+"handle64.exe") || !System.IO.File.Exists(AppdataPath + "handle.exe"))
+                {
+                    winsetupinfo.WindowStyle = WindowStyle.None;
+                    winsetupinfo.Width = 300;
+                    winsetupinfo.Height = 200;
+                    winsetupinfo.Show();
+                    myWindow.Visibility = Visibility.Hidden;
+                    Thread th_gethandleexe = new Thread(gethandleexe);
+                    th_gethandleexe.Start();
+                }
+            }
+            catch (Exception e)
             {
+                MessageBox.Show(e.Message);
+            }
+        }
+
+        void gethandleexe()
+        {
+            try
+            {
+                System.IO.File.Delete(AppdataPath + "handle64.exe");
+                System.IO.File.Delete(AppdataPath + "handle.exe");
+                System.IO.File.Delete(AppdataPath + "Eula.txt");
                 WebClient downloadclient = new WebClient();
-                downloadclient.DownloadFile("https://download.sysinternals.com/files/Handle.zip", "Handle.zip");
-                ZipFile.ExtractToDirectory("Handle.zip",Directory.GetCurrentDirectory());
-                System.IO.File.Delete("Handle.zip");
+                downloadclient.DownloadFile("https://download.sysinternals.com/files/Handle.zip", AppdataPath + "Handle.zip");
+
+                ZipFile.ExtractToDirectory(AppdataPath + "Handle.zip", AppdataPath);
+                ProcessStartInfo prohandleinfo = new ProcessStartInfo();
+                prohandleinfo.Arguments = "-accepteula";
+                prohandleinfo.CreateNoWindow = true;
+                prohandleinfo.UseShellExecute = false;
+
+                if (Environment.Is64BitOperatingSystem)
+                {
+                    prohandleinfo.FileName = AppdataPath + "handle64.exe";
+                }else
+                {
+                    prohandleinfo.FileName = AppdataPath + "handle.exe";
+                }
+                Process prohandle = new Process{ StartInfo = prohandleinfo };
+                prohandle.Start();
+
+                System.IO.File.Delete(AppdataPath + "Handle.zip");
+                System.IO.File.Delete(AppdataPath + "Eula.txt");
+
+                Application.Current.Dispatcher.BeginInvoke(
+                    System.Windows.Threading.DispatcherPriority.Background,
+                    new Action(() => setupend()));
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
+
+        void setupend()
+        {
+            try {
+                myWindow.Visibility = Visibility.Visible;
+                winsetupinfo.Close();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
             }
         }
 
@@ -284,7 +357,7 @@ namespace Gw2_Launchbuddy
                         case "INSTALLPATH":
 
                             exepath = getvalue(reader);
-                            lab_path.Content = exepath;
+                            lab_path.Content = "Install Path: " + exepath;
                             break;
 
                         case "EXECUTABLE":
@@ -469,10 +542,10 @@ namespace Gw2_Launchbuddy
 
             if (Environment.Is64BitOperatingSystem)
             {
-                prohandle_info.FileName="handle64.exe";
+                prohandle_info.FileName= AppdataPath + "handle64.exe";
             } else
             {
-                prohandle_info.FileName="handle.exe";
+                prohandle_info.FileName= AppdataPath + "handle.exe";
             }
             prohandle_info.UseShellExecute = false;
             prohandle_info.RedirectStandardInput = true;
@@ -541,9 +614,9 @@ namespace Gw2_Launchbuddy
                     mutexcloser.CloseMutex(gw2pro.Id, "AN-Mutex-Window-Guild Wars 2");
                     */
                 }
-                catch
+                catch (Exception err)
                 {
-                    MessageBox.Show("TURTELS");
+                    MessageBox.Show(err.Message);
                 }
 
                 if (cb_reshade.IsChecked == true)
@@ -1004,7 +1077,7 @@ namespace Gw2_Launchbuddy
         private void exp_server_Collapsed(object sender, RoutedEventArgs e)
         {
             ServerUI.Height = new GridLength(30);
-            Application.Current.MainWindow.Height-=290;
+            Application.Current.MainWindow.Height=585;
             
         }
 
