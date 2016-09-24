@@ -51,7 +51,7 @@ namespace Gw2_Launchbuddy
         List<Account> selected_accs = new List<Account>();
         List<int> nomutexpros = new List<int>();
 
-        string exepath, exename , unlockerpath;
+        string exepath, exename , unlockerpath, version_client, version_api;
         string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
         bool ismultibox = false;
 
@@ -93,7 +93,6 @@ namespace Gw2_Launchbuddy
         public MainWindow()
         {
             InitializeComponent();
-
             if (!Directory.Exists(AppdataPath))
             {
                 Directory.CreateDirectory(AppdataPath);
@@ -103,14 +102,70 @@ namespace Gw2_Launchbuddy
             checksetup();
             loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
             loadaccounts(); // loading saved accounts from launchbuddy
-
+            Thread checkver = new Thread(checkversion);
+            checkver.Start();
 
         }
 
-
-        public static void UiInvoke(Action a)
+        void checkversion()
         {
-            Application.Current.Dispatcher.Invoke(a);
+            try
+            {
+                if (!isclientuptodate())
+                {
+                    MessageBoxResult win = MessageBox.Show("A new Build of Gw2 is available! Not updating can cause Gw2 Launchbuddy to not work! Update now?", "Client Build Info", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (win.ToString() == "Yes")
+                    {
+                        updateclient();
+                        Dispatcher.Invoke(new Action(() =>
+                        {
+                            System.Windows.Forms.Application.Restart();
+                            Application.Current.Shutdown();
+                        }));
+                    }
+                }
+                string versioninfo = "Build Version: " + version_client;
+
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    if (version_api == version_client)
+                    {
+                        versioninfo += "\tStatus: up to date!";
+                        lab_version.Foreground = new SolidColorBrush(Colors.Green);
+                    }
+                    else
+                    {
+                        versioninfo += "\tStatus: outdated!";
+                        lab_version.Foreground = new SolidColorBrush(Colors.Red);
+                    }
+
+                    lab_version.Content = versioninfo;
+
+                }));
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
+        }
+
+        bool isclientuptodate()
+        {
+            WebClient downloader = new WebClient();
+            Regex filter = new Regex(@"\d*\d");
+            version_api = filter.Match(downloader.DownloadString("https://api.guildwars2.com/v2/build")).Value;
+
+            if (version_api == version_client) return true;
+            return false;
+        }
+
+        void updateclient()
+        {
+            Process progw2 = new Process();
+            ProcessStartInfo infoprogw2 = new ProcessStartInfo { FileName = exepath + exename, Arguments = "-image" };
+            progw2.StartInfo = infoprogw2;
+            progw2.Start();
+            progw2.WaitForExit();
         }
 
         void checksetup()
@@ -349,8 +404,9 @@ namespace Gw2_Launchbuddy
                     switch (reader.Name)
                     {
                         case "VERSIONNAME":
-
-                            lab_version.Content = "Client Version: " + getvalue(reader);
+                            Regex filter = new Regex(@"\d*\d");
+                            version_client= filter.Match(getvalue(reader)).Value;
+                            lab_version.Content = "Client Version: " + version_client;
                             break;
 
 
