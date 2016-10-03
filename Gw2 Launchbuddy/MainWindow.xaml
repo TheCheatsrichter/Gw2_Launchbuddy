@@ -8,7 +8,7 @@
         x:Name="myWindow"
         
         mc:Ignorable="d"
-        Title="Gw2 Launchbuddy BETA" Height="845" Width="700" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
+        Title="Gw2 Launchbuddy" Height="845" Width="700" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="0,5">
         <Grid.Background>
@@ -93,6 +93,7 @@
                 <CheckBox Content="-useOldFov" Margin="5,0,0,0"/>
                 <CheckBox Content="-verify" Margin="5,0,0,0"/>
                 <CheckBox Content="-umbra gpu" Margin="5,0,0,0"/>
+                <CheckBox Content="-windowed" Margin="5,0,0,0"/>
             </ListBox>
             <Label x:Name="lab_descr" Content="Description (Wiki):"  FontSize="16" FontWeight="Bold"  Grid.Column="1"/>
             <TextBlock x:Name="textblock_descr" TextWrapping="Wrap" FontSize="13.333" Grid.Row="1" Grid.Column="1" Margin="5,0,0,0"/>

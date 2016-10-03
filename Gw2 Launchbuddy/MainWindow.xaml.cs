@@ -103,6 +103,7 @@ namespace Gw2_Launchbuddy
             loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
             loadaccounts(); // loading saved accounts from launchbuddy
             Thread checkver = new Thread(checkversion);
+            checkver.IsBackground = true;
             checkver.Start();
 
         }
@@ -113,16 +114,17 @@ namespace Gw2_Launchbuddy
             {
                 if (!isclientuptodate())
                 {
-                    MessageBoxResult win = MessageBox.Show("A new Build of Gw2 is available! Not updating can cause Gw2 Launchbuddy to not work! Update now?", "Client Build Info", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if (win.ToString() == "Yes")
+
+                    Dispatcher.Invoke(new Action(() =>
                     {
-                        updateclient();
-                        Dispatcher.Invoke(new Action(() =>
+                        MessageBoxResult win = MessageBox.Show("A new Build of Gw2 is available! Not updating can cause Gw2 Launchbuddy to not work! Update now?", "Client Build Info", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        if (win.ToString() == "Yes")
                         {
+                            updateclient();
                             System.Windows.Forms.Application.Restart();
-                            Application.Current.Shutdown();
-                        }));
-                    }
+                            Application.Current.Shutdown();   
+                        }
+                    })); 
                 }
                 string versioninfo = "Build Version: " + version_client;
 
@@ -179,6 +181,7 @@ namespace Gw2_Launchbuddy
                     winsetupinfo.Show();
                     myWindow.Visibility = Visibility.Hidden;
                     Thread th_gethandleexe = new Thread(gethandleexe);
+                    th_gethandleexe.IsBackground = true;
                     th_gethandleexe.Start();
                 }
             }
@@ -200,9 +203,10 @@ namespace Gw2_Launchbuddy
 
                 ZipFile.ExtractToDirectory(AppdataPath + "Handle.zip", AppdataPath);
                 ProcessStartInfo prohandleinfo = new ProcessStartInfo();
-                prohandleinfo.Arguments = "-accepteula";
-                prohandleinfo.CreateNoWindow = true;
                 prohandleinfo.UseShellExecute = false;
+                prohandleinfo.CreateNoWindow = true;
+                prohandleinfo.Arguments = "-accepteula";
+
 
                 if (Environment.Is64BitOperatingSystem)
                 {
@@ -506,6 +510,7 @@ namespace Gw2_Launchbuddy
             bt_checkservers.Content = "Loading Serverlist";
             bt_checkservers.IsEnabled = false;
             Thread serverthread = new Thread(createlist);
+            serverthread.IsBackground = true;
             serverthread.Start();
         }
 
@@ -1006,7 +1011,7 @@ namespace Gw2_Launchbuddy
 
         private void cb_login_Checked(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Autologin does only function when no second Authentication (SMS,Email,App) is used on this account.\n Make sure that you current network is an authorized network (check always trust this network at login,recommended) or deactivate the second authentication!(not recommended)", "ATTENTION", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("Autologin does only function when no second Authentication (SMS,Email,App) is used on this account.\n Make sure that your current network is an authorized network (check always trust this network at login,recommended) or deactivate the second authentication!(not recommended)\n\n ATTENTION: Invalid inputs result in a black/white screen and the game freezes!", "ATTENTION", MessageBoxButton.OK, MessageBoxImage.Warning);
             listview_acc.IsEnabled = true;
             lab_email.IsEnabled = true;
             lab_passw.IsEnabled = true;
@@ -1206,12 +1211,8 @@ namespace Gw2_Launchbuddy
                 {
                     if (selected_accs[accnr].Email != null && selected_accs[accnr].Password != null)
                     {
-                        if (ismultibox)
-                        {
-                            arguments += " -windowed ";
-
-                        }
-                        arguments += "-nopatchui -email " + selected_accs[accnr].Email + " -password " + selected_accs[accnr].Password;
+                        
+                        arguments += " -nopatchui -email " + selected_accs[accnr].Email + " -password " + selected_accs[accnr].Password;
                     }
                 }
 

@@ -216,5 +216,14 @@ namespace Gw2_Launchbuddy
             if (!glasses)BeginStoryboard(this.FindResource("anim_quaggan") as Storyboard);
             glasses = true;
         }
+
+        private void bt_resetup_Click(object sender, RoutedEventArgs e)
+        {
+            string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
+            File.Delete(AppdataPath + "handle.exe");
+            File.Delete(AppdataPath + "handle64.exe");
+            System.Windows.Forms.Application.Restart();
+            Application.Current.Shutdown();
+        }
     }
 }
