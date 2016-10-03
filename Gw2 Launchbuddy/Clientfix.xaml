@@ -30,12 +30,15 @@
             <RowDefinition Height="200*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="2">
+            <Button x:Name="bt_auto" Content="Fix Client Wizard" Width="272" Click="bt_auto_Click" Margin="0,5,0,0"/>
             <Button x:Name="bt_appdata" Content="Clean Appdata" Width="272" Click="bt_appdata_Click" Margin="0,5,0,0" />
+            <Button x:Name="bt_resetup" Content="Refresh Launchbuddy Setup" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="272" Click="bt_resetup_Click" Margin="0,5,0,0" />
+            <Button x:Name="bt_bin" Content="Clean Bin folders" Width="272" Click="bt_bin_Click" Margin="0,5,0,0" />
             <Button x:Name="bt_repair" Content="Launch game in repairmode" Width="272" Click="bt_repair_Click" Margin="0,5,0,0"/>
             <Button x:Name="bt_patch" Content="Patch game" Width="272" Click="bt_patch_Click" Margin="0,5,0,0" />
-            <Button x:Name="bt_auto" Content="Fix Client Wizard" Width="272" Click="bt_auto_Click" Margin="0,5,0,0"/>
-            <Button x:Name="bt_bin" Content="Clean Bin folders" Width="272" Click="bt_bin_Click" Margin="0,5,0,0" />
-            <Button x:Name="bt_resetup" Content="Refresh Launchbuddy Setup" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="272" Click="bt_resetup_Click" Margin="0,5,0,0" />
+            
+            
+            
         </StackPanel>
 
         <Image x:Name="image" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" Source="Resources/quaggan.jpg" RenderTransformOrigin="0.5,0.5" Margin="0,-0.502,0,0">

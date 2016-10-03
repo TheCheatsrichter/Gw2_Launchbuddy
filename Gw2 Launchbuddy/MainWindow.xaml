@@ -96,7 +96,7 @@
                 <CheckBox Content="-windowed" Margin="5,0,0,0"/>
             </ListBox>
             <Label x:Name="lab_descr" Content="Description (Wiki):"  FontSize="16" FontWeight="Bold"  Grid.Column="1"/>
-            <TextBlock x:Name="textblock_descr" TextWrapping="Wrap" FontSize="13.333" Grid.Row="1" Grid.Column="1" Margin="5,0,0,0"/>
+            <TextBlock x:Name="textblock_descr" TextWrapping="Wrap" FontSize="13.333" Grid.Row="1" Grid.Column="1" Margin="5,0"/>
             <Label x:Name="lab_arglist" Content="Arguments:" FontSize="16" FontWeight="Bold" Grid.Row="0"/>
 
         </Grid>
@@ -189,8 +189,8 @@
                 <Label x:Name="lab_port_assets" Content="Port (optional):" IsEnabled="False" Grid.Column="1" Grid.Row="4" FontSize="16" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal" />
                 <Label x:Name="lab_port_client" Content="Port :" IsEnabled="False" Grid.Column="1" Grid.Row="5" FontSize="16" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal"/>
                 <CheckBox x:Name="checkb_clientport" Content="Use Clientport: " FontSize="16" Checked="checkb_clientport_Checked" Unchecked="checkb_clientport_Unchecked" FontWeight="Bold" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <CheckBox x:Name="checkb_auth" Content="Use Authentication Server : (Select Server)" VerticalAlignment="Center" FontSize="16" IsEnabled="False" Checked="checkb_auth_Checked" Unchecked="checkb_auth_Unchecked" FontWeight="Bold" HorizontalAlignment="Left" Grid.Row="3" Margin="0,4.36"/>
-                <CheckBox x:Name="checkb_assets" Content="Use Assets Server : (Select Server)" VerticalAlignment="Center" FontSize="16" IsEnabled="False" Checked="checkb_assets_Checked" Unchecked="checkb_assets_Unchecked" FontWeight="Bold" Grid.Row="4" HorizontalAlignment="Left" Margin="0,4.36"/>
+                <CheckBox x:Name="checkb_auth" Grid.ColumnSpan="2" Content="Use Authentication Server : (Select Server)" VerticalAlignment="Center" FontSize="16" IsEnabled="False" Checked="checkb_auth_Checked" Unchecked="checkb_auth_Unchecked" FontWeight="Bold" HorizontalAlignment="Left" Grid.Row="3" Margin="0,4.36"/>
+                <CheckBox x:Name="checkb_assets" Grid.ColumnSpan="2" Content="Use Assets Server : (Select Server)" VerticalAlignment="Center" FontSize="16" IsEnabled="False" Checked="checkb_assets_Checked" Unchecked="checkb_assets_Unchecked" FontWeight="Bold" Grid.Row="4" HorizontalAlignment="Left" Margin="0,4.36"/>
                 <Label x:Name="lab_port_auth" Content="Port (optional):" VerticalAlignment="Bottom" IsEnabled="False" Grid.Column="1" FontSize="16" Grid.Row="3" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal"/>
                 <Button x:Name="bt_checkservers" Content="Check Servers" Click="bt_checkservers_Click" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,5" FontWeight="Normal"  />
                 <ListView x:Name="listview_assets" SelectionChanged="listview_assets_SelectionChanged" Grid.Row="1" Grid.Column="1" d:LayoutOverrides="Height, LeftMargin, RightMargin, TopMargin, BottomMargin" Margin="5,0,0,0" Grid.ColumnSpan="2" FontWeight="Normal" FontSize="12">
