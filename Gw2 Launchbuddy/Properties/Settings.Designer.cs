@@ -46,29 +46,5 @@ namespace Gw2_Launchbuddy.Properties {
                 this["reshadepath"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool use_autologin {
-            get {
-                return ((bool)(this["use_autologin"]));
-            }
-            set {
-                this["use_autologin"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int selected_acc {
-            get {
-                return ((int)(this["selected_acc"]));
-            }
-            set {
-                this["selected_acc"] = value;
-            }
-        }
     }
 }

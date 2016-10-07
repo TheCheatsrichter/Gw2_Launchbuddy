@@ -373,20 +373,7 @@ namespace Gw2_Launchbuddy
                 catch { }
                 cb_reshade.IsEnabled = true;
             }
-
-            try
-            {
-                if (Properties.Settings.Default.use_reshade && cb_reshade.IsEnabled == true) cb_reshade.IsChecked = true;
-                if (Properties.Settings.Default.use_autologin == true) cb_login.IsChecked = true;
-
-                listview_acc.SelectedIndex = Properties.Settings.Default.selected_acc;
-
-            }
-            catch (Exception err)
-            {
-                MessageBox.Show("Error in UI setup. \n " + err.Message);
-            }
-            
+            if (Properties.Settings.Default.use_reshade && cb_reshade.IsEnabled == true) cb_reshade.IsChecked=true;
 
             // Importing the XML file at AppData\Roaming\Guild Wars 2\
             // This file also contains infos about the graphic settings
@@ -591,19 +578,6 @@ namespace Gw2_Launchbuddy
 
         private void bt_launch_Click(object sender, RoutedEventArgs e)
         {
-            //Checking for existing Gw2 instances
-            Process[] prolist = Process.GetProcesses();
-
-            foreach (Process pro in prolist)
-            {
-                if (!nomutexpros.Contains(pro.Id) && pro.ProcessName == "Gw2")
-                {
-                    MessageBox.Show("One instance of Gw2 is allready running!\n If that instance was not launched with -shareArchive (when launched with gw2 launchbuddy this argument gets added automatically) then additional instances will crash!");
-                    closemutex(pro.Id, "AN-Mutex-Window-Guild Wars 2", "Mutant");
-                }
-            }
-
-
             //Launching the application with arguments
             if (ismultibox)
             {
@@ -666,7 +640,6 @@ namespace Gw2_Launchbuddy
             prohandle_info.Arguments = "-p " + proid + " -c " + handlehexid + " -y";
             prohandle.StartInfo = prohandle_info;
             prohandle.Start();
-            nomutexpros.Add(proid);
             output = outputReader.ReadToEnd();
 
 
@@ -681,6 +654,7 @@ namespace Gw2_Launchbuddy
                 gw2proinfo.FileName = exepath + exename;
                 gw2proinfo.Arguments = getarguments(accnr);
                 Process gw2pro = new Process { StartInfo = gw2proinfo };
+
 
                 try
                 {
@@ -1023,9 +997,6 @@ namespace Gw2_Launchbuddy
                     Account acc = new Account {Nick= tb_nick.Text , Email = tb_email.Text, Password = tb_passw.Text, Time = DateTime.Now };
                     accountlist.Add(acc);
                     listview_acc.ItemsSource = accountlist;
-                    tb_email.Clear();
-                    tb_passw.Clear();
-                    tb_nick.Clear();
                 }
                 else
                 {
@@ -1040,7 +1011,7 @@ namespace Gw2_Launchbuddy
 
         private void cb_login_Checked(object sender, RoutedEventArgs e)
         {
-            if (Properties.Settings.Default.use_autologin == false) MessageBox.Show("Autologin does only function when no second Authentication (SMS,Email,App) is used on this account.\n Make sure that your current network is an authorized network (check always trust this network at login,recommended) or deactivate the second authentication!(not recommended)\n\n ATTENTION: Invalid inputs result in a black/white screen and the game freezes!", "ATTENTION", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("Autologin does only function when no second Authentication (SMS,Email,App) is used on this account.\n Make sure that your current network is an authorized network (check always trust this network at login,recommended) or deactivate the second authentication!(not recommended)\n\n ATTENTION: Invalid inputs result in a black/white screen and the game freezes!", "ATTENTION", MessageBoxButton.OK, MessageBoxImage.Warning);
             listview_acc.IsEnabled = true;
             lab_email.IsEnabled = true;
             lab_passw.IsEnabled = true;
@@ -1050,9 +1021,6 @@ namespace Gw2_Launchbuddy
             bt_remacc.IsEnabled = true;
             tb_nick.IsEnabled = true;
             lab_nick.IsEnabled = true;
-
-            Properties.Settings.Default.use_autologin = true;
-            Properties.Settings.Default.Save();
         }
 
         private void cb_login_Unchecked(object sender, RoutedEventArgs e)
@@ -1069,16 +1037,11 @@ namespace Gw2_Launchbuddy
             cb_login.Content = "Use Autologin:";
 
             listview_acc.SelectedIndex = -1;
-            Properties.Settings.Default.use_autologin = false;
-            Properties.Settings.Default.Save();
         }
 
         private void listview_acc_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             selected_accs = listview_acc.SelectedItems.Cast<Account>().ToList();
-
-            Properties.Settings.Default.selected_acc = listview_acc.SelectedIndex;
-            Properties.Settings.Default.Save();
 
             if (listview_acc.SelectedItems.Count != 0 && listview_acc.SelectedItems.Count<=1)
             {
@@ -1249,7 +1212,7 @@ namespace Gw2_Launchbuddy
                     if (selected_accs[accnr].Email != null && selected_accs[accnr].Password != null)
                     {
                         
-                        arguments += " -nopatchui -email " + selected_accs[accnr].Email + " -password  \"" + selected_accs[accnr].Password +"\" ";
+                        arguments += " -nopatchui -email " + selected_accs[accnr].Email + " -password " + selected_accs[accnr].Password;
                     }
                 }
 
