@@ -8,7 +8,7 @@
         x:Name="myWindow"
         
         mc:Ignorable="d"
-        Title="Gw2 Launchbuddy V 1.0.1" Height="845" Width="700" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
+        Title="Gw2 Launchbuddy V 1.0.2" Height="845" Width="700" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="0,5">
         <Grid.Background>
