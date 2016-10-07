@@ -1116,6 +1116,8 @@ namespace Gw2_Launchbuddy
             Properties.Settings.Default.use_reshade = (bool)cb_reshade.IsChecked;
             Properties.Settings.Default.Save();
             safeaccounts();
+            Environment.Exit(Environment.ExitCode);
+
         }
 
         private void bt_remacc_Click(object sender, RoutedEventArgs e)
@@ -1258,7 +1260,7 @@ namespace Gw2_Launchbuddy
                     if (selected_accs[accnr].Email != null && selected_accs[accnr].Password != null)
                     {
                         
-                        arguments += " -nopatchui -email " + selected_accs[accnr].Email + " -password  \"" + selected_accs[accnr].Password +"\" ";
+                        arguments += " -nopatchui -email \"" + selected_accs[accnr].Email + "\" -password \"" + selected_accs[accnr].Password +"\" ";
                     }
                 }
 
