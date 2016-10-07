@@ -701,7 +701,8 @@ namespace Gw2_Launchbuddy
                 }
                 try
                 {
-                    gw2pro.WaitForInputIdle();
+                    gw2pro.WaitForInputIdle(10000);
+                    Thread.Sleep(1000);
                     closemutex(gw2pro.Id, "AN-Mutex-Window-Guild Wars 2", "Mutant");
 
                     // OLD method, sadly only working on Win7
