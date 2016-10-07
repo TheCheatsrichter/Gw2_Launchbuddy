@@ -648,12 +648,21 @@ namespace Gw2_Launchbuddy
             MatchCollection matches = regfilter.Matches(output);
 
             string tmp="";
+            string handlehexid = "";
             foreach (Match entry in matches)
             {
                 tmp= tmp + entry.Value + "\n";
             }
 
-            string handlehexid = matches[matches.Count - 1].Value.Trim(':');
+            try
+            {
+                handlehexid = matches[matches.Count - 1].Value.Trim(':');
+            } catch (Exception err)
+            {
+                MessageBox.Show("No Mutex found on process : " + proid.ToString() + "\n" + err.Message);
+            }
+
+            
             try
             {
                 prohandle.Close();
