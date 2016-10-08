@@ -200,8 +200,24 @@ namespace Gw2_Launchbuddy
                 System.IO.File.Delete(AppdataPath + "Eula.txt");
                 WebClient downloadclient = new WebClient();
                 downloadclient.DownloadFile("https://download.sysinternals.com/files/Handle.zip", AppdataPath + "Handle.zip");
-
                 ZipFile.ExtractToDirectory(AppdataPath + "Handle.zip", AppdataPath);
+
+            }
+            catch {
+                MessageBox.Show("Official microsoft link is not reachable. Using embbeded handle version!");
+                try
+                {
+                    System.IO.File.WriteAllBytes(AppdataPath+ "handle64.exe", Properties.Resources.handle64);
+                    System.IO.File.WriteAllBytes(AppdataPath + "handle.exe", Properties.Resources.handle);
+                }
+
+                catch (Exception err)
+                {
+                    MessageBox.Show("Could not extract handle components. No admin privilges?\n" + err.Message);
+                }
+            }
+
+            try { 
                 ProcessStartInfo prohandleinfo = new ProcessStartInfo();
                 prohandleinfo.UseShellExecute = false;
                 prohandleinfo.CreateNoWindow = true;
