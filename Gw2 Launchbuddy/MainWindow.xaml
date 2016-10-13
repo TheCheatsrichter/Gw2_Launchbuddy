@@ -8,7 +8,7 @@
         x:Name="myWindow"
         
         mc:Ignorable="d"
-        Title="Gw2 Launchbuddy V 1.0.2" Height="845" Width="700" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
+        Title="Gw2 Launchbuddy by TheCheatsrichter" Height="860" Width="700" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
 
     <Grid Margin="0,5">
         <Grid.Background>
@@ -44,17 +44,17 @@
             </EventTrigger>
         </Grid.Triggers>
         <Grid.RowDefinitions>
-            <RowDefinition Height="105*"/>
-            <RowDefinition Height="160*"/>
-            <RowDefinition x:Name="ServerUI" Height="290*"/>
-            <RowDefinition Height="170*"/>
-            <RowDefinition Height="40*"/>
-            <RowDefinition Height="40*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="109*"/>
+            <RowDefinition Height="167*"/>
+            <RowDefinition x:Name="ServerUI" Height="303*"/>
+            <RowDefinition Height="178*"/>
+            <RowDefinition Height="42*"/>
         </Grid.RowDefinitions>
 
 
 
-        <Grid Grid.Row="1" Margin="5,0,0,0">
+        <Grid Grid.Row="2" Margin="5,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="100*"/>
@@ -111,7 +111,7 @@
 
 
 
-        <Grid Grid.Row="3" Margin="5,0"  >
+        <Grid Grid.Row="4" Margin="5,0"  >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="190*"/>
                 <ColumnDefinition Width="190*"/>
@@ -146,15 +146,6 @@
             </ListView>
         </Grid>
 
-        <Grid Grid.Row="4" Margin="5,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50*"/>
-                <ColumnDefinition Width="50*"/>
-            </Grid.ColumnDefinitions>
-            <CheckBox x:Name="cb_reshade" Content="Use Reshade Unlocker" Checked="cb_reshade_Checked" Unchecked="cb_reshade_Unchecked" FontSize="16" FontWeight="Bold" IsEnabled="False"  VerticalAlignment="Center" HorizontalAlignment="Left"/>
-            <Button x:Name="bt_reshadepath" Content="Set ReshadeUnlocker Path" Click="bt_reshadepath_Click" Grid.Column="1" Margin="5,5,0,5"/>
-        </Grid>
-
         <Grid Grid.Row="5" Margin="5,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50*"/>
@@ -167,7 +158,7 @@
 
 
 
-        <Expander x:Name="exp_server" Header="Serverselection" IsExpanded="True"  FontSize="16" FontWeight="Bold" Collapsed="exp_server_Collapsed" Expanded="exp_server_Expanded" Grid.Row="2" Margin="5,0" >
+        <Expander x:Name="exp_server" Header="Serverselection" IsExpanded="True"  FontSize="16" FontWeight="Bold" Collapsed="exp_server_Collapsed" Expanded="exp_server_Expanded" Grid.Row="3" Margin="5,0" >
 
             <Grid >
                 <Grid.ColumnDefinitions>
@@ -235,32 +226,54 @@
             </Grid>
 
         </Expander>
-        <Border   Grid.Column="0" d:LayoutOverrides="HorizontalAlignment, LeftMargin, RightMargin, TopMargin, BottomMargin" Margin="5,0">
-            <Grid Margin="0,-3,0,0">
+
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Exit" Click="mnuExit"/>
+                </MenuItem>
+                <MenuItem Header="_Tools">
+                    <MenuItem Header="Reshade Unlocker">
+                        <MenuItem Header="Set Path" Click="bt_reshadepath_Click"/>
+                        <MenuItem x:Name="cb_reshade" Header="Use Reshade Unlocker" Checked="cb_reshade_Checked" Unchecked="cb_reshade_Unchecked" IsEnabled="False" IsCheckable="True"/>
+                    </MenuItem>
+                    <MenuItem Header="Client">
+                        <MenuItem Header="Set Directory" Click="bt_installpath_Click" />
+                        <MenuItem Header="Fix Client" Click="bt_quaggan_Click"/>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="_Help">
+                    <MenuItem Header="Donate" Click="bt_donate_Click"/>
+                    <MenuItem Header="About" Click="mnuAbout_Click" />
+                </MenuItem>
+            </Menu>
+        </DockPanel>
+        <Expander x:Name="expClient" Header="GW2 Client Details" HorizontalAlignment="Left" Margin="5,5,0,0" Grid.Row="1" VerticalAlignment="Top" Height="94" Width="682" IsExpanded="True">
+            <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100*"/>
-                    <ColumnDefinition Width="60*"/>
+                    <ColumnDefinition Width="21*"/>
+                    <ColumnDefinition Width="319*"/>
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30*"/>
-                    <RowDefinition Height="80*"/>
-                </Grid.RowDefinitions>
-                <Button x:Name="bt_installpath" Content="Set Directory" Click="bt_installpath_Click" Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0,80,6" BorderThickness="1"/>
-                <Label x:Name="lab_about" Content="Gw2 Launchbuddy by TheCheatsrichter" Grid.Row="0" Grid.Column="1" FontWeight="Bold" Height="29" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
-                <Button x:Name="bt_quaggan"  Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Height="75" Click="bt_quaggan_Click" Margin="0,26,0,4" Grid.RowSpan="2">
-                    <Image Source="Resources/quaggan.png"/>
-                </Button>
-                <Label x:Name="label" Content="Gw2 Client Details:" HorizontalAlignment="Left" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                <StackPanel Grid.Column="0" Grid.Row="1">
-                    <Label x:Name="lab_version" Content="Build Version:" />
-                    <Label x:Name="lab_para" Content="Latest Startparameters:" Grid.Column="1" Grid.Row="1" />
-                    <Label x:Name="lab_path" Content="Install Path:" Grid.Column="1" Grid.Row="1" />
-                </StackPanel>
-                <Button x:Name="bt_donate" Background="Gray" FontWeight="Bold" Foreground="LimeGreen" Content="Donate" Grid.Column="1" Grid.Row="1"  VerticalAlignment="Top" Click="bt_donate_Click" Margin="5,0,80,0" Height="27" />
+                <Border   Grid.Column="0" Margin="5,20,-7,-53" Grid.ColumnSpan="2">
+                    <Grid Margin="0,-3,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="88*"/>
+                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="335*"/>
+                            <ColumnDefinition Width="255*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30*"/>
+                            <RowDefinition Height="80*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"/>
+                    </Grid>
+
+                </Border>
+                <Label x:Name="lab_para" Content="Latest Startparameters:" Margin="0,7,-2,38" Grid.ColumnSpan="2" />
+                <Label x:Name="lab_path" Content="Install Path:" Margin="0,33,-2,12" Grid.ColumnSpan="2" />
             </Grid>
-
-        </Border>
-
+        </Expander>
 
 
 
