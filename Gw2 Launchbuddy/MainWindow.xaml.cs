@@ -705,6 +705,7 @@ namespace Gw2_Launchbuddy
                 ProcessStartInfo gw2proinfo = new ProcessStartInfo();
                 gw2proinfo.FileName = exepath + exename;
                 gw2proinfo.Arguments = getarguments(accnr);
+                gw2proinfo.WorkingDirectory = exepath;
                 Process gw2pro = new Process { StartInfo = gw2proinfo };
 
                 try
