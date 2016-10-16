@@ -137,7 +137,6 @@
     </ApplicationDefinition>
     <Compile Include="Encryption_AES.cs" />
     <Compile Include="HandleManager.cs" />
-    <Compile Include="MutexKiller.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
