@@ -16,6 +16,9 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+//The original code was modified between 2010 and 2016 multiple times
+//by KairuByte. Adaptations made for GW2 use.
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
