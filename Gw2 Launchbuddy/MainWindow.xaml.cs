@@ -99,7 +99,7 @@ namespace Gw2_Launchbuddy
             }
 
             accountlist.Clear(); //clearing accountlist
-            checksetup();
+            //checksetup();
             loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
             loadaccounts(); // loading saved accounts from launchbuddy
             Thread checkver = new Thread(checkversion);
@@ -207,8 +207,8 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show("Official microsoft link is not reachable. Using embbeded handle version!");
                 try
                 {
-                    System.IO.File.WriteAllBytes(AppdataPath+ "handle64.exe", Properties.Resources.handle64);
-                    System.IO.File.WriteAllBytes(AppdataPath + "handle.exe", Properties.Resources.handle);
+                    //System.IO.File.WriteAllBytes(AppdataPath+ "handle64.exe", Properties.Resources.handle64);
+                    //System.IO.File.WriteAllBytes(AppdataPath + "handle.exe", Properties.Resources.handle);
                 }
 
                 catch (Exception err)
@@ -705,6 +705,7 @@ namespace Gw2_Launchbuddy
                 ProcessStartInfo gw2proinfo = new ProcessStartInfo();
                 gw2proinfo.FileName = exepath + exename;
                 gw2proinfo.Arguments = getarguments(accnr);
+                gw2proinfo.WorkingDirectory = exepath;
                 Process gw2pro = new Process { StartInfo = gw2proinfo };
 
                 try
@@ -718,8 +719,13 @@ namespace Gw2_Launchbuddy
                 try
                 {
                     gw2pro.WaitForInputIdle(10000);
-                    Thread.Sleep(1000);
-                    closemutex(gw2pro.Id, "AN-Mutex-Window-Guild Wars 2", "Mutant");
+                    Thread.Sleep(100);
+                    HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2");
+
+
+                    // V1.0 - 1.0.3 method which required an external exe and admin rights.
+                    //closemutex(gw2pro.Id, "AN-Mutex-Window-Guild Wars 2", "Mutant");
+
 
                     // OLD method, sadly only working on Win7
                     /*
@@ -738,6 +744,7 @@ namespace Gw2_Launchbuddy
                     {
                         ProcessStartInfo unlockerpro = new ProcessStartInfo();
                         unlockerpro.FileName = unlockerpath;
+                        unlockerpro.WorkingDirectory = Path.GetDirectoryName(unlockerpath);
                         Process.Start(unlockerpro);
                     }
                     catch (Exception err)

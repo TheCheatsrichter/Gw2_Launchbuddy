@@ -136,6 +136,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Encryption_AES.cs" />
+    <Compile Include="HandleManager.cs" />
     <Compile Include="MutexKiller.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -236,12 +237,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\glasses.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\handle.exe" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\handle64.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
