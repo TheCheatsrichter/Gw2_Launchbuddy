@@ -743,6 +743,7 @@ namespace Gw2_Launchbuddy
                     {
                         ProcessStartInfo unlockerpro = new ProcessStartInfo();
                         unlockerpro.FileName = unlockerpath;
+                        unlockerpro.WorkingDirectory = Path.GetDirectoryName(unlockerpath);
                         Process.Start(unlockerpro);
                     }
                     catch (Exception err)
