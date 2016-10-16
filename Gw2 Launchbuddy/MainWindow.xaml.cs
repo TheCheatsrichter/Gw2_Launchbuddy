@@ -51,7 +51,7 @@ namespace Gw2_Launchbuddy
         List<Account> selected_accs = new List<Account>();
         List<int> nomutexpros = new List<int>();
 
-        string exepath, exename, unlockerpath, version_client, version_api;
+        string exepath, exename , unlockerpath, version_client, version_api;
         string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
         bool ismultibox = false;
 
@@ -72,8 +72,7 @@ namespace Gw2_Launchbuddy
         {
             public string Email { get; set; }
             public string Password { get; set; }
-            public string DisplayPW
-            {
+            public string DisplayPW {
                 get
                 {
                     string stars = "";
@@ -83,8 +82,7 @@ namespace Gw2_Launchbuddy
                     }
                     return stars;
                 }
-                set
-                {
+                set {
                     DisplayPW = value;
                 }
             }
@@ -124,26 +122,26 @@ namespace Gw2_Launchbuddy
                         {
                             updateclient();
                             System.Windows.Forms.Application.Restart();
-                            Application.Current.Shutdown();
+                            Application.Current.Shutdown();   
                         }
-                    }));
+                    })); 
                 }
-                string versioninfo = "GW2 Client Details: " + version_client;
+                string versioninfo = "Build Version: " + version_client;
 
                 Dispatcher.Invoke(new Action(() =>
                 {
                     if (version_api == version_client)
                     {
                         versioninfo += "\tStatus: up to date!";
-                        expClient.Foreground = new SolidColorBrush(Colors.Green);
+                        lab_version.Foreground = new SolidColorBrush(Colors.Green);
                     }
                     else
                     {
                         versioninfo += "\tStatus: outdated!";
-                        expClient.Foreground = new SolidColorBrush(Colors.Red);
+                        lab_version.Foreground = new SolidColorBrush(Colors.Red);
                     }
 
-                    expClient.Header = versioninfo;
+                    lab_version.Content = versioninfo;
 
                 }));
             }
@@ -174,9 +172,8 @@ namespace Gw2_Launchbuddy
 
         void checksetup()
         {
-            try
-            {
-                if (!System.IO.File.Exists(AppdataPath + "handle64.exe") || !System.IO.File.Exists(AppdataPath + "handle.exe"))
+            try {
+                if (!System.IO.File.Exists(AppdataPath+"handle64.exe") || !System.IO.File.Exists(AppdataPath + "handle.exe"))
                 {
                     winsetupinfo.WindowStyle = WindowStyle.None;
                     winsetupinfo.Width = 300;
@@ -206,12 +203,11 @@ namespace Gw2_Launchbuddy
                 ZipFile.ExtractToDirectory(AppdataPath + "Handle.zip", AppdataPath);
 
             }
-            catch
-            {
+            catch {
                 MessageBox.Show("Official microsoft link is not reachable. Using embbeded handle version!");
                 try
                 {
-                    System.IO.File.WriteAllBytes(AppdataPath + "handle64.exe", Properties.Resources.handle64);
+                    System.IO.File.WriteAllBytes(AppdataPath+ "handle64.exe", Properties.Resources.handle64);
                     System.IO.File.WriteAllBytes(AppdataPath + "handle.exe", Properties.Resources.handle);
                 }
 
@@ -221,8 +217,7 @@ namespace Gw2_Launchbuddy
                 }
             }
 
-            try
-            {
+            try { 
                 ProcessStartInfo prohandleinfo = new ProcessStartInfo();
                 prohandleinfo.UseShellExecute = false;
                 prohandleinfo.CreateNoWindow = true;
@@ -232,12 +227,11 @@ namespace Gw2_Launchbuddy
                 if (Environment.Is64BitOperatingSystem)
                 {
                     prohandleinfo.FileName = AppdataPath + "handle64.exe";
-                }
-                else
+                }else
                 {
                     prohandleinfo.FileName = AppdataPath + "handle.exe";
                 }
-                Process prohandle = new Process { StartInfo = prohandleinfo };
+                Process prohandle = new Process{ StartInfo = prohandleinfo };
                 prohandle.Start();
 
                 System.IO.File.Delete(AppdataPath + "Handle.zip");
@@ -256,8 +250,7 @@ namespace Gw2_Launchbuddy
 
         void setupend()
         {
-            try
-            {
+            try {
                 myWindow.Visibility = Visibility.Visible;
                 winsetupinfo.Close();
             }
@@ -343,7 +336,7 @@ namespace Gw2_Launchbuddy
 
 
             }
-
+            
             try
             {
                 Application.Current.Dispatcher.BeginInvoke(
@@ -370,7 +363,7 @@ namespace Gw2_Launchbuddy
             listview_assets.ItemsSource = assetlist;
             lab_authserverlist.Content = "Authentication Servers (" + authlist.Count + " servers found):";
             lab_assetserverlist.Content = "Asset Servers (" + assetlist.Count + " servers found):";
-            bt_checkservers.Content = "Check Servers (Last update: " + DateTime.Now.ToString("h:mm:ss tt") + ")";
+            bt_checkservers.Content = "Check Servers (Last update: "+ DateTime.Now.ToString("h:mm:ss tt") + ")";
 
 
             // Sorting  servers (ping).
@@ -409,7 +402,7 @@ namespace Gw2_Launchbuddy
             {
                 MessageBox.Show("Error in UI setup. \n " + err.Message);
             }
-
+            
 
             // Importing the XML file at AppData\Roaming\Guild Wars 2\
             // This file also contains infos about the graphic settings
@@ -445,8 +438,8 @@ namespace Gw2_Launchbuddy
                     {
                         case "VERSIONNAME":
                             Regex filter = new Regex(@"\d*\d");
-                            version_client = filter.Match(getvalue(reader)).Value;
-                            expClient.Header = "GW2 Client Details: " + version_client;
+                            version_client= filter.Match(getvalue(reader)).Value;
+                            lab_version.Content = "Client Version: " + version_client;
                             break;
 
 
@@ -468,7 +461,7 @@ namespace Gw2_Launchbuddy
                             Regex regex = new Regex(@"-\w*");
                             string input = getvalue(reader);
                             MatchCollection matchList = regex.Matches(input);
-
+                            
                             foreach (Match parameter in matchList)
                             {
                                 if (parameter.Value != "-shareArchive") lab_para.Content = lab_para.Content + " " + parameter.Value;
@@ -486,7 +479,7 @@ namespace Gw2_Launchbuddy
                                     }
 
                                 }
-                            }
+                            }               
                             break;
                     }
                 }
@@ -631,8 +624,7 @@ namespace Gw2_Launchbuddy
             if (ismultibox)
             {
                 for (int i = 0; i <= selected_accs.Count - 1; i++) launchgw2(i);
-            }
-            else
+            }else
             {
                 launchgw2(0);
             }
@@ -640,12 +632,12 @@ namespace Gw2_Launchbuddy
 
         void killmutex(int proid)
         {
-
-
+            
+            
         }
 
 
-        void closemutex(int proid, string handlename, string handletype)
+        void closemutex (int proid, string handlename , string handletype)
         {
             StreamReader outputReader = null;
             Process prohandle = new Process();
@@ -653,17 +645,16 @@ namespace Gw2_Launchbuddy
 
             if (Environment.Is64BitOperatingSystem)
             {
-                prohandle_info.FileName = AppdataPath + "handle64.exe";
-            }
-            else
+                prohandle_info.FileName= AppdataPath + "handle64.exe";
+            } else
             {
-                prohandle_info.FileName = AppdataPath + "handle.exe";
+                prohandle_info.FileName= AppdataPath + "handle.exe";
             }
             prohandle_info.UseShellExecute = false;
             prohandle_info.RedirectStandardInput = true;
             prohandle_info.RedirectStandardOutput = true;
             prohandle_info.CreateNoWindow = true;
-            prohandle_info.Arguments = "-p " + proid + " -a \"" + handlename + "\"";
+            prohandle_info.Arguments = "-p "+proid+" -a \""+ handlename + "\"";
             prohandle.StartInfo = prohandle_info;
             prohandle.Start();
             outputReader = prohandle.StandardOutput;
@@ -672,23 +663,22 @@ namespace Gw2_Launchbuddy
             Regex regfilter = new Regex("....(:)");
             MatchCollection matches = regfilter.Matches(output);
 
-            string tmp = "";
+            string tmp="";
             string handlehexid = "";
             foreach (Match entry in matches)
             {
-                tmp = tmp + entry.Value + "\n";
+                tmp= tmp + entry.Value + "\n";
             }
 
             try
             {
                 handlehexid = matches[matches.Count - 1].Value.Trim(':');
-            }
-            catch (Exception err)
+            } catch (Exception err)
             {
                 MessageBox.Show("No Mutex found on process : " + proid.ToString() + "\n" + err.Message);
             }
 
-
+            
             try
             {
                 prohandle.Close();
@@ -697,7 +687,7 @@ namespace Gw2_Launchbuddy
             {
 
             }
-
+            
             prohandle_info.Arguments = "-p " + proid + " -c " + handlehexid + " -y";
             prohandle.StartInfo = prohandle_info;
             prohandle.Start();
@@ -759,12 +749,12 @@ namespace Gw2_Launchbuddy
 
 
             }
-            catch (Exception err)
+            catch(Exception err)
             {
                 MessageBox.Show(err.Message);
             }
 
-
+           
         }
 
         private void bt_installpath_Click(object sender, RoutedEventArgs e)
@@ -804,18 +794,17 @@ namespace Gw2_Launchbuddy
                 {
                     // Using commandline to launch both exe files from the link file
                     // EXAMPLE: cmd.exe /c start "" "C:\Program Files (x86)\Guild Wars 2\ReshadeUnlocker" && start "" "C:\Program Files (x86)\Guild Wars 2\Gw2"
-                    shortcut.Arguments = " /c start \"\" \"" + unlockerpath + "\" && start \"\" \"" + exepath + exename + "\" " + arguments;
+                    shortcut.Arguments = " /c start \"\" \"" + unlockerpath + "\" && start \"\" \"" + exepath+exename + "\" " +arguments;
                     MessageBox.Show(shortcut.Arguments);
                     shortcut.TargetPath = "cmd.exe"; // win will automatically extend this to the cmd path
                     shortcut.Save();
-                }
-                else
+                }else
                 {
                     shortcut.Arguments = arguments;
                     shortcut.TargetPath = targetFileLocation;
                     shortcut.Save();
                 }
-
+                
 
                 string dynamicinfo = "";
                 foreach (string arg in arguments.Split(' '))
@@ -824,14 +813,14 @@ namespace Gw2_Launchbuddy
                 }
 
 
-                System.Windows.MessageBox.Show("Custom Launcher created at : " + exepath + "\nUse ReshadeUnlocker: " + cb_reshade.IsChecked.ToString() + "\nUsed arguments:" + dynamicinfo);
+                System.Windows.MessageBox.Show("Custom Launcher created at : " + exepath + "\nUse ReshadeUnlocker: "+ cb_reshade.IsChecked.ToString() +"\nUsed arguments:" + dynamicinfo);
             }
             catch (Exception err)
             {
                 MessageBox.Show("Error when creating shortcut. Invalid Path?\n\n" + err.Message);
             }
-
-
+     
+            
 
         }
 
@@ -993,14 +982,14 @@ namespace Gw2_Launchbuddy
 
         void safeaccounts()
         {
-
+            
             ObservableCollection<Account> aes_accountlist = new ObservableCollection<Account>();
             try
             {
                 aes_accountlist.Clear();
                 foreach (Account acc in accountlist)
                 {
-                    aes_accountlist.Add(new Account { Nick = acc.Nick, Email = acc.Email, Password = crypt.Encrypt(acc.Password), Time = acc.Time });
+                    aes_accountlist.Add(new Account {Nick= acc.Nick, Email = acc.Email, Password = crypt.Encrypt(acc.Password), Time = acc.Time });
                 }
             }
             catch (Exception err)
@@ -1024,7 +1013,7 @@ namespace Gw2_Launchbuddy
         void loadaccounts()
         {
             try
-            {
+            { 
                 var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\Launchbuddy.bin";
 
                 if (System.IO.File.Exists(path) == true)
@@ -1034,10 +1023,10 @@ namespace Gw2_Launchbuddy
                     {
                         var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                         ObservableCollection<Account> aes_accountlist = (ObservableCollection<Account>)bformatter.Deserialize(stream);
-
+                        
                         foreach (Account acc in aes_accountlist)
                         {
-                            accountlist.Add(new Account { Nick = acc.Nick, Email = acc.Email, Password = crypt.Decrypt(acc.Password), Time = acc.Time });
+                            accountlist.Add(new Account{Nick = acc.Nick,Email=acc.Email,Password=crypt.Decrypt(acc.Password),Time=acc.Time});
                         }
 
                         listview_acc.ItemsSource = accountlist;
@@ -1057,7 +1046,7 @@ namespace Gw2_Launchbuddy
             {
                 if (tb_passw.Text.Length > 4)
                 {
-                    Account acc = new Account { Nick = tb_nick.Text, Email = tb_email.Text, Password = tb_passw.Text, Time = DateTime.Now };
+                    Account acc = new Account {Nick= tb_nick.Text , Email = tb_email.Text, Password = tb_passw.Text, Time = DateTime.Now };
                     accountlist.Add(acc);
                     listview_acc.ItemsSource = accountlist;
                     tb_email.Clear();
@@ -1117,7 +1106,7 @@ namespace Gw2_Launchbuddy
             Properties.Settings.Default.selected_acc = listview_acc.SelectedIndex;
             Properties.Settings.Default.Save();
 
-            if (listview_acc.SelectedItems.Count != 0 && listview_acc.SelectedItems.Count <= 1)
+            if (listview_acc.SelectedItems.Count != 0 && listview_acc.SelectedItems.Count<=1)
             {
                 var selectedItems = (dynamic)listview_acc.SelectedItems;
                 cb_login.Content = "Use Autologin : " + selectedItems[0].Email;
@@ -1136,6 +1125,7 @@ namespace Gw2_Launchbuddy
                 bt_shortcut.IsEnabled = false;
                 ismultibox = true;
             }
+
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -1154,6 +1144,7 @@ namespace Gw2_Launchbuddy
                 accountlist.Remove(listview_acc.SelectedItem as Account);
                 listview_acc.SelectedIndex = -1;
             }
+
         }
 
         private void bt_quaggan_Click(object sender, RoutedEventArgs e)
@@ -1169,6 +1160,7 @@ namespace Gw2_Launchbuddy
             {
                 MessageBox.Show("Gw2.exe  installpath is empty!");
             }
+
         }
 
 
@@ -1211,15 +1203,15 @@ namespace Gw2_Launchbuddy
         private void exp_server_Collapsed(object sender, RoutedEventArgs e)
         {
             ServerUI.Height = new GridLength(30);
-            Application.Current.MainWindow.Height = 585;
-
+            Application.Current.MainWindow.Height=585;
+            
         }
 
         private void exp_server_Expanded(object sender, RoutedEventArgs e)
         {
             ServerUI.Height = new GridLength(290);
             Application.Current.MainWindow.Height = 845;
-
+            
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
@@ -1245,8 +1237,7 @@ namespace Gw2_Launchbuddy
                 if (filedialog.FileName == "" || !filedialog.FileName.EndsWith(".exe"))
                 {
                     MessageBox.Show("Invalid .exe file selected!");
-                }
-                else
+                } else
                 {
                     unlockerpath = filedialog.FileName;
                     try
@@ -1285,26 +1276,32 @@ namespace Gw2_Launchbuddy
                 {
                     if (selected_accs[accnr].Email != null && selected_accs[accnr].Password != null)
                     {
-                        arguments += " -nopatchui -email \"" + selected_accs[accnr].Email + "\" -password \"" + selected_accs[accnr].Password + "\" ";
+                        
+                        arguments += " -nopatchui -email \"" + selected_accs[accnr].Email + "\" -password \"" + selected_accs[accnr].Password +"\" ";
                     }
                 }
+
             }
             catch
             {
-                MessageBox.Show("No Account selected! Launching without autologin.");
+
+                    MessageBox.Show("No Account selected! Launching without autologin.");
             }
-            
+                
+           
+
             foreach (System.Windows.Controls.CheckBox entry in arglistbox.Items)
             {
                 if (entry.IsChecked == true)
                 {
                     arguments += " " + entry.Content;
                 }
+
             }
             return arguments;
         }
 
-        void sortbycolum(ListView list, object sender)
+        void sortbycolum (ListView list , object sender)
         {
             GridViewColumnHeader column = (sender as GridViewColumnHeader);
             string sortBy = column.Tag.ToString();
@@ -1324,15 +1321,10 @@ namespace Gw2_Launchbuddy
             list.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
         }
 
-        private void mnuExit(Object sender, RoutedEventArgs e)
+        private void button_Click_1(object sender, RoutedEventArgs e)
         {
-            Environment.Exit(0);
-        }
 
-        private void mnuAbout_Click(Object sender, RoutedEventArgs e)
-        {
-            About about = new About();
-            about.Show();
+
         }
 
         void mutexkiller(int ProId)
@@ -1366,7 +1358,7 @@ namespace Gw2_Launchbuddy
 
         private void listview_auth_Click(object sender, RoutedEventArgs e)
         {
-            sortbycolum(listview_auth, sender);
+            sortbycolum(listview_auth,sender);
         }
         private void listview_assets_Click(object sender, RoutedEventArgs e)
         {
