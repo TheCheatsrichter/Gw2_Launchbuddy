@@ -601,15 +601,10 @@ namespace Gw2_Launchbuddy
         private void bt_launch_Click(object sender, RoutedEventArgs e)
         {
             //Checking for existing Gw2 instances
-            Process[] prolist = Process.GetProcesses();
-
-            foreach (Process pro in prolist)
+            if (Process.GetProcesses().ToList().Where(a => !nomutexpros.Contains(a.Id) && a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).Any())
             {
-                if (!nomutexpros.Contains(pro.Id) && pro.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase))
-                {
-                    MessageBox.Show("One instance of Gw2 is allready running!\n If that instance was not launched with -shareArchive (when launched with gw2 launchbuddy this argument gets added automatically) then additional instances will crash!");
-                    HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
-                }
+                MessageBox.Show("One or more instances of Gw2 is allready running!\n If that instance was not launched with -shareArchive (when launched with gw2 launchbuddy this argument gets added automatically) then additional instances will crash!");
+                HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
             }
 
 
