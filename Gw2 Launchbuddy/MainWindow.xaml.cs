@@ -605,7 +605,7 @@ namespace Gw2_Launchbuddy
 
             foreach (Process pro in prolist)
             {
-                if (!nomutexpros.Contains(pro.Id) && pro.ProcessName == "Gw2")
+                if (!nomutexpros.Contains(pro.Id) && pro.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase))
                 {
                     MessageBox.Show("One instance of Gw2 is allready running!\n If that instance was not launched with -shareArchive (when launched with gw2 launchbuddy this argument gets added automatically) then additional instances will crash!");
                     HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
@@ -747,7 +747,6 @@ namespace Gw2_Launchbuddy
                 switch (item.Content.ToString())
                 {
                     case "-32":
-
                         textblock_descr.Text = "Forces the game to run in 32 bit.";
                         break;
 
@@ -825,6 +824,10 @@ namespace Gw2_Launchbuddy
 
                     case "-maploadinfo":
                         textblock_descr.Text = "Shows diagnostic information during map loads, including load percentages and elapsed time.";
+                        break;
+
+                    case "-shareArchive":
+                        textblock_descr.Text = "Opens the Gw2.dat file in shared mode so that it can be accessed from other processes while the game is running.";
                         break;
 
                     default:
