@@ -459,21 +459,32 @@ namespace Gw2_Launchbuddy
                             string input = getvalue(reader);
                             MatchCollection matchList = regex.Matches(input);
 
+                            // Automatically set checks of previously used arguments. No game halting ones allowed.
+
+                            var noKeep = new List<string>();
+                            noKeep.Add("-shareArchive");
+                            noKeep.Add("-image");
+                            noKeep.Add("-log");
+                            noKeep.Add("-verify");
+                            noKeep.Add("-repair");
+                            noKeep.Add("-diag");
+                            noKeep.Add("-exit");
+                            noKeep.Add("-allowinstall");
+                            noKeep.Add("-exit");
+
                             foreach (Match parameter in matchList)
                             {
-                                if (parameter.Value != "-shareArchive") lab_para.Content = lab_para.Content + " " + parameter.Value;
+                                if (parameter.Value.Equals("-shareArchive", StringComparison.OrdinalIgnoreCase))
+                                    lab_para.Content = lab_para.Content + " " + parameter.Value;
                             }
-
-                            // Automatically  set checks of previously used arguments
 
                             foreach (CheckBox entry in arglistbox.Items)
                             {
                                 foreach (Match parameter in matchList)
                                 {
-                                    if (entry.Content.ToString() == parameter.Value)
-                                    {
+                                    if (entry.Content.ToString().Equals(parameter.Value, StringComparison.OrdinalIgnoreCase) &&
+                                        !noKeep.Contains(parameter.Value, StringComparer.OrdinalIgnoreCase))
                                         entry.IsChecked = true;
-                                    }
 
                                 }
                             }
