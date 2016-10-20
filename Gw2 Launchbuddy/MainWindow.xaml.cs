@@ -474,7 +474,7 @@ namespace Gw2_Launchbuddy
 
                             foreach (Match parameter in matchList)
                             {
-                                if (parameter.Value.Equals("-shareArchive", StringComparison.OrdinalIgnoreCase))
+                                if (!parameter.Value.Equals("-shareArchive", StringComparison.OrdinalIgnoreCase))
                                     lab_para.Content = lab_para.Content + " " + parameter.Value;
                             }
 
