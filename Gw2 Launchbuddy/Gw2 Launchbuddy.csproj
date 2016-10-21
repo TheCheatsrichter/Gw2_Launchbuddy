@@ -136,6 +136,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddOnManager.cs" />
     <Compile Include="Encryption_AES.cs" />
     <Compile Include="HandleManager.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
