@@ -169,7 +169,6 @@ namespace Gw2_Launchbuddy
         #endregion
 
         #region Functions
-
         /// <summary>
         /// Clears file locks on the specified dat file, from specified process.
         /// </summary>
@@ -178,7 +177,20 @@ namespace Gw2_Launchbuddy
         /// <returns></returns>
         public static bool ClearDatLock(string Proc, string Dat)
         {
+            var temp = new List<int>();
+            return ClearDatLock(Proc, Dat, ref temp);
+        }
+        /// <summary>
+        /// Clears file locks on the specified dat file, from specified process.
+        /// </summary>
+        /// <param name="Proc">Full path to process file to unlock from</param>
+        /// <param name="Dat">Full path to dat file to be unlocked</param>
+        /// <param name="excProcIDs">Process ID's to exclude</param>
+        /// <returns></returns>
+        public static bool ClearDatLock(string Proc, string Dat, ref List<int> excProcIDs)
+        {
             bool success = false;
+            var excList = excProcIDs == null ? new List<int>() : excProcIDs.ToList();
 
             //take off the drive portion due to limitation in how killhandle works for file name
             Dat = Dat.Substring(2);
@@ -186,12 +198,13 @@ namespace Gw2_Launchbuddy
             //get list of currently running system processes
             Process[] processList = Process.GetProcesses();
 
-            foreach (Process i in processList.Where(a => a.ProcessName.Equals(Regex.Replace(Proc, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase), StringComparison.OrdinalIgnoreCase)))
+            foreach (Process i in processList.Where(a => !excList.Contains(a.Id)).Where(a => a.ProcessName.Equals(Regex.Replace(Proc, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase), StringComparison.OrdinalIgnoreCase)))
             {
 
                 if (HandleManager.KillHandle(i, Dat, true))
                 {
                     success = true;
+                    excProcIDs.Add(i.Id);
                 }
             }
 
@@ -204,18 +217,34 @@ namespace Gw2_Launchbuddy
         /// <param name="Proc">Full path to process file to unlock from</param>
         /// <param name="MutexName">Full name of mutex to be removed</param>
         /// <returns></returns>
+        /// <returns></returns>
         public static bool ClearMutex(string Proc, string MutexName)
         {
+            var temp = new List<int>();
+            return ClearMutex(Proc, MutexName, ref temp);
+        }
+
+        /// <summary>
+        /// Kills named mutex in active process.
+        /// </summary>
+        /// <param name="Proc">Full path to process file to unlock from</param>
+        /// <param name="MutexName">Full name of mutex to be removed</param>
+        /// <param name="excProcIDs">Process ID's to exclude</param>
+        /// <returns></returns>
+        public static bool ClearMutex(string Proc, string MutexName, ref List<int> excProcIDs)
+        {
             bool success = false;
+            var excList = excProcIDs == null ? new List<int>() : excProcIDs.ToList();
 
             //get list of currently running system processes
             Process[] processList = Process.GetProcesses();
 
-            foreach (Process i in processList.Where(a => a.ProcessName.Equals(Regex.Replace(Proc, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase), StringComparison.OrdinalIgnoreCase)))
+            foreach (Process i in processList.Where(a => !excList.Contains(a.Id)).Where(a => a.ProcessName.Equals(Regex.Replace(Proc, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase), StringComparison.OrdinalIgnoreCase)))
             {
                 if (HandleManager.KillHandle(i, MutexName, false))
                 {
                     success = true;
+                    excProcIDs.Add(i.Id);
                 }
             }
 
