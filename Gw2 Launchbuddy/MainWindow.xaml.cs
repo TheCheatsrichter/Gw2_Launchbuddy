@@ -22,7 +22,7 @@ using System.IO.Compression;
 
 namespace Gw2_Launchbuddy
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window 
     {
 
         ///Gw2 Launchbuddy by TheCheatsrichter 2016
@@ -50,6 +50,7 @@ namespace Gw2_Launchbuddy
 
         List<Account> selected_accs = new List<Account>();
         List<int> nomutexpros = new List<int>();
+        List<string> noKeep = new List<string>();
 
         string exepath, exename, unlockerpath, version_client, version_api;
         string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
@@ -192,6 +193,7 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show(e.Message);
             }
         }
+
 
         void gethandleexe()
         {
@@ -461,7 +463,6 @@ namespace Gw2_Launchbuddy
 
                             // Automatically set checks of previously used arguments. No game halting ones allowed.
 
-                            var noKeep = new List<string>();
                             noKeep.Add("-shareArchive");
                             noKeep.Add("-image");
                             noKeep.Add("-log");
@@ -471,6 +472,7 @@ namespace Gw2_Launchbuddy
                             noKeep.Add("-exit");
                             noKeep.Add("-allowinstall");
                             noKeep.Add("-exit");
+                          
 
                             foreach (Match parameter in matchList)
                             {
@@ -1184,6 +1186,14 @@ namespace Gw2_Launchbuddy
                 arguments += " -clientport " + tb_clientport.Text;
             }
 
+            foreach (System.Windows.Controls.CheckBox entry in arglistbox.Items)
+            {
+                if (entry.IsChecked == true)
+                {
+                    arguments += " " + entry.Content;
+                }
+            }
+
             try
             {
                 if (cb_login.IsChecked == true)
@@ -1199,13 +1209,10 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show("No Account selected! Launching without autologin.");
             }
 
-            foreach (System.Windows.Controls.CheckBox entry in arglistbox.Items)
-            {
-                if (entry.IsChecked == true)
-                {
-                    arguments += " " + entry.Content;
-                }
-            }
+
+
+
+
             return arguments;
         }
 
