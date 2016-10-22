@@ -123,8 +123,8 @@ namespace Gw2_Launchbuddy
                         if (win.ToString() == "Yes")
                         {
                             updateclient();
-                            System.Windows.Forms.Application.Restart();
-                            Application.Current.Shutdown();
+                            loadconfig();
+                            checkversion();
                         }
                     }));
                 }
@@ -172,88 +172,6 @@ namespace Gw2_Launchbuddy
             progw2.WaitForExit();
         }
 
-        void checksetup()
-        {
-            try
-            {
-                if (!System.IO.File.Exists(AppdataPath + "handle64.exe") || !System.IO.File.Exists(AppdataPath + "handle.exe"))
-                {
-                    winsetupinfo.WindowStyle = WindowStyle.None;
-                    winsetupinfo.Width = 300;
-                    winsetupinfo.Height = 200;
-                    winsetupinfo.Show();
-                    myWindow.Visibility = Visibility.Hidden;
-                    Thread th_gethandleexe = new Thread(gethandleexe);
-                    th_gethandleexe.IsBackground = true;
-                    th_gethandleexe.Start();
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
-
-
-        void gethandleexe()
-        {
-            try
-            {
-                System.IO.File.Delete(AppdataPath + "handle64.exe");
-                System.IO.File.Delete(AppdataPath + "handle.exe");
-                System.IO.File.Delete(AppdataPath + "Eula.txt");
-                WebClient downloadclient = new WebClient();
-                downloadclient.DownloadFile("https://download.sysinternals.com/files/Handle.zip", AppdataPath + "Handle.zip");
-                ZipFile.ExtractToDirectory(AppdataPath + "Handle.zip", AppdataPath);
-
-            }
-            catch
-            {
-                MessageBox.Show("Official microsoft link is not reachable. Using embbeded handle version!");
-                try
-                {
-                    //System.IO.File.WriteAllBytes(AppdataPath+ "handle64.exe", Properties.Resources.handle64);
-                    //System.IO.File.WriteAllBytes(AppdataPath + "handle.exe", Properties.Resources.handle);
-                }
-
-                catch (Exception err)
-                {
-                    MessageBox.Show("Could not extract handle components. No admin privilges?\n" + err.Message);
-                }
-            }
-
-            try
-            {
-                ProcessStartInfo prohandleinfo = new ProcessStartInfo();
-                prohandleinfo.UseShellExecute = false;
-                prohandleinfo.CreateNoWindow = true;
-                prohandleinfo.Arguments = "-accepteula";
-
-
-                if (Environment.Is64BitOperatingSystem)
-                {
-                    prohandleinfo.FileName = AppdataPath + "handle64.exe";
-                }
-                else
-                {
-                    prohandleinfo.FileName = AppdataPath + "handle.exe";
-                }
-                Process prohandle = new Process { StartInfo = prohandleinfo };
-                prohandle.Start();
-
-                System.IO.File.Delete(AppdataPath + "Handle.zip");
-                System.IO.File.Delete(AppdataPath + "Eula.txt");
-
-                Application.Current.Dispatcher.BeginInvoke(
-                    System.Windows.Threading.DispatcherPriority.Background,
-                    new Action(() => setupend()));
-
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
 
         void setupend()
         {
@@ -1209,10 +1127,6 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show("No Account selected! Launching without autologin.");
             }
 
-
-
-
-
             return arguments;
         }
 
@@ -1269,6 +1183,101 @@ namespace Gw2_Launchbuddy
         {
             sortbycolum(listview_assets, sender);
         }
+
+
+
+
+        //####################################################################################
+        //Old Handle method functions
+        //####################################################################################
+        void checksetup()
+        {
+            try
+            {
+                if (!System.IO.File.Exists(AppdataPath + "handle64.exe") || !System.IO.File.Exists(AppdataPath + "handle.exe"))
+                {
+                    winsetupinfo.WindowStyle = WindowStyle.None;
+                    winsetupinfo.Width = 300;
+                    winsetupinfo.Height = 200;
+                    winsetupinfo.Show();
+                    myWindow.Visibility = Visibility.Hidden;
+                    Thread th_gethandleexe = new Thread(gethandleexe);
+                    th_gethandleexe.IsBackground = true;
+                    th_gethandleexe.Start();
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
+
+
+        void gethandleexe()
+        {
+            try
+            {
+                System.IO.File.Delete(AppdataPath + "handle64.exe");
+                System.IO.File.Delete(AppdataPath + "handle.exe");
+                System.IO.File.Delete(AppdataPath + "Eula.txt");
+                WebClient downloadclient = new WebClient();
+                downloadclient.DownloadFile("https://download.sysinternals.com/files/Handle.zip", AppdataPath + "Handle.zip");
+                ZipFile.ExtractToDirectory(AppdataPath + "Handle.zip", AppdataPath);
+
+            }
+            catch
+            {
+                MessageBox.Show("Official microsoft link is not reachable. Using embbeded handle version!");
+                try
+                {
+                    //System.IO.File.WriteAllBytes(AppdataPath+ "handle64.exe", Properties.Resources.handle64);
+                    //System.IO.File.WriteAllBytes(AppdataPath + "handle.exe", Properties.Resources.handle);
+                }
+
+                catch (Exception err)
+                {
+                    MessageBox.Show("Could not extract handle components. No admin privilges?\n" + err.Message);
+                }
+            }
+
+            try
+            {
+                ProcessStartInfo prohandleinfo = new ProcessStartInfo();
+                prohandleinfo.UseShellExecute = false;
+                prohandleinfo.CreateNoWindow = true;
+                prohandleinfo.Arguments = "-accepteula";
+
+
+                if (Environment.Is64BitOperatingSystem)
+                {
+                    prohandleinfo.FileName = AppdataPath + "handle64.exe";
+                }
+                else
+                {
+                    prohandleinfo.FileName = AppdataPath + "handle.exe";
+                }
+                Process prohandle = new Process { StartInfo = prohandleinfo };
+                prohandle.Start();
+
+                System.IO.File.Delete(AppdataPath + "Handle.zip");
+                System.IO.File.Delete(AppdataPath + "Eula.txt");
+
+                Application.Current.Dispatcher.BeginInvoke(
+                    System.Windows.Threading.DispatcherPriority.Background,
+                    new Action(() => setupend()));
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
+
+        //####################################################################################
+        //Old Handle method functions END
+        //####################################################################################
+
+
     }
 
     public class SortAdorner : Adorner
@@ -1308,5 +1317,9 @@ namespace Gw2_Launchbuddy
 
             drawingContext.Pop();
         }
+
     }
+
+
+   
 }

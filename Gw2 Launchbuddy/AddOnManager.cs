@@ -1,24 +1,9 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Net.NetworkInformation;
-using System.Xml;
 using System.IO;
 using System.Diagnostics;
-using IWshRuntimeLibrary;
-using System.Reflection;
-using System.ComponentModel;
-using System.Collections.ObjectModel;
-using System.Net;
-using System.Windows.Data;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Windows.Documents;
-using System.Windows.Media;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO.Compression;
-using System.Text;
 
 
 namespace Gw2_Launchbuddy
