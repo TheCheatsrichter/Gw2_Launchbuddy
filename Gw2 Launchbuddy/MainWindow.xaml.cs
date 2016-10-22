@@ -1036,14 +1036,14 @@ namespace Gw2_Launchbuddy
 
         private void exp_server_Collapsed(object sender, RoutedEventArgs e)
         {
-            ServerUI.Height = new GridLength(30);
+            //ServerUI.Height = new GridLength(30);
             Application.Current.MainWindow.Height = 585;
 
         }
 
         private void exp_server_Expanded(object sender, RoutedEventArgs e)
         {
-            ServerUI.Height = new GridLength(290);
+            //ServerUI.Height = new GridLength(290);
             Application.Current.MainWindow.Height = 845;
         }
 
