@@ -63,6 +63,40 @@ namespace Gw2_Launchbuddy
             }
         }
 
+
+        void CheckExisting()
+        {
+            Process[] processes = Process.GetProcesses();
+
+            foreach (Process pro in processes)
+            {
+                foreach (AddOn addon in AddOns.Where(a => a.Name == pro.ProcessName))
+                {
+                    addon.ChildProcess.Add(pro);
+                }
+            }
+        }
+
+        void UpdateList()
+        {
+            CheckExisting();
+
+            Process[] processes = Process.GetProcesses();
+
+            foreach(AddOn addon in AddOns)
+            {
+                foreach(Process childpro in addon.ChildProcess)
+                {
+                    if (!processes.Contains(childpro))
+                    {
+                        addon.ChildProcess.Remove(childpro);
+                    }
+                }  
+            }
+
+        }
+
+
         void Remove(string name)
         {
             foreach (AddOn addon in AddOns.Where(a => a.Name == name))
