@@ -7,18 +7,41 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Gw2_Launchbuddy.MainWindow"
         x:Name="myWindow"
         WindowStyle="None"
+        ShowInTaskbar="true"
     
         mc:Ignorable="d"
-        Title="Gw2 Launchbuddy V 1.0.5" Height="600" Width="700" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
+        Title="Gw2 Launchbuddy V 1.0.5" Height="650" Width="700" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="myWindow_MouseLeftButtonDown">
 
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation 
+                        Storyboard.TargetName="myWindow"
+                        Storyboard.TargetProperty="Opacity"
+                        From="0.0" To="1.0" Duration="0:0:1"
+                        AutoReverse="False"
+                    />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
 
     <Grid Margin="5,5">
         <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="100*"/>
-            <RowDefinition Height="10*"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            
         </Grid.RowDefinitions>
 
-        <Grid Margin="5,5" Grid.Row="1">
+        <StackPanel Grid.Row="2" >
+            <Label Content="Current Setup:" x:Name="lab_currentsetup"/>
+            <Label Content="Used Addons:" x:Name="lab_usedaddons"/>
+        </StackPanel>
+
+        <Grid Margin="5,5" Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50*"/>
                 <ColumnDefinition Width="50*"/>
@@ -27,7 +50,7 @@
             <Button x:Name="bt_shortcut" Content="Create Shortcut (No Multiboxing)" Grid.Column="1" Grid.Row="1"  Click="bt_shortcut_Click" BorderThickness="1" Margin="5,0,0,0"/>
         </Grid>
 
-        <TabControl Grid.Row="0" >
+        <TabControl x:Name="tab_options" Grid.Row="1" SelectionChanged="tab_options_SelectionChanged" MouseLeave="tab_options_MouseLeave" >
             <TabControl.Background>
                 <ImageBrush ImageSource="/Resources/launchbuddyback.png" Stretch="Uniform" AlignmentX="Right" Opacity="0.15" >
                     <ImageBrush.Transform>
@@ -42,8 +65,7 @@
             </TabControl.Background>
             <TabItem Header="General">
                 <StackPanel>
-                    <Border   Grid.Column="0" d:LayoutOverrides="HorizontalAlignment, LeftMargin, RightMargin, TopMargin, BottomMargin" Margin="5,0">
-                        <Grid Margin="0,-3,0,0">
+                    <Grid Margin="0,-3,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="100*"/>
                                 <ColumnDefinition Width="60*"/>
@@ -66,7 +88,6 @@
                             <Button x:Name="bt_donate" Background="Gray" FontWeight="Bold" Foreground="LimeGreen" Content="Donate" Grid.Column="1" Grid.Row="1"  VerticalAlignment="Top" Click="bt_donate_Click" Margin="5,0,80,0" Height="27" />
                         </Grid>
 
-                    </Border>
                     <Grid Grid.Row="1" Margin="5,0,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
@@ -241,8 +262,22 @@
 
                     <ListView x:Name="lv_AddOns" Grid.Row="1" Grid.ColumnSpan="2" >
                         <ListView.View>
-                            <GridView>
-                                <GridViewColumn/>
+                            <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
+                                <GridViewColumn  HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
+                                    <GridViewColumnHeader Tag="Name" Click="listview_auth_Click">Name</GridViewColumnHeader>
+                                </GridViewColumn>
+                                <GridViewColumn HeaderStringFormat="" Width="200" DisplayMemberBinding="{Binding args}">
+                                    <GridViewColumnHeader Tag="args" Click="listview_auth_Click">Parameters</GridViewColumnHeader>
+                                </GridViewColumn>
+                                <GridViewColumn HeaderStringFormat="" Width="70" DisplayMemberBinding="{Binding IsMultilaunch}">
+                                    <GridViewColumnHeader Tag="IsMultilaunch" Click="listview_auth_Click">Multilaunch</GridViewColumnHeader>
+                                </GridViewColumn>
+                                <GridViewColumn Width="60" DisplayMemberBinding="{Binding IsOverlay}">
+                                    <GridViewColumnHeader Tag="IsOverlay" Click="listview_auth_Click">Overlay</GridViewColumnHeader>
+                                </GridViewColumn>
+                                <GridViewColumn  DisplayMemberBinding="{Binding Path}">
+                                    <GridViewColumnHeader Tag="Path" Click="listview_auth_Click">Path</GridViewColumnHeader>
+                                </GridViewColumn>
                             </GridView>
                         </ListView.View>
                     </ListView>
@@ -253,8 +288,8 @@
                         <TextBox x:Name="tb_AddonArgs" Width="100"/>
                         <CheckBox x:Name="cb_AddonMultilaunch" Content="Multilaunch"  VerticalAlignment="Center" Margin="5,0" />
                         <CheckBox x:Name="cb_AddonOverlay" Content="Overlay" VerticalAlignment="Center" Margin="5,0" />
-                        <Button x:Name="bt_AddAddon" Content="Add" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0"/>
-                        <Button x:Name="bt_RemAddon" Content="Remove" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0"/>
+                        <Button x:Name="bt_AddAddon" Content="Add" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_AddAddon_Click"/>
+                        <Button x:Name="bt_RemAddon" Content="Remove" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_RemAddon_Click"/>
                     </StackPanel>
 
 
@@ -263,6 +298,15 @@
 
 
         </TabControl>
+        <StackPanel Grid.Row="0" HorizontalAlignment="Left">
+            <Label Content="Gw2 Launchbuddy V1.1 BETA" FontSize="16" FontWeight="Bold"/>
+        </StackPanel>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="bt_cinema" Width="30" Content="C" />
+            <Button x:Name="bt_minimize" Width="30" Content="M" Click="bt_minimize_Click" />
+            <Button x:Name="bt_close" Width="30" Content="X" Click="bt_close_Click" />
+        </StackPanel>
+        
     </Grid>
     
 

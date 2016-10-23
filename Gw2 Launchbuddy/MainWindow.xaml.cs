@@ -53,10 +53,12 @@ namespace Gw2_Launchbuddy
         List<string> noKeep = new List<string>();
 
         string exepath, exename, unlockerpath, version_client, version_api;
+        string current_setup;
         string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
         bool ismultibox = false;
 
         AES crypt = new AES();
+        AddOnManager addonmanager = new AddOnManager();
 
         [Serializable]
         public class Server
@@ -538,7 +540,6 @@ namespace Gw2_Launchbuddy
                 HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
             }
 
-
             //Launching the application with arguments
             if (ismultibox)
             {
@@ -548,6 +549,16 @@ namespace Gw2_Launchbuddy
             {
                 launchgw2(0);
             }
+
+            //Launching AddOns
+            try
+            {
+                addonmanager.LaunchAll();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show("One or more AddOns could not be launched.\n" + err.Message);
+            }
         }
 
         void launchgw2(int accnr)
@@ -556,7 +567,7 @@ namespace Gw2_Launchbuddy
             {
                 ProcessStartInfo gw2proinfo = new ProcessStartInfo();
                 gw2proinfo.FileName = exepath + exename;
-                gw2proinfo.Arguments = getarguments(accnr);
+                gw2proinfo.Arguments = getarguments(accnr,false);
                 gw2proinfo.WorkingDirectory = exepath;
                 Process gw2pro = new Process { StartInfo = gw2proinfo };
 
@@ -627,7 +638,7 @@ namespace Gw2_Launchbuddy
                 string shortcutLocation = System.IO.Path.Combine(shortcutPath, shortcutName + ".lnk");
                 WshShell shell = new WshShell();
                 IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
-                string arguments = getarguments(0);
+                string arguments = getarguments(0,false);
                 shortcut.IconLocation = Assembly.GetExecutingAssembly().Location;
                 shortcut.Description = "Created with Gw2 Launchbuddy, © TheCheatsrichter";
 
@@ -1083,7 +1094,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        private string getarguments(int accnr)
+        private string getarguments(int accnr,bool hideaccdata)
         {
             //Gathers all arguments and returns them as single string
 
@@ -1114,7 +1125,12 @@ namespace Gw2_Launchbuddy
 
             try
             {
-                if (cb_login.IsChecked == true)
+                if (cb_login.IsChecked == true && hideaccdata)
+                {
+                    arguments += " -Autologin ";
+                }
+
+                if (cb_login.IsChecked == true && !hideaccdata)
                 {
                     if (selected_accs[accnr].Email != null && selected_accs[accnr].Password != null)
                     {
@@ -1124,7 +1140,7 @@ namespace Gw2_Launchbuddy
             }
             catch
             {
-                MessageBox.Show("No Account selected! Launching without autologin.");
+                //MessageBox.Show("No Account selected! Launching without autologin.");
             }
 
             return arguments;
@@ -1174,6 +1190,47 @@ namespace Gw2_Launchbuddy
             System.Diagnostics.Process.Start(url);
         }
 
+        private void bt_close_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void tab_options_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.Source is TabControl)
+            {
+                lab_currentsetup.Content = "Current Setup:" + getarguments(0, true);
+            }
+        }
+
+        private void tab_options_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            lab_currentsetup.Content = "Current Setup:" + getarguments(0, true);
+        }
+
+        private void bt_minimize_Click(object sender, RoutedEventArgs e)
+        {
+            myWindow.WindowState = WindowState.Minimized;
+            myWindow.Opacity = 0;
+        }
+
+        private void myWindow_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
+        private void bt_AddAddon_Click(object sender, RoutedEventArgs e)
+        {
+            string[] args = Regex.Matches(tb_AddonArgs.Text, "-\\w* ?(\".*\")?").Cast<Match>().Select(m => m.Value).ToArray();
+            addonmanager.Add(tb_AddonName.Text,args,(bool)cb_AddonMultilaunch.IsChecked,(bool)cb_AddonOverlay.IsChecked);
+            lv_AddOns.ItemsSource = addonmanager.AddOns;
+        }
+
+        private void bt_RemAddon_Click(object sender, RoutedEventArgs e)
+        {
+            AddOn item = lv_AddOns.SelectedItem as AddOn;
+            addonmanager.Remove(item.Name);
+        }
 
         private void listview_auth_Click(object sender, RoutedEventArgs e)
         {
