@@ -298,22 +298,21 @@
             <TabItem Header="Cinema Mode">
                 <StackPanel>
                     <Label Content="Cinema Mode:" FontSize="16" FontWeight="Bold" />
-
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="50*"/>
                             <ColumnDefinition Width="50*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="200"/>
+                            <RowDefinition Height="150"/>
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
-                        <Image x:Name="cinema_imagepreview" Grid.Row="0" Grid.Column="1" Source="Resources/quaggan.jpg"/>
-                        <Grid>
+                        <Image x:Name="img_imagepreview" Grid.Row="0" Grid.Column="1" Source="Resources/quaggan.jpg"/>
+                        <Grid Margin="0,5">
                             <ListView x:Name="lv_cinema_images" Grid.Row="1" SelectionChanged="lv_cinema_images_SelectionChanged">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding Name}">
+                                        <GridViewColumn HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
                                             <GridViewColumnHeader Tag="Name" Click="listview_auth_Click">Image Name</GridViewColumnHeader>
                                         </GridViewColumn>
                                         <GridViewColumn HeaderStringFormat=""  DisplayMemberBinding="{Binding Path}">
@@ -325,10 +324,10 @@
                         </Grid>
                         <Button Content="Set Imagefolder" x:Name="bt_cinema_setimagefolder" Grid.Row="1" Grid.Column="0" Click="bt_cinema_setimagefolder_Click" />
 
-                        <Label Content="Current Image: " Grid.Row="1" Grid.Column="1"/>
+                        <Label x:Name="lab_imagepreview" Content="Current Image: " Grid.Row="1" Grid.Column="1" FontWeight="Bold"/>
                     </Grid>
 
-                    <Grid>
+                    <Grid Margin="0,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="50*"/>
                             <ColumnDefinition Width="50*"/>
@@ -338,9 +337,31 @@
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" x:Name="tb_maskinfo" TextWrapping="Wrap" Text="Instructions:                                                                Set the Maskimage by using a png image with transparent background. Draw the logo/ image with a black color. Press Set MaskImage and check in the Preview if the mask is imported correctly" FontSize="14.667"/>
-                        <Button Content="Set Maskimage" x:Name="bt_cinema_setmask" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="1" Click="bt_cinema_setmask_Click"/>
-                        <Label Content="Current Mask: " Grid.Row="1" Grid.Column="1"/>
-                        <Image x:Name="cinema_maskpreview" Grid.Row="0" Grid.Column="1" Source="Resources/quaggan.jpg"/>
+                        <Button Content="Set Maskimage" x:Name="bt_cinema_setmask" Grid.Row="1" Click="bt_cinema_setmask_Click"/>
+                        <Label x:Name="lab_maskpreview" Content="Current Mask: " Grid.Row="1" Grid.Column="1" FontWeight="Bold"/>
+                        <Image x:Name="img_maskpreview" Grid.Row="0" Grid.Column="1" Source="Resources/quaggan.jpg"/>
+
+                    </Grid>
+                    <Grid Margin="0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*"/>
+                            <ColumnDefinition Width="50*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
+                        <Button x:Name="bt_setmusic" Content="Set Music" Grid.Column="0" Click="bt_setmusic_Click" Grid.RowSpan="2" VerticalAlignment="Center" Height="30"/>
+                        <Label x:Name="lab_musicpath" Content="Current Music file:" Grid.Column="1" FontWeight="Bold"/>
+                        <Grid Grid.Column="2" Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50*"/>
+                                <ColumnDefinition Width="50*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="bt_musicstart" Content="Test Music" Grid.Column="0" Click="bt_musicstart_Click"/>
+                            <Button x:Name="bt_musicstop" Content="Stop Music" Grid.Column="1" Click="bt_musicstop_Click"/>
+                        </Grid>
+                        
 
                     </Grid>
 

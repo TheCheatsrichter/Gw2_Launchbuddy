@@ -60,6 +60,8 @@ namespace Gw2_Launchbuddy
         AES crypt = new AES();
         AddOnManager addonmanager = new AddOnManager();
 
+        MediaPlayer mediaplayer = new MediaPlayer();
+
         [Serializable]
         public class Server
         {
@@ -132,7 +134,7 @@ namespace Gw2_Launchbuddy
 
         void cinema_setup()
         {
-
+            LoadCinemaSettings();
         }
 
         void checkversion()
@@ -1281,40 +1283,149 @@ namespace Gw2_Launchbuddy
         {
             System.Windows.Forms.FolderBrowserDialog folderdialog = new System.Windows.Forms.FolderBrowserDialog();
             folderdialog.ShowDialog();
-            var files = Directory.GetFiles(folderdialog.SelectedPath, "*.jpg", SearchOption.AllDirectories);
+            lv_cinema_images.Items.Clear();
+            lv_cinema_images.SelectedIndex = -1;
+            lab_imagepreview.Content = "Current Image:";
 
-            ObservableCollection<CinemaImage> images = new ObservableCollection<CinemaImage>();
-            foreach (var file in files)
+            if (folderdialog.SelectedPath != "")
             {
-                images.Add(new CinemaImage(file));
-                lv_cinema_images.ItemsSource= images;
+                var files = Directory.GetFiles(folderdialog.SelectedPath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp"));
+                ObservableCollection<CinemaImage> images = new ObservableCollection<CinemaImage>();
+                foreach (var file in files)
+                {
+                    images.Add(new CinemaImage(file));
+                    lv_cinema_images.ItemsSource = images;
+                    Properties.Settings.Default.cinema_imagepath = folderdialog.SelectedPath;
+                    Properties.Settings.Default.Save();
+                }
             }
-
-
 
         }
 
         private void lv_cinema_images_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //BUG picture doesnt change!
             var selectedimage = lv_cinema_images.SelectedItem as CinemaImage;
-            cinema_imagepreview.Source = new BitmapImage(new Uri(selectedimage.Path, UriKind.Relative));
+            if (selectedimage != null)
+            {
+                img_imagepreview.Source = LoadImage(selectedimage.Path);
+                lab_imagepreview.Content = "Current Image: " + selectedimage.Name;
+            }
+
         }
 
         private void bt_cinema_setmask_Click(object sender, RoutedEventArgs e)
         {
+            System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
+            filedialog.Multiselect = false;
+            filedialog.Filter = "Png Files(*.png) | *.png";
+            filedialog.ShowDialog();
 
+            if (filedialog.FileName != "")
+            {
+                Properties.Settings.Default.cinema_maskpath = filedialog.FileName;
+                Properties.Settings.Default.Save();
+                lab_maskpreview.Content = "Current Mask: " + Path.GetFileName(filedialog.FileName);
+                img_maskpreview.Source = LoadImage(filedialog.FileName);
+            }
         }
 
         private void listview_auth_Click(object sender, RoutedEventArgs e)
         {
             sortbycolum(listview_auth, sender);
         }
+
+        private void bt_setmusic_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
+            filedialog.Multiselect = false;
+            filedialog.Filter = "MP3 Files(*.mp3) | *.mp3";
+            filedialog.ShowDialog();
+
+            if (filedialog.FileName != "")
+            {
+                Properties.Settings.Default.cinema_musicpath = filedialog.FileName;
+                Properties.Settings.Default.Save();
+                lab_musicpath.Content = "Current Musicfile: " + Path.GetFileName(filedialog.FileName);
+                mediaplayer.Open(new Uri(filedialog.FileName));
+            }
+        }
+
+        bool IsValidPath (string path)
+        {
+            try
+            {
+                Path.GetFullPath(path);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        void LoadCinemaSettings()
+        {
+            string imagepath = Properties.Settings.Default.cinema_imagepath;
+            string maskpath = Properties.Settings.Default.cinema_maskpath;
+            string musicpath = Properties.Settings.Default.cinema_musicpath;
+
+            if (IsValidPath(imagepath))
+            {
+                var files = Directory.GetFiles(imagepath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp"));
+                ObservableCollection<CinemaImage> images = new ObservableCollection<CinemaImage>();
+                foreach (var file in files)
+                {
+                    images.Add(new CinemaImage(file));
+                    lv_cinema_images.ItemsSource = images;
+                }
+            }
+
+            if (IsValidPath(maskpath) && Path.GetExtension(maskpath) == ".png")
+            {
+                lab_maskpreview.Content = "Current Mask: " + Path.GetFileName(maskpath);
+                img_maskpreview.Source = LoadImage(maskpath);
+            }
+
+            if (IsValidPath(musicpath) && Path.GetExtension(musicpath) == ".mp3")
+            {
+                lab_musicpath.Content = "Current Musicfile: " + Path.GetFileName(musicpath);
+                mediaplayer.Open(new Uri(musicpath));
+            }
+
+
+        }
+
+        private void bt_musicstart_Click(object sender, RoutedEventArgs e)
+        {
+            mediaplayer.Play();
+        }
+
+        private void bt_musicstop_Click(object sender, RoutedEventArgs e)
+        {
+            mediaplayer.Stop();
+        }
+
         private void listview_assets_Click(object sender, RoutedEventArgs e)
         {
             sortbycolum(listview_assets, sender);
         }
 
+
+        private static BitmapSource LoadImage(string path)
+        {
+            var bitmap = new BitmapImage();
+
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.StreamSource = stream;
+                bitmap.EndInit();
+            }
+
+            return bitmap;
+        }
 
 
 
