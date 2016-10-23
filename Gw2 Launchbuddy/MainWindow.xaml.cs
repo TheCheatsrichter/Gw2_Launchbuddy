@@ -17,6 +17,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Media.Imaging;
 using System.IO.Compression;
 
 
@@ -53,7 +54,6 @@ namespace Gw2_Launchbuddy
         List<string> noKeep = new List<string>();
 
         string exepath, exename, unlockerpath, version_client, version_api;
-        string current_setup;
         string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
         bool ismultibox = false;
 
@@ -95,6 +95,22 @@ namespace Gw2_Launchbuddy
             public string Nick { get; set; }
         }
 
+        public class CinemaImage
+        {
+            public string Name
+            {
+                set { }
+                get { return System.IO.Path.GetFileName(Path); }
+            }
+            public string Path { set; get; }
+
+
+            public CinemaImage(string Path)
+            {
+                this.Path = Path;
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -110,6 +126,13 @@ namespace Gw2_Launchbuddy
             Thread checkver = new Thread(checkversion);
             checkver.IsBackground = true;
             checkver.Start();
+            cinema_setup();
+
+        }
+
+        void cinema_setup()
+        {
+
         }
 
         void checkversion()
@@ -1252,6 +1275,35 @@ namespace Gw2_Launchbuddy
         {
             AddOn item = lv_AddOns.SelectedItem as AddOn;
             addonmanager.Remove(item.Name);
+        }
+
+        private void bt_cinema_setimagefolder_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog folderdialog = new System.Windows.Forms.FolderBrowserDialog();
+            folderdialog.ShowDialog();
+            var files = Directory.GetFiles(folderdialog.SelectedPath, "*.jpg", SearchOption.AllDirectories);
+
+            ObservableCollection<CinemaImage> images = new ObservableCollection<CinemaImage>();
+            foreach (var file in files)
+            {
+                images.Add(new CinemaImage(file));
+                lv_cinema_images.ItemsSource= images;
+            }
+
+
+
+        }
+
+        private void lv_cinema_images_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //BUG picture doesnt change!
+            var selectedimage = lv_cinema_images.SelectedItem as CinemaImage;
+            cinema_imagepreview.Source = new BitmapImage(new Uri(selectedimage.Path, UriKind.Relative));
+        }
+
+        private void bt_cinema_setmask_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void listview_auth_Click(object sender, RoutedEventArgs e)

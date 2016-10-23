@@ -124,9 +124,12 @@ namespace Gw2_Launchbuddy
         {
             foreach (AddOn addon in AddOns)
             {
-                Process addon_pro = new Process { StartInfo = addon.Info };
-                addon.ChildProcess.Add(addon_pro);
-                addon_pro.Start();
+                if (addon.IsMultilaunch || addon.ChildProcess.Count <= 0)
+                {
+                    Process addon_pro = new Process { StartInfo = addon.Info };
+                    addon.ChildProcess.Add(addon_pro);
+                    addon_pro.Start();
+                }
             }
         }
 
