@@ -38,6 +38,8 @@ namespace Gw2_Launchbuddy
         ///##########################################
         /// 
 
+        bool cinemamode = false;
+
         SetupInfo winsetupinfo = new SetupInfo();
         private SortAdorner listViewSortAdorner = null;
         private GridViewColumnHeader listViewSortCol = null;
@@ -135,6 +137,20 @@ namespace Gw2_Launchbuddy
         void cinema_setup()
         {
             LoadCinemaSettings();
+
+            cinemamode = true;
+
+            if (cinemamode)
+            {
+                OptionsHeight = new RowDefinition { Height = new GridLength(0, GridUnitType.Pixel) };
+                OptionsWidth = new ColumnDefinition { Width = new GridLength(0, GridUnitType.Pixel) };
+                CinemaWidth = new ColumnDefinition{ Width = new GridLength(100,GridUnitType.Star) };
+                CinemaHeight = new RowDefinition{ Height = new GridLength(100, GridUnitType.Star) };
+            } else
+            {
+                CinemaWidth = new ColumnDefinition { Width = new GridLength(0, GridUnitType.Pixel) };
+                CinemaHeight = new RowDefinition { Height = new GridLength(0, GridUnitType.Pixel) };
+            }
         }
 
         void checkversion()
