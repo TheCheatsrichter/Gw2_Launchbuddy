@@ -1195,17 +1195,39 @@ namespace Gw2_Launchbuddy
             Application.Current.Shutdown();
         }
 
+
         private void tab_options_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is TabControl)
             {
                 lab_currentsetup.Content = "Current Setup:" + getarguments(0, true);
+
+                string usedaddons = "";
+
+                if (lv_AddOns.ItemsSource!=null)
+                {
+                    foreach (AddOn addon in lv_AddOns.ItemsSource)
+                    {
+                        usedaddons += addon.Name + " ";
+                    }
+                    lab_usedaddons.Content = "Used AddOns: " + usedaddons;
+                }
+                
             }
         }
 
         private void tab_options_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             lab_currentsetup.Content = "Current Setup:" + getarguments(0, true);
+            string usedaddons = "";
+            if (lv_AddOns.ItemsSource != null)
+            {
+                foreach (AddOn addon in lv_AddOns.ItemsSource)
+                {
+                    usedaddons += addon.Name + "; ";
+                }
+                lab_usedaddons.Content = "Used AddOns: " + usedaddons;
+            }
         }
 
         private void bt_minimize_Click(object sender, RoutedEventArgs e)
