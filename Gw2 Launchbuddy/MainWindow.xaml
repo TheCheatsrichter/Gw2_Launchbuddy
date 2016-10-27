@@ -172,7 +172,7 @@
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Nickname" Width="150" DisplayMemberBinding="{Binding Nick}" />
-                                    <GridViewColumn Header="Email" Width="200" DisplayMemberBinding="{Binding Email}" />
+                                    <GridViewColumn Header="Email" Width="200" DisplayMemberBinding="{Binding DisplayEmail}" />
                                     <GridViewColumn Header="Password" Width="150" DisplayMemberBinding="{Binding DisplayPW}" />
                                     <GridViewColumn Header="Created at" Width="150" DisplayMemberBinding="{Binding Time}" />
 
