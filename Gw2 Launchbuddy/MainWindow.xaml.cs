@@ -78,23 +78,9 @@ namespace Gw2_Launchbuddy
         public class Account
         {
             public string Email { get; set; }
+            public string DisplayEmail { get { return "*****@*****.***"; } }
             public string Password { get; set; }
-            public string DisplayPW
-            {
-                get
-                {
-                    string stars = "";
-                    foreach (char ch in Password.ToCharArray())
-                    {
-                        stars += "*";
-                    }
-                    return stars;
-                }
-                set
-                {
-                    DisplayPW = value;
-                }
-            }
+            public string DisplayPW { get { return "********"; } }
             public DateTime Time { get; set; }
             public string Nick { get; set; }
         }
