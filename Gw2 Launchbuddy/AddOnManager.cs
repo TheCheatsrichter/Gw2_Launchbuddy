@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Xml.Serialization;
 
 
 namespace Gw2_Launchbuddy
@@ -12,28 +13,52 @@ namespace Gw2_Launchbuddy
     [Serializable]
     public class AddOn
     {
+        [System.Xml.Serialization.XmlElement("Name")]
         public string Name { set; get; }
-        public ProcessStartInfo Info{ set; get; }
-        public bool IsMultilaunch { set; get; }
-        public bool IsLbAddon { set; get; }
-        public string args {
-            set { }
-            get { return Info.Arguments; }
-        }
-        public string Path {
+
+        [XmlIgnore]
+        public ProcessStartInfo Info {
             set { }
             get {
-                return Info.FileName;
+                if (Info.Arguments == null) Info.Arguments = args;
+                if (Info.FileName == null) Info.Arguments = Path;
+                return Info;
             }
         }
+
+        [System.Xml.Serialization.XmlElement("Multilaunch")]
+        public bool IsMultilaunch { set; get; }
+        [System.Xml.Serialization.XmlElement("LbAddon")]
+        public bool IsLbAddon { set; get; }
+        [System.Xml.Serialization.XmlElement("Arguments")]
+        public string args { set; get; }
+        [System.Xml.Serialization.XmlElement("Path")]
+        public string Path { set; get; }
+
+        [XmlIgnore]
         public List<Process> ChildProcess = new List<Process>();
 
-        public AddOn(string Name,ProcessStartInfo Info, bool IsMultilaunch,bool IsLbAddon)
+        public AddOn(string Name, ProcessStartInfo Info, bool IsMultilaunch, bool IsLbAddon)
         {
             this.Name = Name;
-            this.Info= Info;
-            this.IsMultilaunch= IsMultilaunch;
-            this.IsLbAddon=IsLbAddon;
+            this.Info = Info;
+            this.IsMultilaunch = IsMultilaunch;
+            this.IsLbAddon = IsLbAddon;
+            args = Info.Arguments;
+            Path= Info.FileName;
+        }
+
+        public AddOn() { }
+    }
+
+    [XmlRootAttribute("AddonList")]
+    public class AddonList
+    {
+        public ObservableCollection<AddOn> Addonlist { set; get; }
+
+        AddonList(ObservableCollection<AddOn> list)
+        {
+            Addonlist = list;
         }
     }
 
@@ -153,11 +178,18 @@ namespace Gw2_Launchbuddy
         {
             try
             {
+                XmlSerializer x = new XmlSerializer(typeof(ObservableCollection<AddOn>));
+                TextWriter writer = new StreamWriter(path);
+                x.Serialize(writer, AddOns);
+
+
+                /*
                 using (Stream stream = System.IO.File.Open(path, FileMode.Create))
                 {
                     var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                     bformatter.Serialize(stream, AddOns);
                 }
+                */
             }
             catch (Exception e)
             {
@@ -173,6 +205,16 @@ namespace Gw2_Launchbuddy
 
                 if (System.IO.File.Exists(path) == true)
                 {
+
+                    XmlSerializer serializer = new XmlSerializer(typeof(ObservableCollection<AddOn>));
+
+                    StreamReader reader = new StreamReader(path);
+                    var addons = (ObservableCollection<AddOn>)serializer.Deserialize(reader);
+                    reader.Close();
+                    AddOns = addons;
+                    return addons;
+
+                    /*
                     using (Stream stream = System.IO.File.Open(path, FileMode.Open))
                     {
                         var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
@@ -180,6 +222,7 @@ namespace Gw2_Launchbuddy
 
                         return addonlist;
                     }
+                    */
                 }
                 return null;
             }

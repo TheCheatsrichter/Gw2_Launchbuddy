@@ -143,7 +143,7 @@ namespace Gw2_Launchbuddy
             checkver.IsBackground = true;
             checkver.Start();
             cinema_setup();
-            //LoadAddons();
+            LoadAddons();
             addonmanager.LaunchLbAddons();
             
 
@@ -952,12 +952,12 @@ namespace Gw2_Launchbuddy
 
         void SaveAddons()
         {
-            addonmanager.SaveAddons(AppdataPath+"Addons.bin");
+            addonmanager.SaveAddons(AppdataPath+"Addons.xml");
         }
 
         void LoadAddons()
         {
-            lv_AddOns.ItemsSource = addonmanager.LoadAddons(AppdataPath + "Addons.bin");
+            lv_AddOns.ItemsSource = addonmanager.LoadAddons(AppdataPath + "Addons.xml");
         }
 
         private void bt_addacc_Click(object sender, RoutedEventArgs e)
@@ -1053,7 +1053,7 @@ namespace Gw2_Launchbuddy
             Properties.Settings.Default.use_reshade = (bool)cb_reshade.IsChecked;
             Properties.Settings.Default.Save();
             safeaccounts();
-            //SaveAddons();
+            SaveAddons();
             Environment.Exit(Environment.ExitCode);
         }
 
