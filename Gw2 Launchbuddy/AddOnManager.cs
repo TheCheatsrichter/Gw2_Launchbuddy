@@ -17,12 +17,15 @@ namespace Gw2_Launchbuddy
         public string Name { set; get; }
 
         [XmlIgnore]
-        public ProcessStartInfo Info {
+        public ProcessStartInfo Info
+        {
             set { }
-            get {
-                if (Info.Arguments == null) Info.Arguments = args;
-                if (Info.FileName == null) Info.Arguments = Path;
-                return Info;
+            get
+            {
+                ProcessStartInfo tmp = new ProcessStartInfo();
+                tmp.Arguments = args;
+                tmp.FileName = Path;
+                return tmp;
             }
         }
 
