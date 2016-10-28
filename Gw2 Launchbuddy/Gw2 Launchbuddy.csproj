@@ -116,6 +116,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -135,6 +136,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddOnManager.cs" />
     <Compile Include="Encryption_AES.cs" />
     <Compile Include="HandleManager.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -236,6 +238,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\glasses.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\opacity mask.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

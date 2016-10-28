@@ -17,12 +17,13 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Media.Imaging;
 using System.IO.Compression;
 
 
 namespace Gw2_Launchbuddy
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window 
     {
 
         ///Gw2 Launchbuddy by TheCheatsrichter 2016
@@ -37,6 +38,8 @@ namespace Gw2_Launchbuddy
         ///##########################################
         /// 
 
+        bool cinemamode = false;
+
         SetupInfo winsetupinfo = new SetupInfo();
         private SortAdorner listViewSortAdorner = null;
         private GridViewColumnHeader listViewSortCol = null;
@@ -50,12 +53,16 @@ namespace Gw2_Launchbuddy
 
         List<Account> selected_accs = new List<Account>();
         List<int> nomutexpros = new List<int>();
+        List<string> noKeep = new List<string>();
 
         string exepath, exename, unlockerpath, version_client, version_api;
         string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
         bool ismultibox = false;
 
         AES crypt = new AES();
+        AddOnManager addonmanager = new AddOnManager();
+
+        MediaPlayer mediaplayer = new MediaPlayer();
 
         [Serializable]
         public class Server
@@ -72,16 +79,28 @@ namespace Gw2_Launchbuddy
         {
             public string Email { get; set; }
             public string Password { get; set; }
+            public string DisplayEmail {
+                get {
+                    string tmp="";
+                    try
+                    {
+                        tmp += Email.Substring(0, 2);
+                        tmp += "********@*****";
+                        return tmp;
+                    }
+                    catch
+                    {
+                        return "*********@*****";
+                    }
+
+                }
+                set { }
+            }
             public string DisplayPW
             {
                 get
                 {
-                    string stars = "";
-                    foreach (char ch in Password.ToCharArray())
-                    {
-                        stars += "*";
-                    }
-                    return stars;
+                    return  "*********";
                 }
                 set
                 {
@@ -90,6 +109,22 @@ namespace Gw2_Launchbuddy
             }
             public DateTime Time { get; set; }
             public string Nick { get; set; }
+        }
+
+        public class CinemaImage
+        {
+            public string Name
+            {
+                set { }
+                get { return System.IO.Path.GetFileName(Path); }
+            }
+            public string Path { set; get; }
+
+
+            public CinemaImage(string Path)
+            {
+                this.Path = Path;
+            }
         }
 
         public MainWindow()
@@ -107,6 +142,32 @@ namespace Gw2_Launchbuddy
             Thread checkver = new Thread(checkversion);
             checkver.IsBackground = true;
             checkver.Start();
+            cinema_setup();
+            //LoadAddons();
+            addonmanager.LaunchLbAddons();
+            
+
+        }
+
+        void cinema_setup()
+        {
+            LoadCinemaSettings();
+
+            cinemamode = Properties.Settings.Default.cinema_use;
+
+            if (cinemamode)
+            {
+                SettingsGrid.Visibility = Visibility.Hidden;
+                myWindow.WindowState = WindowState.Maximized;
+                bt_ShowSettings.Visibility = Visibility.Visible;
+            } else
+            {
+                SettingsGrid.Visibility = Visibility.Visible;
+                myWindow.WindowState = WindowState.Normal;
+                myWindow.Height = 680;
+                myWindow.Width = 700;
+                bt_ShowSettings.Visibility = Visibility.Hidden;
+            }
         }
 
         void checkversion()
@@ -122,8 +183,8 @@ namespace Gw2_Launchbuddy
                         if (win.ToString() == "Yes")
                         {
                             updateclient();
-                            System.Windows.Forms.Application.Restart();
-                            Application.Current.Shutdown();
+                            loadconfig();
+                            checkversion();
                         }
                     }));
                 }
@@ -171,87 +232,6 @@ namespace Gw2_Launchbuddy
             progw2.WaitForExit();
         }
 
-        void checksetup()
-        {
-            try
-            {
-                if (!System.IO.File.Exists(AppdataPath + "handle64.exe") || !System.IO.File.Exists(AppdataPath + "handle.exe"))
-                {
-                    winsetupinfo.WindowStyle = WindowStyle.None;
-                    winsetupinfo.Width = 300;
-                    winsetupinfo.Height = 200;
-                    winsetupinfo.Show();
-                    myWindow.Visibility = Visibility.Hidden;
-                    Thread th_gethandleexe = new Thread(gethandleexe);
-                    th_gethandleexe.IsBackground = true;
-                    th_gethandleexe.Start();
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
-
-        void gethandleexe()
-        {
-            try
-            {
-                System.IO.File.Delete(AppdataPath + "handle64.exe");
-                System.IO.File.Delete(AppdataPath + "handle.exe");
-                System.IO.File.Delete(AppdataPath + "Eula.txt");
-                WebClient downloadclient = new WebClient();
-                downloadclient.DownloadFile("https://download.sysinternals.com/files/Handle.zip", AppdataPath + "Handle.zip");
-                ZipFile.ExtractToDirectory(AppdataPath + "Handle.zip", AppdataPath);
-
-            }
-            catch
-            {
-                MessageBox.Show("Official microsoft link is not reachable. Using embbeded handle version!");
-                try
-                {
-                    //System.IO.File.WriteAllBytes(AppdataPath+ "handle64.exe", Properties.Resources.handle64);
-                    //System.IO.File.WriteAllBytes(AppdataPath + "handle.exe", Properties.Resources.handle);
-                }
-
-                catch (Exception err)
-                {
-                    MessageBox.Show("Could not extract handle components. No admin privilges?\n" + err.Message);
-                }
-            }
-
-            try
-            {
-                ProcessStartInfo prohandleinfo = new ProcessStartInfo();
-                prohandleinfo.UseShellExecute = false;
-                prohandleinfo.CreateNoWindow = true;
-                prohandleinfo.Arguments = "-accepteula";
-
-
-                if (Environment.Is64BitOperatingSystem)
-                {
-                    prohandleinfo.FileName = AppdataPath + "handle64.exe";
-                }
-                else
-                {
-                    prohandleinfo.FileName = AppdataPath + "handle.exe";
-                }
-                Process prohandle = new Process { StartInfo = prohandleinfo };
-                prohandle.Start();
-
-                System.IO.File.Delete(AppdataPath + "Handle.zip");
-                System.IO.File.Delete(AppdataPath + "Eula.txt");
-
-                Application.Current.Dispatcher.BeginInvoke(
-                    System.Windows.Threading.DispatcherPriority.Background,
-                    new Action(() => setupend()));
-
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
 
         void setupend()
         {
@@ -461,7 +441,6 @@ namespace Gw2_Launchbuddy
 
                             // Automatically set checks of previously used arguments. No game halting ones allowed.
 
-                            var noKeep = new List<string>();
                             noKeep.Add("-shareArchive");
                             noKeep.Add("-image");
                             noKeep.Add("-log");
@@ -471,6 +450,7 @@ namespace Gw2_Launchbuddy
                             noKeep.Add("-exit");
                             noKeep.Add("-allowinstall");
                             noKeep.Add("-exit");
+                          
 
                             foreach (Match parameter in matchList)
                             {
@@ -618,7 +598,6 @@ namespace Gw2_Launchbuddy
                 HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
             }
 
-
             //Launching the application with arguments
             if (ismultibox)
             {
@@ -628,6 +607,16 @@ namespace Gw2_Launchbuddy
             {
                 launchgw2(0);
             }
+
+            //Launching AddOns
+            try
+            {
+                addonmanager.LaunchAll();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show("One or more AddOns could not be launched.\n" + err.Message);
+            }
         }
 
         void launchgw2(int accnr)
@@ -636,7 +625,7 @@ namespace Gw2_Launchbuddy
             {
                 ProcessStartInfo gw2proinfo = new ProcessStartInfo();
                 gw2proinfo.FileName = exepath + exename;
-                gw2proinfo.Arguments = getarguments(accnr);
+                gw2proinfo.Arguments = getarguments(accnr,false);
                 gw2proinfo.WorkingDirectory = exepath;
                 Process gw2pro = new Process { StartInfo = gw2proinfo };
 
@@ -707,7 +696,7 @@ namespace Gw2_Launchbuddy
                 string shortcutLocation = System.IO.Path.Combine(shortcutPath, shortcutName + ".lnk");
                 WshShell shell = new WshShell();
                 IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
-                string arguments = getarguments(0);
+                string arguments = getarguments(0,false);
                 shortcut.IconLocation = Assembly.GetExecutingAssembly().Location;
                 shortcut.Description = "Created with Gw2 Launchbuddy, © TheCheatsrichter";
 
@@ -927,6 +916,8 @@ namespace Gw2_Launchbuddy
             }
         }
 
+
+
         void loadaccounts()
         {
             try
@@ -956,6 +947,17 @@ namespace Gw2_Launchbuddy
             {
                 MessageBox.Show(e.Message);
             }
+        }
+
+
+        void SaveAddons()
+        {
+            addonmanager.SaveAddons(AppdataPath+"Addons.bin");
+        }
+
+        void LoadAddons()
+        {
+            lv_AddOns.ItemsSource = addonmanager.LoadAddons(AppdataPath + "Addons.bin");
         }
 
         private void bt_addacc_Click(object sender, RoutedEventArgs e)
@@ -1051,6 +1053,7 @@ namespace Gw2_Launchbuddy
             Properties.Settings.Default.use_reshade = (bool)cb_reshade.IsChecked;
             Properties.Settings.Default.Save();
             safeaccounts();
+            //SaveAddons();
             Environment.Exit(Environment.ExitCode);
         }
 
@@ -1116,14 +1119,14 @@ namespace Gw2_Launchbuddy
 
         private void exp_server_Collapsed(object sender, RoutedEventArgs e)
         {
-            ServerUI.Height = new GridLength(30);
+            //ServerUI.Height = new GridLength(30);
             Application.Current.MainWindow.Height = 585;
 
         }
 
         private void exp_server_Expanded(object sender, RoutedEventArgs e)
         {
-            ServerUI.Height = new GridLength(290);
+            //ServerUI.Height = new GridLength(290);
             Application.Current.MainWindow.Height = 845;
         }
 
@@ -1163,7 +1166,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        private string getarguments(int accnr)
+        private string getarguments(int accnr,bool hideaccdata)
         {
             //Gathers all arguments and returns them as single string
 
@@ -1184,9 +1187,22 @@ namespace Gw2_Launchbuddy
                 arguments += " -clientport " + tb_clientport.Text;
             }
 
+            foreach (System.Windows.Controls.CheckBox entry in arglistbox.Items)
+            {
+                if (entry.IsChecked == true)
+                {
+                    arguments += " " + entry.Content;
+                }
+            }
+
             try
             {
-                if (cb_login.IsChecked == true)
+                if (cb_login.IsChecked == true && hideaccdata)
+                {
+                    arguments += " -Autologin ";
+                }
+
+                if (cb_login.IsChecked == true && !hideaccdata)
                 {
                     if (selected_accs[accnr].Email != null && selected_accs[accnr].Password != null)
                     {
@@ -1196,16 +1212,9 @@ namespace Gw2_Launchbuddy
             }
             catch
             {
-                MessageBox.Show("No Account selected! Launching without autologin.");
+                //MessageBox.Show("No Account selected! Launching without autologin.");
             }
 
-            foreach (System.Windows.Controls.CheckBox entry in arglistbox.Items)
-            {
-                if (entry.IsChecked == true)
-                {
-                    arguments += " " + entry.Content;
-                }
-            }
             return arguments;
         }
 
@@ -1253,15 +1262,331 @@ namespace Gw2_Launchbuddy
             System.Diagnostics.Process.Start(url);
         }
 
+        private void bt_close_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+
+        private void tab_options_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.Source is TabControl)
+            {
+                lab_currentsetup.Content = "Current Setup:" + getarguments(0, true);
+
+                string usedaddons = "";
+
+                if (lv_AddOns.ItemsSource!=null)
+                {
+                    foreach (AddOn addon in lv_AddOns.ItemsSource)
+                    {
+                        usedaddons += addon.Name + " ";
+                    }
+                    lab_usedaddons.Content = "Used AddOns: " + usedaddons;
+                }
+                
+            }
+        }
+
+        private void tab_options_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            lab_currentsetup.Content = "Current Setup:" + getarguments(0, true);
+            string usedaddons = "";
+            if (lv_AddOns.ItemsSource != null)
+            {
+                foreach (AddOn addon in lv_AddOns.ItemsSource)
+                {
+                    usedaddons += addon.Name + "; ";
+                }
+                lab_usedaddons.Content = "Used AddOns: " + usedaddons;
+            }
+        }
+
+        private void bt_minimize_Click(object sender, RoutedEventArgs e)
+        {
+            myWindow.WindowState = WindowState.Minimized;
+            myWindow.Opacity = 0;
+        }
+
+        private void myWindow_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
+        private void bt_AddAddon_Click(object sender, RoutedEventArgs e)
+        {
+            string[] args = Regex.Matches(tb_AddonArgs.Text, "-\\w* ?(\".*\")?").Cast<Match>().Select(m => m.Value).ToArray();
+            addonmanager.Add(tb_AddonName.Text,args,(bool)cb_AddonMultilaunch.IsChecked,(bool)cb_AddonOnLB.IsChecked);
+            lv_AddOns.ItemsSource = addonmanager.AddOns;
+        }
+
+        private void bt_RemAddon_Click(object sender, RoutedEventArgs e)
+        {
+            AddOn item = lv_AddOns.SelectedItem as AddOn;
+            addonmanager.Remove(item.Name);
+        }
+
+        private void bt_cinema_setimagefolder_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog folderdialog = new System.Windows.Forms.FolderBrowserDialog();
+            folderdialog.ShowDialog();
+            lv_cinema_images.Items.Clear();
+            lv_cinema_images.SelectedIndex = -1;
+            lab_imagepreview.Content = "Current Image:";
+
+            if (folderdialog.SelectedPath != "")
+            {
+                var files = Directory.GetFiles(folderdialog.SelectedPath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp"));
+                ObservableCollection<CinemaImage> images = new ObservableCollection<CinemaImage>();
+                foreach (var file in files)
+                {
+                    images.Add(new CinemaImage(file));
+                    lv_cinema_images.ItemsSource = images;
+                    Properties.Settings.Default.cinema_imagepath = folderdialog.SelectedPath;
+                    Properties.Settings.Default.Save();
+                }
+            }
+
+        }
+
+        private void lv_cinema_images_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedimage = lv_cinema_images.SelectedItem as CinemaImage;
+            if (selectedimage != null)
+            {
+                img_imagepreview.Source = LoadImage(selectedimage.Path);
+                lab_imagepreview.Content = "Current Image: " + selectedimage.Name;
+            }
+
+        }
+
+        private void bt_cinema_setmask_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
+            filedialog.Multiselect = false;
+            filedialog.Filter = "Png Files(*.png) | *.png";
+            filedialog.ShowDialog();
+
+            if (filedialog.FileName != "")
+            {
+                Properties.Settings.Default.cinema_maskpath = filedialog.FileName;
+                Properties.Settings.Default.Save();
+                lab_maskpreview.Content = "Current Mask: " + Path.GetFileName(filedialog.FileName);
+                img_maskpreview.Source = LoadImage(filedialog.FileName);
+            }
+        }
 
         private void listview_auth_Click(object sender, RoutedEventArgs e)
         {
             sortbycolum(listview_auth, sender);
         }
+
+        private void bt_setmusic_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
+            filedialog.Multiselect = false;
+            filedialog.Filter = "MP3 Files(*.mp3) | *.mp3";
+            filedialog.ShowDialog();
+
+            if (filedialog.FileName != "")
+            {
+                Properties.Settings.Default.cinema_musicpath = filedialog.FileName;
+                Properties.Settings.Default.Save();
+                lab_musicpath.Content = "Current Musicfile: " + Path.GetFileName(filedialog.FileName);
+                mediaplayer.Open(new Uri(filedialog.FileName));
+            }
+        }
+
+        bool IsValidPath (string path)
+        {
+            try
+            {
+                Path.GetFullPath(path);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        void LoadCinemaSettings()
+        {
+            string imagepath = Properties.Settings.Default.cinema_imagepath;
+            string maskpath = Properties.Settings.Default.cinema_maskpath;
+            string musicpath = Properties.Settings.Default.cinema_musicpath;
+
+            if (IsValidPath(imagepath))
+            {
+                var files = Directory.GetFiles(imagepath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp"));
+                ObservableCollection<CinemaImage> images = new ObservableCollection<CinemaImage>();
+                foreach (var file in files)
+                {
+                    images.Add(new CinemaImage(file));
+                    lv_cinema_images.ItemsSource = images;
+                }
+            }
+
+            if (IsValidPath(maskpath) && Path.GetExtension(maskpath) == ".png")
+            {
+                lab_maskpreview.Content = "Current Mask: " + Path.GetFileName(maskpath);
+                img_maskpreview.Source = LoadImage(maskpath);
+            }
+
+            if (IsValidPath(musicpath) && Path.GetExtension(musicpath) == ".mp3")
+            {
+                lab_musicpath.Content = "Current Musicfile: " + Path.GetFileName(musicpath);
+                mediaplayer.Open(new Uri(musicpath));
+            }
+
+
+        }
+
+        private void bt_musicstart_Click(object sender, RoutedEventArgs e)
+        {
+            mediaplayer.Play();
+        }
+
+        private void bt_musicstop_Click(object sender, RoutedEventArgs e)
+        {
+            mediaplayer.Stop();
+        }
+
+        private void bt_cinema_Click(object sender, RoutedEventArgs e)
+        {
+            cinemamode = !Properties.Settings.Default.cinema_use;
+            Properties.Settings.Default.cinema_use=cinemamode;
+            Properties.Settings.Default.Save();
+            cinema_setup();
+        }
+
+        private void bt_ShowSettings_Click(object sender, RoutedEventArgs e)
+        {
+            if (SettingsGrid.Visibility == Visibility.Hidden)
+            {
+                SettingsGrid.Visibility = Visibility.Visible;
+            }else
+            {
+                SettingsGrid.Visibility = Visibility.Hidden;
+            }
+            
+        }
+
         private void listview_assets_Click(object sender, RoutedEventArgs e)
         {
             sortbycolum(listview_assets, sender);
         }
+
+
+        private static BitmapSource LoadImage(string path)
+        {
+            var bitmap = new BitmapImage();
+
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.StreamSource = stream;
+                bitmap.EndInit();
+            }
+
+            return bitmap;
+        }
+
+
+
+        //####################################################################################
+        //Old Handle method functions
+        //####################################################################################
+        void checksetup()
+        {
+            try
+            {
+                if (!System.IO.File.Exists(AppdataPath + "handle64.exe") || !System.IO.File.Exists(AppdataPath + "handle.exe"))
+                {
+                    winsetupinfo.WindowStyle = WindowStyle.None;
+                    winsetupinfo.Width = 300;
+                    winsetupinfo.Height = 200;
+                    winsetupinfo.Show();
+                    myWindow.Visibility = Visibility.Hidden;
+                    Thread th_gethandleexe = new Thread(gethandleexe);
+                    th_gethandleexe.IsBackground = true;
+                    th_gethandleexe.Start();
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
+
+
+        void gethandleexe()
+        {
+            try
+            {
+                System.IO.File.Delete(AppdataPath + "handle64.exe");
+                System.IO.File.Delete(AppdataPath + "handle.exe");
+                System.IO.File.Delete(AppdataPath + "Eula.txt");
+                WebClient downloadclient = new WebClient();
+                downloadclient.DownloadFile("https://download.sysinternals.com/files/Handle.zip", AppdataPath + "Handle.zip");
+                ZipFile.ExtractToDirectory(AppdataPath + "Handle.zip", AppdataPath);
+
+            }
+            catch
+            {
+                MessageBox.Show("Official microsoft link is not reachable. Using embbeded handle version!");
+                try
+                {
+                    //System.IO.File.WriteAllBytes(AppdataPath+ "handle64.exe", Properties.Resources.handle64);
+                    //System.IO.File.WriteAllBytes(AppdataPath + "handle.exe", Properties.Resources.handle);
+                }
+
+                catch (Exception err)
+                {
+                    MessageBox.Show("Could not extract handle components. No admin privilges?\n" + err.Message);
+                }
+            }
+
+            try
+            {
+                ProcessStartInfo prohandleinfo = new ProcessStartInfo();
+                prohandleinfo.UseShellExecute = false;
+                prohandleinfo.CreateNoWindow = true;
+                prohandleinfo.Arguments = "-accepteula";
+
+
+                if (Environment.Is64BitOperatingSystem)
+                {
+                    prohandleinfo.FileName = AppdataPath + "handle64.exe";
+                }
+                else
+                {
+                    prohandleinfo.FileName = AppdataPath + "handle.exe";
+                }
+                Process prohandle = new Process { StartInfo = prohandleinfo };
+                prohandle.Start();
+
+                System.IO.File.Delete(AppdataPath + "Handle.zip");
+                System.IO.File.Delete(AppdataPath + "Eula.txt");
+
+                Application.Current.Dispatcher.BeginInvoke(
+                    System.Windows.Threading.DispatcherPriority.Background,
+                    new Action(() => setupend()));
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
+
+        //####################################################################################
+        //Old Handle method functions END
+        //####################################################################################
+
+
     }
 
     public class SortAdorner : Adorner
@@ -1301,5 +1626,9 @@ namespace Gw2_Launchbuddy
 
             drawingContext.Pop();
         }
+
     }
+
+
+   
 }
