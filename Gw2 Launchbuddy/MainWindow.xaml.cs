@@ -19,7 +19,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using System.IO.Compression;
-
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Gw2_Launchbuddy
 {
@@ -58,6 +59,16 @@ namespace Gw2_Launchbuddy
         string exepath, exename, unlockerpath, version_client, version_api;
         string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
         bool ismultibox = false;
+
+        private Microsoft.Win32.RegistryKey _LBRegKey = null;
+        Microsoft.Win32.RegistryKey LBRegKey
+        {
+            get
+            {
+                return Microsoft.Win32.Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("LaunchBuddy");
+            }
+            set { }
+        }
 
         AES crypt = new AES();
         AddOnManager addonmanager = new AddOnManager();
@@ -591,11 +602,13 @@ namespace Gw2_Launchbuddy
 
         private void bt_launch_Click(object sender, RoutedEventArgs e)
         {
-            //Checking for existing Gw2 instances
-            if (Process.GetProcesses().ToList().Where(a => !nomutexpros.Contains(a.Id) && a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).Any())
+            //Checking for existing Gw2 instances. Do not continue until closed.
+            //if (Process.GetProcesses().ToList().Where(a => !nomutexpros.Contains(a.Id) && a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).Any())
+            if (!checkRegClients())
             {
-                MessageBox.Show("One or more instances of Gw2 is allready running!\n If that instance was not launched with -shareArchive (when launched with gw2 launchbuddy this argument gets added automatically) then additional instances will crash!");
-                HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
+                MessageBox.Show("At least once instance of Guild Wars is running that was not opened by LaunchBuddy. That instance will need to be closed.");
+                return;
+                //HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
             }
 
             //Launching the application with arguments
@@ -617,6 +630,33 @@ namespace Gw2_Launchbuddy
             {
                 MessageBox.Show("One or more AddOns could not be launched.\n" + err.Message);
             }
+        }
+        bool checkRegClients()
+        {
+            return RegClients();
+        }
+        bool updateRegClients(string created)
+        {
+            return RegClients(created);
+        }
+        bool RegClients(string created = null)
+        {
+            var key = LBRegKey;
+            var listClients = ((string[])key.GetValue("Clients")).ToList();
+            var gw2Procs = Process.GetProcesses().ToList().Where(a => a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).ToList().ConvertAll<string>(new Converter<Process, string>(ConvertProcToString));
+            var running = gw2Procs.Count();
+            var temp = listClients.Where(a => !gw2Procs.Contains(a)).ToList();
+            foreach (var t in temp) listClients.Remove(t);
+            if (created != null) listClients.Add(created);
+            key.SetValue("Clients", listClients.ToArray(), Microsoft.Win32.RegistryValueKind.MultiString);
+            var logged = listClients.Count();
+            key.Close();
+            return running == logged;
+        }
+
+        public string ConvertProcToString(Process proc)
+        {
+            return procMD5(proc);
         }
 
         void launchgw2(int accnr)
@@ -642,6 +682,8 @@ namespace Gw2_Launchbuddy
                     gw2pro.WaitForInputIdle(10000);
                     Thread.Sleep(100);
                     HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
+                    //Register the new client to prevent problems.
+                    updateRegClients(procMD5(gw2pro));
                 }
                 catch (Exception err)
                 {
@@ -1494,12 +1536,35 @@ namespace Gw2_Launchbuddy
             return bitmap;
         }
 
+        public string CalculateMD5(string input)
+        {
+            var md5 = MD5.Create();
+            var inputBytes = Encoding.ASCII.GetBytes(input);
+            var hash = md5.ComputeHash(inputBytes);
+
+            var sb = new StringBuilder();
+
+            for (int i = 0; i < hash.Length; i++)
+                sb.Append(hash[i].ToString("X2"));
+
+            return sb.ToString();
+        }
+
+        public string procMD5(Process proc)
+        {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("Start: " + proc.StartTime + " ID: " + proc.Id + " MD5: " + CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString()));
+#endif
+            return CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString());
+        }
+    }
 
 
-        //####################################################################################
-        //Old Handle method functions
-        //####################################################################################
-        void checksetup()
+
+    //####################################################################################
+    //Old Handle method functions
+    //####################################################################################
+    void checksetup()
         {
             try
             {
@@ -1582,12 +1647,12 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        //####################################################################################
-        //Old Handle method functions END
-        //####################################################################################
+    //####################################################################################
+    //Old Handle method functions END
+    //####################################################################################
 
 
-    }
+}
 
     public class SortAdorner : Adorner
     {
