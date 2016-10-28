@@ -9,12 +9,13 @@ using System.Linq;
 
 namespace Gw2_Launchbuddy
 {
+    [Serializable]
     public class AddOn
     {
         public string Name { set; get; }
         public ProcessStartInfo Info{ set; get; }
         public bool IsMultilaunch { set; get; }
-        public bool IsOverlay { set; get; }
+        public bool IsLbAddon { set; get; }
         public string args {
             set { }
             get { return Info.Arguments; }
@@ -27,20 +28,21 @@ namespace Gw2_Launchbuddy
         }
         public List<Process> ChildProcess = new List<Process>();
 
-        public AddOn(string Name,ProcessStartInfo Info, bool IsMultilaunch,bool IsOverlay)
+        public AddOn(string Name,ProcessStartInfo Info, bool IsMultilaunch,bool IsLbAddon)
         {
             this.Name = Name;
             this.Info= Info;
             this.IsMultilaunch= IsMultilaunch;
-            this.IsOverlay=IsOverlay;
+            this.IsLbAddon=IsLbAddon;
         }
     }
 
     class AddOnManager
     {
+        
         public ObservableCollection<AddOn> AddOns = new ObservableCollection<AddOn>();
 
-        public void Add(string name,string[] args,bool IsMultilaunch,bool IsOverlay)
+        public void Add(string name,string[] args,bool IsMultilaunch,bool IsLbAddon)
         {
             if(name != "")
             {
@@ -56,7 +58,7 @@ namespace Gw2_Launchbuddy
                     ProInfo.FileName = filedialog.FileName;
                     ProInfo.Arguments = String.Join(" ", args);
                     ProInfo.WorkingDirectory = Path.GetDirectoryName(filedialog.FileName);
-                    AddOns.Add(new AddOn(name, ProInfo, IsMultilaunch, IsOverlay));
+                    AddOns.Add(new AddOn(name, ProInfo, IsMultilaunch, IsLbAddon));
                 }
             } else
             {
@@ -130,6 +132,61 @@ namespace Gw2_Launchbuddy
                     addon.ChildProcess.Add(addon_pro);
                     addon_pro.Start();
                 }
+            }
+        }
+
+        public void LaunchLbAddons()
+        {
+            foreach (AddOn addon in AddOns)
+            {
+                if((addon.IsMultilaunch ||  addon.ChildProcess.Count <= 0) && addon.IsLbAddon)
+                {
+                    Process addon_pro = new Process { StartInfo = addon.Info };
+                    addon.ChildProcess.Add(addon_pro);
+                    addon_pro.Start();
+                }
+            }
+        }
+
+
+        public void SaveAddons(string path)
+        {
+            try
+            {
+                using (Stream stream = System.IO.File.Open(path, FileMode.Create))
+                {
+                    var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    bformatter.Serialize(stream, AddOns);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
+
+
+        public ObservableCollection<AddOn> LoadAddons(string path)
+        {
+            try
+            {
+
+                if (System.IO.File.Exists(path) == true)
+                {
+                    using (Stream stream = System.IO.File.Open(path, FileMode.Open))
+                    {
+                        var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                        ObservableCollection<AddOn> addonlist = (ObservableCollection<AddOn>)bformatter.Deserialize(stream);
+
+                        return addonlist;
+                    }
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return null;
             }
         }
 

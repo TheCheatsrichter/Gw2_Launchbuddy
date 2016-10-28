@@ -143,6 +143,9 @@ namespace Gw2_Launchbuddy
             checkver.IsBackground = true;
             checkver.Start();
             cinema_setup();
+            //LoadAddons();
+            addonmanager.LaunchLbAddons();
+            
 
         }
 
@@ -156,12 +159,14 @@ namespace Gw2_Launchbuddy
             {
                 SettingsGrid.Visibility = Visibility.Hidden;
                 myWindow.WindowState = WindowState.Maximized;
+                bt_ShowSettings.Visibility = Visibility.Visible;
             } else
             {
                 SettingsGrid.Visibility = Visibility.Visible;
                 myWindow.WindowState = WindowState.Normal;
                 myWindow.Height = 680;
                 myWindow.Width = 700;
+                bt_ShowSettings.Visibility = Visibility.Hidden;
             }
         }
 
@@ -911,6 +916,8 @@ namespace Gw2_Launchbuddy
             }
         }
 
+
+
         void loadaccounts()
         {
             try
@@ -940,6 +947,17 @@ namespace Gw2_Launchbuddy
             {
                 MessageBox.Show(e.Message);
             }
+        }
+
+
+        void SaveAddons()
+        {
+            addonmanager.SaveAddons(AppdataPath+"Addons.bin");
+        }
+
+        void LoadAddons()
+        {
+            lv_AddOns.ItemsSource = addonmanager.LoadAddons(AppdataPath + "Addons.bin");
         }
 
         private void bt_addacc_Click(object sender, RoutedEventArgs e)
@@ -1035,6 +1053,7 @@ namespace Gw2_Launchbuddy
             Properties.Settings.Default.use_reshade = (bool)cb_reshade.IsChecked;
             Properties.Settings.Default.Save();
             safeaccounts();
+            //SaveAddons();
             Environment.Exit(Environment.ExitCode);
         }
 
@@ -1297,7 +1316,7 @@ namespace Gw2_Launchbuddy
         private void bt_AddAddon_Click(object sender, RoutedEventArgs e)
         {
             string[] args = Regex.Matches(tb_AddonArgs.Text, "-\\w* ?(\".*\")?").Cast<Match>().Select(m => m.Value).ToArray();
-            addonmanager.Add(tb_AddonName.Text,args,(bool)cb_AddonMultilaunch.IsChecked,(bool)cb_AddonOverlay.IsChecked);
+            addonmanager.Add(tb_AddonName.Text,args,(bool)cb_AddonMultilaunch.IsChecked,(bool)cb_AddonOnLB.IsChecked);
             lv_AddOns.ItemsSource = addonmanager.AddOns;
         }
 
@@ -1439,6 +1458,19 @@ namespace Gw2_Launchbuddy
             cinemamode = !Properties.Settings.Default.cinema_use;
             Properties.Settings.Default.cinema_use=cinemamode;
             Properties.Settings.Default.Save();
+            cinema_setup();
+        }
+
+        private void bt_ShowSettings_Click(object sender, RoutedEventArgs e)
+        {
+            if (SettingsGrid.Visibility == Visibility.Hidden)
+            {
+                SettingsGrid.Visibility = Visibility.Visible;
+            }else
+            {
+                SettingsGrid.Visibility = Visibility.Hidden;
+            }
+            
         }
 
         private void listview_assets_Click(object sender, RoutedEventArgs e)
