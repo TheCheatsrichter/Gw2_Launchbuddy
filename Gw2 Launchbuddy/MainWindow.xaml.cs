@@ -79,16 +79,28 @@ namespace Gw2_Launchbuddy
         {
             public string Email { get; set; }
             public string Password { get; set; }
+            public string DisplayEmail {
+                get {
+                    string tmp="";
+                    try
+                    {
+                        tmp += Email.Substring(0, 2);
+                        tmp += "********@*****";
+                        return tmp;
+                    }
+                    catch
+                    {
+                        return "*********@*****";
+                    }
+
+                }
+                set { }
+            }
             public string DisplayPW
             {
                 get
                 {
-                    string stars = "";
-                    foreach (char ch in Password.ToCharArray())
-                    {
-                        stars += "*";
-                    }
-                    return stars;
+                    return  "*********";
                 }
                 set
                 {
@@ -138,18 +150,18 @@ namespace Gw2_Launchbuddy
         {
             LoadCinemaSettings();
 
-            cinemamode = true;
+            cinemamode = Properties.Settings.Default.cinema_use;
 
             if (cinemamode)
             {
-                OptionsHeight = new RowDefinition { Height = new GridLength(0, GridUnitType.Pixel) };
-                OptionsWidth = new ColumnDefinition { Width = new GridLength(0, GridUnitType.Pixel) };
-                CinemaWidth = new ColumnDefinition{ Width = new GridLength(100,GridUnitType.Star) };
-                CinemaHeight = new RowDefinition{ Height = new GridLength(100, GridUnitType.Star) };
+                SettingsGrid.Visibility = Visibility.Hidden;
+                myWindow.WindowState = WindowState.Maximized;
             } else
             {
-                CinemaWidth = new ColumnDefinition { Width = new GridLength(0, GridUnitType.Pixel) };
-                CinemaHeight = new RowDefinition { Height = new GridLength(0, GridUnitType.Pixel) };
+                SettingsGrid.Visibility = Visibility.Visible;
+                myWindow.WindowState = WindowState.Normal;
+                myWindow.Height = 680;
+                myWindow.Width = 700;
             }
         }
 
@@ -1420,6 +1432,13 @@ namespace Gw2_Launchbuddy
         private void bt_musicstop_Click(object sender, RoutedEventArgs e)
         {
             mediaplayer.Stop();
+        }
+
+        private void bt_cinema_Click(object sender, RoutedEventArgs e)
+        {
+            cinemamode = !Properties.Settings.Default.cinema_use;
+            Properties.Settings.Default.cinema_use=cinemamode;
+            Properties.Settings.Default.Save();
         }
 
         private void listview_assets_Click(object sender, RoutedEventArgs e)

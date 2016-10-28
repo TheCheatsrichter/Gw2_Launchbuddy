@@ -33,24 +33,34 @@
             <ColumnDefinition x:Name="CinemaWidth" Width="100*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition x:Name="WindowOptionsHeight" Height="30"/>
             <RowDefinition x:Name="OptionsHeight" Height="650"/>
             <RowDefinition x:Name="CinemaHeight" Height="100*"/>
         </Grid.RowDefinitions>
-        <Grid Margin="5,5">
+        <StackPanel Grid.Row="0" HorizontalAlignment="Left">
+            <Label Content="Gw2 Launchbuddy V1.1 BETA" FontSize="16" FontWeight="Bold"/>
+        </StackPanel>
+        <StackPanel x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="1">
+            <Button x:Name="bt_cinema" Width="30" Content="C" Click="bt_cinema_Click" />
+            <Button x:Name="bt_minimize" Width="30" Content="M" Click="bt_minimize_Click" />
+            <Button x:Name="bt_close" Width="30" Content="X" Click="bt_close_Click" />
+        </StackPanel>
+
+
+        <Grid Margin="5,5" x:Name="SettingsGrid" Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
                 <RowDefinition Height="100*"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
 
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="2" >
+            <StackPanel Grid.Row="1" >
                 <Label Content="Current Setup:" x:Name="lab_currentsetup"/>
                 <Label Content="Used Addons:" x:Name="lab_usedaddons"/>
             </StackPanel>
 
-            <Grid Margin="5,5" Grid.Row="3">
+            <Grid Margin="5,5" Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50*"/>
                     <ColumnDefinition Width="50*"/>
@@ -59,7 +69,7 @@
                 <Button x:Name="bt_shortcut" Content="Create Shortcut (No Multiboxing)" Grid.Column="1" Grid.Row="1"  Click="bt_shortcut_Click" BorderThickness="1" Margin="5,0,0,0"/>
             </Grid>
 
-            <TabControl x:Name="tab_options" Grid.Row="1" SelectionChanged="tab_options_SelectionChanged" MouseLeave="tab_options_MouseLeave" >
+            <TabControl x:Name="tab_options" Grid.Row="0" SelectionChanged="tab_options_SelectionChanged" MouseLeave="tab_options_MouseLeave" >
                 <TabControl.Background>
                     <ImageBrush ImageSource="/Resources/launchbuddyback.png" Stretch="Uniform" AlignmentX="Right" Opacity="0.15" >
                         <ImageBrush.Transform>
@@ -172,8 +182,7 @@
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Nickname" Width="150" DisplayMemberBinding="{Binding Nick}" />
-                                    <GridViewColumn Header="Email" Width="200" DisplayMemberBinding="{Binding Email}" />
-                                    <GridViewColumn Header="Password" Width="150" DisplayMemberBinding="{Binding DisplayPW}" />
+                                    <GridViewColumn Header="Email" Width="200" DisplayMemberBinding="{Binding DisplayEmail}" />
                                     <GridViewColumn Header="Created at" Width="150" DisplayMemberBinding="{Binding Time}" />
 
                                 </GridView>
@@ -380,14 +389,7 @@
 
             </TabControl>
 
-            <StackPanel Grid.Row="0" HorizontalAlignment="Left">
-                <Label Content="Gw2 Launchbuddy V1.1 BETA" FontSize="16" FontWeight="Bold"/>
-            </StackPanel>
-            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button x:Name="bt_cinema" Width="30" Content="C" />
-                <Button x:Name="bt_minimize" Width="30" Content="M" Click="bt_minimize_Click" />
-                <Button x:Name="bt_close" Width="30" Content="X" Click="bt_close_Click" />
-            </StackPanel>
+
 
         </Grid>
 

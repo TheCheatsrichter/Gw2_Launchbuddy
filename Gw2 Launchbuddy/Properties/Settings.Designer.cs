@@ -106,5 +106,17 @@ namespace Gw2_Launchbuddy.Properties {
                 this["cinema_musicpath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool cinema_use {
+            get {
+                return ((bool)(this["cinema_use"]));
+            }
+            set {
+                this["cinema_use"] = value;
+            }
+        }
     }
 }
