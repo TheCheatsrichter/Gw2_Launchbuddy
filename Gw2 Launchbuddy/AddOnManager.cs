@@ -152,9 +152,10 @@ namespace Gw2_Launchbuddy
 
         public void LaunchAll()
         {
+
             foreach (AddOn addon in AddOns)
             {
-                if (addon.IsMultilaunch || addon.ChildProcess.Count <= 0)
+                if ((addon.IsMultilaunch || addon.ChildProcess.Count <= 0) && !addon.IsLbAddon)
                 {
                     Process addon_pro = new Process { StartInfo = addon.Info };
                     addon.ChildProcess.Add(addon_pro);
@@ -165,6 +166,7 @@ namespace Gw2_Launchbuddy
 
         public void LaunchLbAddons()
         {
+            UpdateList();
             foreach (AddOn addon in AddOns)
             {
                 if((addon.IsMultilaunch ||  addon.ChildProcess.Count <= 0) && addon.IsLbAddon)
