@@ -1004,9 +1004,9 @@ namespace Gw2_Launchbuddy
         {
             if (IsValidEmail(tb_email.Text))
             {
-                if (tb_passw.Text.Length > 4)
+                if (tb_passw.Password.Length > 4)
                 {
-                    Account acc = new Account { Nick = tb_nick.Text, Email = tb_email.Text, Password = tb_passw.Text, Time = DateTime.Now };
+                    Account acc = new Account { Nick = tb_nick.Text, Email = tb_email.Text, Password = tb_passw.Password, Time = DateTime.Now };
                     accountlist.Add(acc);
                     listview_acc.ItemsSource = accountlist;
                     tb_email.Clear();
