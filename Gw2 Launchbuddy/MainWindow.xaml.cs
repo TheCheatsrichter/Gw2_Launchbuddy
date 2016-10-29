@@ -24,7 +24,7 @@ using System.Text;
 
 namespace Gw2_Launchbuddy
 {
-    public partial class MainWindow : Window 
+    public partial class MainWindow : Window
     {
 
         ///Gw2 Launchbuddy by TheCheatsrichter 2016
@@ -90,9 +90,11 @@ namespace Gw2_Launchbuddy
         {
             public string Email { get; set; }
             public string Password { get; set; }
-            public string DisplayEmail {
-                get {
-                    string tmp="";
+            public string DisplayEmail
+            {
+                get
+                {
+                    string tmp = "";
                     try
                     {
                         tmp += Email.Substring(0, 2);
@@ -111,7 +113,7 @@ namespace Gw2_Launchbuddy
             {
                 get
                 {
-                    return  "*********";
+                    return "*********";
                 }
                 set
                 {
@@ -156,7 +158,7 @@ namespace Gw2_Launchbuddy
             cinema_setup();
             LoadAddons();
             addonmanager.LaunchLbAddons();
-            
+
 
         }
 
@@ -171,7 +173,8 @@ namespace Gw2_Launchbuddy
                 SettingsGrid.Visibility = Visibility.Hidden;
                 myWindow.WindowState = WindowState.Maximized;
                 bt_ShowSettings.Visibility = Visibility.Visible;
-            } else
+            }
+            else
             {
                 SettingsGrid.Visibility = Visibility.Visible;
                 myWindow.WindowState = WindowState.Normal;
@@ -461,7 +464,7 @@ namespace Gw2_Launchbuddy
                             noKeep.Add("-exit");
                             noKeep.Add("-allowinstall");
                             noKeep.Add("-exit");
-                          
+
 
                             foreach (Match parameter in matchList)
                             {
@@ -665,7 +668,7 @@ namespace Gw2_Launchbuddy
             {
                 ProcessStartInfo gw2proinfo = new ProcessStartInfo();
                 gw2proinfo.FileName = exepath + exename;
-                gw2proinfo.Arguments = getarguments(accnr,false);
+                gw2proinfo.Arguments = getarguments(accnr, false);
                 gw2proinfo.WorkingDirectory = exepath;
                 Process gw2pro = new Process { StartInfo = gw2proinfo };
 
@@ -680,7 +683,7 @@ namespace Gw2_Launchbuddy
                 try
                 {
                     gw2pro.WaitForInputIdle(10000);
-                    Thread.Sleep(100);
+                    Thread.Sleep(1000);
                     HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
                     //Register the new client to prevent problems.
                     updateRegClients(procMD5(gw2pro));
@@ -738,7 +741,7 @@ namespace Gw2_Launchbuddy
                 string shortcutLocation = System.IO.Path.Combine(shortcutPath, shortcutName + ".lnk");
                 WshShell shell = new WshShell();
                 IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
-                string arguments = getarguments(0,false);
+                string arguments = getarguments(0, false);
                 shortcut.IconLocation = Assembly.GetExecutingAssembly().Location;
                 shortcut.Description = "Created with Gw2 Launchbuddy, © TheCheatsrichter";
 
@@ -994,7 +997,7 @@ namespace Gw2_Launchbuddy
 
         void SaveAddons()
         {
-            addonmanager.SaveAddons(AppdataPath+"Addons.xml");
+            addonmanager.SaveAddons(AppdataPath + "Addons.xml");
         }
 
         void LoadAddons()
@@ -1208,7 +1211,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        private string getarguments(int accnr,bool hideaccdata)
+        private string getarguments(int accnr, bool hideaccdata)
         {
             //Gathers all arguments and returns them as single string
 
@@ -1318,7 +1321,7 @@ namespace Gw2_Launchbuddy
 
                 string usedaddons = "";
 
-                if (lv_AddOns.ItemsSource!=null)
+                if (lv_AddOns.ItemsSource != null)
                 {
                     foreach (AddOn addon in lv_AddOns.ItemsSource)
                     {
@@ -1326,7 +1329,7 @@ namespace Gw2_Launchbuddy
                     }
                     lab_usedaddons.Content = "Used AddOns: " + usedaddons;
                 }
-                
+
             }
         }
 
@@ -1358,7 +1361,7 @@ namespace Gw2_Launchbuddy
         private void bt_AddAddon_Click(object sender, RoutedEventArgs e)
         {
             string[] args = Regex.Matches(tb_AddonArgs.Text, "-\\w* ?(\".*\")?").Cast<Match>().Select(m => m.Value).ToArray();
-            addonmanager.Add(tb_AddonName.Text,args,(bool)cb_AddonMultilaunch.IsChecked,(bool)cb_AddonOnLB.IsChecked);
+            addonmanager.Add(tb_AddonName.Text, args, (bool)cb_AddonMultilaunch.IsChecked, (bool)cb_AddonOnLB.IsChecked);
             lv_AddOns.ItemsSource = addonmanager.AddOns;
         }
 
@@ -1439,7 +1442,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        bool IsValidPath (string path)
+        bool IsValidPath(string path)
         {
             try
             {
@@ -1498,7 +1501,7 @@ namespace Gw2_Launchbuddy
         private void bt_cinema_Click(object sender, RoutedEventArgs e)
         {
             cinemamode = !Properties.Settings.Default.cinema_use;
-            Properties.Settings.Default.cinema_use=cinemamode;
+            Properties.Settings.Default.cinema_use = cinemamode;
             Properties.Settings.Default.Save();
             cinema_setup();
         }
@@ -1508,11 +1511,12 @@ namespace Gw2_Launchbuddy
             if (SettingsGrid.Visibility == Visibility.Hidden)
             {
                 SettingsGrid.Visibility = Visibility.Visible;
-            }else
+            }
+            else
             {
                 SettingsGrid.Visibility = Visibility.Hidden;
             }
-            
+
         }
 
         private void listview_assets_Click(object sender, RoutedEventArgs e)
@@ -1537,10 +1541,29 @@ namespace Gw2_Launchbuddy
         }
 
 
+        public string CalculateMD5(string input)
+        {
+            var md5 = MD5.Create();
+            var inputBytes = Encoding.ASCII.GetBytes(input);
+            var hash = md5.ComputeHash(inputBytes);
 
-        //####################################################################################
-        //Old Handle method functions
-        //####################################################################################
+            var sb = new StringBuilder();
+
+            for (int i = 0; i < hash.Length; i++)
+                sb.Append(hash[i].ToString("X2"));
+
+            return sb.ToString();
+        }
+
+        public string procMD5(Process proc)
+        {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("Start: " + proc.StartTime + " ID: " + proc.Id + " MD5: " + CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString()));
+#endif
+            return CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString());
+        }
+
+        #region Old Handle Method Functions
         void checksetup()
         {
             try
@@ -1562,7 +1585,6 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show(e.Message);
             }
         }
-
 
         void gethandleexe()
         {
@@ -1590,29 +1612,6 @@ namespace Gw2_Launchbuddy
                     MessageBox.Show("Could not extract handle components. No admin privilges?\n" + err.Message);
                 }
             }
-
-        public string CalculateMD5(string input)
-        {
-            var md5 = MD5.Create();
-            var inputBytes = Encoding.ASCII.GetBytes(input);
-            var hash = md5.ComputeHash(inputBytes);
-
-            var sb = new StringBuilder();
-
-            for (int i = 0; i < hash.Length; i++)
-                sb.Append(hash[i].ToString("X2"));
-
-            return sb.ToString();
-        }
-
-        public string procMD5(Process proc)
-        {
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine("Start: " + proc.StartTime + " ID: " + proc.Id + " MD5: " + CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString()));
-#endif
-            return CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString());
-        }
-    }
 
             try
             {
@@ -1646,12 +1645,7 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show(e.Message);
             }
         }
-
-        //####################################################################################
-        //Old Handle method functions END
-        //####################################################################################
-
-
+        #endregion
     }
 
     public class SortAdorner : Adorner
@@ -1695,5 +1689,5 @@ namespace Gw2_Launchbuddy
     }
 
 
-   
+
 }
