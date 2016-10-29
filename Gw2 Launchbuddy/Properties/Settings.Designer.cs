@@ -70,5 +70,53 @@ namespace Gw2_Launchbuddy.Properties {
                 this["selected_acc"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string cinema_imagepath {
+            get {
+                return ((string)(this["cinema_imagepath"]));
+            }
+            set {
+                this["cinema_imagepath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string cinema_maskpath {
+            get {
+                return ((string)(this["cinema_maskpath"]));
+            }
+            set {
+                this["cinema_maskpath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string cinema_musicpath {
+            get {
+                return ((string)(this["cinema_musicpath"]));
+            }
+            set {
+                this["cinema_musicpath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool cinema_use {
+            get {
+                return ((bool)(this["cinema_use"]));
+            }
+            set {
+                this["cinema_use"] = value;
+            }
+        }
     }
 }
