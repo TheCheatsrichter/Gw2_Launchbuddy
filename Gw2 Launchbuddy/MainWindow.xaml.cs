@@ -623,6 +623,16 @@ namespace Gw2_Launchbuddy
             {
                 launchgw2(0);
             }
+
+            //Launching AddOns
+            try
+            {
+                addonmanager.LaunchAll();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show("One or more AddOns could not be launched.\n" + err.Message);
+            }
         }
         bool checkRegClients()
         {
@@ -636,7 +646,7 @@ namespace Gw2_Launchbuddy
         {
             var key = LBRegKey;
             var listClients = ((string[])key.GetValue("Clients")).ToList();
-            var gw2Procs = Process.GetProcesses().ToList().Where(a => a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).ToList().ConvertAll<string>(new Converter<Process, string>(ConvertProcToString));
+            var gw2Procs = Process.GetProcesses().ToList().Where(a => a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).ToList().ConvertAll<string>(new Converter<Process, string>(procMD5));
             var running = gw2Procs.Count();
             var temp = listClients.Where(a => !gw2Procs.Contains(a)).ToList();
             foreach (var t in temp) listClients.Remove(t);
@@ -645,21 +655,6 @@ namespace Gw2_Launchbuddy
             var logged = listClients.Count();
             key.Close();
             return running == logged;
-        }
-
-        public string ConvertProcToString(Process proc)
-        {
-            return procMD5(proc);
-
-            //Launching AddOns
-            try
-            {
-                addonmanager.LaunchAll();
-            }
-            catch (Exception err)
-            {
-                MessageBox.Show("One or more AddOns could not be launched.\n" + err.Message);
-            }
         }
 
         void launchgw2(int accnr)
