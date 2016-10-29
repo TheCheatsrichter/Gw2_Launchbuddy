@@ -1,5 +1,5 @@
 # Gw2_Launchbuddy V 1.0.0
-# The following FAQ may not match with upcomign BETA releases!
+# The following FAQ may not match with upcoming BETA releases!
 Custom launcher generator for the video game Guild Wars 2.
 TheCheatsrichter. All rights reserved.
 
