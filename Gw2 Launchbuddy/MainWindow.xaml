@@ -10,7 +10,7 @@
         ShowInTaskbar="true"
     
         mc:Ignorable="d"
-        Title="Gw2 Launchbuddy V 1.0.5" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="myWindow_MouseLeftButtonDown">
+        Title="Gw2 Launchbuddy V 1.3" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="myWindow_MouseLeftButtonDown">
 
     <Window.Triggers>
         <EventTrigger RoutedEvent="Window.Loaded">
@@ -38,8 +38,10 @@
             <RowDefinition x:Name="CinemaHeight" Height="100*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" HorizontalAlignment="Left">
-            <Label Content="Gw2 Launchbuddy V1.1 BETA" FontSize="16" FontWeight="Bold"/>  
+            <Label Content="Gw2 Launchbuddy V1.3 BETA" FontSize="16" FontWeight="Bold"/>  
         </StackPanel>
+
+        <MediaElement x:Name="Cinema_Videoplayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual"/>
         <StackPanel x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="1">
             <Button x:Name="bt_ShowSettings" Width="30" Content="S" Click="bt_ShowSettings_Click" />
             <Button x:Name="bt_cinema" Width="30" Content="C" Click="bt_cinema_Click" />
@@ -48,7 +50,7 @@
         </StackPanel>
 
 
-        <Grid Margin="5,5" x:Name="SettingsGrid" Grid.Row="1">
+        <Grid Margin="5,5" x:Name="SettingsGrid" Grid.Row="1" Background="White">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100*"/>
                 <RowDefinition Height="50"/>
@@ -317,74 +319,120 @@
                 <TabItem Header="Cinema Mode">
                     <StackPanel>
                         <Label Content="Cinema Mode:" FontSize="16" FontWeight="Bold" />
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50*"/>
-                                <ColumnDefinition Width="50*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="150"/>
-                                <RowDefinition Height="30"/>
-                            </Grid.RowDefinitions>
-                            <Image x:Name="img_imagepreview" Grid.Row="0" Grid.Column="1" Source="Resources/quaggan.jpg"/>
-                            <Grid Margin="0,5">
-                                <ListView x:Name="lv_cinema_images" Grid.Row="1" SelectionChanged="lv_cinema_images_SelectionChanged">
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
-                                                <GridViewColumnHeader Tag="Name" Click="listview_auth_Click">Image Name</GridViewColumnHeader>
-                                            </GridViewColumn>
-                                            <GridViewColumn HeaderStringFormat=""  DisplayMemberBinding="{Binding Path}">
-                                                <GridViewColumnHeader Tag="Path" Click="listview_auth_Click">Path</GridViewColumnHeader>
-                                            </GridViewColumn>
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
-                            </Grid>
-                            <Button Content="Set Imagefolder" x:Name="bt_cinema_setimagefolder" Grid.Row="1" Grid.Column="0" Click="bt_cinema_setimagefolder_Click" />
+                        <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
+                            <RadioButton x:Name="rb_cinemaslideshowmode" Content="Slideshow Mode" Grid.Column="0" Checked="rb_slideshowmode" IsChecked="True"/>
+                            <RadioButton x:Name="rb_cinemavideomode" Content="Video Mode" Grid.Column="1" Checked="rb_videomode" Margin="5,0,0,0"/>
+                        </StackPanel>
 
-                            <Label x:Name="lab_imagepreview" Content="Current Image: " Grid.Row="1" Grid.Column="1" FontWeight="Bold"/>
-                        </Grid>
-
-                        <Grid Margin="0,5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50*"/>
-                                <ColumnDefinition Width="50*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="150"/>
-                                <RowDefinition Height="30"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0" x:Name="tb_maskinfo" TextWrapping="Wrap" Text="Instructions:                                                                Set the Maskimage by using a png image with transparent background. Draw the logo/ image with a black color. Press Set MaskImage and check in the Preview if the mask is imported correctly" FontSize="14.667"/>
-                            <Button Content="Set Maskimage" x:Name="bt_cinema_setmask" Grid.Row="1" Click="bt_cinema_setmask_Click"/>
-                            <Label x:Name="lab_maskpreview" Content="Current Mask: " Grid.Row="1" Grid.Column="1" FontWeight="Bold"/>
-                            <Image x:Name="img_maskpreview" Grid.Row="0" Grid.Column="1" Source="Resources/quaggan.jpg"/>
-
-                        </Grid>
-                        <Grid Margin="0,5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50*"/>
-                                <ColumnDefinition Width="50*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                            </Grid.RowDefinitions>
-                            <Button x:Name="bt_setmusic" Content="Set Music" Grid.Column="0" Click="bt_setmusic_Click" Grid.RowSpan="2" VerticalAlignment="Center" Height="30"/>
-                            <Label x:Name="lab_musicpath" Content="Current Music file:" Grid.Column="1" FontWeight="Bold"/>
-                            <Grid Grid.Column="2" Grid.Row="1">
+                        <StackPanel x:Name="Videomode" Visibility="Visible">
+                            <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="50*"/>
                                     <ColumnDefinition Width="50*"/>
                                 </Grid.ColumnDefinitions>
-                                <Button x:Name="bt_musicstart" Content="Test Music" Grid.Column="0" Click="bt_musicstart_Click"/>
-                                <Button x:Name="bt_musicstop" Content="Stop Music" Grid.Column="1" Click="bt_musicstop_Click"/>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="200"/>
+                                    <RowDefinition Height="40"/>
+                                </Grid.RowDefinitions>
+
+                                <StackPanel>
+                                    <Label Content="Videomode Info:" FontSize="16" FontWeight="Bold"/>
+                                    <Label Content="Videoname:"/>
+                                    <Label Content="Path:"/>
+                                    <Label Content="Resolution:"/>
+                                    <Label Content="Format:"/>
+                                    <Label Content="Length"/>
+                                </StackPanel>
+                                <MediaElement x:Name="cinema_videoplayback" Grid.Row="0" Grid.Column="1" Margin="5,0" LoadedBehavior="Manual" UnloadedBehavior="Manual"/>
+
+                                <Grid Grid.Row="1" Grid.Column="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50*"/>
+                                        <ColumnDefinition Width="50*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button x:Name="bt_cinema_videoplay" Content=">" Grid.Row="0" Grid.Column="0" Margin="5" Click="bt_cinema_videoplay_Click"/>
+                                    <Button x:Name="bt_cinema_videostop" Content="Stop" Grid.Row="0" Grid.Column="1" BorderThickness="5" Margin="5" Click="bt_cinema_videostop_Click"/>
+                                </Grid>
+                                <Button x:Name="bt_cinema_setvideo" Content="Set Video" Grid.Row="1" Margin="5" Click="bt_cinema_setvideo_Click"/>
+                            </Grid>
+                            
+                        </StackPanel>
+                        
+                        <StackPanel x:Name="Slideshow">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50*"/>
+                                    <ColumnDefinition Width="50*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="150"/>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <Label Content="Slideshow Info:" FontSize="16" FontWeight="Bold"/>
+                                
+                                <Image x:Name="img_imagepreview" Grid.Row="1" Grid.Column="1" Source="Resources/quaggan.jpg"/>
+                                <Grid Margin="0,5" Grid.Row="1">
+                                    <ListView x:Name="lv_cinema_images" Grid.Row="1" SelectionChanged="lv_cinema_images_SelectionChanged">
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
+                                                    <GridViewColumnHeader Tag="Name" Click="listview_auth_Click">Image Name</GridViewColumnHeader>
+                                                </GridViewColumn>
+                                                <GridViewColumn HeaderStringFormat=""  DisplayMemberBinding="{Binding Path}">
+                                                    <GridViewColumnHeader Tag="Path" Click="listview_auth_Click">Path</GridViewColumnHeader>
+                                                </GridViewColumn>
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </Grid>
+                                <Button Content="Set Imagefolder" x:Name="bt_cinema_setimagefolder" Grid.Row="2" Grid.Column="0" Click="bt_cinema_setimagefolder_Click" />
+
+                                <Label x:Name="lab_imagepreview" Content="Current Image: " Grid.Row="2" Grid.Column="1" FontWeight="Bold"/>
                             </Grid>
 
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50*"/>
+                                    <ColumnDefinition Width="50*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="150"/>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Grid.Column="0" x:Name="tb_maskinfo" TextWrapping="Wrap" Text="Instructions:                                                                Set the Maskimage by using a png image with transparent background. Draw the logo/ image with a black color. Press Set MaskImage and check in the Preview if the mask is imported correctly" FontSize="14.667"/>
+                                <Button Content="Set Maskimage" x:Name="bt_cinema_setmask" Grid.Row="1" Click="bt_cinema_setmask_Click"/>
+                                <Label x:Name="lab_maskpreview" Content="Current Mask: " Grid.Row="1" Grid.Column="1" FontWeight="Bold"/>
+                                <Image x:Name="img_maskpreview" Grid.Row="0" Grid.Column="1" Source="Resources/quaggan.jpg"/>
 
-                        </Grid>
+                            </Grid>
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50*"/>
+                                    <ColumnDefinition Width="50*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <Button x:Name="bt_setmusic" Content="Set Music" Grid.Column="0" Click="bt_setmusic_Click" Grid.RowSpan="2" VerticalAlignment="Center" Height="30"/>
+                                <Label x:Name="lab_musicpath" Content="Current Music file:" Grid.Column="1" FontWeight="Bold"/>
+                                <Grid Grid.Column="2" Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50*"/>
+                                        <ColumnDefinition Width="50*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button x:Name="bt_musicstart" Content="Test Music" Grid.Column="0" Click="bt_musicstart_Click"/>
+                                    <Button x:Name="bt_musicstop" Content="Stop Music" Grid.Column="1" Click="bt_musicstop_Click"/>
+                                </Grid>
+
+
+                            </Grid>
+                        </StackPanel>
+
 
                     </StackPanel>
+
                 </TabItem>
 
 
