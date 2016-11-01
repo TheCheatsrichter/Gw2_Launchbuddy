@@ -19,11 +19,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using System.IO.Compression;
-
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Gw2_Launchbuddy
 {
-    public partial class MainWindow : Window 
+    public partial class MainWindow : Window
     {
 
         ///Gw2 Launchbuddy by TheCheatsrichter 2016
@@ -59,6 +60,16 @@ namespace Gw2_Launchbuddy
         string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
         bool ismultibox = false;
 
+        private Microsoft.Win32.RegistryKey _LBRegKey = null;
+        Microsoft.Win32.RegistryKey LBRegKey
+        {
+            get
+            {
+                return Microsoft.Win32.Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("LaunchBuddy");
+            }
+            set { }
+        }
+
         AES crypt = new AES();
         AddOnManager addonmanager = new AddOnManager();
 
@@ -79,9 +90,11 @@ namespace Gw2_Launchbuddy
         {
             public string Email { get; set; }
             public string Password { get; set; }
-            public string DisplayEmail {
-                get {
-                    string tmp="";
+            public string DisplayEmail
+            {
+                get
+                {
+                    string tmp = "";
                     try
                     {
                         tmp += Email.Substring(0, 2);
@@ -100,7 +113,7 @@ namespace Gw2_Launchbuddy
             {
                 get
                 {
-                    return  "*********";
+                    return "*********";
                 }
                 set
                 {
@@ -145,49 +158,29 @@ namespace Gw2_Launchbuddy
             cinema_setup();
             LoadAddons();
             addonmanager.LaunchLbAddons();
-            
+
 
         }
 
         void cinema_setup()
         {
-            //Clunky ugly and simply lazy, I'll fix this before the release
-
             LoadCinemaSettings();
 
             cinemamode = Properties.Settings.Default.cinema_use;
-
-            if (Properties.Settings.Default.cinema_video && !Properties.Settings.Default.cinema_slideshow)
-            {
-                rb_cinemavideomode.IsChecked = true;
-
-                if (cinemamode)
-                {
-                    Cinema_Videoplayer.Visibility = Visibility.Visible;
-                    Cinema_Videoplayer.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
-                    Cinema_Videoplayer.Play();
-                }
-            }else
-            {
-                Cinema_Videoplayer.Visibility = Visibility.Hidden;
-            }
 
             if (cinemamode)
             {
                 SettingsGrid.Visibility = Visibility.Hidden;
                 myWindow.WindowState = WindowState.Maximized;
                 bt_ShowSettings.Visibility = Visibility.Visible;
-                Grid.SetColumnSpan(WindowOptionsColum, 2);
-            } else
+            }
+            else
             {
-                Cinema_Videoplayer.Stop();
-                Cinema_Videoplayer.Visibility = Visibility.Hidden;
                 SettingsGrid.Visibility = Visibility.Visible;
                 myWindow.WindowState = WindowState.Normal;
                 myWindow.Height = 680;
                 myWindow.Width = 700;
                 bt_ShowSettings.Visibility = Visibility.Hidden;
-                Grid.SetColumnSpan(WindowOptionsColum, 1);
             }
         }
 
@@ -471,7 +464,7 @@ namespace Gw2_Launchbuddy
                             noKeep.Add("-exit");
                             noKeep.Add("-allowinstall");
                             noKeep.Add("-exit");
-                          
+
 
                             foreach (Match parameter in matchList)
                             {
@@ -612,11 +605,13 @@ namespace Gw2_Launchbuddy
 
         private void bt_launch_Click(object sender, RoutedEventArgs e)
         {
-            //Checking for existing Gw2 instances
-            if (Process.GetProcesses().ToList().Where(a => !nomutexpros.Contains(a.Id) && a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).Any())
+            //Checking for existing Gw2 instances. Do not continue until closed.
+            //if (Process.GetProcesses().ToList().Where(a => !nomutexpros.Contains(a.Id) && a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).Any())
+            if (!checkRegClients())
             {
-                MessageBox.Show("One or more instances of Gw2 is allready running!\n If that instance was not launched with -shareArchive (when launched with gw2 launchbuddy this argument gets added automatically) then additional instances will crash!");
-                HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
+                MessageBox.Show("At least once instance of Guild Wars is running that was not opened by LaunchBuddy. That instance will need to be closed.");
+                return;
+                //HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
             }
 
             //Launching the application with arguments
@@ -639,6 +634,28 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show("One or more AddOns could not be launched.\n" + err.Message);
             }
         }
+        bool checkRegClients()
+        {
+            return RegClients();
+        }
+        bool updateRegClients(string created)
+        {
+            return RegClients(created);
+        }
+        bool RegClients(string created = null)
+        {
+            var key = LBRegKey;
+            var listClients = ((string[])key.GetValue("Clients")).ToList();
+            var gw2Procs = Process.GetProcesses().ToList().Where(a => a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).ToList().ConvertAll<string>(new Converter<Process, string>(procMD5));
+            var running = gw2Procs.Count();
+            var temp = listClients.Where(a => !gw2Procs.Contains(a)).ToList();
+            foreach (var t in temp) listClients.Remove(t);
+            if (created != null) listClients.Add(created);
+            key.SetValue("Clients", listClients.ToArray(), Microsoft.Win32.RegistryValueKind.MultiString);
+            var logged = listClients.Count();
+            key.Close();
+            return running == logged;
+        }
 
         void launchgw2(int accnr)
         {
@@ -646,7 +663,7 @@ namespace Gw2_Launchbuddy
             {
                 ProcessStartInfo gw2proinfo = new ProcessStartInfo();
                 gw2proinfo.FileName = exepath + exename;
-                gw2proinfo.Arguments = getarguments(accnr,false);
+                gw2proinfo.Arguments = getarguments(accnr, false);
                 gw2proinfo.WorkingDirectory = exepath;
                 Process gw2pro = new Process { StartInfo = gw2proinfo };
 
@@ -661,8 +678,10 @@ namespace Gw2_Launchbuddy
                 try
                 {
                     gw2pro.WaitForInputIdle(10000);
-                    Thread.Sleep(100);
+                    Thread.Sleep(1000);
                     HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
+                    //Register the new client to prevent problems.
+                    updateRegClients(procMD5(gw2pro));
                 }
                 catch (Exception err)
                 {
@@ -717,7 +736,7 @@ namespace Gw2_Launchbuddy
                 string shortcutLocation = System.IO.Path.Combine(shortcutPath, shortcutName + ".lnk");
                 WshShell shell = new WshShell();
                 IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
-                string arguments = getarguments(0,false);
+                string arguments = getarguments(0, false);
                 shortcut.IconLocation = Assembly.GetExecutingAssembly().Location;
                 shortcut.Description = "Created with Gw2 Launchbuddy, © TheCheatsrichter";
 
@@ -973,7 +992,7 @@ namespace Gw2_Launchbuddy
 
         void SaveAddons()
         {
-            addonmanager.SaveAddons(AppdataPath+"Addons.xml");
+            addonmanager.SaveAddons(AppdataPath + "Addons.xml");
         }
 
         void LoadAddons()
@@ -985,9 +1004,9 @@ namespace Gw2_Launchbuddy
         {
             if (IsValidEmail(tb_email.Text))
             {
-                if (tb_passw.Text.Length > 4)
+                if (tb_passw.Password.Length > 4)
                 {
-                    Account acc = new Account { Nick = tb_nick.Text, Email = tb_email.Text, Password = tb_passw.Text, Time = DateTime.Now };
+                    Account acc = new Account { Nick = tb_nick.Text, Email = tb_email.Text, Password = tb_passw.Password, Time = DateTime.Now };
                     accountlist.Add(acc);
                     listview_acc.ItemsSource = accountlist;
                     tb_email.Clear();
@@ -1187,7 +1206,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        private string getarguments(int accnr,bool hideaccdata)
+        private string getarguments(int accnr, bool hideaccdata)
         {
             //Gathers all arguments and returns them as single string
 
@@ -1297,7 +1316,7 @@ namespace Gw2_Launchbuddy
 
                 string usedaddons = "";
 
-                if (lv_AddOns.ItemsSource!=null)
+                if (lv_AddOns.ItemsSource != null)
                 {
                     foreach (AddOn addon in lv_AddOns.ItemsSource)
                     {
@@ -1305,7 +1324,7 @@ namespace Gw2_Launchbuddy
                     }
                     lab_usedaddons.Content = "Used AddOns: " + usedaddons;
                 }
-                
+
             }
         }
 
@@ -1337,7 +1356,7 @@ namespace Gw2_Launchbuddy
         private void bt_AddAddon_Click(object sender, RoutedEventArgs e)
         {
             string[] args = Regex.Matches(tb_AddonArgs.Text, "-\\w* ?(\".*\")?").Cast<Match>().Select(m => m.Value).ToArray();
-            addonmanager.Add(tb_AddonName.Text,args,(bool)cb_AddonMultilaunch.IsChecked,(bool)cb_AddonOnLB.IsChecked);
+            addonmanager.Add(tb_AddonName.Text, args, (bool)cb_AddonMultilaunch.IsChecked, (bool)cb_AddonOnLB.IsChecked);
             lv_AddOns.ItemsSource = addonmanager.AddOns;
         }
 
@@ -1350,12 +1369,13 @@ namespace Gw2_Launchbuddy
         private void bt_cinema_setimagefolder_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog folderdialog = new System.Windows.Forms.FolderBrowserDialog();
+            folderdialog.ShowDialog();
+            lv_cinema_images.Items.Clear();
+            lv_cinema_images.SelectedIndex = -1;
+            lab_imagepreview.Content = "Current Image:";
 
-            if (System.Windows.Forms.DialogResult.OK == folderdialog.ShowDialog())
+            if (folderdialog.SelectedPath != "")
             {
-                lv_cinema_images.SelectedIndex = -1;
-                lv_cinema_images.Items.Clear();
-                lab_imagepreview.Content = "Current Image:";
                 var files = Directory.GetFiles(folderdialog.SelectedPath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp"));
                 ObservableCollection<CinemaImage> images = new ObservableCollection<CinemaImage>();
                 foreach (var file in files)
@@ -1417,7 +1437,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        bool IsValidPath (string path)
+        bool IsValidPath(string path)
         {
             try
             {
@@ -1476,7 +1496,7 @@ namespace Gw2_Launchbuddy
         private void bt_cinema_Click(object sender, RoutedEventArgs e)
         {
             cinemamode = !Properties.Settings.Default.cinema_use;
-            Properties.Settings.Default.cinema_use=cinemamode;
+            Properties.Settings.Default.cinema_use = cinemamode;
             Properties.Settings.Default.Save();
             cinema_setup();
         }
@@ -1486,75 +1506,12 @@ namespace Gw2_Launchbuddy
             if (SettingsGrid.Visibility == Visibility.Hidden)
             {
                 SettingsGrid.Visibility = Visibility.Visible;
-            }else
+            }
+            else
             {
                 SettingsGrid.Visibility = Visibility.Hidden;
             }
-            
-        }
 
-
-        private void rb_slideshowmode(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Videomode.Visibility = Visibility.Collapsed;
-                Slideshow.Visibility = Visibility.Visible;
-                Properties.Settings.Default.cinema_video = false;
-                Properties.Settings.Default.cinema_slideshow = true;
-                Properties.Settings.Default.Save();
-            }
-            catch
-            {
-
-            }
-        }
-
-        private void rb_videomode(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Slideshow.Visibility = Visibility.Collapsed;
-                Videomode.Visibility = Visibility.Visible;
-                Properties.Settings.Default.cinema_video = true;
-                Properties.Settings.Default.cinema_slideshow = false;
-                Properties.Settings.Default.Save();
-            }
-            catch
-            {
-                
-            }
-        }
-
-        private void bt_cinema_setvideo_Click(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
-            filedialog.DefaultExt = "mp4";
-            filedialog.Multiselect = false;
-            filedialog.Filter = "Mp4 Files(*.mp4) | *.mp4";
-            System.Windows.Forms.DialogResult result = filedialog.ShowDialog();
-
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                cinema_videoplayback.Source = new Uri(filedialog.FileName,UriKind.Relative);
-                Properties.Settings.Default.cinema_videopath = filedialog.FileName;
-            }
-        }
-
-        private void bt_cinema_videoplay_Click(object sender, RoutedEventArgs e)
-        {
-            if (cinema_videoplayback.Source != null)
-            {
-                cinema_videoplayback.Play();
-            }
-        }
-
-        private void bt_cinema_videostop_Click(object sender, RoutedEventArgs e)
-        {
-            if (cinema_videoplayback.Source != null)
-            {
-                cinema_videoplayback.Stop();
-            }
         }
 
         private void listview_assets_Click(object sender, RoutedEventArgs e)
@@ -1579,10 +1536,29 @@ namespace Gw2_Launchbuddy
         }
 
 
+        public string CalculateMD5(string input)
+        {
+            var md5 = MD5.Create();
+            var inputBytes = Encoding.ASCII.GetBytes(input);
+            var hash = md5.ComputeHash(inputBytes);
 
-        //####################################################################################
-        //Old Handle method functions
-        //####################################################################################
+            var sb = new StringBuilder();
+
+            for (int i = 0; i < hash.Length; i++)
+                sb.Append(hash[i].ToString("X2"));
+
+            return sb.ToString();
+        }
+
+        public string procMD5(Process proc)
+        {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("Start: " + proc.StartTime + " ID: " + proc.Id + " MD5: " + CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString()));
+#endif
+            return CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString());
+        }
+
+        #region Old Handle Method Functions
         void checksetup()
         {
             try
@@ -1604,7 +1580,6 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show(e.Message);
             }
         }
-
 
         void gethandleexe()
         {
@@ -1665,12 +1640,7 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show(e.Message);
             }
         }
-
-        //####################################################################################
-        //Old Handle method functions END
-        //####################################################################################
-
-
+        #endregion
     }
 
     public class SortAdorner : Adorner
@@ -1714,5 +1684,5 @@ namespace Gw2_Launchbuddy
     }
 
 
-   
+
 }
