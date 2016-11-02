@@ -998,6 +998,7 @@ namespace Gw2_Launchbuddy
                         }
 
                         listview_acc.ItemsSource = accountlist;
+                        Cinema_Accountlist.ItemsSource = accountlist;
                     }
                 }
 
@@ -1578,8 +1579,22 @@ namespace Gw2_Launchbuddy
             {
                 cinema_videoplayback.Source = new Uri(filedialog.FileName,UriKind.Relative);
                 Properties.Settings.Default.cinema_videopath = filedialog.FileName;
+                SetVideoInfo();
+                cinema_videoplayback.Play();
             }
         }
+
+        void SetVideoInfo()
+        {
+            string videopath = Properties.Settings.Default.cinema_videopath;
+
+            lab_videoname.Content = "Name: " + Path.GetFileNameWithoutExtension(videopath);
+            lab_videopath.Content = "Path: " + Path.GetFullPath(videopath);
+            lab_videoformat.Content = "Format: " + Path.GetExtension(videopath);
+            lab_videoresolution.Content = "Resolution: " + cinema_videoplayback.NaturalVideoWidth + " x " + cinema_videoplayback.NaturalVideoHeight;
+            lab_videolength.Content = "Length: " + cinema_videoplayback.NaturalDuration.ToString();
+        }
+
 
         private void bt_cinema_videoplay_Click(object sender, RoutedEventArgs e)
         {
@@ -1618,6 +1633,32 @@ namespace Gw2_Launchbuddy
             return bitmap;
         }
 
+        private void cinema_videoplayback_Loaded(object sender, RoutedEventArgs e)
+        {
+            SetVideoInfo();
+        }
+
+        private void cinema_videoplayback_MediaOpened(object sender, RoutedEventArgs e)
+        {
+            SetVideoInfo();
+        }
+
+        private void Cinema_Launchaccount_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            if (SettingsGrid.Visibility == Visibility.Hidden)
+            {
+                SettingsGrid.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                SettingsGrid.Visibility = Visibility.Hidden;
+            }
+        }
 
         public string CalculateMD5(string input)
         {
@@ -1635,9 +1676,9 @@ namespace Gw2_Launchbuddy
 
         public string procMD5(Process proc)
         {
-#if DEBUG
+            #if DEBUG
             System.Diagnostics.Debug.WriteLine("Start: " + proc.StartTime + " ID: " + proc.Id + " MD5: " + CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString()));
-#endif
+            #endif
             return CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString());
         }
 
