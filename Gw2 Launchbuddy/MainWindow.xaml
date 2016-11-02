@@ -38,7 +38,7 @@
             <RowDefinition x:Name="CinemaHeight" Height="100*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" HorizontalAlignment="Left">
-            <Label Content="Gw2 Launchbuddy V1.3 BETA" FontSize="16" FontWeight="Bold"/>  
+            <Label Content="Gw2 Launchbuddy V1.3 BETA" FontSize="16" FontWeight="Bold"/>
         </StackPanel>
 
         <MediaElement x:Name="Cinema_Videoplayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual"/>
@@ -129,26 +129,26 @@
                                         </Style.Triggers>
                                     </Style>
                                 </ListBox.Resources>
-                                <CheckBox Content="-32" Margin="5,0,0,0"/>
-                                <CheckBox Content="-repair" Margin="5,0,0,0"/>
-                                <CheckBox Content="-bmp" Margin="5,0,0,0"/>
-                                <CheckBox Content="-diag" Margin="5,0,0,0"/>
-                                <CheckBox Content="-dx9single" Margin="5,0,0,0"/>
-                                <CheckBox Content="-forwardrenderer" Margin="5,0,0,0"/>
-                                <CheckBox Content="-image" Margin="5,0,0,0"/>
-                                <CheckBox Content="-log" Margin="5,0,0,0"/>
-                                <CheckBox Content="-maploadinfo" Margin="5,0,0,0"/>
-                                <CheckBox Content="-mce" Margin="5,0,0,0"/>
-                                <CheckBox Content="-nomusic" Margin="5,0,0,0"/>
-                                <CheckBox Content="-noui" Margin="5,0,0,0"/>
-                                <CheckBox Content="-nosound" Margin="5,0,0,0"/>
-                                <CheckBox Content="-prefreset" Margin="5,0,0,0"/>
-                                <CheckBox Content="-uispanallmonitors" Margin="5,0,0,0"/>
-                                <CheckBox Content="-uninstall" Margin="5,0,0,0"/>
-                                <CheckBox Content="-useOldFov" Margin="5,0,0,0"/>
-                                <CheckBox Content="-verify" Margin="5,0,0,0"/>
-                                <CheckBox Content="-umbra gpu" Margin="5,0,0,0"/>
-                                <CheckBox Content="-windowed" Margin="5,0,0,0"/>
+                                <CheckBox Content="-32" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-repair" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-bmp" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-diag" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-dx9single" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-forwardrenderer" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-image" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-log" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-maploadinfo" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-mce" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-nomusic" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-noui" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-nosound" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-prefreset" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-uispanallmonitors" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-uninstall" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-useOldFov" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-verify" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-umbra" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-windowed" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
                             </ListBox>
                             <Label x:Name="lab_descr" Content="Description (Wiki):"  FontSize="16" FontWeight="Bold"  Grid.Column="1"/>
                             <TextBlock x:Name="textblock_descr" TextWrapping="Wrap" FontSize="13.333" Grid.Row="1" Grid.Column="1" Margin="5,0"/>
@@ -207,10 +207,10 @@
                         <Grid.RowDefinitions>
 
                             <RowDefinition Height="30"/>
-                            <RowDefinition Height="105*"/>
+                            <RowDefinition/>
                             <RowDefinition Height="40"/>
                             <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
                         <TextBox x:Name="tb_authport" IsEnabled="False" Grid.Column="2" Grid.Row="3" LostKeyboardFocus="tb_authport_LostKeyboardFocus" VerticalAlignment="Center" FontWeight="Normal"/>
@@ -355,9 +355,9 @@
                                 </Grid>
                                 <Button x:Name="bt_cinema_setvideo" Content="Set Video" Grid.Row="1" Margin="5" Click="bt_cinema_setvideo_Click"/>
                             </Grid>
-                            
+
                         </StackPanel>
-                        
+
                         <StackPanel x:Name="Slideshow">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -370,7 +370,7 @@
                                     <RowDefinition Height="30"/>
                                 </Grid.RowDefinitions>
                                 <Label Content="Slideshow Info:" FontSize="16" FontWeight="Bold"/>
-                                
+
                                 <Image x:Name="img_imagepreview" Grid.Row="1" Grid.Column="1" Source="Resources/quaggan.jpg"/>
                                 <Grid Margin="0,5" Grid.Row="1">
                                     <ListView x:Name="lv_cinema_images" Grid.Row="1" SelectionChanged="lv_cinema_images_SelectionChanged">
@@ -445,11 +445,11 @@
 
 
     </Grid>
-    
-    
-    
 
-   
+
+
+
+
 
 
 </Window>

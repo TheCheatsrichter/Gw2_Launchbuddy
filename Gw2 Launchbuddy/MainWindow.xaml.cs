@@ -19,8 +19,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using System.IO.Compression;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Gw2_Launchbuddy
 {
@@ -49,26 +47,11 @@ namespace Gw2_Launchbuddy
         ObservableCollection<Server> authlist = new ObservableCollection<Server>();
         ObservableCollection<Account> accountlist = new ObservableCollection<Account>();
 
-        Server selected_authsv = new Server();
-        Server selected_assetsv = new Server();
-
-        List<Account> selected_accs = new List<Account>();
         List<int> nomutexpros = new List<int>();
         List<string> noKeep = new List<string>();
 
-        string exepath, exename, unlockerpath, version_client, version_api;
         string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
         bool ismultibox = false;
-
-        private Microsoft.Win32.RegistryKey _LBRegKey = null;
-        Microsoft.Win32.RegistryKey LBRegKey
-        {
-            get
-            {
-                return Microsoft.Win32.Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("LaunchBuddy");
-            }
-            set { }
-        }
 
         AES crypt = new AES();
         AddOnManager addonmanager = new AddOnManager();
@@ -158,8 +141,6 @@ namespace Gw2_Launchbuddy
             cinema_setup();
             LoadAddons();
             addonmanager.LaunchLbAddons();
-
-
         }
 
         void cinema_setup()
@@ -180,7 +161,8 @@ namespace Gw2_Launchbuddy
                     Cinema_Videoplayer.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
                     Cinema_Videoplayer.Play();
                 }
-            }else
+            }
+            else
             {
                 Cinema_Videoplayer.Visibility = Visibility.Hidden;
             }
@@ -191,7 +173,8 @@ namespace Gw2_Launchbuddy
                 myWindow.WindowState = WindowState.Maximized;
                 bt_ShowSettings.Visibility = Visibility.Visible;
                 Grid.SetColumnSpan(WindowOptionsColum, 2);
-            } else
+            }
+            else
             {
                 Cinema_Videoplayer.Stop();
                 Cinema_Videoplayer.Visibility = Visibility.Hidden;
@@ -222,11 +205,11 @@ namespace Gw2_Launchbuddy
                         }
                     }));
                 }
-                string versioninfo = "Build Version: " + version_client;
+                string versioninfo = "Build Version: " + Globals.version_client;
 
                 Dispatcher.Invoke(new Action(() =>
                 {
-                    if (version_api == version_client)
+                    if (Globals.version_api == Globals.version_client)
                     {
                         versioninfo += "\tStatus: up to date!";
                         lab_version.Foreground = new SolidColorBrush(Colors.Green);
@@ -251,16 +234,16 @@ namespace Gw2_Launchbuddy
         {
             WebClient downloader = new WebClient();
             Regex filter = new Regex(@"\d*\d");
-            version_api = filter.Match(downloader.DownloadString("https://api.guildwars2.com/v2/build")).Value;
+            Globals.version_api = filter.Match(downloader.DownloadString("https://api.guildwars2.com/v2/build")).Value;
 
-            if (version_api == version_client) return true;
+            if (Globals.version_api == Globals.version_client) return true;
             return false;
         }
 
         void updateclient()
         {
             Process progw2 = new Process();
-            ProcessStartInfo infoprogw2 = new ProcessStartInfo { FileName = exepath + exename, Arguments = "-image" };
+            ProcessStartInfo infoprogw2 = new ProcessStartInfo { FileName = Globals.exepath + Globals.exename, Arguments = "-image" };
             progw2.StartInfo = infoprogw2;
             progw2.Start();
             progw2.WaitForExit();
@@ -398,7 +381,7 @@ namespace Gw2_Launchbuddy
             {
                 try
                 {
-                    unlockerpath = Properties.Settings.Default.reshadepath;
+                    Globals.unlockerpath = Properties.Settings.Default.reshadepath;
                 }
                 catch { }
                 cb_reshade.IsEnabled = true;
@@ -449,21 +432,21 @@ namespace Gw2_Launchbuddy
                     {
                         case "VERSIONNAME":
                             Regex filter = new Regex(@"\d*\d");
-                            version_client = filter.Match(getvalue(reader)).Value;
-                            lab_version.Content = "Client Version: " + version_client;
+                            Globals.version_client = filter.Match(getvalue(reader)).Value;
+                            lab_version.Content = "Client Version: " + Globals.version_client;
                             break;
 
 
                         case "INSTALLPATH":
 
-                            exepath = getvalue(reader);
-                            lab_path.Content = "Install Path: " + exepath;
+                            Globals.exepath = getvalue(reader);
+                            lab_path.Content = "Install Path: " + Globals.exepath;
                             break;
 
                         case "EXECUTABLE":
 
-                            exename = getvalue(reader);
-                            lab_path.Content += exename;
+                            Globals.exename = getvalue(reader);
+                            lab_path.Content += Globals.exename;
                             break;
 
                         case "EXECCMD":
@@ -568,9 +551,9 @@ namespace Gw2_Launchbuddy
             // UI Handling for selected Asset Server
             if (listview_assets.Items.Count != 0)
             {
-                selected_assetsv = (Server)listview_assets.SelectedItem;
-                tb_assetsport.Text = selected_assetsv.Port;
-                checkb_assets.Content = "Use Assets Server : " + selected_assetsv.IP;
+                Globals.selected_assetsv = (Server)listview_assets.SelectedItem;
+                tb_assetsport.Text = Globals.selected_assetsv.Port;
+                checkb_assets.Content = "Use Assets Server : " + Globals.selected_assetsv.IP;
                 checkb_assets.IsEnabled = true;
             }
             else
@@ -583,11 +566,11 @@ namespace Gw2_Launchbuddy
             // UI Handling for selected Auth Server
             if (listview_auth.Items.Count != 0)
             {
-                selected_authsv = (Server)listview_auth.SelectedItem;
+                Globals.selected_authsv = (Server)listview_auth.SelectedItem;
 
-                tb_authport.Text = selected_authsv.Port;
+                tb_authport.Text = Globals.selected_authsv.Port;
 
-                checkb_auth.Content = "Use Authentication Server : " + selected_authsv.IP;
+                checkb_auth.Content = "Use Authentication Server : " + Globals.selected_authsv.IP;
                 checkb_auth.IsEnabled = true;
             }
             else
@@ -600,15 +583,14 @@ namespace Gw2_Launchbuddy
         {
             lab_port_auth.IsEnabled = true;
             tb_authport.IsEnabled = true;
-            tb_authport.Text = selected_authsv.Port;
-
+            tb_authport.Text = Globals.selected_authsv.Port;
         }
 
         private void checkb_assets_Checked(object sender, RoutedEventArgs e)
         {
             lab_port_assets.IsEnabled = true;
             tb_assetsport.IsEnabled = true;
-            tb_assetsport.Text = selected_assetsv.Port;
+            tb_assetsport.Text = Globals.selected_assetsv.Port;
 
         }
         private void checkb_auth_Unchecked(object sender, RoutedEventArgs e)
@@ -625,108 +607,8 @@ namespace Gw2_Launchbuddy
 
         private void bt_launch_Click(object sender, RoutedEventArgs e)
         {
-            //Checking for existing Gw2 instances. Do not continue until closed.
-            //if (Process.GetProcesses().ToList().Where(a => !nomutexpros.Contains(a.Id) && a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).Any())
-            if (!checkRegClients())
-            {
-                MessageBox.Show("At least once instance of Guild Wars is running that was not opened by LaunchBuddy. That instance will need to be closed.");
-                return;
-                //HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
-            }
-
-            //Launching the application with arguments
-            if (ismultibox)
-            {
-                for (int i = 0; i <= selected_accs.Count - 1; i++) launchgw2(i);
-            }
-            else
-            {
-                launchgw2(0);
-            }
-
-            //Launching AddOns
-            try
-            {
-                addonmanager.LaunchAll();
-            }
-            catch (Exception err)
-            {
-                MessageBox.Show("One or more AddOns could not be launched.\n" + err.Message);
-            }
-        }
-        bool checkRegClients()
-        {
-            return RegClients();
-        }
-        bool updateRegClients(string created)
-        {
-            return RegClients(created);
-        }
-        bool RegClients(string created = null)
-        {
-            var key = LBRegKey;
-            var listClients = ((string[])key.GetValue("Clients")).ToList();
-            var gw2Procs = Process.GetProcesses().ToList().Where(a => a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).ToList().ConvertAll<string>(new Converter<Process, string>(procMD5));
-            var running = gw2Procs.Count();
-            var temp = listClients.Where(a => !gw2Procs.Contains(a)).ToList();
-            foreach (var t in temp) listClients.Remove(t);
-            if (created != null) listClients.Add(created);
-            key.SetValue("Clients", listClients.ToArray(), Microsoft.Win32.RegistryValueKind.MultiString);
-            var logged = listClients.Count();
-            key.Close();
-            return running == logged;
-        }
-
-        void launchgw2(int accnr)
-        {
-            try
-            {
-                ProcessStartInfo gw2proinfo = new ProcessStartInfo();
-                gw2proinfo.FileName = exepath + exename;
-                gw2proinfo.Arguments = getarguments(accnr, false);
-                gw2proinfo.WorkingDirectory = exepath;
-                Process gw2pro = new Process { StartInfo = gw2proinfo };
-
-                try
-                {
-                    gw2pro.Start();
-                }
-                catch (Exception err)
-                {
-                    System.Windows.MessageBox.Show("Could not launch Gw2. Invalid path?\n" + err.Message);
-                }
-                try
-                {
-                    gw2pro.WaitForInputIdle(10000);
-                    Thread.Sleep(1000);
-                    HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
-                    //Register the new client to prevent problems.
-                    updateRegClients(procMD5(gw2pro));
-                }
-                catch (Exception err)
-                {
-                    MessageBox.Show(err.Message);
-                }
-
-                if (cb_reshade.IsChecked == true)
-                {
-                    try
-                    {
-                        ProcessStartInfo unlockerpro = new ProcessStartInfo();
-                        unlockerpro.FileName = unlockerpath;
-                        unlockerpro.WorkingDirectory = Path.GetDirectoryName(unlockerpath);
-                        Process.Start(unlockerpro);
-                    }
-                    catch (Exception err)
-                    {
-                        MessageBox.Show("Could not launch ReshadeUnlocker. Invalid path?\n" + err.Message);
-                    }
-                }
-            }
-            catch (Exception err)
-            {
-                MessageBox.Show(err.Message);
-            }
+            UpdateServerArgs();
+            LaunchManager.launch_click();
         }
 
         private void bt_installpath_Click(object sender, RoutedEventArgs e)
@@ -741,9 +623,9 @@ namespace Gw2_Launchbuddy
 
             if (filedialog.FileName != "")
             {
-                exepath = Path.GetDirectoryName(filedialog.FileName) + @"\";
-                exename = Path.GetFileName(filedialog.Fi‌​leName);
-                lab_path.Content = exepath + exename;
+                Globals.exepath = Path.GetDirectoryName(filedialog.FileName) + @"\";
+                Globals.exename = Path.GetFileName(filedialog.Fi‌​leName);
+                lab_path.Content = Globals.exepath + Globals.exename;
                 //Gw2_Launchbuddy.Properties.Settings.Default.reshadepath = exename;
             }
         }
@@ -756,7 +638,7 @@ namespace Gw2_Launchbuddy
                 string shortcutLocation = System.IO.Path.Combine(shortcutPath, shortcutName + ".lnk");
                 WshShell shell = new WshShell();
                 IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
-                string arguments = getarguments(0, false);
+                string arguments = Globals.args.Print(0);
                 shortcut.IconLocation = Assembly.GetExecutingAssembly().Location;
                 shortcut.Description = "Created with Gw2 Launchbuddy, © TheCheatsrichter";
 
@@ -764,7 +646,7 @@ namespace Gw2_Launchbuddy
                 {
                     // Using commandline to launch both exe files from the link file
                     // EXAMPLE: cmd.exe /c start "" "C:\Program Files (x86)\Guild Wars 2\ReshadeUnlocker" && start "" "C:\Program Files (x86)\Guild Wars 2\Gw2"
-                    shortcut.Arguments = " /c start \"\" \"" + unlockerpath + "\" && start \"\" \"" + exepath + exename + "\" " + arguments;
+                    shortcut.Arguments = " /c start \"\" \"" + Globals.unlockerpath + "\" && start \"\" \"" + Globals.exepath + Globals.exename + "\" " + arguments;
                     MessageBox.Show(shortcut.Arguments);
                     shortcut.TargetPath = "cmd.exe"; // win will automatically extend this to the cmd path
                     shortcut.Save();
@@ -782,7 +664,7 @@ namespace Gw2_Launchbuddy
                     dynamicinfo += arg + "\n\t\t";
                 }
 
-                System.Windows.MessageBox.Show("Custom Launcher created at : " + exepath + "\nUse ReshadeUnlocker: " + cb_reshade.IsChecked.ToString() + "\nUsed arguments:" + dynamicinfo);
+                System.Windows.MessageBox.Show("Custom Launcher created at : " + Globals.exepath + "\nUse ReshadeUnlocker: " + cb_reshade.IsChecked.ToString() + "\nUsed arguments:" + dynamicinfo);
             }
             catch (Exception err)
             {
@@ -898,7 +780,7 @@ namespace Gw2_Launchbuddy
             {
                 try
                 {
-                    CreateShortcut("Gw2_Launcher_" + selected_accs[0].Nick, exepath, exepath + exename);
+                    CreateShortcut("Gw2_Launcher_" + Globals.selected_accs[0].Nick, Globals.exepath, Globals.exepath + Globals.exename);
                 }
                 catch (Exception err)
                 {
@@ -907,11 +789,11 @@ namespace Gw2_Launchbuddy
             }
             else
             {
-                CreateShortcut("Gw2_Custom_Launcher", exepath, exepath + exename);
+                CreateShortcut("Gw2_Custom_Launcher", Globals.exepath, Globals.exepath + Globals.exename);
             }
             try
             {
-                Process.Start(exepath);
+                Process.Start(Globals.exepath);
             }
             catch (Exception err)
             {
@@ -1081,7 +963,7 @@ namespace Gw2_Launchbuddy
 
         private void listview_acc_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            selected_accs = listview_acc.SelectedItems.Cast<Account>().ToList();
+            Globals.selected_accs = listview_acc.SelectedItems.Cast<Account>().ToList();
 
             Properties.Settings.Default.selected_acc = listview_acc.SelectedIndex;
             Properties.Settings.Default.Save();
@@ -1090,8 +972,8 @@ namespace Gw2_Launchbuddy
             {
                 var selectedItems = (dynamic)listview_acc.SelectedItems;
                 cb_login.Content = "Use Autologin : " + selectedItems[0].Email;
-                selected_accs[0].Email = selectedItems[0].Email;
-                selected_accs[0].Password = selectedItems[0].Password;
+                Globals.selected_accs[0].Email = selectedItems[0].Email;
+                Globals.selected_accs[0].Password = selectedItems[0].Password;
                 bt_shortcut.IsEnabled = true;
                 ismultibox = false;
             }
@@ -1100,8 +982,8 @@ namespace Gw2_Launchbuddy
             {
                 var selectedItem = (dynamic)listview_acc.SelectedItem;
                 cb_login.Content = "Use Autologin (Multiboxing): " + listview_acc.SelectedItems.Count + " Accounts selected";
-                selected_accs[0].Email = selectedItem.Email;
-                selected_accs[0].Password = selectedItem.Password;
+                Globals.selected_accs[0].Email = selectedItem.Email;
+                Globals.selected_accs[0].Password = selectedItem.Password;
                 bt_shortcut.IsEnabled = false;
                 ismultibox = true;
             }
@@ -1128,11 +1010,11 @@ namespace Gw2_Launchbuddy
 
         private void bt_quaggan_Click(object sender, RoutedEventArgs e)
         {
-            if (exepath != "")
+            if (Globals.exepath != "")
             {
                 Clientfix clientfix = new Clientfix();
-                clientfix.exepath = exepath;
-                clientfix.exename = exename;
+                clientfix.exepath = Globals.exepath;
+                clientfix.exename = Globals.exename;
                 clientfix.Show();
             }
             else
@@ -1144,12 +1026,12 @@ namespace Gw2_Launchbuddy
 
         private void tb_authport_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
-            selected_authsv.Port = tb_authport.Text;
+            Globals.selected_authsv.Port = tb_authport.Text;
         }
 
         private void tb_assetsport_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
-            selected_assetsv.Port = tb_assetsport.Text;
+            Globals.selected_assetsv.Port = tb_assetsport.Text;
         }
 
         private void cb_reshade_Unchecked(object sender, RoutedEventArgs e)
@@ -1171,9 +1053,9 @@ namespace Gw2_Launchbuddy
             }
             else
             {
-                unlockerpath = filedialog.FileName;
+                Globals.unlockerpath = filedialog.FileName;
                 cb_reshade.IsEnabled = true;
-                Gw2_Launchbuddy.Properties.Settings.Default.reshadepath = unlockerpath;
+                Gw2_Launchbuddy.Properties.Settings.Default.reshadepath = Globals.unlockerpath;
             }
         }
 
@@ -1200,10 +1082,10 @@ namespace Gw2_Launchbuddy
 
         private void cb_reshade_Checked(object sender, RoutedEventArgs e)
         {
-            if (!System.IO.File.Exists(unlockerpath))
+            if (!System.IO.File.Exists(Globals.unlockerpath))
             {
                 cb_reshade.IsChecked = false;
-                MessageBox.Show("Reshade Unlocker exe not found at :\n" + exepath + "\nPlease select the ReshadeUnlocker.exe manually!");
+                MessageBox.Show("Reshade Unlocker exe not found at :\n" + Globals.exepath + "\nPlease select the ReshadeUnlocker.exe manually!");
                 System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
                 filedialog.DefaultExt = "exe";
                 filedialog.Multiselect = false;
@@ -1216,66 +1098,14 @@ namespace Gw2_Launchbuddy
                 }
                 else
                 {
-                    unlockerpath = filedialog.FileName;
+                    Globals.unlockerpath = filedialog.FileName;
                     try
                     {
-                        Gw2_Launchbuddy.Properties.Settings.Default.reshadepath = unlockerpath;
+                        Gw2_Launchbuddy.Properties.Settings.Default.reshadepath = Globals.unlockerpath;
                     }
                     catch { }
                 }
             }
-        }
-
-        private string getarguments(int accnr, bool hideaccdata)
-        {
-            //Gathers all arguments and returns them as single string
-
-            string arguments = " -shareArchive";
-
-            if (checkb_assets.IsChecked == true)
-            {
-                arguments += " -assetsrv " + selected_assetsv.IP + ":" + tb_assetsport.Text;
-            }
-
-            if (checkb_auth.IsChecked == true)
-            {
-                arguments += " -authsrv " + selected_authsv.IP + ":" + tb_authport.Text;
-            }
-
-            if (checkb_clientport.IsChecked == true)
-            {
-                arguments += " -clientport " + tb_clientport.Text;
-            }
-
-            foreach (System.Windows.Controls.CheckBox entry in arglistbox.Items)
-            {
-                if (entry.IsChecked == true)
-                {
-                    arguments += " " + entry.Content;
-                }
-            }
-
-            try
-            {
-                if (cb_login.IsChecked == true && hideaccdata)
-                {
-                    arguments += " -Autologin ";
-                }
-
-                if (cb_login.IsChecked == true && !hideaccdata)
-                {
-                    if (selected_accs[accnr].Email != null && selected_accs[accnr].Password != null)
-                    {
-                        arguments += " -nopatchui -email \"" + selected_accs[accnr].Email + "\" -password \"" + selected_accs[accnr].Password + "\" ";
-                    }
-                }
-            }
-            catch
-            {
-                //MessageBox.Show("No Account selected! Launching without autologin.");
-            }
-
-            return arguments;
         }
 
         void sortbycolum(ListView list, object sender)
@@ -1332,34 +1162,13 @@ namespace Gw2_Launchbuddy
         {
             if (e.Source is TabControl)
             {
-                lab_currentsetup.Content = "Current Setup:" + getarguments(0, true);
-
-                string usedaddons = "";
-
-                if (lv_AddOns.ItemsSource != null)
-                {
-                    foreach (AddOn addon in lv_AddOns.ItemsSource)
-                    {
-                        usedaddons += addon.Name + " ";
-                    }
-                    lab_usedaddons.Content = "Used AddOns: " + usedaddons;
-                }
-
+                RefreshUI();
             }
         }
 
         private void tab_options_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            lab_currentsetup.Content = "Current Setup:" + getarguments(0, true);
-            string usedaddons = "";
-            if (lv_AddOns.ItemsSource != null)
-            {
-                foreach (AddOn addon in lv_AddOns.ItemsSource)
-                {
-                    usedaddons += addon.Name + "; ";
-                }
-                lab_usedaddons.Content = "Used AddOns: " + usedaddons;
-            }
+            RefreshUI();
         }
 
         private void bt_minimize_Click(object sender, RoutedEventArgs e)
@@ -1530,7 +1339,7 @@ namespace Gw2_Launchbuddy
             {
                 SettingsGrid.Visibility = Visibility.Hidden;
             }
-            
+
         }
 
 
@@ -1562,7 +1371,7 @@ namespace Gw2_Launchbuddy
             }
             catch
             {
-                
+
             }
         }
 
@@ -1576,7 +1385,7 @@ namespace Gw2_Launchbuddy
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                cinema_videoplayback.Source = new Uri(filedialog.FileName,UriKind.Relative);
+                cinema_videoplayback.Source = new Uri(filedialog.FileName, UriKind.Relative);
                 Properties.Settings.Default.cinema_videopath = filedialog.FileName;
             }
         }
@@ -1616,29 +1425,6 @@ namespace Gw2_Launchbuddy
             }
 
             return bitmap;
-        }
-
-
-        public string CalculateMD5(string input)
-        {
-            var md5 = MD5.Create();
-            var inputBytes = Encoding.ASCII.GetBytes(input);
-            var hash = md5.ComputeHash(inputBytes);
-
-            var sb = new StringBuilder();
-
-            for (int i = 0; i < hash.Length; i++)
-                sb.Append(hash[i].ToString("X2"));
-
-            return sb.ToString();
-        }
-
-        public string procMD5(Process proc)
-        {
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine("Start: " + proc.StartTime + " ID: " + proc.Id + " MD5: " + CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString()));
-#endif
-            return CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString());
         }
 
         #region Old Handle Method Functions
@@ -1724,6 +1510,41 @@ namespace Gw2_Launchbuddy
             }
         }
         #endregion
+
+        private void CheckBox_Checked(Object sender, RoutedEventArgs e)
+        {
+            Globals.args.Argument(((CheckBox)sender).Content.ToString());
+            RefreshUI();
+        }
+        private void CheckBox_Unchecked(Object sender, RoutedEventArgs e)
+        {
+            Globals.args.Remove(((CheckBox)sender).Content.ToString());
+            RefreshUI();
+        }
+
+        void RefreshUI()
+        {
+            lab_currentsetup.Content = "Current Setup: " + Globals.args.PrintSterile(0);
+            string usedaddons = "";
+            if (lv_AddOns.ItemsSource != null)
+            {
+                foreach (AddOn addon in lv_AddOns.ItemsSource)
+                {
+                    usedaddons += addon.Name + " ";
+                }
+                lab_usedaddons.Content = "Used AddOns: " + usedaddons;
+            }
+        }
+
+        private void UpdateServerArgs()
+        {
+            if (checkb_assets.IsChecked == true)
+                Globals.args.Argument("-assetsrv", Globals.selected_assetsv.IP + ":" + tb_assetsport.Text);
+            if (checkb_auth.IsChecked == true)
+                Globals.args.Argument("-authsrv ", Globals.selected_authsv.IP + ":" + tb_authport.Text);
+            if (checkb_clientport.IsChecked == true)
+                Globals.args.Argument("-clientport", tb_clientport.Text);
+        }
     }
 
     public class SortAdorner : Adorner
