@@ -164,23 +164,43 @@ namespace Gw2_Launchbuddy
 
         void cinema_setup()
         {
+            //Clunky ugly and simply lazy, I'll fix this before the release
+
             LoadCinemaSettings();
 
             cinemamode = Properties.Settings.Default.cinema_use;
+
+            if (Properties.Settings.Default.cinema_video && !Properties.Settings.Default.cinema_slideshow)
+            {
+                rb_cinemavideomode.IsChecked = true;
+
+                if (cinemamode)
+                {
+                    Cinema_Videoplayer.Visibility = Visibility.Visible;
+                    Cinema_Videoplayer.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
+                    Cinema_Videoplayer.Play();
+                }
+            }else
+            {
+                Cinema_Videoplayer.Visibility = Visibility.Hidden;
+            }
 
             if (cinemamode)
             {
                 SettingsGrid.Visibility = Visibility.Hidden;
                 myWindow.WindowState = WindowState.Maximized;
                 bt_ShowSettings.Visibility = Visibility.Visible;
-            }
-            else
+                Grid.SetColumnSpan(WindowOptionsColum, 2);
+            } else
             {
+                Cinema_Videoplayer.Stop();
+                Cinema_Videoplayer.Visibility = Visibility.Hidden;
                 SettingsGrid.Visibility = Visibility.Visible;
                 myWindow.WindowState = WindowState.Normal;
                 myWindow.Height = 680;
                 myWindow.Width = 700;
                 bt_ShowSettings.Visibility = Visibility.Hidden;
+                Grid.SetColumnSpan(WindowOptionsColum, 1);
             }
         }
 
@@ -1369,13 +1389,12 @@ namespace Gw2_Launchbuddy
         private void bt_cinema_setimagefolder_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog folderdialog = new System.Windows.Forms.FolderBrowserDialog();
-            folderdialog.ShowDialog();
-            lv_cinema_images.Items.Clear();
-            lv_cinema_images.SelectedIndex = -1;
-            lab_imagepreview.Content = "Current Image:";
 
-            if (folderdialog.SelectedPath != "")
+            if (System.Windows.Forms.DialogResult.OK == folderdialog.ShowDialog())
             {
+                lv_cinema_images.SelectedIndex = -1;
+                lv_cinema_images.Items.Clear();
+                lab_imagepreview.Content = "Current Image:";
                 var files = Directory.GetFiles(folderdialog.SelectedPath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp"));
                 ObservableCollection<CinemaImage> images = new ObservableCollection<CinemaImage>();
                 foreach (var file in files)
@@ -1511,7 +1530,71 @@ namespace Gw2_Launchbuddy
             {
                 SettingsGrid.Visibility = Visibility.Hidden;
             }
+            
+        }
 
+
+        private void rb_slideshowmode(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Videomode.Visibility = Visibility.Collapsed;
+                Slideshow.Visibility = Visibility.Visible;
+                Properties.Settings.Default.cinema_video = false;
+                Properties.Settings.Default.cinema_slideshow = true;
+                Properties.Settings.Default.Save();
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void rb_videomode(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Slideshow.Visibility = Visibility.Collapsed;
+                Videomode.Visibility = Visibility.Visible;
+                Properties.Settings.Default.cinema_video = true;
+                Properties.Settings.Default.cinema_slideshow = false;
+                Properties.Settings.Default.Save();
+            }
+            catch
+            {
+                
+            }
+        }
+
+        private void bt_cinema_setvideo_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
+            filedialog.DefaultExt = "mp4";
+            filedialog.Multiselect = false;
+            filedialog.Filter = "Mp4 Files(*.mp4) | *.mp4";
+            System.Windows.Forms.DialogResult result = filedialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                cinema_videoplayback.Source = new Uri(filedialog.FileName,UriKind.Relative);
+                Properties.Settings.Default.cinema_videopath = filedialog.FileName;
+            }
+        }
+
+        private void bt_cinema_videoplay_Click(object sender, RoutedEventArgs e)
+        {
+            if (cinema_videoplayback.Source != null)
+            {
+                cinema_videoplayback.Play();
+            }
+        }
+
+        private void bt_cinema_videostop_Click(object sender, RoutedEventArgs e)
+        {
+            if (cinema_videoplayback.Source != null)
+            {
+                cinema_videoplayback.Stop();
+            }
         }
 
         private void listview_assets_Click(object sender, RoutedEventArgs e)
