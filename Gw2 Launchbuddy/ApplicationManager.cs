@@ -30,7 +30,7 @@ namespace Gw2_Launchbuddy
             //Launching AddOns
             try
             {
-                Globals.addonmanager.LaunchAll();
+                AddOnManager.LaunchAll();
             }
             catch (Exception err)
             {

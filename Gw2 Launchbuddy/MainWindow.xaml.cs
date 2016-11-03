@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using System.IO.Compression;
+using static System.Windows.Forms.ListView;
 
 namespace Gw2_Launchbuddy
 {
@@ -54,7 +55,6 @@ namespace Gw2_Launchbuddy
         bool ismultibox = false;
 
         AES crypt = new AES();
-        AddOnManager addonmanager = new AddOnManager();
 
         MediaPlayer mediaplayer = new MediaPlayer();
 
@@ -140,7 +140,7 @@ namespace Gw2_Launchbuddy
             checkver.Start();
             cinema_setup();
             LoadAddons();
-            addonmanager.LaunchLbAddons();
+            AddOnManager.LaunchLbAddons();
         }
 
         void cinema_setup()
@@ -392,7 +392,7 @@ namespace Gw2_Launchbuddy
                 if (Properties.Settings.Default.use_reshade && cb_reshade.IsEnabled == true) cb_reshade.IsChecked = true;
                 if (Properties.Settings.Default.use_autologin == true) cb_login.IsChecked = true;
 
-                listview_acc.SelectedIndex = Properties.Settings.Default.selected_acc;
+                listview_acc.SelectedIndex = Cinema_Accountlist.SelectedIndex = Properties.Settings.Default.selected_acc;
 
             }
             catch (Exception err)
@@ -879,8 +879,7 @@ namespace Gw2_Launchbuddy
                             accountlist.Add(new Account { Nick = acc.Nick, Email = acc.Email, Password = crypt.Decrypt(acc.Password), Time = acc.Time });
                         }
 
-                        listview_acc.ItemsSource = accountlist;
-                        Cinema_Accountlist.ItemsSource = accountlist;
+                        listview_acc.ItemsSource = Cinema_Accountlist.ItemsSource = accountlist;
                     }
                 }
 
@@ -895,12 +894,12 @@ namespace Gw2_Launchbuddy
 
         void SaveAddons()
         {
-            addonmanager.SaveAddons(AppdataPath + "Addons.xml");
+            AddOnManager.SaveAddons(AppdataPath + "Addons.xml");
         }
 
         void LoadAddons()
         {
-            lv_AddOns.ItemsSource = addonmanager.LoadAddons(AppdataPath + "Addons.xml");
+            lv_AddOns.ItemsSource = AddOnManager.LoadAddons(AppdataPath + "Addons.xml");
         }
 
         private void bt_addacc_Click(object sender, RoutedEventArgs e)
@@ -964,14 +963,14 @@ namespace Gw2_Launchbuddy
 
         private void listview_acc_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Globals.selected_accs = listview_acc.SelectedItems.Cast<Account>().ToList();
+            Globals.selected_accs = ((ListView)sender).SelectedItems.Cast<Account>().ToList();
 
-            Properties.Settings.Default.selected_acc = listview_acc.SelectedIndex;
+            Properties.Settings.Default.selected_acc = ((ListView)sender).SelectedIndex;
             Properties.Settings.Default.Save();
 
-            if (listview_acc.SelectedItems.Count != 0 && listview_acc.SelectedItems.Count <= 1)
+            if (((ListView)sender).SelectedItems.Count != 0 && ((ListView)sender).SelectedItems.Count <= 1)
             {
-                var selectedItems = (dynamic)listview_acc.SelectedItems;
+                var selectedItems = (dynamic)((ListView)sender).SelectedItems;
                 cb_login.Content = "Use Autologin : " + selectedItems[0].Email;
                 Globals.selected_accs[0].Email = selectedItems[0].Email;
                 Globals.selected_accs[0].Password = selectedItems[0].Password;
@@ -979,16 +978,22 @@ namespace Gw2_Launchbuddy
                 ismultibox = false;
             }
 
-            if (listview_acc.SelectedItems.Count != 0 && listview_acc.SelectedItems.Count > 1)
+            if (((ListView)sender).SelectedItems.Count != 0 && ((ListView)sender).SelectedItems.Count > 1)
             {
-                var selectedItem = (dynamic)listview_acc.SelectedItem;
-                cb_login.Content = "Use Autologin (Multiboxing): " + listview_acc.SelectedItems.Count + " Accounts selected";
+                var selectedItem = (dynamic)((ListView)sender).SelectedItem;
+                cb_login.Content = "Use Autologin (Multiboxing): " + ((ListView)sender).SelectedItems.Count + " Accounts selected";
                 Globals.selected_accs[0].Email = selectedItem.Email;
                 Globals.selected_accs[0].Password = selectedItem.Password;
                 bt_shortcut.IsEnabled = false;
                 ismultibox = true;
             }
 
+            //Sync account lists.
+            var list = ((ListView)sender) != listview_acc ? listview_acc : Cinema_Accountlist;
+            list.SelectionChanged -= listview_acc_SelectionChanged;
+            list.SelectedItems.Clear();
+            foreach (Account s in ((ListView)sender).SelectedItems) if (!list.SelectedItems.Contains(s)) list.SelectedItems.Add(s);
+            list.SelectionChanged += listview_acc_SelectionChanged;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -1186,14 +1191,14 @@ namespace Gw2_Launchbuddy
         private void bt_AddAddon_Click(object sender, RoutedEventArgs e)
         {
             string[] args = Regex.Matches(tb_AddonArgs.Text, "-\\w* ?(\".*\")?").Cast<Match>().Select(m => m.Value).ToArray();
-            addonmanager.Add(tb_AddonName.Text, args, (bool)cb_AddonMultilaunch.IsChecked, (bool)cb_AddonOnLB.IsChecked);
-            lv_AddOns.ItemsSource = addonmanager.AddOns;
+            AddOnManager.Add(tb_AddonName.Text, args, (bool)cb_AddonMultilaunch.IsChecked, (bool)cb_AddonOnLB.IsChecked);
+            lv_AddOns.ItemsSource = AddOnManager.AddOns;
         }
 
         private void bt_RemAddon_Click(object sender, RoutedEventArgs e)
         {
             AddOn item = lv_AddOns.SelectedItem as AddOn;
-            addonmanager.Remove(item.Name);
+            AddOnManager.Remove(item.Name);
         }
 
         private void bt_cinema_setimagefolder_Click(object sender, RoutedEventArgs e)
@@ -1470,7 +1475,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        
+
 
         #region Old Handle Method Functions
         void checksetup()

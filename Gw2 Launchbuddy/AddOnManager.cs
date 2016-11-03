@@ -25,6 +25,7 @@ namespace Gw2_Launchbuddy
                 ProcessStartInfo tmp = new ProcessStartInfo();
                 tmp.Arguments = args;
                 tmp.FileName = Path;
+                tmp.WorkingDirectory = new FileInfo(tmp.FileName).Directory.FullName;
                 return tmp;
             }
         }
@@ -65,12 +66,12 @@ namespace Gw2_Launchbuddy
         }
     }
 
-    class AddOnManager
+    public static class AddOnManager
     {
         
-        public ObservableCollection<AddOn> AddOns = new ObservableCollection<AddOn>();
+        public static ObservableCollection<AddOn> AddOns = new ObservableCollection<AddOn>();
 
-        public void Add(string name,string[] args,bool IsMultilaunch,bool IsLbAddon)
+        public static void Add(string name,string[] args,bool IsMultilaunch,bool IsLbAddon)
         {
             if(name != "")
             {
@@ -97,7 +98,7 @@ namespace Gw2_Launchbuddy
         }
 
 
-        public void CheckExisting()
+        public static void CheckExisting()
         {
             Process[] processes = Process.GetProcesses();
 
@@ -110,7 +111,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        public void UpdateList()
+        public static void UpdateList()
         {
             CheckExisting();
 
@@ -118,7 +119,7 @@ namespace Gw2_Launchbuddy
 
             foreach(AddOn addon in AddOns)
             {
-                foreach(Process childpro in addon.ChildProcess)
+                foreach (Process childpro in addon.ChildProcess.ToList())
                 {
                     if (!processes.Contains(childpro))
                     {
@@ -130,7 +131,7 @@ namespace Gw2_Launchbuddy
         }
 
 
-        public void Remove(string name)
+        public static void Remove(string name)
         {
             try
             {
@@ -142,7 +143,7 @@ namespace Gw2_Launchbuddy
             catch { }
         }
 
-        public void LaunchSingle(string name)
+        public static void LaunchSingle(string name)
         {
             AddOn addon = AddOns.FirstOrDefault(a => a.Name == name);
             Process addon_pro = new Process { StartInfo = addon.Info };
@@ -150,9 +151,9 @@ namespace Gw2_Launchbuddy
             addon_pro.Start();
         }
 
-        public void LaunchAll()
+        public static void LaunchAll()
         {
-
+            UpdateList();
             foreach (AddOn addon in AddOns)
             {
                 if ((addon.IsMultilaunch || addon.ChildProcess.Count <= 0) && !addon.IsLbAddon)
@@ -164,7 +165,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        public void LaunchLbAddons()
+        public static void LaunchLbAddons()
         {
             UpdateList();
             foreach (AddOn addon in AddOns)
@@ -179,7 +180,7 @@ namespace Gw2_Launchbuddy
         }
 
 
-        public void SaveAddons(string path)
+        public static void SaveAddons(string path)
         {
             try
             {
@@ -203,7 +204,7 @@ namespace Gw2_Launchbuddy
         }
 
 
-        public ObservableCollection<AddOn> LoadAddons(string path)
+        public static ObservableCollection<AddOn> LoadAddons(string path)
         {
             try
             {

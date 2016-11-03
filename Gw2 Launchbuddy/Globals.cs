@@ -18,8 +18,7 @@ namespace Gw2_Launchbuddy
             }
             set { }
         }
-
-        public static AddOnManager addonmanager = new AddOnManager();
+        
         public static List<Account> selected_accs = new List<Account>();
         public static string exepath, exename, unlockerpath, version_client, version_api;
 

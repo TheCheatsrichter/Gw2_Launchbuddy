@@ -55,7 +55,7 @@
                     <DropShadowEffect/>
                 </Image.Effect>
             </Image>
-            <ListView x:Name="Cinema_Accountlist" Canvas.Left="100" Canvas.Top="80" Width="280" Height="135">
+            <ListView x:Name="Cinema_Accountlist" Canvas.Left="100" Canvas.Top="80" Width="280" Height="135" SelectionChanged="listview_acc_SelectionChanged">
                 <ListView.View>
                     <GridView >
                         <GridViewColumn Width="200" DisplayMemberBinding="{Binding Nick}">
