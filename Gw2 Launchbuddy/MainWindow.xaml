@@ -83,7 +83,7 @@
             <Label Content="Gw2 Launchbuddy V1.3 BETA" FontSize="16" FontWeight="Bold"/>
         </StackPanel>
 
-        <Image x:Name="img_slideshow" Source="Resources/quaggan.png" Grid.ColumnSpan="5" Grid.RowSpan="5" RenderTransformOrigin="0.5,0.5">
+        <Image x:Name="img_slideshow" Source="Resources/loginwindow.png" Grid.ColumnSpan="5" Grid.RowSpan="5" RenderTransformOrigin="0.5,0.5">
             <Image.OpacityMask>
                 <ImageBrush ImageSource="Resources/logo_hq_mask.png" Stretch="Uniform"/>
             </Image.OpacityMask>

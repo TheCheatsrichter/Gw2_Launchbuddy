@@ -151,7 +151,6 @@ namespace Gw2_Launchbuddy
         void slideshow_diashow(string imagespath)
         {
             List<BitmapSource> images = new List<BitmapSource>();
-            Thread.Sleep(10000);
             if (imagespath != "")
             {
                 var files = Directory.GetFiles(imagespath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp"));
@@ -165,6 +164,7 @@ namespace Gw2_Launchbuddy
                 images.Add((new BitmapImage(new Uri(@"/Resources/launchbuddyback.png", UriKind.Relative))));
             }
             
+            //temporary int to not cause infinite loop
             int tmp = 0;
 
             while (tmp < 10)
@@ -216,12 +216,17 @@ namespace Gw2_Launchbuddy
                     string imagespath = Properties.Settings.Default.cinema_imagepath;
                     string maskpath = Properties.Settings.Default.cinema_maskpath;
 
-                    /*
-                    //if (maskpath != "") img_slideshow.OpacityMask = new ImageBrush(LoadImage(maskpath));
+                    if (maskpath != null)
+                    {
+                        ImageBrush mask = new ImageBrush(LoadImage(maskpath));
+                        mask.Stretch = Stretch.Uniform;
+                        img_slideshow.OpacityMask = mask;
+                    }
 
+                    
                     Thread th_slideshow = new Thread(() => slideshow_diashow(imagespath));
                     th_slideshow.Start();
-                    */
+                    
                     img_slideshow.Visibility = Visibility.Visible;
                     mediaplayer.Open(new Uri(musicpath));
                     mediaplayer.Play();
