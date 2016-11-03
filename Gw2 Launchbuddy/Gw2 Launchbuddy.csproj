@@ -111,6 +111,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CrashReporter.NET">
+      <HintPath>..\..\..\..\Desktop\Crashreport .net 4.0\CrashReporter.NET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -138,6 +141,7 @@
     </ApplicationDefinition>
     <Compile Include="AddOnManager.cs" />
     <Compile Include="ApplicationManager.cs" />
+    <Compile Include="CrashReporter.cs" />
     <Compile Include="Encryption_AES.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="HandleManager.cs" />
@@ -246,6 +250,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\loginwindow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\logo_hq_mask.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

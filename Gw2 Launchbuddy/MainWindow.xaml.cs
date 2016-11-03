@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using System.IO.Compression;
-using static System.Windows.Forms.ListView;
 
 namespace Gw2_Launchbuddy
 {
@@ -128,8 +127,10 @@ namespace Gw2_Launchbuddy
                 Directory.CreateDirectory(AppdataPath);
             }
 
+            //ENABLE THIS BEFORE RELEASE!! ##########################################################################################
+            //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionReport);
+
             accountlist.Clear(); //clearing accountlist
-            //checksetup();
             loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
             loadaccounts(); // loading saved accounts from launchbuddy
             Thread checkver = new Thread(checkversion);
@@ -140,37 +141,91 @@ namespace Gw2_Launchbuddy
             AddOnManager.LaunchLbAddons();
         }
 
-        void cinema_setup()
+        static void UnhandledExceptionReport(object sender, UnhandledExceptionEventArgs args)
         {
-            //Clunky ugly and simply lazy, I'll fix this before the release
+            Exception e = (Exception)args.ExceptionObject;
+            CrashReporter.ReportCrashToAll(e);
+        }
 
-            LoadCinemaSettings();
 
-            cinemamode = Properties.Settings.Default.cinema_use;
-
-            if (Properties.Settings.Default.cinema_video && !Properties.Settings.Default.cinema_slideshow)
+        void slideshow_diashow(string imagespath)
+        {
+            List<BitmapSource> images = new List<BitmapSource>();
+            Thread.Sleep(10000);
+            if (imagespath != "")
             {
-                rb_cinemavideomode.IsChecked = true;
-
-                if (cinemamode)
+                var files = Directory.GetFiles(imagespath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp"));
+                foreach (var image in files)
                 {
-                    Cinema_Videoplayer.Visibility = Visibility.Visible;
-                    Cinema_Videoplayer.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
-                    Cinema_Videoplayer.Play();
+                    images.Add(LoadImage(image));
                 }
             }
             else
             {
-                Cinema_Videoplayer.Visibility = Visibility.Hidden;
+                images.Add((new BitmapImage(new Uri(@"/Resources/launchbuddyback.png", UriKind.Relative))));
             }
+            
+            int tmp = 0;
+
+            while (tmp < 10)
+            {
+                Random rnd = new Random();
+                int nr = rnd.Next(images.Count);
+
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    //img_slideshow.Source = images[nr];
+                }));
+
+                Thread.Sleep(3000);
+                tmp++;
+
+            }
+
+        }
+
+        void cinema_setup()
+        {
+            LoadCinemaSettings();
+            cinemamode = Properties.Settings.Default.cinema_use;
+            bool videomode = Properties.Settings.Default.cinema_video;
+            bool slideshowmode = Properties.Settings.Default.cinema_slideshow;
+            cinema_videoplayback.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
+
+            if (videomode && !slideshowmode) rb_cinemavideomode.IsChecked = true;
+            if (!videomode && slideshowmode) rb_cinemaslideshowmode.IsChecked = true;
 
             if (cinemamode)
             {
                 SettingsGrid.Visibility = Visibility.Hidden;
                 myWindow.WindowState = WindowState.Maximized;
                 bt_ShowSettings.Visibility = Visibility.Visible;
-
                 Grid.SetColumnSpan(WindowOptionsColum, 2);
+                Cinema_Videoplayer.Visibility = Visibility.Hidden;
+
+                if (videomode)
+                {
+                    Cinema_Videoplayer.Visibility = Visibility.Visible;
+                    Cinema_Videoplayer.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
+                    Cinema_Videoplayer.Play();
+                }
+
+                if (slideshowmode)
+                {
+                    string musicpath = Properties.Settings.Default.cinema_musicpath;
+                    string imagespath = Properties.Settings.Default.cinema_imagepath;
+                    string maskpath = Properties.Settings.Default.cinema_maskpath;
+
+                    /*
+                    //if (maskpath != "") img_slideshow.OpacityMask = new ImageBrush(LoadImage(maskpath));
+
+                    Thread th_slideshow = new Thread(() => slideshow_diashow(imagespath));
+                    th_slideshow.Start();
+                    */
+                    img_slideshow.Visibility = Visibility.Visible;
+                    mediaplayer.Open(new Uri(musicpath));
+                    mediaplayer.Play();
+                }
             }
             else
             {
@@ -183,6 +238,7 @@ namespace Gw2_Launchbuddy
                 bt_ShowSettings.Visibility = Visibility.Hidden;
                 Grid.SetColumnSpan(WindowOptionsColum, 1);
             }
+
         }
 
         void checkversion()
@@ -1583,9 +1639,11 @@ namespace Gw2_Launchbuddy
         private void Window_LostKeyboardFocus(Object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
             Cinema_Videoplayer.Volume = 0;
+            mediaplayer.Volume=0;
         }
         private void Window_GotKeyboardFocus(Object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
+            mediaplayer.Volume = 100;
             Cinema_Videoplayer.Volume = 100;
         }
     }

@@ -7,6 +7,7 @@ using static Gw2_Launchbuddy.MainWindow;
 
 namespace Gw2_Launchbuddy
 {
+
     static class Globals
     {
         public static Microsoft.Win32.RegistryKey LBRegKey { get { return Microsoft.Win32.Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("LaunchBuddy"); } set { } }

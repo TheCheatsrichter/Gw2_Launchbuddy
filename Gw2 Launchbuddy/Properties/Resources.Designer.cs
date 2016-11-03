@@ -113,6 +113,16 @@ namespace Gw2_Launchbuddy.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap logo_hq_mask {
+            get {
+                object obj = ResourceManager.GetObject("logo_hq_mask", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap opacity_mask {
             get {
                 object obj = ResourceManager.GetObject("opacity_mask", resourceCulture);

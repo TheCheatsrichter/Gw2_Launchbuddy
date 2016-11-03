@@ -138,9 +138,9 @@ namespace Gw2_Launchbuddy
 
         public static string procMD5(Process proc)
         {
-#if DEBUG
+            #if DEBUG
             System.Diagnostics.Debug.WriteLine("Start: " + proc.StartTime + " ID: " + proc.Id + " MD5: " + CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString()));
-#endif
+            #endif
             return CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString());
         }
     }
