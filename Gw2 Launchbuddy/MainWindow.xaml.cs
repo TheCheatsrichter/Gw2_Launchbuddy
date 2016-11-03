@@ -1569,6 +1569,15 @@ namespace Gw2_Launchbuddy
             if (checkb_clientport.IsChecked == true)
                 Globals.args.Argument("-clientport", tb_clientport.Text);
         }
+
+        private void Window_LostKeyboardFocus(Object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
+        {
+            Cinema_Videoplayer.Volume = 0;
+        }
+        private void Window_GotKeyboardFocus(Object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
+        {
+            Cinema_Videoplayer.Volume = 100;
+        }
     }
 
     public class SortAdorner : Adorner
