@@ -169,7 +169,7 @@ namespace Gw2_Launchbuddy
                 SettingsGrid.Visibility = Visibility.Hidden;
                 myWindow.WindowState = WindowState.Maximized;
                 bt_ShowSettings.Visibility = Visibility.Visible;
-                
+
                 Grid.SetColumnSpan(WindowOptionsColum, 2);
             }
             else
@@ -1139,7 +1139,7 @@ namespace Gw2_Launchbuddy
         {
             Application.Current.Shutdown();
         }
-        
+
         private void tab_options_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is TabControl)
@@ -1372,13 +1372,17 @@ namespace Gw2_Launchbuddy
 
         void SetVideoInfo()
         {
-            string videopath = Properties.Settings.Default.cinema_videopath;
+            try
+            {
+                string videopath = Properties.Settings.Default.cinema_videopath;
 
-            lab_videoname.Content = "Name: " + Path.GetFileNameWithoutExtension(videopath);
-            lab_videopath.Content = "Path: " + Path.GetFullPath(videopath);
-            lab_videoformat.Content = "Format: " + Path.GetExtension(videopath);
-            lab_videoresolution.Content = "Resolution: " + cinema_videoplayback.NaturalVideoWidth + " x " + cinema_videoplayback.NaturalVideoHeight;
-            lab_videolength.Content = "Length: " + cinema_videoplayback.NaturalDuration.ToString();
+                lab_videoname.Content = "Name: " + Path.GetFileNameWithoutExtension(videopath);
+                lab_videopath.Content = "Path: " + Path.GetFullPath(videopath);
+                lab_videoformat.Content = "Format: " + Path.GetExtension(videopath);
+                lab_videoresolution.Content = "Resolution: " + cinema_videoplayback.NaturalVideoWidth + " x " + cinema_videoplayback.NaturalVideoHeight;
+                lab_videolength.Content = "Length: " + cinema_videoplayback.NaturalDuration.ToString();
+            }
+            catch { }
         }
 
 
