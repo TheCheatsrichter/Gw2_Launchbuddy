@@ -169,7 +169,7 @@
                                 <CheckBox Content="-uninstall" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
                                 <CheckBox Content="-useOldFov" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
                                 <CheckBox Content="-verify" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-umbra" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox Content="-umbra gpu" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
                                 <CheckBox Content="-windowed" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
                             </ListBox>
                             <Label x:Name="lab_descr" Content="Description (Wiki):"  FontSize="16" FontWeight="Bold"  Grid.Column="1"/>
