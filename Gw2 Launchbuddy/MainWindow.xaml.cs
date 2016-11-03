@@ -138,7 +138,6 @@ namespace Gw2_Launchbuddy
             cinema_setup();
             LoadAddons();
             AddOnManager.LaunchLbAddons();
-            CrashReporter.TestReportAll();
         }
 
         void cinema_setup()
