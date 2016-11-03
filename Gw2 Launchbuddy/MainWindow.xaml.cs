@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using System.IO.Compression;
-using static System.Windows.Forms.ListView;
+using CrashReporterDotNET;
 
 namespace Gw2_Launchbuddy
 {
@@ -138,6 +138,7 @@ namespace Gw2_Launchbuddy
             cinema_setup();
             LoadAddons();
             AddOnManager.LaunchLbAddons();
+            CrashReporter.TestReportAll();
         }
 
         void cinema_setup()
