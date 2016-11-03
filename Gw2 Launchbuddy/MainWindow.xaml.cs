@@ -1454,7 +1454,8 @@ namespace Gw2_Launchbuddy
 
         private void Cinema_Launchaccount_Click(object sender, RoutedEventArgs e)
         {
-
+            UpdateServerArgs();
+            LaunchManager.launch_click();
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
