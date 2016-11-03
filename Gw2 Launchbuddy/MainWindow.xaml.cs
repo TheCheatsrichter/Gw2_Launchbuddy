@@ -147,12 +147,50 @@ namespace Gw2_Launchbuddy
             CrashReporter.ReportCrashToAll(e);
         }
 
+
+        void slideshow_diashow(string imagespath)
+        {
+            List<BitmapSource> images = new List<BitmapSource>();
+            Thread.Sleep(10000);
+            if (imagespath != "")
+            {
+                var files = Directory.GetFiles(imagespath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp"));
+                foreach (var image in files)
+                {
+                    images.Add(LoadImage(image));
+                }
+            }
+            else
+            {
+                images.Add((new BitmapImage(new Uri(@"/Resources/launchbuddyback.png", UriKind.Relative))));
+            }
+            
+            int tmp = 0;
+
+            while (tmp < 10)
+            {
+                Random rnd = new Random();
+                int nr = rnd.Next(images.Count);
+
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    //img_slideshow.Source = images[nr];
+                }));
+
+                Thread.Sleep(3000);
+                tmp++;
+                
+            }
+
+        }
+
         void cinema_setup()
         {
             LoadCinemaSettings();
             cinemamode = Properties.Settings.Default.cinema_use;
             bool videomode = Properties.Settings.Default.cinema_video;
             bool slideshowmode = Properties.Settings.Default.cinema_slideshow;
+            cinema_videoplayback.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
 
             if (videomode && !slideshowmode) rb_cinemavideomode.IsChecked = true;
             if (!videomode && slideshowmode) rb_cinemaslideshowmode.IsChecked = true;
@@ -174,7 +212,16 @@ namespace Gw2_Launchbuddy
 
                 if (slideshowmode)
                 {
+                    string musicpath = Properties.Settings.Default.cinema_musicpath;
+                    string imagespath = Properties.Settings.Default.cinema_imagepath;
+                    string maskpath = Properties.Settings.Default.cinema_maskpath;
 
+                    Thread th_slideshow = new Thread(() => slideshow_diashow(imagespath));
+                    th_slideshow.Start();
+
+                    img_slideshow.Visibility = Visibility.Visible;
+                    mediaplayer.Open(new Uri(musicpath));
+                    mediaplayer.Play();
                 }
             }
             else
@@ -1579,9 +1626,11 @@ namespace Gw2_Launchbuddy
         private void Window_LostKeyboardFocus(Object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
             Cinema_Videoplayer.Volume = 0;
+            mediaplayer.Volume=0;
         }
         private void Window_GotKeyboardFocus(Object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
+            mediaplayer.Volume = 100;
             Cinema_Videoplayer.Volume = 100;
         }
     }

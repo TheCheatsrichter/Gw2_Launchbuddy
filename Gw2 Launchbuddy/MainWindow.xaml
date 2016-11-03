@@ -11,6 +11,46 @@
     
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
         Title="Gw2 Launchbuddy V 1.3" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="myWindow_MouseLeftButtonDown">
+    <Window.Resources>
+        <Storyboard x:Key="anim_slideshow_start">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="img_slideshow">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0.678"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:4" Value="0.818"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:4.9" Value="1.205">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseInOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="img_slideshow">
+                <EasingDoubleKeyFrame KeyTime="0" Value="-19.714"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:4" Value="-20.386"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:4.9" x:Name="SlideShowEndPos" Value="800">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseInOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="img_slideshow">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0.677"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:4" Value="0.816"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:4.9" Value="1.201">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseInOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="img_slideshow">
+                <EasingDoubleKeyFrame KeyTime="0" Value="17.459"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:4" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:4.9" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CubicEase EasingMode="EaseInOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </Window.Resources>
 
     <Window.Triggers>
         <EventTrigger RoutedEvent="Window.Loaded">
@@ -24,8 +64,10 @@
                     />
                 </Storyboard>
             </BeginStoryboard>
+            <BeginStoryboard Storyboard="{StaticResource anim_slideshow_start}"/>
         </EventTrigger>
     </Window.Triggers>
+
 
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
@@ -41,6 +83,16 @@
             <Label Content="Gw2 Launchbuddy V1.3 BETA" FontSize="16" FontWeight="Bold"/>
         </StackPanel>
 
+        <Image x:Name="img_slideshow" Source="Resources/launchbuddyback.png" Grid.ColumnSpan="10" Grid.RowSpan="10" RenderTransformOrigin="0.5,0.5">
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Image.RenderTransform>
+        </Image>
         <MediaElement x:Name="Cinema_Videoplayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual"/>
         <StackPanel x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="1">
             <Button x:Name="bt_ShowSettings" Width="30" Content="S" Click="bt_ShowSettings_Click" Height="30" VerticalAlignment="Top" />
@@ -51,11 +103,7 @@
 
         <Canvas x:Name="Canvas_login" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0">
             <!--<Image Source="pack://siteoforigin:,,,/Resources/loginwindow.png" Height="300">-->
-            <Image Source="/Resources/loginwindow.png" Height="300">
-                <Image.Effect>
-                    <DropShadowEffect/>
-                </Image.Effect>
-            </Image>
+            <Image Source="/Resources/loginwindow.png" Height="300"/>
             <ListView x:Name="Cinema_Accountlist" Canvas.Left="100" Canvas.Top="80" Width="280" Height="135" SelectionChanged="listview_acc_SelectionChanged">
                 <ListView.View>
                     <GridView >
@@ -463,6 +511,7 @@
 
 
         </Grid>
+
 
 
 
