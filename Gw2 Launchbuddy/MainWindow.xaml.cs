@@ -454,7 +454,17 @@ namespace Gw2_Launchbuddy
             // This file also contains infos about the graphic settings
 
             //Find the newest xml file in APPDATA (the xml files share the same name as their exe files -> multiple .xml files possible!)
-            string[] configfiles = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\", "*.exe.xml");
+            string[] configfiles = new string[]{};
+            try
+            {
+                configfiles = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\", "*.exe.xml");
+            }
+            catch (Exception e)
+            {
+                //TODO: Handle corrupt/missing Guild Wars install
+                MessageBox.Show("Guild Wars may not be installed. \n " + e.Message);
+                return;
+            }
             string sourcepath = "";
             long max = 0;
 
