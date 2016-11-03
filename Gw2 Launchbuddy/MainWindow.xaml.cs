@@ -179,7 +179,7 @@ namespace Gw2_Launchbuddy
 
                 Thread.Sleep(3000);
                 tmp++;
-                
+
             }
 
         }
@@ -216,9 +216,12 @@ namespace Gw2_Launchbuddy
                     string imagespath = Properties.Settings.Default.cinema_imagepath;
                     string maskpath = Properties.Settings.Default.cinema_maskpath;
 
+                    /*
+                    //if (maskpath != "") img_slideshow.OpacityMask = new ImageBrush(LoadImage(maskpath));
+
                     Thread th_slideshow = new Thread(() => slideshow_diashow(imagespath));
                     th_slideshow.Start();
-
+                    */
                     img_slideshow.Visibility = Visibility.Visible;
                     mediaplayer.Open(new Uri(musicpath));
                     mediaplayer.Play();
