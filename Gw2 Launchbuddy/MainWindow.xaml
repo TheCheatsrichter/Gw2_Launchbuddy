@@ -43,11 +43,33 @@
 
         <MediaElement x:Name="Cinema_Videoplayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual"/>
         <StackPanel x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="1">
-            <Button x:Name="bt_ShowSettings" Width="30" Content="S" Click="bt_ShowSettings_Click" />
+            <Button x:Name="bt_ShowSettings" Width="30" Content="S" Click="bt_ShowSettings_Click" Height="30" VerticalAlignment="Top" />
             <Button x:Name="bt_cinema" Width="30" Content="C" Click="bt_cinema_Click" />
             <Button x:Name="bt_minimize" Width="30" Content="M" Click="bt_minimize_Click" />
             <Button x:Name="bt_close" Width="30" Content="X" Click="bt_close_Click" />
         </StackPanel>
+
+        <Canvas x:Name="Canvas_login" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0">
+            <Image Source="pack://siteoforigin:,,,/Resources/loginwindow.png" Height="300">
+                <Image.Effect>
+                    <DropShadowEffect/>
+                </Image.Effect>
+            </Image>
+            <ListView x:Name="Cinema_Accountlist" Canvas.Left="100" Canvas.Top="80" Width="280" Height="135">
+                <ListView.View>
+                    <GridView >
+                        <GridViewColumn Width="200" DisplayMemberBinding="{Binding Nick}">
+                            <GridViewColumnHeader Tag="Name" Click="listview_auth_Click">Name</GridViewColumnHeader>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <StackPanel Orientation="Horizontal" Canvas.Left="100" Canvas.Top="220">
+                <Button x:Name="Cinema_Launchaccount"  Content="Launch" Width="100" Click="Cinema_Launchaccount_Click"/>
+                <Button x:Name="Settings" Content="Settings"  Width="100" Margin="10,0,0,0" Click="Settings_Click"/>
+            </StackPanel>
+
+        </Canvas>
 
 
         <Grid Margin="5,5" x:Name="SettingsGrid" Grid.Row="1" Background="White">
@@ -55,7 +77,6 @@
                 <RowDefinition Height="100*"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
-
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="1" >
@@ -69,7 +90,7 @@
                     <ColumnDefinition Width="50*"/>
                 </Grid.ColumnDefinitions>
                 <Button x:Name="bt_launch" Content="Launch Gw2"  Click="bt_launch_Click" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0"  />
-                <Button x:Name="bt_shortcut" Content="Create Shortcut (No Multiboxing)" Grid.Column="1" Grid.Row="1"  Click="bt_shortcut_Click" BorderThickness="1" Margin="5,0,0,0"/>
+                <Button x:Name="bt_shortcut" Content="Create Shortcut (Coming back soon)" Grid.Column="1" Grid.Row="1"  Click="bt_shortcut_Click" BorderThickness="1" Margin="5,0,0,0" IsEnabled="false"/>
             </Grid>
 
             <TabControl x:Name="tab_options" Grid.Row="0" SelectionChanged="tab_options_SelectionChanged" MouseLeave="tab_options_MouseLeave" >
@@ -337,13 +358,13 @@
 
                                 <StackPanel>
                                     <Label Content="Videomode Info:" FontSize="16" FontWeight="Bold"/>
-                                    <Label Content="Videoname:"/>
-                                    <Label Content="Path:"/>
-                                    <Label Content="Resolution:"/>
-                                    <Label Content="Format:"/>
-                                    <Label Content="Length"/>
+                                    <Label x:Name="lab_videoname" Content="Videoname:"/>
+                                    <Label x:Name="lab_videopath" Content="Path:"/>
+                                    <Label x:Name="lab_videoresolution" Content="Resolution:"/>
+                                    <Label x:Name="lab_videoformat" Content="Format:"/>
+                                    <Label x:Name="lab_videolength" Content="Length:"/>
                                 </StackPanel>
-                                <MediaElement x:Name="cinema_videoplayback" Grid.Row="0" Grid.Column="1" Margin="5,0" LoadedBehavior="Manual" UnloadedBehavior="Manual"/>
+                                <MediaElement x:Name="cinema_videoplayback" Grid.Row="0" Grid.Column="1" Margin="5,0" LoadedBehavior="Manual" UnloadedBehavior="Manual" Loaded="cinema_videoplayback_Loaded" MediaOpened="cinema_videoplayback_MediaOpened"/>
 
                                 <Grid Grid.Row="1" Grid.Column="1">
                                     <Grid.ColumnDefinitions>
