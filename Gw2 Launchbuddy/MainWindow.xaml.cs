@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using System.IO.Compression;
-using CrashReporterDotNET;
 
 namespace Gw2_Launchbuddy
 {
@@ -128,8 +127,10 @@ namespace Gw2_Launchbuddy
                 Directory.CreateDirectory(AppdataPath);
             }
 
+            //ENABLE THIS BEFORE RELEASE!! ##########################################################################################
+            //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionReport);
+
             accountlist.Clear(); //clearing accountlist
-            //checksetup();
             loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
             loadaccounts(); // loading saved accounts from launchbuddy
             Thread checkver = new Thread(checkversion);
@@ -140,37 +141,41 @@ namespace Gw2_Launchbuddy
             AddOnManager.LaunchLbAddons();
         }
 
+        static void UnhandledExceptionReport(object sender, UnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception)args.ExceptionObject;
+            CrashReporter.ReportCrashToAll(e);
+        }
+
         void cinema_setup()
         {
-            //Clunky ugly and simply lazy, I'll fix this before the release
-
             LoadCinemaSettings();
-
             cinemamode = Properties.Settings.Default.cinema_use;
+            bool videomode = Properties.Settings.Default.cinema_video;
+            bool slideshowmode = Properties.Settings.Default.cinema_slideshow;
 
-            if (Properties.Settings.Default.cinema_video && !Properties.Settings.Default.cinema_slideshow)
-            {
-                rb_cinemavideomode.IsChecked = true;
-
-                if (cinemamode)
-                {
-                    Cinema_Videoplayer.Visibility = Visibility.Visible;
-                    Cinema_Videoplayer.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
-                    Cinema_Videoplayer.Play();
-                }
-            }
-            else
-            {
-                Cinema_Videoplayer.Visibility = Visibility.Hidden;
-            }
+            if (videomode && !slideshowmode) rb_cinemavideomode.IsChecked = true;
+            if (!videomode && slideshowmode) rb_cinemaslideshowmode.IsChecked = true;
 
             if (cinemamode)
             {
                 SettingsGrid.Visibility = Visibility.Hidden;
                 myWindow.WindowState = WindowState.Maximized;
                 bt_ShowSettings.Visibility = Visibility.Visible;
-
                 Grid.SetColumnSpan(WindowOptionsColum, 2);
+                Cinema_Videoplayer.Visibility = Visibility.Hidden;
+
+                if (videomode)
+                {
+                    Cinema_Videoplayer.Visibility = Visibility.Visible;
+                    Cinema_Videoplayer.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
+                    Cinema_Videoplayer.Play();
+                }
+
+                if (slideshowmode)
+                {
+
+                }
             }
             else
             {
@@ -183,6 +188,7 @@ namespace Gw2_Launchbuddy
                 bt_ShowSettings.Visibility = Visibility.Hidden;
                 Grid.SetColumnSpan(WindowOptionsColum, 1);
             }
+
         }
 
         void checkversion()
