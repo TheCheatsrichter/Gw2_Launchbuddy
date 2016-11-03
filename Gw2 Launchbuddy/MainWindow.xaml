@@ -50,7 +50,8 @@
         </StackPanel>
 
         <Canvas x:Name="Canvas_login" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0">
-            <Image Source="pack://siteoforigin:,,,/Resources/loginwindow.png" Height="300">
+            <!--<Image Source="pack://siteoforigin:,,,/Resources/loginwindow.png" Height="300">-->
+            <Image Source="/Resources/loginwindow.png" Height="300">
                 <Image.Effect>
                     <DropShadowEffect/>
                 </Image.Effect>

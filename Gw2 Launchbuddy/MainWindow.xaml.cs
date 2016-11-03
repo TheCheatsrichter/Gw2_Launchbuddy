@@ -169,6 +169,7 @@ namespace Gw2_Launchbuddy
                 SettingsGrid.Visibility = Visibility.Hidden;
                 myWindow.WindowState = WindowState.Maximized;
                 bt_ShowSettings.Visibility = Visibility.Visible;
+                
                 Grid.SetColumnSpan(WindowOptionsColum, 2);
             }
             else
