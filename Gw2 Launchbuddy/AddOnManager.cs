@@ -68,7 +68,6 @@ namespace Gw2_Launchbuddy
 
     public static class AddOnManager
     {
-        
         public static ObservableCollection<AddOn> AddOns = new ObservableCollection<AddOn>();
 
         public static void Add(string name,string[] args,bool IsMultilaunch,bool IsLbAddon)
@@ -89,15 +88,13 @@ namespace Gw2_Launchbuddy
                     ProInfo.WorkingDirectory = Path.GetDirectoryName(filedialog.FileName);
                     AddOns.Add(new AddOn(name, ProInfo, IsMultilaunch, IsLbAddon));
                 }
-            } else
+            }
+            else
             {
                 MessageBox.Show("Please enter a name!");
             }
-
-            
         }
-
-
+        
         public static void CheckExisting()
         {
             Process[] processes = Process.GetProcesses();
@@ -114,7 +111,6 @@ namespace Gw2_Launchbuddy
         public static void UpdateList()
         {
             CheckExisting();
-
             Process[] processes = Process.GetProcesses();
 
             foreach(AddOn addon in AddOns)
@@ -127,7 +123,6 @@ namespace Gw2_Launchbuddy
                     }
                 }  
             }
-
         }
 
 
@@ -178,8 +173,7 @@ namespace Gw2_Launchbuddy
                 }
             }
         }
-
-
+        
         public static void SaveAddons(string path)
         {
             try
@@ -187,8 +181,7 @@ namespace Gw2_Launchbuddy
                 XmlSerializer x = new XmlSerializer(typeof(ObservableCollection<AddOn>));
                 TextWriter writer = new StreamWriter(path);
                 x.Serialize(writer, AddOns);
-
-
+                
                 /*
                 using (Stream stream = System.IO.File.Open(path, FileMode.Create))
                 {
@@ -202,16 +195,13 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show(e.Message);
             }
         }
-
-
+        
         public static ObservableCollection<AddOn> LoadAddons(string path)
         {
             try
             {
-
                 if (System.IO.File.Exists(path) == true)
                 {
-
                     XmlSerializer serializer = new XmlSerializer(typeof(ObservableCollection<AddOn>));
 
                     StreamReader reader = new StreamReader(path);
@@ -238,6 +228,5 @@ namespace Gw2_Launchbuddy
                 return null;
             }
         }
-
     }
 }

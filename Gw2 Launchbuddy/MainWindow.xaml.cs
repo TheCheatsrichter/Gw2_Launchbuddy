@@ -52,7 +52,6 @@ namespace Gw2_Launchbuddy
         List<string> noKeep = new List<string>();
 
         string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
-        bool ismultibox = false;
 
         AES crypt = new AES();
 
@@ -115,8 +114,6 @@ namespace Gw2_Launchbuddy
                 get { return System.IO.Path.GetFileName(Path); }
             }
             public string Path { set; get; }
-
-
             public CinemaImage(string Path)
             {
                 this.Path = Path;
@@ -249,7 +246,6 @@ namespace Gw2_Launchbuddy
             progw2.WaitForExit();
         }
 
-
         void setupend()
         {
             try
@@ -262,7 +258,6 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show(err.Message);
             }
         }
-
 
         void createlist()
         {
@@ -286,14 +281,11 @@ namespace Gw2_Launchbuddy
 
                 foreach (IPAddress ip in auth2ips)
                 {
-
                     tmp_authlist.Add(new Server { IP = ip.ToString(), Port = default_auth1port, Type = "auth2", Ping = getping(ip.ToString()).ToString() });
-
                 }
 
                 foreach (IPAddress ip in assetips)
                 {
-
                     tmp_assetlist.Add(new Server { IP = ip.ToString(), Port = default_assetport, Type = "asset", Ping = getping(ip.ToString()).ToString(), Location = getlocation(ip.ToString()) });
                 }
             }
@@ -341,13 +333,11 @@ namespace Gw2_Launchbuddy
                 Application.Current.Dispatcher.BeginInvoke(
                 System.Windows.Threading.DispatcherPriority.Background,
                 new Action(() => updateserverlist(tmp_authlist, tmp_assetlist)));
-
             }
             catch (Exception err)
             {
                 MessageBox.Show(err.Message);
             }
-
         }
 
         void updateserverlist(ObservableCollection<Server> newauthlist, ObservableCollection<Server> newassetlist)
@@ -363,7 +353,6 @@ namespace Gw2_Launchbuddy
             lab_authserverlist.Content = "Authentication Servers (" + authlist.Count + " servers found):";
             lab_assetserverlist.Content = "Asset Servers (" + assetlist.Count + " servers found):";
             bt_checkservers.Content = "Check Servers (Last update: " + DateTime.Now.ToString("h:mm:ss tt") + ")";
-
 
             // Sorting  servers (ping).
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(listview_auth.ItemsSource);
@@ -393,7 +382,6 @@ namespace Gw2_Launchbuddy
                 if (Properties.Settings.Default.use_autologin == true) cb_login.IsChecked = true;
 
                 listview_acc.SelectedIndex = Cinema_Accountlist.SelectedIndex = Properties.Settings.Default.selected_acc;
-
             }
             catch (Exception err)
             {
@@ -619,7 +607,6 @@ namespace Gw2_Launchbuddy
             filedialog.Multiselect = false;
             filedialog.Filter = "Exe Files(*.exe) | *.exe";
             filedialog.ShowDialog();
-
 
             if (filedialog.FileName != "")
             {
@@ -858,8 +845,6 @@ namespace Gw2_Launchbuddy
             }
         }
 
-
-
         void loadaccounts()
         {
             try
@@ -890,7 +875,6 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show(e.Message);
             }
         }
-
 
         void SaveAddons()
         {
@@ -975,7 +959,6 @@ namespace Gw2_Launchbuddy
                 Globals.selected_accs[0].Email = selectedItems[0].Email;
                 Globals.selected_accs[0].Password = selectedItems[0].Password;
                 bt_shortcut.IsEnabled = true;
-                ismultibox = false;
             }
 
             if (((ListView)sender).SelectedItems.Count != 0 && ((ListView)sender).SelectedItems.Count > 1)
@@ -985,7 +968,6 @@ namespace Gw2_Launchbuddy
                 Globals.selected_accs[0].Email = selectedItem.Email;
                 Globals.selected_accs[0].Password = selectedItem.Password;
                 bt_shortcut.IsEnabled = false;
-                ismultibox = true;
             }
 
             //Sync account lists.
@@ -1028,7 +1010,6 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show("Gw2.exe  installpath is empty!");
             }
         }
-
 
         private void tb_authport_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
@@ -1134,11 +1115,6 @@ namespace Gw2_Launchbuddy
             list.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
         }
 
-        private void button_Click_1(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void bt_donate_Click(object sender, RoutedEventArgs e)
         {
             string url = "";
@@ -1162,8 +1138,7 @@ namespace Gw2_Launchbuddy
         {
             Application.Current.Shutdown();
         }
-
-
+        
         private void tab_options_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is TabControl)
@@ -1284,7 +1259,6 @@ namespace Gw2_Launchbuddy
             }
         }
 
-
         void LoadCinemaSettings()
         {
             string imagepath = Properties.Settings.Default.cinema_imagepath;
@@ -1313,8 +1287,6 @@ namespace Gw2_Launchbuddy
                 lab_musicpath.Content = "Current Musicfile: " + Path.GetFileName(musicpath);
                 mediaplayer.Open(new Uri(musicpath));
             }
-
-
         }
 
         private void bt_musicstart_Click(object sender, RoutedEventArgs e)
@@ -1347,7 +1319,6 @@ namespace Gw2_Launchbuddy
             }
 
         }
-
 
         private void rb_slideshowmode(object sender, RoutedEventArgs e)
         {
@@ -1474,8 +1445,6 @@ namespace Gw2_Launchbuddy
                 SettingsGrid.Visibility = Visibility.Hidden;
             }
         }
-
-
 
         #region Old Handle Method Functions
         void checksetup()
@@ -1607,8 +1576,7 @@ namespace Gw2_Launchbuddy
 
         public ListSortDirection Direction { get; private set; }
 
-        public SortAdorner(UIElement element, ListSortDirection dir)
-                : base(element)
+        public SortAdorner(UIElement element, ListSortDirection dir) : base(element)
         {
             this.Direction = dir;
         }
@@ -1634,9 +1602,5 @@ namespace Gw2_Launchbuddy
 
             drawingContext.Pop();
         }
-
     }
-
-
-
 }

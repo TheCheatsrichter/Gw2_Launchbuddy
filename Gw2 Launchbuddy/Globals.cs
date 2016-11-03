@@ -9,16 +9,8 @@ namespace Gw2_Launchbuddy
 {
     static class Globals
     {
-        private static Microsoft.Win32.RegistryKey _LBRegKey = null;
-        public static Microsoft.Win32.RegistryKey LBRegKey
-        {
-            get
-            {
-                return Microsoft.Win32.Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("LaunchBuddy");
-            }
-            set { }
-        }
-        
+        public static Microsoft.Win32.RegistryKey LBRegKey { get { return Microsoft.Win32.Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("LaunchBuddy"); } set { } }
+
         public static List<Account> selected_accs = new List<Account>();
         public static string exepath, exename, unlockerpath, version_client, version_api;
 
@@ -41,14 +33,14 @@ namespace Gw2_Launchbuddy
         public string PrintSterile(int i) { return PrintSterile(Globals.selected_accs.Count > i ? Globals.selected_accs[i] : new Account()); }
         public string PrintSterile(Account account)
         {
-            return String.Join(" ", arguments.Where(a => !a.Sensitive).Select(a => a.Print)) + (Properties.Settings.Default.use_autologin ? " -AutoLogin" : "") ;
+            return String.Join(" ", arguments.Where(a => !a.Sensitive).Select(a => a.Print)) + (Properties.Settings.Default.use_autologin ? " -AutoLogin" : "");
         }
         public void Argument(string flag) { Argument(flag, null, null); }
         public void Argument(string flag, string option) { Argument(flag, option, null); }
         public void Argument(string flag, bool? sensitive) { Argument(flag, null, sensitive); }
         public void Argument(string flag, string option, bool? sensitive)
         {
-            var arg = new Argument(flag,option,sensitive ?? false);
+            var arg = new Argument(flag, option, sensitive ?? false);
             if (arguments.Any(a => a.Flag == flag))
                 arg = arguments.Where(a => a.Flag == flag).First();
             else
