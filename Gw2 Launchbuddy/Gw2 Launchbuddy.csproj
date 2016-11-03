@@ -137,7 +137,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AddOnManager.cs" />
+    <Compile Include="ApplicationManager.cs" />
     <Compile Include="Encryption_AES.cs" />
+    <Compile Include="Globals.cs" />
     <Compile Include="HandleManager.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -243,7 +245,7 @@
     <None Include="Resources\opacity mask.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\loginwindow.png" />
+    <Resource Include="Resources\loginwindow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
