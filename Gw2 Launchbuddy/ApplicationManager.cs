@@ -48,7 +48,17 @@ namespace Gw2_Launchbuddy
         static bool RegClients(string created = null)
         {
             var key = Globals.LBRegKey;
-            var listClients = ((string[])key.GetValue("Clients")).ToList();
+            List<string> listClients = new List<string>();
+            try
+            {
+                listClients = ((string[])key.GetValue("Clients")).ToList();
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("Reg key likely does not exist: " + e.Message);
+#endif
+            }
             var gw2Procs = Process.GetProcesses().ToList().Where(a => a.ProcessName == Regex.Replace(Globals.exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).ToList().ConvertAll<string>(new Converter<Process, string>(procMD5));
             var running = gw2Procs.Count();
             var temp = listClients.Where(a => !gw2Procs.Contains(a)).ToList();
@@ -111,7 +121,7 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show(err.Message);
             }
         }
-        
+
         public static string CalculateMD5(string input)
         {
             var md5 = MD5.Create();
