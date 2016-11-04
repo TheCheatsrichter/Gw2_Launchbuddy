@@ -151,6 +151,7 @@ namespace Gw2_Launchbuddy
 
         void slideshow_diashow(string imagespath)
         {
+            //Currently loads all images to RAM and then shows them. Should be changed to improve performance
             List<BitmapSource> images = new List<BitmapSource>();
             if (imagespath != "")
             {
@@ -164,23 +165,31 @@ namespace Gw2_Launchbuddy
             {
                 images.Add((new BitmapImage(new Uri(@"/Resources/launchbuddyback.png", UriKind.Relative))));
             }
-            
-            //temporary int to not cause infinite loop
-            int tmp = 0;
 
-            while (tmp < 10)
+            bool isactive = false;
+
+            Dispatcher.Invoke(new Action(() =>
             {
-                Random rnd = new Random();
-                int nr = rnd.Next(images.Count);
+                isactive = myWindow.IsActive;
+            }));
 
-                Dispatcher.Invoke(new Action(() =>
+            while (true)
+            {
+                while (isactive)
                 {
-                    //img_slideshow.Source = images[nr];
-                }));
+                    Random rnd = new Random();
+                    int nr = rnd.Next(images.Count);
+                    images[nr].Freeze();
 
+                    Dispatcher.Invoke(new Action(() =>
+                    {
+                        img_slideshow.Source = images[nr];
+                    }));
+
+                    Thread.Sleep(3000);
+
+                }
                 Thread.Sleep(3000);
-                tmp++;
-
             }
 
         }
@@ -244,7 +253,6 @@ namespace Gw2_Launchbuddy
                         img_slideshow.OpacityMask = mask;
                     }
 
-                    
                     Thread th_slideshow = new Thread(() => slideshow_diashow(imagespath));
                     th_slideshow.Start();
                     
@@ -1277,7 +1285,6 @@ namespace Gw2_Launchbuddy
             if (System.Windows.Forms.DialogResult.OK == folderdialog.ShowDialog())
             {
                 lv_cinema_images.SelectedIndex = -1;
-                lv_cinema_images.Items.Clear();
                 lab_imagepreview.Content = "Current Image:";
                 var files = Directory.GetFiles(folderdialog.SelectedPath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp"));
                 ObservableCollection<CinemaImage> images = new ObservableCollection<CinemaImage>();
