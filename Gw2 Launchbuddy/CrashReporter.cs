@@ -13,7 +13,7 @@ namespace Gw2_Launchbuddy
         public static System.Net.Mail.MailAddress[] emails = new System.Net.Mail.MailAddress[]
         {
             new MailAddress("gw2launchbuddy@gmx.at","TheCheatsrichter"),
-            //new MailAddress("","KairuByte"),
+            new MailAddress("launchbuddy@kairubyte.mailclark.ai","KairuByte"),
         };
 
         public static void TestReportSingle(string name)
