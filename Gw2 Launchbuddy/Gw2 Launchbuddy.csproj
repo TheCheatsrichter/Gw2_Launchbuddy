@@ -260,6 +260,20 @@
   <ItemGroup>
     <Resource Include="Resources\logo_hq_mask.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\error.png" />
+    <Resource Include="Resources\Icons\minimize.png" />
+    <Resource Include="Resources\Icons\multitab.png" />
+    <Resource Include="Resources\Icons\pause.png" />
+    <Resource Include="Resources\Icons\play.png" />
+    <Resource Include="Resources\Icons\settings.png" />
+    <Resource Include="Resources\Icons\speaker_loud.png" />
+    <Resource Include="Resources\Icons\speaker_mute.png" />
+    <Resource Include="Resources\Icons\stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\popcorn.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
