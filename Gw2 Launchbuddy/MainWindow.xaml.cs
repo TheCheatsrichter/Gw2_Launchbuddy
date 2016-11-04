@@ -219,7 +219,16 @@ namespace Gw2_Launchbuddy
                 myWindow.Height = (int)(myWindow.Width / 16 * 9);
                 int reso_x = (int)myWindow.Width;
                 int reso_y = (int)myWindow.Height;
+
+                //Centering Window, only needed in Debug
+                double screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
+                double screenHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
+                double windowWidth = this.Width;
+                double windowHeight = this.Height;
+                this.Left = (screenWidth / 2) - (windowWidth / 2);
+                this.Top = (screenHeight / 2) - (windowHeight / 2);
 #endif
+
                 Canvas.SetTop(Canvas_login, reso_y - (reso_y / 2));
                 Canvas.SetLeft(Canvas_login, reso_x / 10);
                 var endpos =(System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];
@@ -230,7 +239,7 @@ namespace Gw2_Launchbuddy
                 Grid.SetColumnSpan(WindowOptionsColum, 2);
                 Cinema_MediaPlayer.Visibility = Visibility.Hidden;
                 Canvas_Custom_UI.Visibility = Visibility.Visible;
-                
+                VolumeControl.Visibility = Visibility.Visible;
 
                 if (videomode)
                 {
@@ -262,6 +271,7 @@ namespace Gw2_Launchbuddy
             }
             else
             {
+                VolumeControl.Visibility = Visibility.Collapsed;
                 Cinema_MediaPlayer.Stop();
                 Cinema_MediaPlayer.Visibility = Visibility.Hidden;
                 SettingsGrid.Visibility = Visibility.Visible;
