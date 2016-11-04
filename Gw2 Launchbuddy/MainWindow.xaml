@@ -12,6 +12,25 @@
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
         Title="Gw2 Launchbuddy V 1.3" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="myWindow_MouseLeftButtonDown">
     <Window.Resources>
+
+        <Storyboard x:Key="anim_musicfadeout">
+            <DoubleAnimation 
+                        Storyboard.TargetName="Cinema_MediaPlayer"
+                        Storyboard.TargetProperty="Volume"
+                        From="1" To="0" Duration="0:0:1"
+                        AutoReverse="False"
+                        />
+        </Storyboard>
+
+        <Storyboard x:Key="anim_musicfadein">
+            <DoubleAnimation 
+                        Storyboard.TargetName="Cinema_MediaPlayer"
+                        Storyboard.TargetProperty="Volume"
+                        From="0" To="1" Duration="0:0:3"
+                        AutoReverse="False"
+                        />
+        </Storyboard>
+
         <EasingDoubleKeyFrame x:Key="Mask_EndPos" KeyTime="0:0:4.9" Value="800">
             <EasingDoubleKeyFrame.EasingFunction>
                 <CubicEase EasingMode="EaseInOut"/>
@@ -97,7 +116,7 @@
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
-        <MediaElement x:Name="Cinema_Videoplayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual"/>
+        <MediaElement x:Name="Cinema_MediaPlayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual"/>
         <StackPanel x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="1">
             <Button x:Name="bt_ShowSettings" Width="30" Click="bt_ShowSettings_Click" Height="30" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
                 <Image Source="Resources/Icons/settings.png"/>

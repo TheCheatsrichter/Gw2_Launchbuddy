@@ -54,8 +54,6 @@ namespace Gw2_Launchbuddy
 
         AES crypt = new AES();
 
-        MediaPlayer mediaplayer = new MediaPlayer();
-
         [Serializable]
         public class Server
         {
@@ -229,15 +227,15 @@ namespace Gw2_Launchbuddy
                 SettingsGrid.Visibility = Visibility.Hidden;
                 bt_ShowSettings.Visibility = Visibility.Visible;
                 Grid.SetColumnSpan(WindowOptionsColum, 2);
-                Cinema_Videoplayer.Visibility = Visibility.Hidden;
+                Cinema_MediaPlayer.Visibility = Visibility.Hidden;
                 Canvas_Custom_UI.Visibility = Visibility.Visible;
                 
 
                 if (videomode)
                 {
-                    Cinema_Videoplayer.Visibility = Visibility.Visible;
-                    Cinema_Videoplayer.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
-                    Cinema_Videoplayer.Play();
+                    Cinema_MediaPlayer.Visibility = Visibility.Visible;
+                    Cinema_MediaPlayer.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
+                    Cinema_MediaPlayer.Play();
                 }
 
                 if (slideshowmode)
@@ -257,14 +255,14 @@ namespace Gw2_Launchbuddy
                     th_slideshow.Start();
                     
                     img_slideshow.Visibility = Visibility.Visible;
-                    mediaplayer.Open(new Uri(musicpath));
-                    mediaplayer.Play();
+                    Cinema_MediaPlayer.Source=new Uri(musicpath);
+                    Cinema_MediaPlayer.Play();
                 }
             }
             else
             {
-                Cinema_Videoplayer.Stop();
-                Cinema_Videoplayer.Visibility = Visibility.Hidden;
+                Cinema_MediaPlayer.Stop();
+                Cinema_MediaPlayer.Visibility = Visibility.Hidden;
                 SettingsGrid.Visibility = Visibility.Visible;
                 myWindow.WindowState = WindowState.Normal;
                 myWindow.Height = 680;
@@ -1343,7 +1341,7 @@ namespace Gw2_Launchbuddy
                 Properties.Settings.Default.cinema_musicpath = filedialog.FileName;
                 Properties.Settings.Default.Save();
                 lab_musicpath.Content = "Current Musicfile: " + Path.GetFileName(filedialog.FileName);
-                mediaplayer.Open(new Uri(filedialog.FileName));
+                Cinema_MediaPlayer.Source =(new Uri(filedialog.FileName));
             }
         }
 
@@ -1386,18 +1384,18 @@ namespace Gw2_Launchbuddy
             if (IsValidPath(musicpath) && Path.GetExtension(musicpath) == ".mp3")
             {
                 lab_musicpath.Content = "Current Musicfile: " + Path.GetFileName(musicpath);
-                mediaplayer.Open(new Uri(musicpath));
+                Cinema_MediaPlayer.Source = (new Uri(musicpath));
             }
         }
 
         private void bt_musicstart_Click(object sender, RoutedEventArgs e)
         {
-            mediaplayer.Play();
+            Cinema_MediaPlayer.Play();
         }
 
         private void bt_musicstop_Click(object sender, RoutedEventArgs e)
         {
-            mediaplayer.Stop();
+            Cinema_MediaPlayer.Stop();
         }
 
         private void bt_cinema_Click(object sender, RoutedEventArgs e)
@@ -1405,7 +1403,7 @@ namespace Gw2_Launchbuddy
             cinemamode = !Properties.Settings.Default.cinema_use;
             Properties.Settings.Default.cinema_use = cinemamode;
             Properties.Settings.Default.Save();
-            mediaplayer.Stop();
+            Cinema_MediaPlayer.Stop();
             cinema_setup();
         }
 
@@ -1673,13 +1671,11 @@ namespace Gw2_Launchbuddy
 
         private void Window_LostKeyboardFocus(Object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
-            Cinema_Videoplayer.Volume = 0;
-            mediaplayer.Volume=0;
+            BeginStoryboard(this.FindResource("anim_musicfadeout") as System.Windows.Media.Animation.Storyboard);
         }
         private void Window_GotKeyboardFocus(Object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
-            mediaplayer.Volume = 100;
-            Cinema_Videoplayer.Volume = 100;
+            BeginStoryboard(this.FindResource("anim_musicfadein") as System.Windows.Media.Animation.Storyboard);
         }
 
 
