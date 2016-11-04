@@ -127,9 +127,10 @@ namespace Gw2_Launchbuddy
                 Directory.CreateDirectory(AppdataPath);
             }
 
+#if !DEBUG
             //ENABLE THIS BEFORE RELEASE!! ##########################################################################################
-            //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionReport);
-
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionReport);
+#endif
             accountlist.Clear(); //clearing accountlist
             loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
             loadaccounts(); // loading saved accounts from launchbuddy
@@ -1522,7 +1523,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        #region Old Handle Method Functions
+#region Old Handle Method Functions
         void checksetup()
         {
             try
@@ -1604,7 +1605,7 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show(e.Message);
             }
         }
-        #endregion
+#endregion
 
         private void CheckBox_Checked(Object sender, RoutedEventArgs e)
         {
