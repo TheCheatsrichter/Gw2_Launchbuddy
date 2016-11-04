@@ -198,12 +198,32 @@ namespace Gw2_Launchbuddy
 
             if (cinemamode)
             {
-                SettingsGrid.Visibility = Visibility.Hidden;
+
+
+                //Notes: Login frame = 560x300
+
+#if !DEBUG
+                int reso_x = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
+                int reso_y = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
                 myWindow.WindowState = WindowState.Maximized;
+#else
+                //Test resolutions here!
+                //Only edit width!
+                myWindow.Width = 1600;
+
+                myWindow.Height = (int)(myWindow.Width / 16 * 9);
+                int reso_x = (int)myWindow.Width;
+                int reso_y = (int)myWindow.Height;
+#endif
+                Canvas.SetTop(Canvas_login, reso_y - (reso_y / 2));
+                Canvas.SetLeft(Canvas_login, reso_x / 10);
+
+                SettingsGrid.Visibility = Visibility.Hidden;
                 bt_ShowSettings.Visibility = Visibility.Visible;
                 Grid.SetColumnSpan(WindowOptionsColum, 2);
                 Cinema_Videoplayer.Visibility = Visibility.Hidden;
                 Canvas_Custom_UI.Visibility = Visibility.Visible;
+                
 
                 if (videomode)
                 {
@@ -1654,6 +1674,17 @@ namespace Gw2_Launchbuddy
         {
             mediaplayer.Volume = 100;
             Cinema_Videoplayer.Volume = 100;
+        }
+
+
+        private void Canvas_login_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void Image_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
         }
     }
 
