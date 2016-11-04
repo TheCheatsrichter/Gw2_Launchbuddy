@@ -104,27 +104,28 @@
             <Button x:Name="bt_close" Width="30" Content="X" Click="bt_close_Click" />
         </StackPanel>
 
-        <Canvas x:Name="Canvas_login" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0">
-            <!--<Image Source="pack://siteoforigin:,,,/Resources/loginwindow.png" Height="300">-->
-            <Image Source="/Resources/loginwindow.png" Height="300"/>
-            <ListView x:Name="Cinema_Accountlist" Canvas.Left="100" Canvas.Top="80" Width="280" Height="135" SelectionChanged="listview_acc_SelectionChanged">
-                <ListView.View>
-                    <GridView >
-                        <GridViewColumn Width="200" DisplayMemberBinding="{Binding Nick}">
-                            <GridViewColumnHeader Tag="Name" Click="listview_auth_Click">Name</GridViewColumnHeader>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-            <StackPanel Orientation="Horizontal" Canvas.Left="100" Canvas.Top="220">
-                <Button x:Name="Cinema_Launchaccount"  Content="Launch" Width="100" Click="Cinema_Launchaccount_Click"/>
-                <Button x:Name="Settings" Content="Settings"  Width="100" Margin="10,0,0,0" Click="Settings_Click"/>
-            </StackPanel>
-
+        <Canvas x:Name="Canvas_Custom_UI" >
+            <Canvas x:Name="Canvas_login" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0">
+                <!--<Image Source="pack://siteoforigin:,,,/Resources/loginwindow.png" Height="300">-->
+                <Image Source="/Resources/loginwindow.png" Height="300"/>
+                <ListView x:Name="Cinema_Accountlist" Canvas.Left="100" Canvas.Top="80" Width="280" Height="135" SelectionChanged="listview_acc_SelectionChanged">
+                    <ListView.View>
+                        <GridView >
+                            <GridViewColumn Width="200" DisplayMemberBinding="{Binding Nick}">
+                                <GridViewColumnHeader Tag="Name" Click="listview_auth_Click">Name</GridViewColumnHeader>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <StackPanel Orientation="Horizontal" Canvas.Left="100" Canvas.Top="220">
+                    <Button x:Name="Cinema_Launchaccount"  Content="Launch" Width="100" Click="Cinema_Launchaccount_Click"/>
+                    <Button x:Name="Settings" Content="Settings"  Width="100" Margin="10,0,0,0" Click="Settings_Click"/>
+                </StackPanel>
+            </Canvas>
         </Canvas>
-
-
-        <Grid Margin="5,5" x:Name="SettingsGrid" Grid.Row="1" Background="White">
+        
+        
+        <Grid  x:Name="SettingsGrid" Grid.Row="1" Background="White" Width="700" Height="650" Grid.RowSpan="3" Grid.ColumnSpan="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100*"/>
                 <RowDefinition Height="50"/>

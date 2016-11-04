@@ -203,6 +203,7 @@ namespace Gw2_Launchbuddy
                 bt_ShowSettings.Visibility = Visibility.Visible;
                 Grid.SetColumnSpan(WindowOptionsColum, 2);
                 Cinema_Videoplayer.Visibility = Visibility.Hidden;
+                Canvas_Custom_UI.Visibility = Visibility.Visible;
 
                 if (videomode)
                 {
@@ -243,6 +244,7 @@ namespace Gw2_Launchbuddy
                 myWindow.Width = 700;
                 bt_ShowSettings.Visibility = Visibility.Hidden;
                 Grid.SetColumnSpan(WindowOptionsColum, 1);
+                Canvas_Custom_UI.Visibility = Visibility.Collapsed;
             }
 
         }
@@ -1377,6 +1379,7 @@ namespace Gw2_Launchbuddy
             cinemamode = !Properties.Settings.Default.cinema_use;
             Properties.Settings.Default.cinema_use = cinemamode;
             Properties.Settings.Default.Save();
+            mediaplayer.Stop();
             cinema_setup();
         }
 

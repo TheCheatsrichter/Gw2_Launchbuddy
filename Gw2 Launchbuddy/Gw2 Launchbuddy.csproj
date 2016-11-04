@@ -143,6 +143,7 @@
     <Compile Include="AddOnManager.cs" />
     <Compile Include="ApplicationManager.cs" />
     <Compile Include="CrashReporter.cs" />
+    <Compile Include="CustomUI.cs" />
     <Compile Include="Encryption_AES.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="HandleManager.cs" />
