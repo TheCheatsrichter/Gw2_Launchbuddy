@@ -117,8 +117,33 @@
             </Image.RenderTransform>
         </Image>
         <MediaElement x:Name="Cinema_MediaPlayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual" Volume="{Binding Path=Value,ElementName=sl_volumecontrol}"/>
-        
-        <StackPanel x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="1">
+
+        <StackPanel x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="1" Background="#4CFFFFFF">
+            <StackPanel.Triggers>
+                <EventTrigger RoutedEvent="StackPanel.MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                            Storyboard.TargetName="WindowOptionsColum" 
+                            Storyboard.TargetProperty="(StackPanel.Background).(SolidColorBrush.Color)"
+                            To="#4CFFFFFF" Duration="0:0:1"
+                        />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="StackPanel.MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                            Storyboard.TargetName="WindowOptionsColum" 
+                            Storyboard.TargetProperty="(StackPanel.Background).(SolidColorBrush.Color)"
+                            To="Transparent" Duration="0:0:1"  
+                        />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </StackPanel.Triggers>
+            
             <Button x:Name="bt_ShowSettings" Width="30" Click="bt_ShowSettings_Click" Height="30" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
                 <Image Source="Resources/Icons/settings.png"/>
             </Button>
