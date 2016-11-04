@@ -1697,16 +1697,15 @@ namespace Gw2_Launchbuddy
             sl_volumecontrol.Visibility = Visibility.Visible;
         }
 
-        private void Slider_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            (sender as Slider).Visibility=Visibility.Collapsed;
-        }
-
         private void sl_volumecontrol_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             Cinema_MediaPlayer.Volume = sl_volumecontrol.Value;
         }
 
+        private void WrapPanel_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            sl_volumecontrol.Visibility = Visibility.Collapsed;
+        }
     }
 
     public class SortAdorner : Adorner
