@@ -10,14 +10,14 @@
         ShowInTaskbar="true"
     
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
-        Title="Gw2 Launchbuddy V 1.3" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="myWindow_MouseLeftButtonDown">
+        Title="Gw2 Launchbuddy V 1.3" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.Resources>
 
         <Storyboard x:Key="anim_musicfadeout">
             <DoubleAnimation 
                         Storyboard.TargetName="Cinema_MediaPlayer"
                         Storyboard.TargetProperty="Volume"
-                        From="1" To="0" Duration="0:0:1"
+                        To="0" Duration="0:0:1"
                         AutoReverse="False"
                         />
         </Storyboard>
@@ -26,7 +26,7 @@
             <DoubleAnimation 
                         Storyboard.TargetName="Cinema_MediaPlayer"
                         Storyboard.TargetProperty="Volume"
-                        From="0" To="1" Duration="0:0:3"
+                        To="1" Duration="0:0:3"
                         AutoReverse="False"
                         />
         </Storyboard>
@@ -133,8 +133,8 @@
         </StackPanel>
 
         <Canvas x:Name="Canvas_Custom_UI">
-            <Canvas x:Name="Canvas_login" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0" MouseLeftButtonDown="Canvas_login_MouseLeftButtonDown">
-                <Image Source="/Resources/loginwindow.png" Height="300" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
+            <Canvas x:Name="Canvas_login" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0">
+                <Image Source="/Resources/loginwindow.png" Height="300" />
                 <ListView x:Name="Cinema_Accountlist" Canvas.Left="100" Canvas.Top="80" Width="280" Height="135" SelectionChanged="listview_acc_SelectionChanged">
                     <ListView.View>
                         <GridView >

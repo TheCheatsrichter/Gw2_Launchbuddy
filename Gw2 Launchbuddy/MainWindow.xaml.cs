@@ -1678,16 +1678,6 @@ namespace Gw2_Launchbuddy
             BeginStoryboard(this.FindResource("anim_musicfadein") as System.Windows.Media.Animation.Storyboard);
         }
 
-
-        private void Canvas_login_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void Image_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-
-        }
     }
 
     public class SortAdorner : Adorner
