@@ -198,18 +198,15 @@ namespace Gw2_Launchbuddy
 
             if (cinemamode)
             {
-
-
-                //Notes: Login frame = 560x300
-
 #if !DEBUG
                 int reso_x = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
                 int reso_y = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
                 myWindow.WindowState = WindowState.Maximized;
 #else
+                //Notes: Login frame = 560x300
                 //Test resolutions here!
                 //Only edit width!
-                myWindow.Width = 1600;
+                myWindow.Width = 2000;
 
                 myWindow.Height = (int)(myWindow.Width / 16 * 9);
                 int reso_x = (int)myWindow.Width;
@@ -217,6 +214,8 @@ namespace Gw2_Launchbuddy
 #endif
                 Canvas.SetTop(Canvas_login, reso_y - (reso_y / 2));
                 Canvas.SetLeft(Canvas_login, reso_x / 10);
+                var endpos =(System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];
+                endpos.Value = reso_x/3;
 
                 SettingsGrid.Visibility = Visibility.Hidden;
                 bt_ShowSettings.Visibility = Visibility.Visible;

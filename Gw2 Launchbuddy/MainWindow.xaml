@@ -12,6 +12,11 @@
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
         Title="Gw2 Launchbuddy V 1.3" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="myWindow_MouseLeftButtonDown">
     <Window.Resources>
+        <EasingDoubleKeyFrame x:Key="Mask_EndPos" KeyTime="0:0:4.9" Value="800">
+            <EasingDoubleKeyFrame.EasingFunction>
+                <CubicEase EasingMode="EaseInOut"/>
+            </EasingDoubleKeyFrame.EasingFunction>
+        </EasingDoubleKeyFrame>
         <Storyboard x:Key="anim_slideshow_start">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="img_slideshow">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0.678"/>
@@ -25,11 +30,7 @@
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="img_slideshow">
                 <EasingDoubleKeyFrame KeyTime="0" Value="-19.714"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:4" Value="-20.386"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:4.9" x:Name="SlideShowEndPos" Value="800">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <CubicEase EasingMode="EaseInOut"/>
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
+                <StaticResource ResourceKey="Mask_EndPos" />
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="img_slideshow">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0.677"/>
