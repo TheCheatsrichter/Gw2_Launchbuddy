@@ -1258,11 +1258,6 @@ namespace Gw2_Launchbuddy
             myWindow.Opacity = 0;
         }
 
-        private void myWindow_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            this.DragMove();
-        }
-
         private void bt_AddAddon_Click(object sender, RoutedEventArgs e)
         {
             string[] args = Regex.Matches(tb_AddonArgs.Text, "-\\w* ?(\".*\")?").Cast<Match>().Select(m => m.Value).ToArray();
@@ -1678,6 +1673,10 @@ namespace Gw2_Launchbuddy
             BeginStoryboard(this.FindResource("anim_musicfadein") as System.Windows.Media.Animation.Storyboard);
         }
 
+        private void myWindow_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
     }
 
     public class SortAdorner : Adorner
