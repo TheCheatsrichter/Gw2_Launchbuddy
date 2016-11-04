@@ -38,6 +38,7 @@ namespace Gw2_Launchbuddy
         /// 
 
         bool cinemamode = false;
+        double MediaVolume=100;
 
         SetupInfo winsetupinfo = new SetupInfo();
         private SortAdorner listViewSortAdorner = null;
@@ -1677,6 +1678,35 @@ namespace Gw2_Launchbuddy
         {
             this.DragMove();
         }
+
+        private void bt_mute_Click(object sender, RoutedEventArgs e)
+        {
+            if(Cinema_MediaPlayer.IsMuted)
+            {
+                Cinema_MediaPlayer.IsMuted = false;
+                img_mutebutton.Source = new BitmapImage(new Uri("/Resources/Icons/speaker_loud.png", UriKind.Relative));
+            }else
+            {
+                Cinema_MediaPlayer.IsMuted = true;
+                img_mutebutton.Source = new BitmapImage(new Uri("/Resources/Icons/speaker_mute.png", UriKind.Relative));
+            }
+        }
+
+        private void bt_mute_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            sl_volumecontrol.Visibility = Visibility.Visible;
+        }
+
+        private void Slider_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            (sender as Slider).Visibility=Visibility.Collapsed;
+        }
+
+        private void sl_volumecontrol_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Cinema_MediaPlayer.Volume = sl_volumecontrol.Value;
+        }
+
     }
 
     public class SortAdorner : Adorner

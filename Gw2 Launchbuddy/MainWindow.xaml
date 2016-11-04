@@ -26,7 +26,7 @@
             <DoubleAnimation 
                         Storyboard.TargetName="Cinema_MediaPlayer"
                         Storyboard.TargetProperty="Volume"
-                        To="1" Duration="0:0:3"
+                        To="{Binding Path=Value,ElementName=sl_volumecontrol}" Duration="0:0:3"
                         AutoReverse="False"
                         />
         </Storyboard>
@@ -116,11 +116,19 @@
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
-        <MediaElement x:Name="Cinema_MediaPlayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual"/>
+        <MediaElement x:Name="Cinema_MediaPlayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual" Volume="{Binding Path=Value,ElementName=sl_volumecontrol}"/>
+        
         <StackPanel x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="1">
             <Button x:Name="bt_ShowSettings" Width="30" Click="bt_ShowSettings_Click" Height="30" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
                 <Image Source="Resources/Icons/settings.png"/>
             </Button>
+            <WrapPanel>
+                <Button x:Name="bt_mute" Width="40"   BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="bt_mute_Click" MouseEnter="bt_mute_MouseEnter" >
+                    <Image x:Name="img_mutebutton" Source="Resources/Icons/speaker_loud.png"/>
+                </Button>
+                <Slider x:Name="sl_volumecontrol" Width="150" Orientation="Horizontal" Visibility="Collapsed" LargeChange="0.1" Maximum="1" MouseLeave="Slider_MouseLeave" ValueChanged="sl_volumecontrol_ValueChanged"></Slider>
+            </WrapPanel>
+
             <Button x:Name="bt_cinema" Width="40" Click="bt_cinema_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
                 <Image Source="Resources/Icons/popcorn.png"/>
             </Button>
