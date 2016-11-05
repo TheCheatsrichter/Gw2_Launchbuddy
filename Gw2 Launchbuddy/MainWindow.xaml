@@ -116,7 +116,7 @@
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
-        <MediaElement x:Name="Cinema_MediaPlayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual" Volume="{Binding Path=Value,ElementName=sl_volumecontrol}"/>
+        <MediaElement x:Name="Cinema_MediaPlayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual" Volume="{Binding Path=Value,ElementName=sl_volumecontrol}" MediaEnded="Cinema_MediaPlayer_MediaEnded"/>
 
         <StackPanel x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="1" Background="#4CFFFFFF">
             <StackPanel.Triggers>

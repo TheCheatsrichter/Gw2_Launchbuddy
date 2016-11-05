@@ -1755,8 +1755,10 @@ namespace Gw2_Launchbuddy
 
         private void Cinema_MediaPlayer_MediaEnded(object sender, RoutedEventArgs e)
         {
-            (sender as MediaPlayer).Play();
+            (sender as MediaElement).Stop();
+            (sender as MediaElement).Play();
         }
+
     }
 
     public class SortAdorner : Adorner
