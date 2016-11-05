@@ -151,6 +151,40 @@ namespace Gw2_Launchbuddy
         void slideshow_diashow(string imagespath)
         {
             //Currently loads all images to RAM and then shows them. Should be changed to improve performance
+
+            bool isactive = false;
+
+
+
+            string[] files = Directory.GetFiles(imagespath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp")).ToArray<string>();
+
+            while (true)
+            {
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    isactive = myWindow.IsActive;
+                }));
+                while (isactive)
+                {
+                    Random rnd = new Random();
+                    int nr = rnd.Next(files.Length-1);
+                    BitmapSource currentimg = LoadImage(files[nr]);
+                    currentimg.Freeze();
+
+                    Dispatcher.Invoke(new Action(() =>
+                    {
+                        img_slideshow.Source = currentimg;
+                    }));
+
+                    Thread.Sleep(3000);
+
+                }
+                Thread.Sleep(3000);
+            }
+
+
+
+            /*
             List<BitmapSource> images = new List<BitmapSource>();
             if (imagespath != "")
             {
@@ -190,6 +224,7 @@ namespace Gw2_Launchbuddy
                 }
                 Thread.Sleep(3000);
             }
+            */
 
         }
 
@@ -214,7 +249,8 @@ namespace Gw2_Launchbuddy
                 //Notes: Login frame = 560x300
                 //Test resolutions here!
                 //Only edit width!
-                myWindow.Width = 2000;
+
+                myWindow.Width = 1600;
 
                 myWindow.Height = (int)(myWindow.Width / 16 * 9);
                 int reso_x = (int)myWindow.Width;
@@ -1715,6 +1751,11 @@ namespace Gw2_Launchbuddy
         private void WrapPanel_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             sl_volumecontrol.Visibility = Visibility.Collapsed;
+        }
+
+        private void Cinema_MediaPlayer_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            (sender as MediaPlayer).Play();
         }
     }
 
