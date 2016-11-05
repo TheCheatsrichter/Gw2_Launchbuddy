@@ -150,13 +150,17 @@ namespace Gw2_Launchbuddy
 
         void slideshow_diashow(string imagespath)
         {
-            //Currently loads all images to RAM and then shows them. Should be changed to improve performance
-
             bool isactive = false;
-
-
-
             string[] files = Directory.GetFiles(imagespath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp")).ToArray<string>();
+            Random rnd = new Random();
+            BitmapSource startimg = LoadImage(files[rnd.Next(files.Length - 1)]);
+            startimg.Freeze();
+
+            Dispatcher.Invoke(new Action(() =>
+            {
+                img_slideshow.Source = startimg;
+            }));
+            
 
             while (true)
             {
@@ -166,7 +170,7 @@ namespace Gw2_Launchbuddy
                 }));
                 while (isactive)
                 {
-                    Random rnd = new Random();
+                    
                     int nr = rnd.Next(files.Length-1);
                     BitmapSource currentimg = LoadImage(files[nr]);
                     currentimg.Freeze();
@@ -181,50 +185,6 @@ namespace Gw2_Launchbuddy
                 }
                 Thread.Sleep(3000);
             }
-
-
-
-            /*
-            List<BitmapSource> images = new List<BitmapSource>();
-            if (imagespath != "")
-            {
-                var files = Directory.GetFiles(imagespath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp"));
-                foreach (var image in files)
-                {
-                    images.Add(LoadImage(image));
-                }
-            }
-            else
-            {
-                images.Add((new BitmapImage(new Uri(@"/Resources/launchbuddyback.png", UriKind.Relative))));
-            }
-
-            bool isactive = false;
-
-            Dispatcher.Invoke(new Action(() =>
-            {
-                isactive = myWindow.IsActive;
-            }));
-
-            while (true)
-            {
-                while (isactive)
-                {
-                    Random rnd = new Random();
-                    int nr = rnd.Next(images.Count);
-                    images[nr].Freeze();
-
-                    Dispatcher.Invoke(new Action(() =>
-                    {
-                        img_slideshow.Source = images[nr];
-                    }));
-
-                    Thread.Sleep(3000);
-
-                }
-                Thread.Sleep(3000);
-            }
-            */
 
         }
 
