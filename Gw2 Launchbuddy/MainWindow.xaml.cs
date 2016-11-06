@@ -38,7 +38,7 @@ namespace Gw2_Launchbuddy
         /// 
 
         bool cinemamode = false;
-        double MediaVolume=100;
+        double MediaVolume = 100;
 
         SetupInfo winsetupinfo = new SetupInfo();
         private SortAdorner listViewSortAdorner = null;
@@ -138,7 +138,25 @@ namespace Gw2_Launchbuddy
             checkver.Start();
             cinema_setup();
             LoadAddons();
+            fillargs();
+
             AddOnManager.LaunchLbAddons();
+        }
+
+        private void fillargs()
+        {
+            arglistbox.Items.Clear();
+            List<CheckBox> tmp = new List<CheckBox>();
+            foreach (var item in Globals.ArgList)
+                tmp.Add(new CheckBox() { Content = item.Key });
+            foreach (var item in tmp)
+            {
+                item.Margin = new Thickness(5, 0, 0, 0);
+                item.Checked += CheckBox_Checked;
+                item.Unchecked += CheckBox_Unchecked;
+            }
+
+            arglistbox.ItemsSource = tmp;
         }
 
         static void UnhandledExceptionReport(object sender, UnhandledExceptionEventArgs args)
@@ -231,8 +249,8 @@ namespace Gw2_Launchbuddy
 
                 Canvas.SetTop(Canvas_login, reso_y - (reso_y / 2));
                 Canvas.SetLeft(Canvas_login, reso_x / 10);
-                var endpos =(System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];
-                endpos.Value = reso_x/3;
+                var endpos = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];
+                endpos.Value = reso_x / 3;
 
                 SettingsGrid.Visibility = Visibility.Hidden;
                 bt_ShowSettings.Visibility = Visibility.Visible;
@@ -263,9 +281,9 @@ namespace Gw2_Launchbuddy
 
                     Thread th_slideshow = new Thread(() => slideshow_diashow(imagespath));
                     th_slideshow.Start();
-                    
+
                     img_slideshow.Visibility = Visibility.Visible;
-                    Cinema_MediaPlayer.Source=new Uri(musicpath);
+                    Cinema_MediaPlayer.Source = new Uri(musicpath);
                     Cinema_MediaPlayer.Play();
                 }
             }
@@ -493,7 +511,7 @@ namespace Gw2_Launchbuddy
             // This file also contains infos about the graphic settings
 
             //Find the newest xml file in APPDATA (the xml files share the same name as their exe files -> multiple .xml files possible!)
-            string[] configfiles = new string[]{};
+            string[] configfiles = new string[] { };
             try
             {
                 configfiles = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\", "*.exe.xml");
@@ -779,96 +797,7 @@ namespace Gw2_Launchbuddy
                 System.Windows.Controls.CheckBox item = (System.Windows.Controls.CheckBox)selecteditem;
                 lab_descr.Content = "Description (" + item.Content.ToString() + "):";
 
-                switch (item.Content.ToString())
-                {
-                    case "-32":
-                        textblock_descr.Text = "Forces the game to run in 32 bit.";
-                        break;
-
-                    case "-bmp":
-                        textblock_descr.Text = "Forces the game to create lossless screenshots as .BMP files. Use for creating high-quality screenshots at the expense of much larger files.";
-                        break;
-
-                    case "-diag":
-                        textblock_descr.Text = "Instead of launching the game, this command creates a detailed diagnostic file that contains diagnostic data that can be used for troubleshooting. The file, NetworkDiag.log, will be located in your game directory or Documents/Guild Wars . If you want to use this feature, be sure to create a separate shortcut for it.";
-                        break;
-
-                    case "-dx9single":
-                        textblock_descr.Text = "Enables the Direct3D 9c renderer in single-threaded mode. Improves performance in Wine with CSMT.";
-                        break;
-
-                    case "-forwardrenderer":
-                        textblock_descr.Text = "Uses Forward Rendering instead of Deferred Rendering (unfinished). This currently may lead to shadows and lighting to not appear as expected.It may increase the framerate and responsiveness when using AMD graphics card";
-                        break;
-
-                    case "-image":
-                        textblock_descr.Text = "Runs the patch UI only in order to download any available updates; closes immediately without loading the login form. ";
-                        break;
-
-                    case "-log":
-                        textblock_descr.Text = ("Enables the creation of a log file, used mostly by Support. The path for the generated file usually is found in the APPDATA folder");
-                        break;
-
-                    case "-mce":
-                        textblock_descr.Text = "Start the client with Windows Media Center compatibility, switching the game to full screen and restarting Media Center (if available) after the client is closed.";
-                        break;
-
-                    case "-nomusic":
-                        textblock_descr.Text = "Disables music and background music.";
-                        break;
-
-                    case "-noui":
-                        textblock_descr.Text = "Disables the user interface. This does the same thing as pressing Ctrl+Shift+H in the game.";
-                        break;
-
-                    case "-nosound":
-                        textblock_descr.Text = "Disables audio system completely.";
-                        break;
-
-                    case "-prefreset":
-                        textblock_descr.Text = "Resets game settings.";
-                        break;
-
-                    case "-repair":
-                        textblock_descr.Text = "Start the client, checks the files for errors and repairs them as needed. This can take a long time (1/2 hour or an hour) to run as it checks the entire contents of the 20-30 gigabyte archive.";
-                        break;
-
-                    case "-uispanallmonitors":
-                        textblock_descr.Text = "Spreads user interface across all monitors in a triple monitor setup.";
-                        break;
-
-                    case "-uninstall":
-                        textblock_descr.Text = "Presents the uninstall dialog. If uninstall is accepted, it deletes the contents of the Guild Wars 2 installation folder except GW2.EXE itself and any manually created subfolders. Contents in subfolders (if any) are not deleted.";
-                        break;
-
-                    case "-useOldFov":
-                        textblock_descr.Text = "Disables the widescreen field-of-view enhancements and restores the original field-of-view.";
-                        break;
-
-                    case "-verify":
-                        textblock_descr.Text = "Used to verify the .dat file.";
-                        break;
-
-                    case "-windowed":
-                        textblock_descr.Text = "Forces Guild Wars 2 to run in windowed mode. In game, you can switch to windowed mode by pressing Alt + Enter or clicking the window icon in the upper right corner.";
-                        break;
-
-                    case "-umbra gpu":
-                        textblock_descr.Text = "Forces the use of umbra's GPU accelerated culling. In most cases, using this results in higher cpu usage and lower gpu usage decreasing the frame-rate.";
-                        break;
-
-                    case "-maploadinfo":
-                        textblock_descr.Text = "Shows diagnostic information during map loads, including load percentages and elapsed time.";
-                        break;
-
-                    case "-shareArchive":
-                        textblock_descr.Text = "Opens the Gw2.dat file in shared mode so that it can be accessed from other processes while the game is running.";
-                        break;
-
-                    default:
-                        textblock_descr.Text = "Description missing!. (PLS REPORT)";
-                        break;
-                }
+                textblock_descr.Text = Globals.ArgList.Where(a => a.Key == item.Content.ToString()).Select(a => a.Value).FirstOrDefault() ?? "Description missing!. (PLS REPORT)";
             }
         }
 
@@ -1347,7 +1276,7 @@ namespace Gw2_Launchbuddy
                 Properties.Settings.Default.cinema_musicpath = filedialog.FileName;
                 Properties.Settings.Default.Save();
                 lab_musicpath.Content = "Current Musicfile: " + Path.GetFileName(filedialog.FileName);
-                Cinema_MediaPlayer.Source =(new Uri(filedialog.FileName));
+                Cinema_MediaPlayer.Source = (new Uri(filedialog.FileName));
             }
         }
 
@@ -1546,17 +1475,10 @@ namespace Gw2_Launchbuddy
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            if (SettingsGrid.Visibility == Visibility.Hidden)
-            {
-                SettingsGrid.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                SettingsGrid.Visibility = Visibility.Hidden;
-            }
+            SettingsGrid.Visibility = SettingsGrid.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
         }
 
-#region Old Handle Method Functions
+        #region Old Handle Method Functions
         void checksetup()
         {
             try
@@ -1638,7 +1560,7 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show(e.Message);
             }
         }
-#endregion
+        #endregion
 
         private void CheckBox_Checked(Object sender, RoutedEventArgs e)
         {
@@ -1654,19 +1576,12 @@ namespace Gw2_Launchbuddy
         void RefreshUI()
         {
             lab_currentsetup.Content = "Current Setup: " + Globals.args.PrintSterile(0);
-            string usedaddons = "";
-            if (lv_AddOns.ItemsSource != null)
-            {
-                foreach (AddOn addon in lv_AddOns.ItemsSource)
-                {
-                    usedaddons += addon.Name + " ";
-                }
-                lab_usedaddons.Content = "Used AddOns: " + usedaddons;
-            }
+            lab_usedaddons.Content = "Used AddOns: " + AddOnManager.ListAddons();
         }
 
         private void UpdateServerArgs()
         {
+            //Should really be bound to changing applicable UI elements
             if (checkb_assets.IsChecked == true)
                 Globals.args.Argument("-assetsrv", Globals.selected_assetsv.IP + ":" + tb_assetsport.Text);
             if (checkb_auth.IsChecked == true)
@@ -1691,11 +1606,12 @@ namespace Gw2_Launchbuddy
 
         private void bt_mute_Click(object sender, RoutedEventArgs e)
         {
-            if(Cinema_MediaPlayer.IsMuted)
+            if (Cinema_MediaPlayer.IsMuted)
             {
                 Cinema_MediaPlayer.IsMuted = false;
                 img_mutebutton.Source = new BitmapImage(new Uri("/Resources/Icons/speaker_loud.png", UriKind.Relative));
-            }else
+            }
+            else
             {
                 Cinema_MediaPlayer.IsMuted = true;
                 img_mutebutton.Source = new BitmapImage(new Uri("/Resources/Icons/speaker_mute.png", UriKind.Relative));
