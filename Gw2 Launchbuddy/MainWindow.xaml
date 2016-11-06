@@ -251,7 +251,7 @@
                                 <ColumnDefinition Width="50*"/>
                                 <ColumnDefinition Width="50*"/>
                             </Grid.ColumnDefinitions>
-                            <ListBox x:Name="arglistbox" SelectionChanged="arglistbox_SelectionChanged" Grid.Row="1" Grid.Column="0" Margin="0,0,5,0" >
+                            <ListBox x:Name="arglistbox" ItemsSource="{Binding}"   SelectionChanged="arglistbox_SelectionChanged" Grid.Row="1" Grid.Column="0" Margin="0,0,5,0" >
                                 <ListBox.Resources>
                                     <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                         <Style.Triggers>

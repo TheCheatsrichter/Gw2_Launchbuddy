@@ -125,6 +125,10 @@ namespace Gw2_Launchbuddy
             }
         }
 
+        public static string ListAddons(string seperator = ", ")
+        {
+            return String.Join(seperator, AddOns.Select(a => a.Name));
+        }
 
         public static void Remove(string name)
         {
