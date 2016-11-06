@@ -1,29 +1,29 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Net.NetworkInformation;
-using System.Xml;
-using System.IO;
-using System.Diagnostics;
-using IWshRuntimeLibrary;
-using System.Reflection;
-using System.ComponentModel;
-using System.Collections.ObjectModel;
-using System.Net;
-using System.Windows.Data;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Media.Imaging;
-using System.IO.Compression;
-
-
-namespace Gw2_Launchbuddy
+﻿namespace Gw2_Launchbuddy
 {
-    public partial class MainWindow : Window 
+    using System;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Net.NetworkInformation;
+    using System.Xml;
+    using System.IO;
+    using System.Diagnostics;
+    using IWshRuntimeLibrary;
+    using System.Reflection;
+    using System.ComponentModel;
+    using System.Collections.ObjectModel;
+    using System.Net;
+    using System.Windows.Data;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+    using System.Windows.Documents;
+    using System.Windows.Media;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Windows.Media.Imaging;
+    using System.IO.Compression;
+    using System.Threading.Tasks;
+
+    public partial class MainWindow : Window
     {
 
         ///Gw2 Launchbuddy by TheCheatsrichter 2016
@@ -79,9 +79,11 @@ namespace Gw2_Launchbuddy
         {
             public string Email { get; set; }
             public string Password { get; set; }
-            public string DisplayEmail {
-                get {
-                    string tmp="";
+            public string DisplayEmail
+            {
+                get
+                {
+                    string tmp = "";
                     try
                     {
                         tmp += Email.Substring(0, 2);
@@ -100,7 +102,7 @@ namespace Gw2_Launchbuddy
             {
                 get
                 {
-                    return  "*********";
+                    return "*********";
                 }
                 set
                 {
@@ -145,7 +147,7 @@ namespace Gw2_Launchbuddy
             cinema_setup();
             LoadAddons();
             addonmanager.LaunchLbAddons();
-            
+
 
         }
 
@@ -160,7 +162,8 @@ namespace Gw2_Launchbuddy
                 SettingsGrid.Visibility = Visibility.Hidden;
                 myWindow.WindowState = WindowState.Maximized;
                 bt_ShowSettings.Visibility = Visibility.Visible;
-            } else
+            }
+            else
             {
                 SettingsGrid.Visibility = Visibility.Visible;
                 myWindow.WindowState = WindowState.Normal;
@@ -450,7 +453,7 @@ namespace Gw2_Launchbuddy
                             noKeep.Add("-exit");
                             noKeep.Add("-allowinstall");
                             noKeep.Add("-exit");
-                          
+
 
                             foreach (Match parameter in matchList)
                             {
@@ -589,7 +592,7 @@ namespace Gw2_Launchbuddy
             tb_assetsport.IsEnabled = false;
         }
 
-        private void bt_launch_Click(object sender, RoutedEventArgs e)
+        private async void bt_launch_Click(object sender, RoutedEventArgs e)
         {
             //Checking for existing Gw2 instances
             if (Process.GetProcesses().ToList().Where(a => !nomutexpros.Contains(a.Id) && a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).Any())
@@ -601,11 +604,14 @@ namespace Gw2_Launchbuddy
             //Launching the application with arguments
             if (ismultibox)
             {
-                for (int i = 0; i <= selected_accs.Count - 1; i++) launchgw2(i);
+                for (int i = 0; i <= selected_accs.Count - 1; i++)
+                {
+                    await launchgw2(i);
+                }
             }
             else
             {
-                launchgw2(0);
+                await launchgw2(0);
             }
 
             //Launching AddOns
@@ -619,13 +625,14 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        void launchgw2(int accnr)
+        async Task launchgw2(int accnr)
         {
+            await Task.Delay(5000 * accnr);
             try
             {
                 ProcessStartInfo gw2proinfo = new ProcessStartInfo();
                 gw2proinfo.FileName = exepath + exename;
-                gw2proinfo.Arguments = getarguments(accnr,false);
+                gw2proinfo.Arguments = getarguments(accnr, false);
                 gw2proinfo.WorkingDirectory = exepath;
                 Process gw2pro = new Process { StartInfo = gw2proinfo };
 
@@ -696,7 +703,7 @@ namespace Gw2_Launchbuddy
                 string shortcutLocation = System.IO.Path.Combine(shortcutPath, shortcutName + ".lnk");
                 WshShell shell = new WshShell();
                 IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
-                string arguments = getarguments(0,false);
+                string arguments = getarguments(0, false);
                 shortcut.IconLocation = Assembly.GetExecutingAssembly().Location;
                 shortcut.Description = "Created with Gw2 Launchbuddy, © TheCheatsrichter";
 
@@ -952,7 +959,7 @@ namespace Gw2_Launchbuddy
 
         void SaveAddons()
         {
-            addonmanager.SaveAddons(AppdataPath+"Addons.xml");
+            addonmanager.SaveAddons(AppdataPath + "Addons.xml");
         }
 
         void LoadAddons()
@@ -1166,7 +1173,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        private string getarguments(int accnr,bool hideaccdata)
+        private string getarguments(int accnr, bool hideaccdata)
         {
             //Gathers all arguments and returns them as single string
 
@@ -1276,7 +1283,7 @@ namespace Gw2_Launchbuddy
 
                 string usedaddons = "";
 
-                if (lv_AddOns.ItemsSource!=null)
+                if (lv_AddOns.ItemsSource != null)
                 {
                     foreach (AddOn addon in lv_AddOns.ItemsSource)
                     {
@@ -1284,7 +1291,7 @@ namespace Gw2_Launchbuddy
                     }
                     lab_usedaddons.Content = "Used AddOns: " + usedaddons;
                 }
-                
+
             }
         }
 
@@ -1316,7 +1323,7 @@ namespace Gw2_Launchbuddy
         private void bt_AddAddon_Click(object sender, RoutedEventArgs e)
         {
             string[] args = Regex.Matches(tb_AddonArgs.Text, "-\\w* ?(\".*\")?").Cast<Match>().Select(m => m.Value).ToArray();
-            addonmanager.Add(tb_AddonName.Text,args,(bool)cb_AddonMultilaunch.IsChecked,(bool)cb_AddonOnLB.IsChecked);
+            addonmanager.Add(tb_AddonName.Text, args, (bool)cb_AddonMultilaunch.IsChecked, (bool)cb_AddonOnLB.IsChecked);
             lv_AddOns.ItemsSource = addonmanager.AddOns;
         }
 
@@ -1397,7 +1404,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        bool IsValidPath (string path)
+        bool IsValidPath(string path)
         {
             try
             {
@@ -1456,7 +1463,7 @@ namespace Gw2_Launchbuddy
         private void bt_cinema_Click(object sender, RoutedEventArgs e)
         {
             cinemamode = !Properties.Settings.Default.cinema_use;
-            Properties.Settings.Default.cinema_use=cinemamode;
+            Properties.Settings.Default.cinema_use = cinemamode;
             Properties.Settings.Default.Save();
             cinema_setup();
         }
@@ -1466,11 +1473,12 @@ namespace Gw2_Launchbuddy
             if (SettingsGrid.Visibility == Visibility.Hidden)
             {
                 SettingsGrid.Visibility = Visibility.Visible;
-            }else
+            }
+            else
             {
                 SettingsGrid.Visibility = Visibility.Hidden;
             }
-            
+
         }
 
         private void listview_assets_Click(object sender, RoutedEventArgs e)
@@ -1630,5 +1638,5 @@ namespace Gw2_Launchbuddy
     }
 
 
-   
+
 }
