@@ -6,7 +6,9 @@ TheCheatsrichter. All rights reserved.
 Credits:
 
 Project Management: TheCheatsrichter
+
 Programming: KairuByte, TheCheatsrichter
+
 Graphics: Arenanet, TheCheatsrichter
 
 Additonal Thanks to : WoodenPotatoes, Wonders Frostfire and all the guys on reddit who spent their time giving constructive feedback.
