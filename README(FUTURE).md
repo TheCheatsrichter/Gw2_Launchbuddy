@@ -3,6 +3,15 @@
 Custom launcher generator for the video game Guild Wars 2.
 TheCheatsrichter. All rights reserved.
 
+Credits:
+
+Project Management: TheCheatsrichter
+Programming: KairuByte, TheCheatsrichter
+Graphics: Arenanet, TheCheatsrichter
+
+Additonal Thanks to : WoodenPotatoes, Wonders Frostfire and all the guys on reddit who spent their time giving constructive feedback.
+
+
 How to use it:
 
 General usage:
@@ -53,4 +62,4 @@ FAQ:
 - After some time an errormessage "Error 502" pops up. What does it mean? - This error is caused by a downtime of the official Gw2 API. Gw2 Launchbuddy will still work as normaly, however launching the game without the newest Guild Wars 2 build can cause a crash! 
 
 
-Want to help me out? Use the donate button or support me ingame TheCheatsrichter.6547
+Want to help me out? Use the donate button or support us ingame TheCheatsrichter.6547, KairuByte.2703.
