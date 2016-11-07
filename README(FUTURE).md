@@ -3,7 +3,7 @@
 Custom launcher generator for the video game Guild Wars 2.
 TheCheatsrichter. All rights reserved.
 
-**Credits:
+**Credits:**
 
 Project Management: TheCheatsrichter
 
@@ -14,7 +14,7 @@ Graphics: Arenanet, TheCheatsrichter
 Additonal Thanks to : WoodenPotatoes, Wonders Frostfire and all the guys on reddit who spent their time giving constructive feedback.
 
 
-**How to use it:
+**How to use it:**
 
 General usage:
 
@@ -42,7 +42,7 @@ Invalid account information leads to a game freeze with white or blackscreen. Tw
 
 
 
-**FAQ:
+**FAQ:**
 
 - Are these options banable? - No, all command line arguments are provided by arenanet themself. 
 
