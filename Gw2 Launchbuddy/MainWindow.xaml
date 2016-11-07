@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gw2_Launchbuddy"
-        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Gw2_Launchbuddy.MainWindow"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" x:Class="Gw2_Launchbuddy.MainWindow"
         x:Name="myWindow"
         WindowStyle="None"
         ShowInTaskbar="true"
@@ -12,22 +12,36 @@
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
         Title="Gw2 Launchbuddy V 1.3" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1">
     <Window.Resources>
+        <Storyboard x:Key="anim_imgfadeout">
+            <DoubleAnimation 
+        		Storyboard.TargetName="img_slideshow"
+        		Storyboard.TargetProperty="Opacity"
+        		From ="1" To="0" Duration="0:0:1"
+                        />
+        </Storyboard>
+        <Storyboard x:Key="anim_imgfadein">
+            <DoubleAnimation 
+        		Storyboard.TargetName="img_slideshow"
+        		Storyboard.TargetProperty="Opacity"
+        		From ="0" To="1" Duration="0:0:1"
+                        />
+        </Storyboard>
 
         <Storyboard x:Key="anim_musicfadeout">
             <DoubleAnimation 
-                        Storyboard.TargetName="Cinema_MediaPlayer"
-                        Storyboard.TargetProperty="Volume"
-                        To="0" Duration="0:0:1"
-                        AutoReverse="False"
+        		Storyboard.TargetName="Cinema_MediaPlayer"
+        		Storyboard.TargetProperty="Volume"
+        		To="0" Duration="0:0:1"
+        		AutoReverse="False"
                         />
         </Storyboard>
 
         <Storyboard x:Key="anim_musicfadein">
             <DoubleAnimation 
-                        Storyboard.TargetName="Cinema_MediaPlayer"
-                        Storyboard.TargetProperty="Volume"
-                        To="{Binding Path=Value,ElementName=sl_volumecontrol}" Duration="0:0:3"
-                        AutoReverse="False"
+        		Storyboard.TargetName="Cinema_MediaPlayer"
+        		Storyboard.TargetProperty="Volume"
+        		To="{Binding Value, ElementName=sl_volumecontrol}" Duration="0:0:3"
+        		AutoReverse="False"
                         />
         </Storyboard>
 
@@ -70,10 +84,63 @@
                 </EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
+        <SolidColorBrush x:Key="ListBorder" Color="#828790"/>
+
+       
+        
+        <Style x:Key="Style_lvacc" TargetType="{x:Type ListView}">
+            
+            <Setter Property="Background" Value="{x:Null}"/>
+            <Setter Property="TextElement.Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FF232323"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="Gainsboro"/>
+            <Setter Property="ScrollViewer.Foreground" Value="White"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListView}">
+                        <Themes:ListBoxChrome x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" RenderMouseOver="False" RenderFocused="True" SnapsToDevicePixels="true">
+                            <ScrollViewer Padding="{TemplateBinding Padding}" Style="{DynamicResource {x:Static GridView.GridViewScrollViewerStyleKey}}" Foreground="Black">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                </ItemsPresenter>
+                            </ScrollViewer>
+                        </Themes:ListBoxChrome>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsGrouping" Value="true"/>
+                                    <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontFamily" Value="Times New Roman"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        
+        <Style x:Key="lv_blackheader"  TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
+            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+            <Setter Property="TextBlock.Foreground" Value="White"/>
+            <Setter Property="Background" Value="Black"/>
+        </Style>
+
+
     </Window.Resources>
 
     <Window.Triggers>
-        <EventTrigger RoutedEvent="Window.Loaded">
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
             <BeginStoryboard>
                 <Storyboard>
                     <DoubleAnimation 
@@ -116,28 +183,28 @@
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
-        <MediaElement x:Name="Cinema_MediaPlayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual" Volume="{Binding Path=Value,ElementName=sl_volumecontrol}" MediaEnded="Cinema_MediaPlayer_MediaEnded"/>
+        <MediaElement x:Name="Cinema_MediaPlayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual" Volume="{Binding Value, ElementName=sl_volumecontrol}" MediaEnded="Cinema_MediaPlayer_MediaEnded"/>
 
         <StackPanel x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="1" Background="#4CFFFFFF">
             <StackPanel.Triggers>
-                <EventTrigger RoutedEvent="StackPanel.MouseEnter">
+                <EventTrigger RoutedEvent="UIElement.MouseEnter">
                     <BeginStoryboard>
                         <Storyboard>
                             <ColorAnimation
-                            Storyboard.TargetName="WindowOptionsColum" 
-                            Storyboard.TargetProperty="(StackPanel.Background).(SolidColorBrush.Color)"
-                            To="#4CFFFFFF" Duration="0:0:1"
+								Storyboard.TargetName="WindowOptionsColum" 
+								Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+								To="#4CFFFFFF" Duration="0:0:1"
                         />
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
-                <EventTrigger RoutedEvent="StackPanel.MouseLeave">
+                <EventTrigger RoutedEvent="UIElement.MouseLeave">
                     <BeginStoryboard>
                         <Storyboard>
                             <ColorAnimation
-                            Storyboard.TargetName="WindowOptionsColum" 
-                            Storyboard.TargetProperty="(StackPanel.Background).(SolidColorBrush.Color)"
-                            To="Transparent" Duration="0:0:1"  
+								Storyboard.TargetName="WindowOptionsColum" 
+								Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+								To="Transparent" Duration="0:0:1"  
                         />
                         </Storyboard>
                     </BeginStoryboard>
@@ -147,7 +214,7 @@
                 <Button x:Name="bt_mute" Width="40"   BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="bt_mute_Click" MouseEnter="bt_mute_MouseEnter" >
                     <Image x:Name="img_mutebutton" Source="Resources/Icons/speaker_loud.png"/>
                 </Button>
-                <Slider x:Name="sl_volumecontrol" Width="150" Orientation="Horizontal" Visibility="Collapsed" LargeChange="0.1" Maximum="1" ValueChanged="sl_volumecontrol_ValueChanged" SmallChange="0.05" Value="0.9"></Slider>
+                <Slider x:Name="sl_volumecontrol" Width="150" Orientation="Horizontal" Visibility="Collapsed" LargeChange="0.1" Maximum="1" ValueChanged="sl_volumecontrol_ValueChanged" SmallChange="0.05" Value="0.9"/>
             </WrapPanel>
             <Button x:Name="bt_ShowSettings" Width="30" Click="bt_ShowSettings_Click" Height="30" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
                 <Image Source="Resources/Icons/settings.png"/>
@@ -166,11 +233,23 @@
         <Canvas x:Name="Canvas_Custom_UI">
             <Canvas x:Name="Canvas_login" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0">
                 <Image Source="/Resources/loginwindow.png" Height="300" />
-                <ListView x:Name="Cinema_Accountlist" Canvas.Left="100" Canvas.Top="80" Width="280" Height="135" SelectionChanged="listview_acc_SelectionChanged">
+                <ListView x:Name="Cinema_Accountlist" BorderThickness="0" Canvas.Left="100" Canvas.Top="80" Width="280" Height="135" SelectionChanged="listview_acc_SelectionChanged" Style="{DynamicResource Style_lvacc}" BorderBrush="#FF5F5F5F">
                     <ListView.View>
                         <GridView >
-                            <GridViewColumn Width="200" DisplayMemberBinding="{Binding Nick}">
-                                <GridViewColumnHeader Tag="Name" Click="listview_auth_Click">Name</GridViewColumnHeader>
+                            <GridViewColumn Width="280">
+                                <GridViewColumnHeader Tag="Name" Click="listview_auth_Click" Content="Name" Background="Transparent" Foreground="White" Focusable="False"/>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock x:Name="Txt" Text="{Binding Nick}" FontSize="14.667" FontWeight="Bold" Background="{x:Null}">
+                                            <TextBlock.Foreground>
+                                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                    <GradientStop Color="#FF027A23" Offset="0"/>
+                                                    <GradientStop Color="#FF535353" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </TextBlock.Foreground>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                         </GridView>
                     </ListView.View>
@@ -181,8 +260,8 @@
                 </StackPanel>
             </Canvas>
         </Canvas>
-        
-        
+
+
         <Grid  x:Name="SettingsGrid" Grid.Row="1" Background="White" Width="700" Height="650" Grid.RowSpan="3" Grid.ColumnSpan="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100*"/>
@@ -253,9 +332,9 @@
                             </Grid.ColumnDefinitions>
                             <ListBox x:Name="arglistbox" ItemsSource="{Binding}"   SelectionChanged="arglistbox_SelectionChanged" Grid.Row="1" Grid.Column="0" Margin="0,0,5,0" >
                                 <ListBox.Resources>
-                                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsMouseOver,RelativeSource={RelativeSource Self}}" Value="True">
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
                                                 <Setter Property="IsSelected" Value="True" />
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -290,7 +369,7 @@
                     </StackPanel>
                 </TabItem>
 
-                <TabItem Header="AccountManager">
+                <TabItem Header="Account Manager">
                     <Grid Grid.Row="3" Margin="5,0"  >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="190*"/>
@@ -359,16 +438,16 @@
                             <ListView.View>
                                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
                                     <GridViewColumn  HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding IP}">
-                                        <GridViewColumnHeader Tag="IP" Click="listview_assets_Click">IP</GridViewColumnHeader>
+                                        <GridViewColumnHeader Tag="IP" Click="listview_assets_Click" Content="IP"/>
                                     </GridViewColumn>
                                     <GridViewColumn HeaderStringFormat="" Width="65" DisplayMemberBinding="{Binding Port}">
-                                        <GridViewColumnHeader Tag="Port" Click="listview_assets_Click">Port</GridViewColumnHeader>
+                                        <GridViewColumnHeader Tag="Port" Click="listview_assets_Click" Content="Port"/>
                                     </GridViewColumn>
                                     <GridViewColumn HeaderStringFormat="" Width="75" DisplayMemberBinding="{Binding Location}">
-                                        <GridViewColumnHeader Tag="Location" Click="listview_assets_Click">Location</GridViewColumnHeader>
+                                        <GridViewColumnHeader Tag="Location" Click="listview_assets_Click" Content="Location"/>
                                     </GridViewColumn>
-                                    <GridViewColumn Width="60" DisplayMemberBinding="{Binding Path=Ping}">
-                                        <GridViewColumnHeader Tag="Ping" Click="listview_assets_Click">Ping</GridViewColumnHeader>
+                                    <GridViewColumn Width="60" DisplayMemberBinding="{Binding Ping}">
+                                        <GridViewColumnHeader Tag="Ping" Click="listview_assets_Click" Content="Ping"/>
                                     </GridViewColumn>
                                 </GridView>
                             </ListView.View>
@@ -378,16 +457,16 @@
                             <ListView.View>
                                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
                                     <GridViewColumn  HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding IP}">
-                                        <GridViewColumnHeader Tag="IP" Click="listview_auth_Click">IP</GridViewColumnHeader>
+                                        <GridViewColumnHeader Tag="IP" Click="listview_auth_Click" Content="IP"/>
                                     </GridViewColumn>
                                     <GridViewColumn HeaderStringFormat="" Width="65" DisplayMemberBinding="{Binding Port}">
-                                        <GridViewColumnHeader Tag="Port" Click="listview_auth_Click">Port</GridViewColumnHeader>
+                                        <GridViewColumnHeader Tag="Port" Click="listview_auth_Click" Content="Port"/>
                                     </GridViewColumn>
                                     <GridViewColumn HeaderStringFormat="" Width="70" DisplayMemberBinding="{Binding Type}">
-                                        <GridViewColumnHeader Tag="Type" Click="listview_auth_Click">Type</GridViewColumnHeader>
+                                        <GridViewColumnHeader Tag="Type" Click="listview_auth_Click" Content="Type"/>
                                     </GridViewColumn>
                                     <GridViewColumn Width="60" DisplayMemberBinding="{Binding Ping}">
-                                        <GridViewColumnHeader Tag="Ping" Click="listview_auth_Click">Ping</GridViewColumnHeader>
+                                        <GridViewColumnHeader Tag="Ping" Click="listview_auth_Click" Content="Ping"/>
                                     </GridViewColumn>
                                 </GridView>
                             </ListView.View>
@@ -417,19 +496,19 @@
                             <ListView.View>
                                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
                                     <GridViewColumn  HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
-                                        <GridViewColumnHeader Tag="Name" Click="listview_auth_Click">Name</GridViewColumnHeader>
+                                        <GridViewColumnHeader Tag="Name" Click="listview_auth_Click" Content="Name"/>
                                     </GridViewColumn>
                                     <GridViewColumn HeaderStringFormat="" Width="200" DisplayMemberBinding="{Binding args}">
-                                        <GridViewColumnHeader Tag="args" Click="listview_auth_Click">Parameters</GridViewColumnHeader>
+                                        <GridViewColumnHeader Tag="args" Click="listview_auth_Click" Content="Parameters"/>
                                     </GridViewColumn>
                                     <GridViewColumn HeaderStringFormat="" Width="70" DisplayMemberBinding="{Binding IsMultilaunch}">
-                                        <GridViewColumnHeader Tag="IsMultilaunch" Click="listview_auth_Click">Multilaunch</GridViewColumnHeader>
+                                        <GridViewColumnHeader Tag="IsMultilaunch" Click="listview_auth_Click" Content="Multilaunch"/>
                                     </GridViewColumn>
                                     <GridViewColumn Width="60" DisplayMemberBinding="{Binding IsLbAddon}">
-                                        <GridViewColumnHeader Tag="IsLbAddon" Click="listview_auth_Click">Start with LB</GridViewColumnHeader>
+                                        <GridViewColumnHeader Tag="IsLbAddon" Click="listview_auth_Click" Content="Start with LB"/>
                                     </GridViewColumn>
                                     <GridViewColumn  DisplayMemberBinding="{Binding Path}">
-                                        <GridViewColumnHeader Tag="Path" Click="listview_auth_Click">Path</GridViewColumnHeader>
+                                        <GridViewColumnHeader Tag="Path" Click="listview_auth_Click" Content="Path"/>
                                     </GridViewColumn>
                                 </GridView>
                             </ListView.View>
@@ -482,7 +561,7 @@
                                         <ColumnDefinition Width="50*"/>
                                         <ColumnDefinition Width="50*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Button x:Name="bt_cinema_videoplay" Content=">" Grid.Row="0" Grid.Column="0" Margin="5" Click="bt_cinema_videoplay_Click"/>
+                                    <Button x:Name="bt_cinema_videoplay" Content="&gt;" Grid.Row="0" Grid.Column="0" Margin="5" Click="bt_cinema_videoplay_Click"/>
                                     <Button x:Name="bt_cinema_videostop" Content="Stop" Grid.Row="0" Grid.Column="1" BorderThickness="5" Margin="5" Click="bt_cinema_videostop_Click"/>
                                 </Grid>
                                 <Button x:Name="bt_cinema_setvideo" Content="Set Video" Grid.Row="1" Margin="5" Click="bt_cinema_setvideo_Click"/>
@@ -509,10 +588,10 @@
                                         <ListView.View>
                                             <GridView>
                                                 <GridViewColumn HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
-                                                    <GridViewColumnHeader Tag="Name" Click="listview_auth_Click">Image Name</GridViewColumnHeader>
+                                                    <GridViewColumnHeader Tag="Name" Click="listview_auth_Click" Content="Image Name"/>
                                                 </GridViewColumn>
                                                 <GridViewColumn HeaderStringFormat=""  DisplayMemberBinding="{Binding Path}">
-                                                    <GridViewColumnHeader Tag="Path" Click="listview_auth_Click">Path</GridViewColumnHeader>
+                                                    <GridViewColumnHeader Tag="Path" Click="listview_auth_Click" Content="Path"/>
                                                 </GridViewColumn>
                                             </GridView>
                                         </ListView.View>

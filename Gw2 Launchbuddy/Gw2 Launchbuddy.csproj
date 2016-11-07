@@ -115,6 +115,7 @@
       <HintPath>..\packages\CrashReporter.NET.Official.1.5.1\lib\net40\CrashReporter.NET.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />

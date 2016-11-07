@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using System.IO.Compression;
+using System.Windows.Media.Animation;
 
 namespace Gw2_Launchbuddy
 {
@@ -178,8 +179,10 @@ namespace Gw2_Launchbuddy
             {
                 img_slideshow.Source = startimg;
             }));
-            
 
+            Storyboard ImgFadeOut = (Storyboard)FindResource("anim_imgfadeout");
+            Storyboard ImgFadeIn = (Storyboard)FindResource("anim_imgfadein");
+            Thread.Sleep(5000);
             while (true)
             {
                 Dispatcher.Invoke(new Action(() =>
@@ -188,17 +191,20 @@ namespace Gw2_Launchbuddy
                 }));
                 while (isactive)
                 {
-                    
+                    //Dispatcher.BeginInvoke(new Action(() => ImgFadeIn.Begin()));
+                    Thread.Sleep(1000);
                     int nr = rnd.Next(files.Length-1);
                     BitmapSource currentimg = LoadImage(files[nr]);
                     currentimg.Freeze();
+                    Thread.Sleep(1000);
+                    //Dispatcher.BeginInvoke(new Action(() => ImgFadeOut.Begin()));
 
                     Dispatcher.Invoke(new Action(() =>
                     {
                         img_slideshow.Source = currentimg;
                     }));
 
-                    Thread.Sleep(3000);
+                    Thread.Sleep(1000);
 
                 }
                 Thread.Sleep(3000);
