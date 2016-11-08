@@ -180,25 +180,32 @@ namespace Gw2_Launchbuddy
                 img_slideshow.Source = startimg;
             }));
 
-            Storyboard ImgFadeOut = (Storyboard)FindResource("anim_imgfadeout");
-            Storyboard ImgFadeIn = (Storyboard)FindResource("anim_imgfadein");
-            Thread.Sleep(5000);
+
+
             while (true)
             {
                 Dispatcher.Invoke(new Action(() =>
                 {
                     isactive = myWindow.IsActive;
                 }));
+
                 while (isactive)
                 {
-                    //Dispatcher.BeginInvoke(new Action(() => ImgFadeIn.Begin()));
+                    Dispatcher.Invoke(new Action(() =>
+                    {
+                        Storyboard ImgFadeIn = (Storyboard)FindResource("anim_imgfadein");
+                        ImgFadeIn.Begin();
+                    }));
                     Thread.Sleep(1000);
                     int nr = rnd.Next(files.Length-1);
                     BitmapSource currentimg = LoadImage(files[nr]);
                     currentimg.Freeze();
+                    Thread.Sleep(5000); //Time how long the picture is actually displayed
+                    Dispatcher.Invoke(new Action(() => {
+                        Storyboard ImgFadeOut = (Storyboard)FindResource("anim_imgfadeout");
+                        ImgFadeOut.Begin();
+                    }));
                     Thread.Sleep(1000);
-                    //Dispatcher.BeginInvoke(new Action(() => ImgFadeOut.Begin()));
-
                     Dispatcher.Invoke(new Action(() =>
                     {
                         img_slideshow.Source = currentimg;

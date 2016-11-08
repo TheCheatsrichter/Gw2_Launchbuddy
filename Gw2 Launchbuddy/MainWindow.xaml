@@ -105,7 +105,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ListView}">
-                        <Themes:ListBoxChrome x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" RenderMouseOver="False" RenderFocused="True" SnapsToDevicePixels="true">
+                        <Themes:ListBoxChrome x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" RenderMouseOver="False" RenderFocused="False" SnapsToDevicePixels="true">
                             <ScrollViewer Padding="{TemplateBinding Padding}" Style="{DynamicResource {x:Static GridView.GridViewScrollViewerStyleKey}}" Foreground="Black">
                                 <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
                                 </ItemsPresenter>
@@ -504,7 +504,7 @@
                                     <GridViewColumn HeaderStringFormat="" Width="70" DisplayMemberBinding="{Binding IsMultilaunch}">
                                         <GridViewColumnHeader Tag="IsMultilaunch" Click="listview_auth_Click" Content="Multilaunch"/>
                                     </GridViewColumn>
-                                    <GridViewColumn Width="60" DisplayMemberBinding="{Binding IsLbAddon}">
+                                    <GridViewColumn Width="80" DisplayMemberBinding="{Binding IsLbAddon}">
                                         <GridViewColumnHeader Tag="IsLbAddon" Click="listview_auth_Click" Content="Start with LB"/>
                                     </GridViewColumn>
                                     <GridViewColumn  DisplayMemberBinding="{Binding Path}">
