@@ -35,5 +35,8 @@
     <Setting Name="cinema_videopath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="mediaplayer_volume" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">90</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -154,5 +154,17 @@ namespace Gw2_Launchbuddy.Properties {
                 this["cinema_videopath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("90")]
+        public double mediaplayer_volume {
+            get {
+                return ((double)(this["mediaplayer_volume"]));
+            }
+            set {
+                this["mediaplayer_volume"] = value;
+            }
+        }
     }
 }

@@ -1640,6 +1640,8 @@ namespace Gw2_Launchbuddy
         private void WrapPanel_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             sl_volumecontrol.Visibility = Visibility.Collapsed;
+            Properties.Settings.Default.mediaplayer_volume = sl_volumecontrol.Value;
+            Properties.Settings.Default.Save();
         }
 
         private void Cinema_MediaPlayer_MediaEnded(object sender, RoutedEventArgs e)
