@@ -280,7 +280,7 @@ namespace Gw2_Launchbuddy
 
             //General needed resources
 
-            if (!picext.Contains(Path.GetExtension(loginwindowpath), StringComparer.OrdinalIgnoreCase) || !System.IO.File.Exists(loginwindowpath))
+            if ((!picext.Contains(Path.GetExtension(loginwindowpath), StringComparer.OrdinalIgnoreCase) || !System.IO.File.Exists(loginwindowpath)) && loginwindowpath!="")
             {
                 MessageBox.Show("Invalid loginwindow file detected! File could not be found / is not a picture file.\n Filepath: " + loginwindowpath);
                 invalid = true;
@@ -298,7 +298,7 @@ namespace Gw2_Launchbuddy
             bool videomode = Properties.Settings.Default.cinema_video;
             bool slideshowmode = Properties.Settings.Default.cinema_slideshow;
             cinemamode = Properties.Settings.Default.cinema_use;
-            cinemamode = cinema_checksetup(slideshowmode,videomode);
+            if (cinemamode)cinemamode = cinema_checksetup(slideshowmode,videomode);
 
             string musicpath = Properties.Settings.Default.cinema_musicpath;
             string imagespath = Properties.Settings.Default.cinema_imagepath;
@@ -359,7 +359,7 @@ namespace Gw2_Launchbuddy
 
                 //Setting Custom mode independent Cinema Elements
                 if (backgroundcolor != null) myWindow.Background = new SolidColorBrush(backgroundcolor);
-                if (loginwindowpath != null) img_loginwindow.Source = LoadImage(loginwindowpath);
+                if (loginwindowpath != "") img_loginwindow.Source = LoadImage(loginwindowpath);
 
                 if (videomode)
                 {
@@ -420,7 +420,7 @@ namespace Gw2_Launchbuddy
                 myWindow.WindowState = WindowState.Normal;
                 myWindow.Height = 680;
                 myWindow.Width = 700;
-                bt_ShowSettings.Visibility = Visibility.Hidden;
+                bt_ShowSettings.Visibility = Visibility.Collapsed;
                 Grid.SetColumnSpan(WindowOptionsColum, 1);
                 Canvas_Custom_UI.Visibility = Visibility.Collapsed;
             }
