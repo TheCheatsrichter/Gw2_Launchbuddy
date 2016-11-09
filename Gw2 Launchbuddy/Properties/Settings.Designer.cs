@@ -118,5 +118,53 @@ namespace Gw2_Launchbuddy.Properties {
                 this["cinema_use"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool cinema_video {
+            get {
+                return ((bool)(this["cinema_video"]));
+            }
+            set {
+                this["cinema_video"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool cinema_slideshow {
+            get {
+                return ((bool)(this["cinema_slideshow"]));
+            }
+            set {
+                this["cinema_slideshow"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string cinema_videopath {
+            get {
+                return ((string)(this["cinema_videopath"]));
+            }
+            set {
+                this["cinema_videopath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("90")]
+        public double mediaplayer_volume {
+            get {
+                return ((double)(this["mediaplayer_volume"]));
+            }
+            set {
+                this["mediaplayer_volume"] = value;
+            }
+        }
     }
 }

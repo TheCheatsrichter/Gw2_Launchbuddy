@@ -111,6 +111,11 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CrashReporter.NET, Version=1.5.1.0, Culture=neutral, PublicKeyToken=986591a91592b7e6, processorArchitecture=MSIL">
+      <HintPath>..\packages\CrashReporter.NET.Official.1.5.1\lib\net40\CrashReporter.NET.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -137,7 +142,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AddOnManager.cs" />
+    <Compile Include="ApplicationManager.cs" />
+    <Compile Include="CrashReporter.cs" />
+    <Compile Include="CustomUI.cs" />
     <Compile Include="Encryption_AES.cs" />
+    <Compile Include="Globals.cs" />
     <Compile Include="HandleManager.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -185,6 +194,8 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Gw2 Launchbuddy_TemporaryKey.pfx" />
+    <None Include="packages.config" />
     <None Include="Properties\app.manifest">
       <SubType>Designer</SubType>
     </None>
@@ -240,6 +251,29 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\opacity mask.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\loginwindow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\logo_hq_mask.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\error.png" />
+    <Resource Include="Resources\Icons\minimize.png" />
+    <Resource Include="Resources\Icons\multitab.png" />
+    <Resource Include="Resources\Icons\pause.png" />
+    <Resource Include="Resources\Icons\play.png" />
+    <Resource Include="Resources\Icons\settings.png" />
+    <Resource Include="Resources\Icons\speaker_loud.png" />
+    <Resource Include="Resources\Icons\speaker_mute.png" />
+    <Resource Include="Resources\Icons\stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\popcorn.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

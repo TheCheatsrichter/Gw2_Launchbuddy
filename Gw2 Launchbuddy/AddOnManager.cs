@@ -25,6 +25,7 @@ namespace Gw2_Launchbuddy
                 ProcessStartInfo tmp = new ProcessStartInfo();
                 tmp.Arguments = args;
                 tmp.FileName = Path;
+                tmp.WorkingDirectory = new FileInfo(tmp.FileName).Directory.FullName;
                 return tmp;
             }
         }
@@ -65,12 +66,11 @@ namespace Gw2_Launchbuddy
         }
     }
 
-    class AddOnManager
+    public static class AddOnManager
     {
-        
-        public ObservableCollection<AddOn> AddOns = new ObservableCollection<AddOn>();
+        public static ObservableCollection<AddOn> AddOns = new ObservableCollection<AddOn>();
 
-        public void Add(string name,string[] args,bool IsMultilaunch,bool IsLbAddon)
+        public static void Add(string name,string[] args,bool IsMultilaunch,bool IsLbAddon)
         {
             if(name != "")
             {
@@ -88,16 +88,14 @@ namespace Gw2_Launchbuddy
                     ProInfo.WorkingDirectory = Path.GetDirectoryName(filedialog.FileName);
                     AddOns.Add(new AddOn(name, ProInfo, IsMultilaunch, IsLbAddon));
                 }
-            } else
+            }
+            else
             {
                 MessageBox.Show("Please enter a name!");
             }
-
-            
         }
-
-
-        public void CheckExisting()
+        
+        public static void CheckExisting()
         {
             Process[] processes = Process.GetProcesses();
 
@@ -110,15 +108,14 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        public void UpdateList()
+        public static void UpdateList()
         {
             CheckExisting();
-
             Process[] processes = Process.GetProcesses();
 
             foreach(AddOn addon in AddOns)
             {
-                foreach(Process childpro in addon.ChildProcess)
+                foreach (Process childpro in addon.ChildProcess.ToList())
                 {
                     if (!processes.Contains(childpro))
                     {
@@ -126,11 +123,14 @@ namespace Gw2_Launchbuddy
                     }
                 }  
             }
-
         }
 
+        public static string ListAddons(string seperator = ", ")
+        {
+            return String.Join(seperator, AddOns.Select(a => a.Name));
+        }
 
-        public void Remove(string name)
+        public static void Remove(string name)
         {
             try
             {
@@ -142,7 +142,7 @@ namespace Gw2_Launchbuddy
             catch { }
         }
 
-        public void LaunchSingle(string name)
+        public static void LaunchSingle(string name)
         {
             AddOn addon = AddOns.FirstOrDefault(a => a.Name == name);
             Process addon_pro = new Process { StartInfo = addon.Info };
@@ -150,9 +150,9 @@ namespace Gw2_Launchbuddy
             addon_pro.Start();
         }
 
-        public void LaunchAll()
+        public static void LaunchAll()
         {
-
+            UpdateList();
             foreach (AddOn addon in AddOns)
             {
                 if ((addon.IsMultilaunch || addon.ChildProcess.Count <= 0) && !addon.IsLbAddon)
@@ -164,7 +164,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        public void LaunchLbAddons()
+        public static void LaunchLbAddons()
         {
             UpdateList();
             foreach (AddOn addon in AddOns)
@@ -177,17 +177,15 @@ namespace Gw2_Launchbuddy
                 }
             }
         }
-
-
-        public void SaveAddons(string path)
+        
+        public static void SaveAddons(string path)
         {
             try
             {
                 XmlSerializer x = new XmlSerializer(typeof(ObservableCollection<AddOn>));
                 TextWriter writer = new StreamWriter(path);
                 x.Serialize(writer, AddOns);
-
-
+                
                 /*
                 using (Stream stream = System.IO.File.Open(path, FileMode.Create))
                 {
@@ -201,16 +199,13 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show(e.Message);
             }
         }
-
-
-        public ObservableCollection<AddOn> LoadAddons(string path)
+        
+        public static ObservableCollection<AddOn> LoadAddons(string path)
         {
             try
             {
-
                 if (System.IO.File.Exists(path) == true)
                 {
-
                     XmlSerializer serializer = new XmlSerializer(typeof(ObservableCollection<AddOn>));
 
                     StreamReader reader = new StreamReader(path);
@@ -237,6 +232,5 @@ namespace Gw2_Launchbuddy
                 return null;
             }
         }
-
     }
 }
