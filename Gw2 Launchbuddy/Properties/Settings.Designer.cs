@@ -166,5 +166,29 @@ namespace Gw2_Launchbuddy.Properties {
                 this["mediaplayer_volume"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#00000000")]
+        public global::System.Windows.Media.Color cinema_backgroundcolor {
+            get {
+                return ((global::System.Windows.Media.Color)(this["cinema_backgroundcolor"]));
+            }
+            set {
+                this["cinema_backgroundcolor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string cinema_loginwindowpath {
+            get {
+                return ((string)(this["cinema_loginwindowpath"]));
+            }
+            set {
+                this["cinema_loginwindowpath"] = value;
+            }
+        }
     }
 }

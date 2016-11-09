@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gw2_Launchbuddy"
         xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" x:Class="Gw2_Launchbuddy.MainWindow"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         x:Name="myWindow"
         WindowStyle="None"
         ShowInTaskbar="true"
+
     
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
         Title="Gw2 Launchbuddy V 1.3" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1">
@@ -86,10 +88,10 @@
         </Storyboard>
         <SolidColorBrush x:Key="ListBorder" Color="#828790"/>
 
-       
-        
+
+
         <Style x:Key="Style_lvacc" TargetType="{x:Type ListView}">
-            
+
             <Setter Property="Background" Value="{x:Null}"/>
             <Setter Property="TextElement.Foreground" Value="White"/>
             <Setter Property="BorderBrush" Value="#FF232323"/>
@@ -129,7 +131,7 @@
             <Setter Property="FontFamily" Value="Times New Roman"/>
             <Setter Property="FontSize" Value="14"/>
         </Style>
-        
+
         <Style x:Key="lv_blackheader"  TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
             <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
             <Setter Property="TextBlock.Foreground" Value="White"/>
@@ -232,7 +234,7 @@
 
         <Canvas x:Name="Canvas_Custom_UI">
             <Canvas x:Name="Canvas_login" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0">
-                <Image Source="/Resources/loginwindow.png" Height="300" />
+                <Image x:Name="img_loginwindow" Source="/Resources/loginwindow.png" Height="300" />
                 <ListView x:Name="Cinema_Accountlist" BorderThickness="0" Canvas.Left="100" Canvas.Top="80" Width="280" Height="135" SelectionChanged="listview_acc_SelectionChanged" Style="{DynamicResource Style_lvacc}" BorderBrush="#FF5F5F5F">
                     <ListView.View>
                         <GridView >
@@ -283,7 +285,7 @@
                 <Button x:Name="bt_shortcut" Content="Create Shortcut (Coming back soon)" Grid.Column="1" Grid.Row="1"  Click="bt_shortcut_Click" BorderThickness="1" Margin="5,0,0,0" IsEnabled="false"/>
             </Grid>
 
-            <TabControl x:Name="tab_options" Grid.Row="0" SelectionChanged="tab_options_SelectionChanged" MouseLeave="tab_options_MouseLeave" >
+            <TabControl x:Name="tab_options" Grid.Row="0" SelectionChanged="tab_options_SelectionChanged" MouseLeave="tab_options_MouseLeave">
                 <TabControl.Background>
                     <ImageBrush ImageSource="/Resources/launchbuddyback.png" Stretch="Uniform" AlignmentX="Right" Opacity="0.15" >
                         <ImageBrush.Transform>
@@ -577,7 +579,7 @@
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="30"/>
-                                    <RowDefinition Height="150"/>
+                                    <RowDefinition Height="110"/>
                                     <RowDefinition Height="30"/>
                                 </Grid.RowDefinitions>
                                 <Label Content="Slideshow Info:" FontSize="16" FontWeight="Bold"/>
@@ -601,14 +603,14 @@
 
                                 <Label x:Name="lab_imagepreview" Content="Current Image: " Grid.Row="2" Grid.Column="1" FontWeight="Bold"/>
                             </Grid>
-
+                            <Separator Margin="0,5,0,0"/>
                             <Grid Margin="0,5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="50*"/>
                                     <ColumnDefinition Width="50*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="150"/>
+                                    <RowDefinition Height="100"/>
                                     <RowDefinition Height="30"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Grid.Row="0" Grid.Column="0" x:Name="tb_maskinfo" TextWrapping="Wrap" Text="Instructions:                                                                Set the Maskimage by using a png image with transparent background. Draw the logo/ image with a black color. Press Set MaskImage and check in the Preview if the mask is imported correctly" FontSize="14.667"/>
@@ -617,7 +619,8 @@
                                 <Image x:Name="img_maskpreview" Grid.Row="0" Grid.Column="1" Source="Resources/quaggan.jpg"/>
 
                             </Grid>
-                            <Grid Margin="0,5">
+                            <Separator Margin="0,5"/>
+                            <Grid >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="50*"/>
                                     <ColumnDefinition Width="50*"/>
@@ -633,11 +636,36 @@
                                         <ColumnDefinition Width="50*"/>
                                         <ColumnDefinition Width="50*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Button x:Name="bt_musicstart" Content="Test Music" Grid.Column="0" Click="bt_musicstart_Click"/>
-                                    <Button x:Name="bt_musicstop" Content="Stop Music" Grid.Column="1" Click="bt_musicstop_Click"/>
+                                    <Button x:Name="bt_musicstart" Content="Test Music" Grid.Column="0" Click="bt_musicstart_Click" Margin="5,0"/>
+                                    <Button x:Name="bt_musicstop" Content="Stop Music" Grid.Column="1" Click="bt_musicstop_Click" Margin="5,0"/>
                                 </Grid>
+                            </Grid>
+                        </StackPanel>
+                        <Separator Margin="0,5"/>
+                        <StackPanel>
 
-
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50*"/>
+                                    <ColumnDefinition Width="50*"/>
+                                </Grid.ColumnDefinitions>
+                                <Button Content="Set Loginwindow Image" x:Name="bt_setloginwindow" Click="bt_setloginwindow_Click" />
+                                <Label x:Name="lab_loginwindowpath"  Grid.Column="1" Content="Current Loginwindow: Default" FontWeight="Bold"/>
+                            </Grid>
+                            <Separator Margin="0,5,0,0"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50*"/>
+                                    <ColumnDefinition Width="50*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <Label Content="Background Color:" FontWeight="Bold"/>
+                                <xctk:ColorPicker Name="ClrPcker_Background" SelectedColorChanged="ClrPcker_Background_SelectedColorChanged" Grid.Column="1" Margin="5"/>
                             </Grid>
                         </StackPanel>
 

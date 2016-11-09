@@ -38,5 +38,11 @@
     <Setting Name="mediaplayer_volume" Type="System.Double" Scope="User">
       <Value Profile="(Default)">90</Value>
     </Setting>
+    <Setting Name="cinema_backgroundcolor" Type="System.Windows.Media.Color" Scope="User">
+      <Value Profile="(Default)">#00000000</Value>
+    </Setting>
+    <Setting Name="cinema_loginwindowpath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

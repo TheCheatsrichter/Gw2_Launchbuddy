@@ -39,7 +39,6 @@ namespace Gw2_Launchbuddy
         /// 
 
         bool cinemamode = false;
-        double MediaVolume = 100;
 
         SetupInfo winsetupinfo = new SetupInfo();
         private SortAdorner listViewSortAdorner = null;
@@ -121,10 +120,17 @@ namespace Gw2_Launchbuddy
 
         public MainWindow()
         {
-            InitializeComponent();
-            if (!Directory.Exists(AppdataPath))
+            try
             {
-                Directory.CreateDirectory(AppdataPath);
+                InitializeComponent();
+                if (!Directory.Exists(AppdataPath))
+                {
+                    Directory.CreateDirectory(AppdataPath);
+                }
+            }
+            catch
+            {
+                Properties.Settings.Default.Reset() ;
             }
 
 #if !DEBUG
@@ -227,11 +233,21 @@ namespace Gw2_Launchbuddy
             bool slideshowmode = Properties.Settings.Default.cinema_slideshow;
             cinema_videoplayback.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
 
+            string musicpath = Properties.Settings.Default.cinema_musicpath;
+            string imagespath = Properties.Settings.Default.cinema_imagepath;
+            string maskpath = Properties.Settings.Default.cinema_maskpath;
+            string videopath = Properties.Settings.Default.cinema_videopath;
+            string loginwindowpath = Properties.Settings.Default.cinema_loginwindowpath;
+            var backgroundcolor = Properties.Settings.Default.cinema_backgroundcolor;
+
             if (videomode && !slideshowmode) rb_cinemavideomode.IsChecked = true;
             if (!videomode && slideshowmode) rb_cinemaslideshowmode.IsChecked = true;
 
-            if (cinemamode)
+                if (cinemamode)
             {
+                //Cinema Mode
+
+                sl_volumecontrol.Value = Properties.Settings.Default.mediaplayer_volume;
 #if !DEBUG
                 int reso_x = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
                 int reso_y = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
@@ -255,12 +271,14 @@ namespace Gw2_Launchbuddy
                 this.Left = (screenWidth / 2) - (windowWidth / 2);
                 this.Top = (screenHeight / 2) - (windowHeight / 2);
 #endif
-
+                //Setting up the Login Window Location
                 Canvas.SetTop(Canvas_login, reso_y - (reso_y / 2));
                 Canvas.SetLeft(Canvas_login, reso_x / 10);
+                //Setting up Endposition of Logo Animation
                 var endpos = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];
                 endpos.Value = reso_x / 3;
 
+                //General UI Hidding/Scaling
                 SettingsGrid.Visibility = Visibility.Hidden;
                 bt_ShowSettings.Visibility = Visibility.Visible;
                 Grid.SetColumnSpan(WindowOptionsColum, 2);
@@ -268,36 +286,58 @@ namespace Gw2_Launchbuddy
                 Canvas_Custom_UI.Visibility = Visibility.Visible;
                 VolumeControl.Visibility = Visibility.Visible;
 
+                //Seeting Custom mode independent Cinema Elements
+                if (backgroundcolor != null) myWindow.Background = new SolidColorBrush(backgroundcolor);
+                if (loginwindowpath != null) img_loginwindow.Source = LoadImage(loginwindowpath);
+
                 if (videomode)
                 {
-                    Cinema_MediaPlayer.Visibility = Visibility.Visible;
-                    Cinema_MediaPlayer.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
-                    Cinema_MediaPlayer.Play();
+                    try
+                    {
+                        //Load Backgroundvideo
+                        Cinema_MediaPlayer.Visibility = Visibility.Visible;
+                        Cinema_MediaPlayer.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
+                        Cinema_MediaPlayer.Play();
+                    }
+                    catch (Exception err) {
+                        MessageBox.Show("The choosen video for cinemamode is not valid/ does not exist!\n" + err.Message);
+                        Properties.Settings.Default.cinema_use = false;
+                        Properties.Settings.Default.Save();
+                    }
                 }
 
                 if (slideshowmode)
                 {
-                    string musicpath = Properties.Settings.Default.cinema_musicpath;
-                    string imagespath = Properties.Settings.Default.cinema_imagepath;
-                    string maskpath = Properties.Settings.Default.cinema_maskpath;
-
-                    if (maskpath != null)
+                    try
                     {
-                        ImageBrush mask = new ImageBrush(LoadImage(maskpath));
-                        mask.Stretch = Stretch.Uniform;
-                        img_slideshow.OpacityMask = mask;
+                        if (maskpath != null)
+                        {
+                            //Setting opacity mask (logo)
+                            ImageBrush mask = new ImageBrush(LoadImage(maskpath));
+                            mask.Stretch = Stretch.Uniform;
+                            img_slideshow.OpacityMask = mask;
+                        }
+
+                        //Starting background slideshowthread
+                        Thread th_slideshow = new Thread(() => slideshow_diashow(imagespath));
+                        th_slideshow.Start();
+
+                        img_slideshow.Visibility = Visibility.Visible;
+                        Cinema_MediaPlayer.Source = new Uri(musicpath);
+                        Cinema_MediaPlayer.Play();
+
+                    } catch (Exception err)
+                    {
+                        MessageBox.Show("One or more settings for slideshowmode are missing!\n" +err.Message);
+                        Properties.Settings.Default.cinema_use = false;
+                        Properties.Settings.Default.Save();
                     }
-
-                    Thread th_slideshow = new Thread(() => slideshow_diashow(imagespath));
-                    th_slideshow.Start();
-
-                    img_slideshow.Visibility = Visibility.Visible;
-                    Cinema_MediaPlayer.Source = new Uri(musicpath);
-                    Cinema_MediaPlayer.Play();
+                    
                 }
             }
             else
             {
+                //Normal Mode
                 VolumeControl.Visibility = Visibility.Collapsed;
                 Cinema_MediaPlayer.Stop();
                 Cinema_MediaPlayer.Visibility = Visibility.Hidden;
@@ -1334,6 +1374,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_musicstart_Click(object sender, RoutedEventArgs e)
         {
+            Cinema_MediaPlayer.Source = new Uri(Properties.Settings.Default.cinema_musicpath);
             Cinema_MediaPlayer.Play();
         }
 
@@ -1650,6 +1691,33 @@ namespace Gw2_Launchbuddy
             (sender as MediaElement).Play();
         }
 
+        private void ClrPcker_Background_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            myWindow.Background = new SolidColorBrush((Color)ClrPcker_Background.SelectedColor);
+            if ((Color)ClrPcker_Background.SelectedColor != null)
+            {
+                Properties.Settings.Default.cinema_backgroundcolor = (Color)ClrPcker_Background.SelectedColor;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        private void bt_setloginwindow_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
+            filedialog.DefaultExt = "png";
+            filedialog.Multiselect = false;
+            filedialog.Filter = "Png Files(*.png) | *.png";
+            System.Windows.Forms.DialogResult result = filedialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                cinema_videoplayback.Source = new Uri(filedialog.FileName, UriKind.Relative);
+                Properties.Settings.Default.cinema_loginwindowpath = filedialog.FileName;
+                img_loginwindow.Source = LoadImage(filedialog.FileName);
+                lab_loginwindowpath.Content = "Current Loginwindow: " + Path.GetFileNameWithoutExtension(filedialog.FileName);
+                Properties.Settings.Default.Save();
+            }
+        }
     }
 
     public class SortAdorner : Adorner
