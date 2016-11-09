@@ -190,5 +190,17 @@ namespace Gw2_Launchbuddy.Properties {
                 this["cinema_loginwindowpath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int cinema_slideshowendpos {
+            get {
+                return ((int)(this["cinema_slideshowendpos"]));
+            }
+            set {
+                this["cinema_slideshowendpos"] = value;
+            }
+        }
     }
 }

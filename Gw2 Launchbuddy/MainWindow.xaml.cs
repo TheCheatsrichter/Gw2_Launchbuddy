@@ -41,6 +41,8 @@ namespace Gw2_Launchbuddy
         bool cinemamode = false;
         bool slideshowthread_isrunning = false;
 
+        int reso_x, reso_y;
+
         SetupInfo winsetupinfo = new SetupInfo();
         private SortAdorner listViewSortAdorner = null;
         private GridViewColumnHeader listViewSortCol = null;
@@ -319,15 +321,15 @@ namespace Gw2_Launchbuddy
                 //Cinema Mode
 
                 sl_volumecontrol.Value = Properties.Settings.Default.mediaplayer_volume;
-#if !DEBUG
-                int reso_x = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
-                int reso_y = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
+
+                reso_x = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
+                reso_y = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
                 myWindow.WindowState = WindowState.Maximized;
-#else
+
                 //Notes: Login frame = 560x300
                 //Test resolutions here!
                 //Only edit width!
-
+                /*
                 myWindow.Width = 1600;
 
                 myWindow.Height = (int)(myWindow.Width / 16 * 9);
@@ -341,13 +343,14 @@ namespace Gw2_Launchbuddy
                 double windowHeight = this.Height;
                 this.Left = (screenWidth / 2) - (windowWidth / 2);
                 this.Top = (screenHeight / 2) - (windowHeight / 2);
-#endif
+                */
+
                 //Setting up the Login Window Location
                 Canvas.SetTop(Canvas_login, reso_y - (reso_y / 2));
                 Canvas.SetLeft(Canvas_login, reso_x / 10);
                 //Setting up Endposition of Logo Animation
                 var endpos = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];
-                endpos.Value = reso_x / 3;
+                endpos.Value = Properties.Settings.Default.cinema_slideshowendpos * reso_x /200;
 
                 //General UI Hidding/Scaling
                 SettingsGrid.Visibility = Visibility.Hidden;
@@ -1380,6 +1383,9 @@ namespace Gw2_Launchbuddy
                 Properties.Settings.Default.Save();
                 lab_maskpreview.Content = "Current Mask: " + Path.GetFileName(filedialog.FileName);
                 img_maskpreview.Source = LoadImage(filedialog.FileName);
+                ImageBrush newmask = new ImageBrush(LoadImage(filedialog.FileName));
+                newmask.Stretch = Stretch.Uniform;
+                img_slideshow.OpacityMask = newmask;
             }
         }
 
@@ -1792,6 +1798,27 @@ namespace Gw2_Launchbuddy
                 lab_loginwindowpath.Content = "Current Loginwindow: " + Path.GetFileNameWithoutExtension(filedialog.FileName);
                 Properties.Settings.Default.Save();
             }
+        }
+
+        private void sl_logoendpos_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var anim_slideshow = (System.Windows.Media.Animation.Storyboard)Resources["anim_slideshow_start"];
+            anim_slideshow.Begin();           
+        }
+
+        private void sl_logoendpos_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            var anim_slideshow = (System.Windows.Media.Animation.Storyboard)Resources["anim_slideshow_start"];
+            anim_slideshow.Begin();
+            Properties.Settings.Default.cinema_slideshowendpos = (int)sl_logoendpos.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var endpos = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];
+            endpos.Value = sl_logoendpos.Value*(reso_x/200);
+
         }
     }
 
