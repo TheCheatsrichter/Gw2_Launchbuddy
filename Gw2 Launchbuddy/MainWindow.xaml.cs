@@ -39,6 +39,7 @@ namespace Gw2_Launchbuddy
         /// 
 
         bool cinemamode = false;
+        bool slideshowthread_isrunning = false;
 
         SetupInfo winsetupinfo = new SetupInfo();
         private SortAdorner listViewSortAdorner = null;
@@ -225,13 +226,79 @@ namespace Gw2_Launchbuddy
 
         }
 
+        bool cinema_checksetup(bool checkslideshow, bool checkvideomode)
+        {
+            string musicpath = Properties.Settings.Default.cinema_musicpath;
+            string maskpath = Properties.Settings.Default.cinema_maskpath;
+            string videopath = Properties.Settings.Default.cinema_videopath;
+            string loginwindowpath = Properties.Settings.Default.cinema_loginwindowpath;
+            var backgroundcolor = Properties.Settings.Default.cinema_backgroundcolor;
+
+            string[] musicext = {
+                ".WAV", ".MID", ".MIDI", ".WMA", ".MP3", ".OGG", ".RMA",
+                ".AVI", ".MP4", ".DIVX", ".WMV",
+            };
+
+            string[] videoext = {
+                ".AVI", ".MP4", ".DIVX", ".WMV",
+            };
+
+            string[] picext = {
+                ".PNG", ".JPG", ".JPEG", ".BMP", ".GIF", 
+            };
+
+            bool invalid = false;
+
+
+            if (checkvideomode)
+            {
+                //Check all needed VideoMode resources here
+
+                if (!videoext.Contains(Path.GetExtension(videopath), StringComparer.OrdinalIgnoreCase) || !System.IO.File.Exists(videopath))
+                {
+                    MessageBox.Show("Invalid video file detected! File could not be found / is not a video file.\n Filepath: " + videopath);
+                    invalid = true;
+                }
+            }
+
+            if (checkslideshow)
+            {
+                //Check all needed SlideshowMode resources here
+
+                if (!musicext.Contains(Path.GetExtension(musicpath), StringComparer.OrdinalIgnoreCase) || !System.IO.File.Exists(musicpath))
+                {
+                    MessageBox.Show("Invalid music file detected! File could not be found / is not a music file.\n Filepath: " + musicpath);
+                    invalid = true;
+                }
+
+                if (!picext.Contains(Path.GetExtension(maskpath), StringComparer.OrdinalIgnoreCase) || !System.IO.File.Exists(maskpath))
+                {
+                    MessageBox.Show("Invalid mask file detected! File could not be found / is not a picture file.\n Filepath: " + maskpath);
+                    invalid = true;
+                }
+            }
+
+            //General needed resources
+
+            if (!picext.Contains(Path.GetExtension(loginwindowpath), StringComparer.OrdinalIgnoreCase) || !System.IO.File.Exists(loginwindowpath))
+            {
+                MessageBox.Show("Invalid loginwindow file detected! File could not be found / is not a picture file.\n Filepath: " + loginwindowpath);
+                invalid = true;
+            }
+
+            if (invalid) return false;
+
+            return true;
+
+        }
+
         void cinema_setup()
         {
             LoadCinemaSettings();
-            cinemamode = Properties.Settings.Default.cinema_use;
             bool videomode = Properties.Settings.Default.cinema_video;
             bool slideshowmode = Properties.Settings.Default.cinema_slideshow;
-            cinema_videoplayback.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
+            cinemamode = Properties.Settings.Default.cinema_use;
+            cinemamode = cinema_checksetup(slideshowmode,videomode);
 
             string musicpath = Properties.Settings.Default.cinema_musicpath;
             string imagespath = Properties.Settings.Default.cinema_imagepath;
@@ -240,10 +307,14 @@ namespace Gw2_Launchbuddy
             string loginwindowpath = Properties.Settings.Default.cinema_loginwindowpath;
             var backgroundcolor = Properties.Settings.Default.cinema_backgroundcolor;
 
+            //Settings UI Setup
+            cinema_videoplayback.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
             if (videomode && !slideshowmode) rb_cinemavideomode.IsChecked = true;
             if (!videomode && slideshowmode) rb_cinemaslideshowmode.IsChecked = true;
+            ClrPcker_Background.SelectedColor = backgroundcolor;
+            lab_loginwindowpath.Content = "Current Loginwindow: " + Path.GetFileNameWithoutExtension(loginwindowpath);
 
-                if (cinemamode)
+            if (cinemamode)
             {
                 //Cinema Mode
 
@@ -286,7 +357,7 @@ namespace Gw2_Launchbuddy
                 Canvas_Custom_UI.Visibility = Visibility.Visible;
                 VolumeControl.Visibility = Visibility.Visible;
 
-                //Seeting Custom mode independent Cinema Elements
+                //Setting Custom mode independent Cinema Elements
                 if (backgroundcolor != null) myWindow.Background = new SolidColorBrush(backgroundcolor);
                 if (loginwindowpath != null) img_loginwindow.Source = LoadImage(loginwindowpath);
 
@@ -319,8 +390,12 @@ namespace Gw2_Launchbuddy
                         }
 
                         //Starting background slideshowthread
-                        Thread th_slideshow = new Thread(() => slideshow_diashow(imagespath));
-                        th_slideshow.Start();
+                        if(!slideshowthread_isrunning)
+                        {
+                            Thread th_slideshow = new Thread(() => slideshow_diashow(imagespath));
+                            th_slideshow.Start();
+                        }
+                        slideshowthread_isrunning = true;
 
                         img_slideshow.Visibility = Visibility.Visible;
                         Cinema_MediaPlayer.Source = new Uri(musicpath);
