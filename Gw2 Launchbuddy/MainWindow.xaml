@@ -52,15 +52,18 @@
                 <CubicEase EasingMode="EaseInOut"/>
             </EasingDoubleKeyFrame.EasingFunction>
         </EasingDoubleKeyFrame>
+
+        <EasingDoubleKeyFrame x:Key="Mask_EndScaleX" KeyTime="0:0:4.9" Value="1.205">
+            <EasingDoubleKeyFrame.EasingFunction>
+                <CubicEase EasingMode="EaseInOut"/>
+            </EasingDoubleKeyFrame.EasingFunction>
+        </EasingDoubleKeyFrame>
+
         <Storyboard x:Key="anim_slideshow_start">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="img_slideshow">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0.678"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:4" Value="0.818"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:4.9" Value="1.205">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <CubicEase EasingMode="EaseInOut"/>
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
+                <StaticResource ResourceKey="Mask_EndScaleX"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="img_slideshow">
                 <EasingDoubleKeyFrame KeyTime="0" Value="-19.714"/>
@@ -70,11 +73,7 @@
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="img_slideshow">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0.677"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:4" Value="0.816"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:4.9" Value="1.201">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <CubicEase EasingMode="EaseInOut"/>
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
+                <StaticResource ResourceKey="Mask_EndScaleX"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="img_slideshow">
                 <EasingDoubleKeyFrame KeyTime="0" Value="17.459"/>
@@ -680,8 +679,15 @@
                                         <ColumnDefinition Width="50*"/>
                                         <ColumnDefinition Width="50*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Label Content="Image Endposition Horizontal:" FontWeight="Bold"/>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+                                    <Label Content="Image EndPosition Horizontal:" FontWeight="Bold"/>
                                     <Slider x:Name="sl_logoendpos" Grid.Column="1" Maximum="100" Minimum="-100" Value="30" ValueChanged="sl_logoendpos_ValueChanged" Thumb.DragCompleted="sl_logoendpos_DragCompleted"/>
+
+                                    <Label x:Name="lab_endscaleX" Content="Image EndScale:" FontWeight="Bold" Grid.Row="1"/>
+                                    <Slider x:Name="sl_logoendscaleX" Grid.Column="1" Grid.Row="1" Value="30" ValueChanged="sl_logoendscaleX_ValueChanged" Thumb.DragCompleted="sl_logoendscaleX_DragCompleted" Maximum="5" Minimum="0.2" LargeChange="0.1"/>
                                 </Grid>
                             </StackPanel>
                         </ScrollViewer>

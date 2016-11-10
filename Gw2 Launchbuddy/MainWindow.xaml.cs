@@ -351,6 +351,8 @@ namespace Gw2_Launchbuddy
                 //Setting up Endposition of Logo Animation
                 var endpos = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];
                 endpos.Value = Properties.Settings.Default.cinema_slideshowendpos * reso_x /200;
+                var endscale = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndScaleX"];
+                endscale.Value = (double)Properties.Settings.Default.cinema_slideshowendscale;
 
                 //General UI Hidding/Scaling
                 SettingsGrid.Visibility = Visibility.Hidden;
@@ -363,6 +365,8 @@ namespace Gw2_Launchbuddy
                 //Setting Custom mode independent Cinema Elements
                 if (backgroundcolor != null) myWindow.Background = new SolidColorBrush(backgroundcolor);
                 if (loginwindowpath != "") img_loginwindow.Source = LoadImage(loginwindowpath);
+                sl_logoendpos.Value = Properties.Settings.Default.cinema_slideshowendpos;
+                sl_logoendscaleX.Value = Properties.Settings.Default.cinema_slideshowendscale;
 
                 if (videomode)
                 {
@@ -1814,11 +1818,25 @@ namespace Gw2_Launchbuddy
             Properties.Settings.Default.Save();
         }
 
+        private void sl_logoendscaleX_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var endscale = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndScaleX"];
+            endscale.Value = sl_logoendscaleX.Value;
+            lab_endscaleX.Content = "Image EndScale: " + Math.Round(sl_logoendscaleX.Value,2) + " X Zoom";
+        }
+
+        private void sl_logoendscaleX_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            var anim_slideshow = (System.Windows.Media.Animation.Storyboard)Resources["anim_slideshow_start"];
+            anim_slideshow.Begin();
+            Properties.Settings.Default.cinema_slideshowendscale = sl_logoendscaleX.Value;
+            Properties.Settings.Default.Save();
+        }
+
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var endpos = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];
             endpos.Value = sl_logoendpos.Value*(reso_x/200);
-
         }
     }
 

@@ -202,5 +202,17 @@ namespace Gw2_Launchbuddy.Properties {
                 this["cinema_slideshowendpos"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.205")]
+        public double cinema_slideshowendscale {
+            get {
+                return ((double)(this["cinema_slideshowendscale"]));
+            }
+            set {
+                this["cinema_slideshowendscale"] = value;
+            }
+        }
     }
 }
