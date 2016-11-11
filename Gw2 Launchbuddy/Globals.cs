@@ -56,7 +56,17 @@ namespace Gw2_Launchbuddy
     public class Arguments
     {
         public List<Argument> arguments { get; set; }
-        public string Print(int i) { return Print(Globals.selected_accs.Count > i ? Globals.selected_accs[i] : new Account()); }
+        public string Print(int i)
+        {
+            if (i >= 0)
+            {
+                return Print(Globals.selected_accs.Count > i ? Globals.selected_accs[i] : new Account());
+            }
+            else
+            {
+                return String.Join(" ", arguments.Select(a => a.Print));
+            }
+        }
         public string Print(Account account)
         {
             Argument("-email", account.Email, true);
@@ -64,7 +74,9 @@ namespace Gw2_Launchbuddy
             Argument("-nopatchui", true);
             return String.Join(" ", arguments.Select(a => a.Print));
         }
-        public string PrintSterile(int i) { return PrintSterile(Globals.selected_accs.Count > i ? Globals.selected_accs[i] : new Account()); }
+        public string PrintSterile(int i) {
+            return PrintSterile(Globals.selected_accs.Count > i ? Globals.selected_accs[i] : new Account());
+        }
         public string PrintSterile(Account account)
         {
             return String.Join(" ", arguments.Where(a => !a.Sensitive).Select(a => a.Print)) + (Properties.Settings.Default.use_autologin ? " -AutoLogin" : "");

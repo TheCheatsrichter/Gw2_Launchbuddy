@@ -91,10 +91,10 @@
 
         <Style x:Key="Style_lvacc" TargetType="{x:Type ListView}">
 
-            <Setter Property="Background" Value="{x:Null}"/>
+            <Setter Property="Background" Value="#4CFFFFFF"/>
             <Setter Property="TextElement.Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="#FF232323"/>
-            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="Foreground" Value="Gainsboro"/>
             <Setter Property="ScrollViewer.Foreground" Value="White"/>
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
@@ -152,7 +152,6 @@
                     />
                 </Storyboard>
             </BeginStoryboard>
-            <BeginStoryboard Storyboard="{StaticResource anim_slideshow_start}"/>
         </EventTrigger>
     </Window.Triggers>
 
@@ -244,8 +243,9 @@
                                         <TextBlock x:Name="Txt" Text="{Binding Nick}" FontSize="14.667" FontWeight="Bold" Background="{x:Null}">
                                             <TextBlock.Foreground>
                                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                                    <GradientStop Color="#FF027A23" Offset="0"/>
-                                                    <GradientStop Color="#FF535353" Offset="1"/>
+                                                    <GradientStop Color="#FFD1D1D1" Offset="0"/>
+                                                    <GradientStop Color="White" Offset="1"/>
+                                                    <GradientStop Color="White" Offset="0.979"/>
                                                 </LinearGradientBrush>
                                             </TextBlock.Foreground>
                                         </TextBlock>

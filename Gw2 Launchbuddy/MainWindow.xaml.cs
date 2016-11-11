@@ -388,6 +388,10 @@ namespace Gw2_Launchbuddy
                 {
                     try
                     {
+                        
+                        Storyboard anim_slideshow = (Storyboard)FindResource("anim_slideshow_start");
+                        anim_slideshow.Begin();
+
                         if (maskpath != null)
                         {
                             //Setting opacity mask (logo)
@@ -631,7 +635,7 @@ namespace Gw2_Launchbuddy
                 if (Properties.Settings.Default.use_reshade && cb_reshade.IsEnabled == true) cb_reshade.IsChecked = true;
                 if (Properties.Settings.Default.use_autologin == true) cb_login.IsChecked = true;
 
-                listview_acc.SelectedIndex = Cinema_Accountlist.SelectedIndex = Properties.Settings.Default.selected_acc;
+                if (Properties.Settings.Default.selected_acc!=0)listview_acc.SelectedIndex = Cinema_Accountlist.SelectedIndex = Properties.Settings.Default.selected_acc;
             }
             catch (Exception err)
             {

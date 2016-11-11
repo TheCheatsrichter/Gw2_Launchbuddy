@@ -25,7 +25,14 @@ namespace Gw2_Launchbuddy
             }
 
             //Launching the application with arguments
-            for (int i = 0; i <= Globals.selected_accs.Count - 1; i++) launchgw2(i);
+            if (Globals.selected_accs.Count > 0)
+            {
+                for (int i = 0; i <= Globals.selected_accs.Count - 1; i++) launchgw2(i);
+            } else
+            {
+                launchgw2(-1);
+            }
+            
 
             //Launching AddOns
             try
