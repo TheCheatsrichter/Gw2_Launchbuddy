@@ -142,6 +142,7 @@ namespace Gw2_Launchbuddy
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionReport);
 #endif
             accountlist.Clear(); //clearing accountlist
+            fillargs(); //create arglist
             loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
             loadaccounts(); // loading saved accounts from launchbuddy
             Thread checkver = new Thread(checkversion);
@@ -149,7 +150,7 @@ namespace Gw2_Launchbuddy
             checkver.Start();
             cinema_setup();
             LoadAddons();
-            fillargs();
+
 
             AddOnManager.LaunchLbAddons();
         }
@@ -764,7 +765,6 @@ namespace Gw2_Launchbuddy
                                     if (entry.Content.ToString().Equals(parameter.Value, StringComparison.OrdinalIgnoreCase) &&
                                         !noKeep.Contains(parameter.Value, StringComparer.OrdinalIgnoreCase))
                                         entry.IsChecked = true;
-
                                 }
                             }
                             break;
