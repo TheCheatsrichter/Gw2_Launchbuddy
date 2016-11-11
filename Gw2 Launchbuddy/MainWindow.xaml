@@ -243,9 +243,9 @@
                                         <TextBlock x:Name="Txt" Text="{Binding Nick}" FontSize="14.667" FontWeight="Bold" Background="{x:Null}">
                                             <TextBlock.Foreground>
                                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                                    <GradientStop Color="#FFD1D1D1" Offset="0"/>
+                                                    <GradientStop Color="Black" Offset="0"/>
                                                     <GradientStop Color="White" Offset="1"/>
-                                                    <GradientStop Color="White" Offset="0.979"/>
+                                                    <GradientStop Color="Black" Offset="0.979"/>
                                                 </LinearGradientBrush>
                                             </TextBlock.Foreground>
                                         </TextBlock>
@@ -535,7 +535,7 @@
                 <TabItem Header="Cinema Mode">
                     
                     <StackPanel>
-                        <Label Content="Cinema Mode (Changes require restart!): " FontSize="16" FontWeight="Bold" />
+                        <Label Content="Cinema Mode (Changes may require restart): " FontSize="16" FontWeight="Bold" />
                         <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
                             <RadioButton x:Name="rb_cinemaslideshowmode" Content="Slideshow Mode" Grid.Column="0" Checked="rb_slideshowmode" IsChecked="True"/>
                             <RadioButton x:Name="rb_cinemavideomode" Content="Video Mode" Grid.Column="1" Checked="rb_videomode" Margin="5,0,0,0"/>
@@ -603,7 +603,7 @@
 
 
 
-                        <ScrollViewer Height="350">
+                        <ScrollViewer Height="350" Background="#19000000" >
                             <StackPanel x:Name="Slideshow">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -646,7 +646,7 @@
                                         <RowDefinition Height="100"/>
                                         <RowDefinition Height="30"/>
                                     </Grid.RowDefinitions>
-                                    <TextBlock Grid.Row="0" Grid.Column="0" x:Name="tb_maskinfo" TextWrapping="Wrap" Text="Instructions:                                                                Set the Maskimage by using a png image with transparent background. Draw the logo/ image with a black color. Press Set MaskImage and check in the Preview if the mask is imported correctly" FontSize="14.667"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="0" x:Name="tb_maskinfo" TextWrapping="Wrap" Text="Instructions:                                                                Set the Maskimage by using a png image with transparent background. Draw the logo/ image with any choosen color, the alpha channel however determines which part of the mask will be visible! Press Set MaskImage and check in the Preview if the mask is imported correctly" FontSize="14.667"/>
                                     <Button Content="Set Maskimage" x:Name="bt_cinema_setmask" Grid.Row="1" Click="bt_cinema_setmask_Click"/>
                                     <Label x:Name="lab_maskpreview" Content="Current Mask: Default" Grid.Row="1" Grid.Column="1" FontWeight="Bold"/>
                                     <Image x:Name="img_maskpreview" Grid.Row="0" Grid.Column="1" Source="Resources/logo_hq_mask.png"/>

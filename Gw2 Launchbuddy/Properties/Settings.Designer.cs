@@ -133,7 +133,7 @@ namespace Gw2_Launchbuddy.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool cinema_slideshow {
             get {
                 return ((bool)(this["cinema_slideshow"]));

@@ -123,6 +123,7 @@ namespace Gw2_Launchbuddy
 
         public MainWindow()
         {
+            checklibraries();
             try
             {
                 InitializeComponent();
@@ -151,6 +152,12 @@ namespace Gw2_Launchbuddy
             fillargs();
 
             AddOnManager.LaunchLbAddons();
+        }
+
+        private void checklibraries()
+        {
+            if (!System.IO.File.Exists("CrashReporter.NET.dll")) System.IO.File.WriteAllBytes("CrashReporter.NET.dll", Properties.Resources.CrashReporter_NET);
+            if (!System.IO.File.Exists("Xceed.Wpf.Toolkit.dll")) System.IO.File.WriteAllBytes("Xceed.Wpf.Toolkit.dll", Properties.Resources.Xceed_Wpf_Toolkit);
         }
 
         private void fillargs()
@@ -230,6 +237,7 @@ namespace Gw2_Launchbuddy
 
         bool cinema_checksetup(bool checkslideshow, bool checkvideomode)
         {
+            string imagespath = Properties.Settings.Default.cinema_imagepath;
             string musicpath = Properties.Settings.Default.cinema_musicpath;
             string maskpath = Properties.Settings.Default.cinema_maskpath;
             string videopath = Properties.Settings.Default.cinema_videopath;
@@ -278,6 +286,12 @@ namespace Gw2_Launchbuddy
                     MessageBox.Show("Invalid mask file detected! File could not be found / is not a picture file.\n Filepath: " + maskpath);
                     invalid = true;
                 }
+
+                if (!Directory.Exists(imagespath) || Directory.GetFiles(imagespath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp")).ToArray<string>().Length <=0)
+                {
+                    MessageBox.Show("Invalid image folder detected! No Images could be found at the choosen location! \n Filepath: " + imagespath);
+                    invalid = true;
+                }
             }
 
             //General needed resources
@@ -296,11 +310,11 @@ namespace Gw2_Launchbuddy
 
         void cinema_setup()
         {
-            LoadCinemaSettings();
             bool videomode = Properties.Settings.Default.cinema_video;
             bool slideshowmode = Properties.Settings.Default.cinema_slideshow;
             cinemamode = Properties.Settings.Default.cinema_use;
             if (cinemamode)cinemamode = cinema_checksetup(slideshowmode,videomode);
+            LoadCinemaSettings();
 
             string musicpath = Properties.Settings.Default.cinema_musicpath;
             string imagespath = Properties.Settings.Default.cinema_imagepath;
@@ -1437,7 +1451,7 @@ namespace Gw2_Launchbuddy
             string maskpath = Properties.Settings.Default.cinema_maskpath;
             string musicpath = Properties.Settings.Default.cinema_musicpath;
 
-            if (IsValidPath(imagepath))
+            if (IsValidPath(imagepath) && Directory.Exists(imagepath))
             {
                 var files = Directory.GetFiles(imagepath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp"));
                 ObservableCollection<CinemaImage> images = new ObservableCollection<CinemaImage>();
