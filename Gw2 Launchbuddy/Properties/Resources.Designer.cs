@@ -173,9 +173,9 @@ namespace Gw2_Launchbuddy.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap opacity_mask {
+        internal static System.Drawing.Bitmap opacitymask {
             get {
-                object obj = ResourceManager.GetObject("opacity_mask", resourceCulture);
+                object obj = ResourceManager.GetObject("opacitymask", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

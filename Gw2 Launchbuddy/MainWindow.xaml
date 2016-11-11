@@ -167,7 +167,11 @@
             <RowDefinition x:Name="CinemaHeight" Height="100*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" HorizontalAlignment="Left">
-            <Label Content="Gw2 Launchbuddy V1.3 BETA" FontSize="16" FontWeight="Bold"/>
+            <Label Content="Gw2 Launchbuddy V1.3 BETA" FontSize="16" FontWeight="Bold" Foreground="White" >
+                <Label.Background>
+                    <ImageBrush ImageSource="Resources/opacitymask.png"/>
+                </Label.Background>
+            </Label>
         </StackPanel>
 
         <Image x:Name="img_slideshow" Source="Resources/loginwindow.png" Grid.ColumnSpan="5" Grid.RowSpan="5" RenderTransformOrigin="0.5,0.5">
@@ -234,6 +238,9 @@
             <Canvas x:Name="Canvas_login" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0">
                 <Image x:Name="img_loginwindow" Source="/Resources/loginwindow.png" Height="300" />
                 <ListView x:Name="Cinema_Accountlist" BorderThickness="0" Canvas.Left="100" Canvas.Top="80" Width="280" Height="135" SelectionChanged="listview_acc_SelectionChanged" Style="{DynamicResource Style_lvacc}" BorderBrush="#FF5F5F5F">
+                    <ListView.OpacityMask>
+                        <ImageBrush ImageSource="Resources/opacitymask.png"/>
+                    </ListView.OpacityMask>
                     <ListView.View>
                         <GridView >
                             <GridViewColumn Width="280">
@@ -256,10 +263,20 @@
                     </ListView.View>
                 </ListView>
                 <StackPanel Orientation="Horizontal" Canvas.Left="100" Canvas.Top="220">
-                    <Button x:Name="Cinema_Launchaccount"  Width="100" Height="30" Click="Cinema_Launchaccount_Click" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="2" BorderBrush="Black"  Background="#CCFFFFFF">
-                        <Image Source="Resources/launchbutton.png"/>
+                    <Button x:Name="Cinema_Launchaccount"  Width="100" Height="30" Click="Cinema_Launchaccount_Click" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0" BorderBrush="Black"  Background="#CCFFFFFF">
+                        <Button.OpacityMask>
+                            <ImageBrush ImageSource="Resources/opacitymask.png"/>
+                        </Button.OpacityMask>
+                        <Image Source="Resources/launchbutton.png">
+                            <Image.OpacityMask>
+                                <ImageBrush ImageSource="Resources/opacitymask.png"/>
+                            </Image.OpacityMask>
+                        </Image>
                     </Button>
-                    <Button x:Name="Settings" Width="100" Height="30" Margin="10,0,0,0" Click="Settings_Click" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="2" BorderBrush="Black"  Background="#CCFFFFFF">
+                    <Button x:Name="Settings" Width="100" Height="30" Margin="10,0,0,0" Click="Settings_Click" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0" BorderBrush="Black"  Background="#CCFFFFFF">
+                        <Button.OpacityMask>
+                            <ImageBrush ImageSource="Resources/opacitymask.png"/>
+                        </Button.OpacityMask>
                         <Image Source="Resources/Icons/settings.png" />
                     </Button>
                 </StackPanel>
@@ -269,7 +286,7 @@
 
         <Grid  x:Name="SettingsGrid" Grid.Row="1" Background="White" Width="700" Height="650" Grid.RowSpan="3" Grid.ColumnSpan="3">
             <Grid.RowDefinitions>
-                <RowDefinition Height="100*"/>
+                <RowDefinition Height="100*" MinHeight="550"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
