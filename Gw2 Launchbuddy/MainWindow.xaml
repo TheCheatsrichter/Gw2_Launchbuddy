@@ -340,7 +340,11 @@
                                 <Label x:Name="lab_para" Content="Latest Startparameters:" Grid.Column="1" Grid.Row="1" />
                                 <Label x:Name="lab_path" Content="Install Path:" Grid.Column="1" Grid.Row="1" />
                             </StackPanel>
-                            <Button x:Name="bt_donate" Background="Gray" FontWeight="Bold" Foreground="LimeGreen" Content="Donate" Grid.Column="1" Grid.Row="1"  VerticalAlignment="Top" Click="bt_donate_Click" Margin="5,0,80,0" Height="27" />
+                            <Button x:Name="bt_donate" Background="Gray" FontWeight="Bold" Foreground="#FFF50000" Content="Donate" Grid.Column="1" Grid.Row="1"  VerticalAlignment="Top" Click="bt_donate_Click" Margin="5,0,80,0" Height="27" FontSize="16" >
+                                <Button.OpacityMask>
+                                    <ImageBrush ImageSource="Resources/opacitymask.png"/>
+                                </Button.OpacityMask>
+                            </Button>
                         </Grid>
 
                         <Grid Grid.Row="1" Margin="5,0,0,0">
