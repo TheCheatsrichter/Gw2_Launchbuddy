@@ -60,8 +60,8 @@ namespace Gw2_Launchbuddy
         }
         public string Print(Account account)
         {
-            AddTemp("-email", '"' + account.Email + '"');
-            AddTemp("-password", '"' + account.Password + '"');
+            AddTemp("-email ", '"' + account.Email + '"');
+            AddTemp("-password ", '"' + account.Password + '"');
             AddTemp("-nopatchui");
             return String.Join(" ", arguments.Where(a => a.Active).Select(a => a.Print));
         }

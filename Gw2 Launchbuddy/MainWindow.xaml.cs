@@ -340,12 +340,12 @@ namespace Gw2_Launchbuddy
             lab_loginwindowpath.Content = "Current Loginwindow: " + Path.GetFileNameWithoutExtension(loginwindowpath);
             sl_logoendpos.Value = Properties.Settings.Default.cinema_slideshowendpos;
             sl_logoendscaleX.Value = Properties.Settings.Default.cinema_slideshowendscale;
+            sl_volumecontrol.Value = Properties.Settings.Default.mediaplayer_volume;
+            Cinema_MediaPlayer.Volume = sl_volumecontrol.Value;
 
             if (cinemamode)
             {
                 //Cinema Mode
-
-                sl_volumecontrol.Value = Properties.Settings.Default.mediaplayer_volume;
 
                 reso_x = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
                 reso_y = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
