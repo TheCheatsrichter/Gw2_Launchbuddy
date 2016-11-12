@@ -146,6 +146,7 @@
     </ApplicationDefinition>
     <Compile Include="AddOnManager.cs" />
     <Compile Include="ApplicationManager.cs" />
+    <Compile Include="ArgumentManager.cs" />
     <Compile Include="CrashReporter.cs" />
     <Compile Include="CustomUI.cs" />
     <Compile Include="Encryption_AES.cs" />
