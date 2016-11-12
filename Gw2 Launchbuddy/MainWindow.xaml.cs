@@ -165,7 +165,7 @@ namespace Gw2_Launchbuddy
         {
             arglistbox.Items.Clear();
             List<CheckBox> tmp = new List<CheckBox>();
-            foreach (var item in Globals.ArgList)
+            foreach (var item in Globals.args.ToDictionary(false))
                 tmp.Add(new CheckBox() { Content = item.Key });
             foreach (var item in tmp)
             {
@@ -962,7 +962,7 @@ namespace Gw2_Launchbuddy
                 System.Windows.Controls.CheckBox item = (System.Windows.Controls.CheckBox)selecteditem;
                 lab_descr.Content = "Description (" + item.Content.ToString() + "):";
 
-                textblock_descr.Text = Globals.ArgList.Where(a => a.Key == item.Content.ToString()).Select(a => a.Value).FirstOrDefault() ?? "Description missing!. (PLS REPORT)";
+                textblock_descr.Text = Globals.args.ToDictionary(false).Where(a => a.Key == item.Content.ToString()).Select(a => a.Value).FirstOrDefault() ?? "Description missing!. (PLS REPORT)";
             }
         }
 
@@ -1764,7 +1764,7 @@ namespace Gw2_Launchbuddy
 
         private void CheckBox_Checked(Object sender, RoutedEventArgs e)
         {
-            Globals.args.Argument(((CheckBox)sender).Content.ToString());
+            Globals.args.Add(((CheckBox)sender).Content.ToString());
             RefreshUI();
         }
         private void CheckBox_Unchecked(Object sender, RoutedEventArgs e)
