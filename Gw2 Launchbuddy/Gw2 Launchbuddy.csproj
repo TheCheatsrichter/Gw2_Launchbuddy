@@ -285,6 +285,7 @@
   <ItemGroup>
     <Content Include="Resources\CrashReporter.NET.dll" />
     <Resource Include="Resources\opacitymask.png" />
+    <Resource Include="Resources\Icons\film.png" />
     <Content Include="Resources\Xceed.Wpf.Toolkit.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

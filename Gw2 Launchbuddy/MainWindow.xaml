@@ -12,7 +12,7 @@
 
     
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
-        Title="Gw2 Launchbuddy V 1.3" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1">
+        Title="Gw2 Launchbuddy V 1.3.2" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1">
     <Window.Resources>
         <Storyboard x:Key="anim_imgfadeout">
             <DoubleAnimation 
@@ -167,7 +167,7 @@
             <RowDefinition x:Name="CinemaHeight" Height="100*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" HorizontalAlignment="Left">
-            <Label Content="Gw2 Launchbuddy V1.3 BETA" FontSize="16" FontWeight="Bold" Foreground="White" >
+            <Label Content="Gw2 Launchbuddy V1.3.2 BETA" FontSize="16" FontWeight="Bold" Foreground="White" >
                 <Label.Background>
                     <ImageBrush ImageSource="Resources/opacitymask.png"/>
                 </Label.Background>
@@ -224,7 +224,7 @@
                 <Image Source="Resources/Icons/settings.png"/>
             </Button>
             <Button x:Name="bt_cinema" Width="40" Click="bt_cinema_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
-                <Image Source="Resources/Icons/popcorn.png"/>
+                <Image Source="Resources/Icons/film.png"/>
             </Button>
             <Button x:Name="bt_minimize" Width="40" Click="bt_minimize_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
                 <Image Source="Resources/Icons/minimize.png"/>
