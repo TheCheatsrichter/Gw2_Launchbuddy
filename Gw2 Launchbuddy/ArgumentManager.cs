@@ -12,7 +12,7 @@ namespace Gw2_Launchbuddy
             arguments = new List<Argument>();
             // Normal
             arguments.Add(new Argument("-32", "Forces the game to run in 32 bit."));
-            arguments.Add(new Argument("-64", "Forces the game to run in 64 bit."));
+            //arguments.Add(new Argument("-64", "Forces the game to run in 64 bit."));
             arguments.Add(new Argument("-bmp", "Forces the game to create lossless screenshots as .BMP files. Use for creating high-quality screenshots at the expense of much larger files."));
             arguments.Add(new Argument("-diag", "Instead of launching the game, this command creates a detailed diagnostic file that contains diagnostic data that can be used for troubleshooting. The file, NetworkDiag.log, will be located in your game directory or Documents/Guild Wars . If you want to use this feature, be sure to create a separate shortcut for it."));
             arguments.Add(new Argument("-dx9single", "Enables the Direct3D 9c renderer in single-threaded mode. Improves performance in Wine with CSMT."));
@@ -32,7 +32,7 @@ namespace Gw2_Launchbuddy
             arguments.Add(new Argument("-windowed", "Forces Guild Wars 2 to run in windowed mode. In game, you can switch to windowed mode by pressing Alt + Enter or clicking the window icon in the upper right corner."));
             arguments.Add(new Argument("-umbra gpu", "Forces the use of umbra's GPU accelerated culling. In most cases, using this results in higher cpu usage and lower gpu usage decreasing the frame-rate."));
             arguments.Add(new Argument("-maploadinfo", "Shows diagnostic information during map loads, including load percentages and elapsed time."));
-            arguments.Add(new Argument("-shareArchive", "Opens the Gw2.dat file in shared mode so that it can be accessed from other processes while the game is running."));
+            //arguments.Add(new Argument("-shareArchive", "Opens the Gw2.dat file in shared mode so that it can be accessed from other processes while the game is running."));
             // Secure
             arguments.Add(new Argument("-email", null, true));
             arguments.Add(new Argument("-password", null, true));
