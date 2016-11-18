@@ -133,7 +133,7 @@ namespace Gw2_Launchbuddy.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool cinema_slideshow {
             get {
                 return ((bool)(this["cinema_slideshow"]));
@@ -164,6 +164,54 @@ namespace Gw2_Launchbuddy.Properties {
             }
             set {
                 this["mediaplayer_volume"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFE6E6E6")]
+        public global::System.Windows.Media.Color cinema_backgroundcolor {
+            get {
+                return ((global::System.Windows.Media.Color)(this["cinema_backgroundcolor"]));
+            }
+            set {
+                this["cinema_backgroundcolor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string cinema_loginwindowpath {
+            get {
+                return ((string)(this["cinema_loginwindowpath"]));
+            }
+            set {
+                this["cinema_loginwindowpath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int cinema_slideshowendpos {
+            get {
+                return ((int)(this["cinema_slideshowendpos"]));
+            }
+            set {
+                this["cinema_slideshowendpos"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.205")]
+        public double cinema_slideshowendscale {
+            get {
+                return ((double)(this["cinema_slideshowendscale"]));
+            }
+            set {
+                this["cinema_slideshowendscale"] = value;
             }
         }
     }

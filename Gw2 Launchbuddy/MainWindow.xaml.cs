@@ -39,7 +39,9 @@ namespace Gw2_Launchbuddy
         /// 
 
         bool cinemamode = false;
-        double MediaVolume = 100;
+        bool slideshowthread_isrunning = false;
+
+        int reso_x, reso_y;
 
         SetupInfo winsetupinfo = new SetupInfo();
         private SortAdorner listViewSortAdorner = null;
@@ -121,10 +123,18 @@ namespace Gw2_Launchbuddy
 
         public MainWindow()
         {
-            InitializeComponent();
-            if (!Directory.Exists(AppdataPath))
+            checklibraries();
+            try
             {
-                Directory.CreateDirectory(AppdataPath);
+                InitializeComponent();
+                if (!Directory.Exists(AppdataPath))
+                {
+                    Directory.CreateDirectory(AppdataPath);
+                }
+            }
+            catch
+            {
+                Properties.Settings.Default.Reset() ;
             }
 
 #if !DEBUG
@@ -132,6 +142,7 @@ namespace Gw2_Launchbuddy
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionReport);
 #endif
             accountlist.Clear(); //clearing accountlist
+            fillargs(); //create arglist
             loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
             loadaccounts(); // loading saved accounts from launchbuddy
             Thread checkver = new Thread(checkversion);
@@ -139,16 +150,22 @@ namespace Gw2_Launchbuddy
             checkver.Start();
             cinema_setup();
             LoadAddons();
-            fillargs();
+
 
             AddOnManager.LaunchLbAddons();
+        }
+
+        private void checklibraries()
+        {
+            if (!System.IO.File.Exists("CrashReporter.NET.dll")) System.IO.File.WriteAllBytes("CrashReporter.NET.dll", Properties.Resources.CrashReporter_NET);
+            if (!System.IO.File.Exists("Xceed.Wpf.Toolkit.dll")) System.IO.File.WriteAllBytes("Xceed.Wpf.Toolkit.dll", Properties.Resources.Xceed_Wpf_Toolkit);
         }
 
         private void fillargs()
         {
             arglistbox.Items.Clear();
             List<CheckBox> tmp = new List<CheckBox>();
-            foreach (var item in Globals.ArgList)
+            foreach (var item in Globals.args.ToDictionary(false))
                 tmp.Add(new CheckBox() { Content = item.Key });
             foreach (var item in tmp)
             {
@@ -219,28 +236,125 @@ namespace Gw2_Launchbuddy
 
         }
 
+        bool cinema_checksetup(bool checkslideshow, bool checkvideomode)
+        {
+            string imagespath = Properties.Settings.Default.cinema_imagepath;
+            string musicpath = Properties.Settings.Default.cinema_musicpath;
+            string maskpath = Properties.Settings.Default.cinema_maskpath;
+            string videopath = Properties.Settings.Default.cinema_videopath;
+            string loginwindowpath = Properties.Settings.Default.cinema_loginwindowpath;
+            var backgroundcolor = Properties.Settings.Default.cinema_backgroundcolor;
+
+            string[] musicext = {
+                ".WAV", ".MID", ".MIDI", ".WMA", ".MP3", ".OGG", ".RMA",
+                ".AVI", ".MP4", ".DIVX", ".WMV",
+            };
+
+            string[] videoext = {
+                ".AVI", ".MP4", ".DIVX", ".WMV", ".M4A",
+            };
+
+            string[] picext = {
+                ".PNG", ".JPG", ".JPEG", ".BMP", ".GIF", 
+            };
+
+            bool invalid = false;
+
+
+            if (checkvideomode)
+            {
+                //Check all needed VideoMode resources here
+
+                if (!videoext.Contains(Path.GetExtension(videopath), StringComparer.OrdinalIgnoreCase) || !System.IO.File.Exists(videopath))
+                {
+                    MessageBox.Show("Invalid video file detected! File could not be found / is not a video file.\n Filepath: " + videopath +"\n\nPlease choose another file in the cinemamode section!");
+                    invalid = true;
+                }
+            }
+
+            if (checkslideshow)
+            {
+                //Check all needed SlideshowMode resources here
+
+                if (!musicext.Contains(Path.GetExtension(musicpath), StringComparer.OrdinalIgnoreCase) || !System.IO.File.Exists(musicpath))
+                {
+                    MessageBox.Show("Invalid music file detected! File could not be found / is not a music file.\n Filepath: " + musicpath + "\n\nPlease choose another file in the cinemamode section!");
+                    invalid = true;
+                }
+
+                if (!picext.Contains(Path.GetExtension(maskpath), StringComparer.OrdinalIgnoreCase) || !System.IO.File.Exists(maskpath))
+                {
+                    MessageBox.Show("Invalid mask file detected! File could not be found / is not a picture file.\n Filepath: " + maskpath + "\n\nPlease choose another file in the cinemamode section!");
+                    invalid = true;
+                }
+
+                if (!Directory.Exists(imagespath) || Directory.GetFiles(imagespath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp")).ToArray<string>().Length <=0)
+                {
+                    MessageBox.Show("Invalid image folder detected! No Images could be found at the choosen location! \n Filepath: " + imagespath + "\n\nPlease choose another folder in the cinemamode section!");
+                    invalid = true;
+                }
+            }
+
+            //General needed resources
+
+            if ((!picext.Contains(Path.GetExtension(loginwindowpath), StringComparer.OrdinalIgnoreCase) || !System.IO.File.Exists(loginwindowpath)) && loginwindowpath!="")
+            {
+                MessageBox.Show("Invalid loginwindow file detected! File could not be found / is not a picture file.\n Filepath: " + loginwindowpath + "\n\nPlease choose another file in the cinemamode section!");
+                invalid = true;
+            }
+
+            if (invalid) return false;
+
+            return true;
+
+        }
+
         void cinema_setup()
         {
-            LoadCinemaSettings();
-            cinemamode = Properties.Settings.Default.cinema_use;
             bool videomode = Properties.Settings.Default.cinema_video;
             bool slideshowmode = Properties.Settings.Default.cinema_slideshow;
-            cinema_videoplayback.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
+            cinemamode = Properties.Settings.Default.cinema_use;
+            if (cinemamode)cinemamode = cinema_checksetup(slideshowmode,videomode);
+            Properties.Settings.Default.cinema_use = cinemamode;
+            Properties.Settings.Default.Save();
+            LoadCinemaSettings();
 
+            string musicpath = Properties.Settings.Default.cinema_musicpath;
+            string imagespath = Properties.Settings.Default.cinema_imagepath;
+            string maskpath = Properties.Settings.Default.cinema_maskpath;
+            string videopath = Properties.Settings.Default.cinema_videopath;
+            string loginwindowpath = Properties.Settings.Default.cinema_loginwindowpath;
+            var backgroundcolor = Properties.Settings.Default.cinema_backgroundcolor;
+
+            //Settings UI Setup
+            try {
+                cinema_videoplayback.Source = new Uri(videopath, UriKind.Relative);
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show("Videofile for videomode could not be found! \nPath: " + videopath + "\n" + err.Message);
+            }
             if (videomode && !slideshowmode) rb_cinemavideomode.IsChecked = true;
             if (!videomode && slideshowmode) rb_cinemaslideshowmode.IsChecked = true;
+            ClrPcker_Background.SelectedColor = backgroundcolor;
+            lab_loginwindowpath.Content = "Current Loginwindow: " + Path.GetFileNameWithoutExtension(loginwindowpath);
+            sl_logoendpos.Value = Properties.Settings.Default.cinema_slideshowendpos;
+            sl_logoendscaleX.Value = Properties.Settings.Default.cinema_slideshowendscale;
+            sl_volumecontrol.Value = Properties.Settings.Default.mediaplayer_volume;
+            Cinema_MediaPlayer.Volume = sl_volumecontrol.Value;
 
             if (cinemamode)
             {
-#if !DEBUG
-                int reso_x = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
-                int reso_y = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
+                //Cinema Mode
+
+                reso_x = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
+                reso_y = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
                 myWindow.WindowState = WindowState.Maximized;
-#else
+
                 //Notes: Login frame = 560x300
                 //Test resolutions here!
                 //Only edit width!
-
+                /*
                 myWindow.Width = 1600;
 
                 myWindow.Height = (int)(myWindow.Width / 16 * 9);
@@ -254,13 +368,18 @@ namespace Gw2_Launchbuddy
                 double windowHeight = this.Height;
                 this.Left = (screenWidth / 2) - (windowWidth / 2);
                 this.Top = (screenHeight / 2) - (windowHeight / 2);
-#endif
+                */
 
+                //Setting up the Login Window Location
                 Canvas.SetTop(Canvas_login, reso_y - (reso_y / 2));
                 Canvas.SetLeft(Canvas_login, reso_x / 10);
+                //Setting up Endposition of Logo Animation
                 var endpos = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];
-                endpos.Value = reso_x / 3;
+                endpos.Value = Properties.Settings.Default.cinema_slideshowendpos * reso_x /200;
+                var endscale = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndScaleX"];
+                endscale.Value = (double)Properties.Settings.Default.cinema_slideshowendscale;
 
+                //General UI Hidding/Scaling
                 SettingsGrid.Visibility = Visibility.Hidden;
                 bt_ShowSettings.Visibility = Visibility.Visible;
                 Grid.SetColumnSpan(WindowOptionsColum, 2);
@@ -268,36 +387,74 @@ namespace Gw2_Launchbuddy
                 Canvas_Custom_UI.Visibility = Visibility.Visible;
                 VolumeControl.Visibility = Visibility.Visible;
 
+                //Setting Custom mode independent Cinema Elements
+                try
+                {
+                    if (backgroundcolor != null) myWindow.Background = new SolidColorBrush(backgroundcolor);
+                    if (loginwindowpath != "") img_loginwindow.Source = LoadImage(loginwindowpath);
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show("Loginwindow image could not be found!\nPath: " + loginwindowpath + "\n" + err.Message);
+                }
+                
+
                 if (videomode)
                 {
-                    Cinema_MediaPlayer.Visibility = Visibility.Visible;
-                    Cinema_MediaPlayer.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
-                    Cinema_MediaPlayer.Play();
+                    try
+                    {
+                        //Load Backgroundvideo
+                        Cinema_MediaPlayer.Visibility = Visibility.Visible;
+                        Cinema_MediaPlayer.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
+                        Cinema_MediaPlayer.Play();
+                    }
+                    catch (Exception err) {
+                        MessageBox.Show("The choosen video for cinemamode is not valid/ does not exist!\n" + err.Message);
+                        Properties.Settings.Default.cinema_use = false;
+                        Properties.Settings.Default.Save();
+                    }
                 }
 
                 if (slideshowmode)
                 {
-                    string musicpath = Properties.Settings.Default.cinema_musicpath;
-                    string imagespath = Properties.Settings.Default.cinema_imagepath;
-                    string maskpath = Properties.Settings.Default.cinema_maskpath;
-
-                    if (maskpath != null)
+                    try
                     {
-                        ImageBrush mask = new ImageBrush(LoadImage(maskpath));
-                        mask.Stretch = Stretch.Uniform;
-                        img_slideshow.OpacityMask = mask;
+                        
+                        Storyboard anim_slideshow = (Storyboard)FindResource("anim_slideshow_start");
+                        anim_slideshow.Begin();
+
+                        if (maskpath != null)
+                        {
+                            //Setting opacity mask (logo)
+                            ImageBrush mask = new ImageBrush(LoadImage(maskpath));
+                            mask.Stretch = Stretch.Uniform;
+                            img_slideshow.OpacityMask = mask;
+                        }
+
+                        //Starting background slideshowthread
+                        if(!slideshowthread_isrunning)
+                        {
+                            Thread th_slideshow = new Thread(() => slideshow_diashow(imagespath));
+                            th_slideshow.Start();
+                        }
+                        slideshowthread_isrunning = true;
+
+                        img_slideshow.Visibility = Visibility.Visible;
+                        Cinema_MediaPlayer.Source = new Uri(musicpath);
+                        Cinema_MediaPlayer.Play();
+
+                    } catch (Exception err)
+                    {
+                        MessageBox.Show("One or more settings for slideshowmode are missing!\n" +err.Message);
+                        Properties.Settings.Default.cinema_use = false;
+                        Properties.Settings.Default.Save();
                     }
-
-                    Thread th_slideshow = new Thread(() => slideshow_diashow(imagespath));
-                    th_slideshow.Start();
-
-                    img_slideshow.Visibility = Visibility.Visible;
-                    Cinema_MediaPlayer.Source = new Uri(musicpath);
-                    Cinema_MediaPlayer.Play();
+                    
                 }
             }
             else
             {
+                //Normal Mode
                 VolumeControl.Visibility = Visibility.Collapsed;
                 Cinema_MediaPlayer.Stop();
                 Cinema_MediaPlayer.Visibility = Visibility.Hidden;
@@ -305,7 +462,7 @@ namespace Gw2_Launchbuddy
                 myWindow.WindowState = WindowState.Normal;
                 myWindow.Height = 680;
                 myWindow.Width = 700;
-                bt_ShowSettings.Visibility = Visibility.Hidden;
+                bt_ShowSettings.Visibility = Visibility.Collapsed;
                 Grid.SetColumnSpan(WindowOptionsColum, 1);
                 Canvas_Custom_UI.Visibility = Visibility.Collapsed;
             }
@@ -509,7 +666,7 @@ namespace Gw2_Launchbuddy
                 if (Properties.Settings.Default.use_reshade && cb_reshade.IsEnabled == true) cb_reshade.IsChecked = true;
                 if (Properties.Settings.Default.use_autologin == true) cb_login.IsChecked = true;
 
-                listview_acc.SelectedIndex = Cinema_Accountlist.SelectedIndex = Properties.Settings.Default.selected_acc;
+                if (Properties.Settings.Default.selected_acc!=0)listview_acc.SelectedIndex = Cinema_Accountlist.SelectedIndex = Properties.Settings.Default.selected_acc;
             }
             catch (Exception err)
             {
@@ -608,7 +765,6 @@ namespace Gw2_Launchbuddy
                                     if (entry.Content.ToString().Equals(parameter.Value, StringComparison.OrdinalIgnoreCase) &&
                                         !noKeep.Contains(parameter.Value, StringComparer.OrdinalIgnoreCase))
                                         entry.IsChecked = true;
-
                                 }
                             }
                             break;
@@ -806,7 +962,7 @@ namespace Gw2_Launchbuddy
                 System.Windows.Controls.CheckBox item = (System.Windows.Controls.CheckBox)selecteditem;
                 lab_descr.Content = "Description (" + item.Content.ToString() + "):";
 
-                textblock_descr.Text = Globals.ArgList.Where(a => a.Key == item.Content.ToString()).Select(a => a.Value).FirstOrDefault() ?? "Description missing!. (PLS REPORT)";
+                textblock_descr.Text = Globals.args.ToDictionary(false).Where(a => a.Key == item.Content.ToString()).Select(a => a.Value).FirstOrDefault() ?? "Description missing!. (PLS REPORT)";
             }
         }
 
@@ -1265,6 +1421,9 @@ namespace Gw2_Launchbuddy
                 Properties.Settings.Default.Save();
                 lab_maskpreview.Content = "Current Mask: " + Path.GetFileName(filedialog.FileName);
                 img_maskpreview.Source = LoadImage(filedialog.FileName);
+                ImageBrush newmask = new ImageBrush(LoadImage(filedialog.FileName));
+                newmask.Stretch = Stretch.Uniform;
+                img_slideshow.OpacityMask = newmask;
             }
         }
 
@@ -1277,7 +1436,7 @@ namespace Gw2_Launchbuddy
         {
             System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
             filedialog.Multiselect = false;
-            filedialog.Filter = "MP3 Files(*.mp3) | *.mp3";
+            filedialog.Filter = "MP3 Files(*.mp3) | *.mp3|WAV Files (*.wav)|*.wav|AAC Files (*.aac)|*.aac|All Files(*.*)|*.*";
             filedialog.ShowDialog();
 
             if (filedialog.FileName != "")
@@ -1307,33 +1466,65 @@ namespace Gw2_Launchbuddy
             string imagepath = Properties.Settings.Default.cinema_imagepath;
             string maskpath = Properties.Settings.Default.cinema_maskpath;
             string musicpath = Properties.Settings.Default.cinema_musicpath;
+            string loginpath = Properties.Settings.Default.cinema_loginwindowpath;
 
-            if (IsValidPath(imagepath))
+            try
             {
-                var files = Directory.GetFiles(imagepath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp"));
-                ObservableCollection<CinemaImage> images = new ObservableCollection<CinemaImage>();
-                foreach (var file in files)
+                if (IsValidPath(imagepath) && Directory.Exists(imagepath))
                 {
-                    images.Add(new CinemaImage(file));
-                    lv_cinema_images.ItemsSource = images;
+                    var files = Directory.GetFiles(imagepath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp"));
+                    ObservableCollection<CinemaImage> images = new ObservableCollection<CinemaImage>();
+                    foreach (var file in files)
+                    {
+                        images.Add(new CinemaImage(file));
+                        lv_cinema_images.ItemsSource = images;
+                    }
                 }
             }
-
-            if (IsValidPath(maskpath) && Path.GetExtension(maskpath) == ".png")
-            {
-                lab_maskpreview.Content = "Current Mask: " + Path.GetFileName(maskpath);
-                img_maskpreview.Source = LoadImage(maskpath);
+            catch {
             }
 
-            if (IsValidPath(musicpath) && Path.GetExtension(musicpath) == ".mp3")
+            try
             {
-                lab_musicpath.Content = "Current Musicfile: " + Path.GetFileName(musicpath);
-                Cinema_MediaPlayer.Source = (new Uri(musicpath));
+                if (IsValidPath(maskpath) && Path.GetExtension(maskpath) == ".png")
+                {
+                    img_maskpreview.Source = LoadImage(maskpath);
+                    lab_maskpreview.Content = "Current Mask: " + Path.GetFileName(maskpath);                 
+                }
             }
+            catch {
+                lab_maskpreview.Content = "Current Mask: ERROR! " + Path.GetFileName(maskpath) + " file not found!";
+            }
+
+            try
+            {
+                if (IsValidPath(loginpath) && Path.GetExtension(maskpath) == ".png")
+                {
+                    lab_loginwindowpath.Content = "Current Loginwindow: " + Path.GetFileName(loginpath);
+                }
+            }
+            catch
+            {
+                lab_loginwindowpath.Content = "Current Mask: ERROR! " + Path.GetFileName(loginpath) + " file not found!";
+            }
+
+            try
+            {
+                if (IsValidPath(musicpath) )
+                {
+                    Cinema_MediaPlayer.Source = (new Uri(musicpath));
+                    lab_musicpath.Content = "Current Musicfile: " + Path.GetFileName(musicpath);            
+                }
+            }
+            catch {
+                lab_maskpreview.Content = "Current Musicfile: ERROR! " + Path.GetFileName(musicpath) + " file not found!";
+            }
+
         }
 
         private void bt_musicstart_Click(object sender, RoutedEventArgs e)
         {
+            Cinema_MediaPlayer.Source = new Uri(Properties.Settings.Default.cinema_musicpath);
             Cinema_MediaPlayer.Play();
         }
 
@@ -1401,7 +1592,7 @@ namespace Gw2_Launchbuddy
             System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
             filedialog.DefaultExt = "mp4";
             filedialog.Multiselect = false;
-            filedialog.Filter = "Mp4 Files(*.mp4) | *.mp4";
+            filedialog.Filter = "Mp4 Files(*.mp4) | *.mp4|Raw Files(*.raw)|*.raw|Wmv Files(*.wmv)|*.wmv|Mpeg Files(*.mpeg)|*.mpeg|All Files(*.*)|*.*";
             System.Windows.Forms.DialogResult result = filedialog.ShowDialog();
 
             if (result == System.Windows.Forms.DialogResult.OK)
@@ -1573,7 +1764,7 @@ namespace Gw2_Launchbuddy
 
         private void CheckBox_Checked(Object sender, RoutedEventArgs e)
         {
-            Globals.args.Argument(((CheckBox)sender).Content.ToString());
+            Globals.args.Add(((CheckBox)sender).Content.ToString());
             RefreshUI();
         }
         private void CheckBox_Unchecked(Object sender, RoutedEventArgs e)
@@ -1650,6 +1841,68 @@ namespace Gw2_Launchbuddy
             (sender as MediaElement).Play();
         }
 
+        private void ClrPcker_Background_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            myWindow.Background = new SolidColorBrush((Color)ClrPcker_Background.SelectedColor);
+            if ((Color)ClrPcker_Background.SelectedColor != null)
+            {
+                Properties.Settings.Default.cinema_backgroundcolor = (Color)ClrPcker_Background.SelectedColor;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        private void bt_setloginwindow_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
+            filedialog.DefaultExt = "png";
+            filedialog.Multiselect = false;
+            filedialog.Filter = "Png Files(*.png) | *.png";
+            System.Windows.Forms.DialogResult result = filedialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                cinema_videoplayback.Source = new Uri(filedialog.FileName, UriKind.Relative);
+                Properties.Settings.Default.cinema_loginwindowpath = filedialog.FileName;
+                img_loginwindow.Source = LoadImage(filedialog.FileName);
+                lab_loginwindowpath.Content = "Current Loginwindow: " + Path.GetFileNameWithoutExtension(filedialog.FileName);
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        private void sl_logoendpos_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var anim_slideshow = (System.Windows.Media.Animation.Storyboard)Resources["anim_slideshow_start"];
+            anim_slideshow.Begin();           
+        }
+
+        private void sl_logoendpos_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            var anim_slideshow = (System.Windows.Media.Animation.Storyboard)Resources["anim_slideshow_start"];
+            anim_slideshow.Begin();
+            Properties.Settings.Default.cinema_slideshowendpos = (int)sl_logoendpos.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void sl_logoendscaleX_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var endscale = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndScaleX"];
+            endscale.Value = sl_logoendscaleX.Value;
+            lab_endscaleX.Content = "Image EndScale: " + Math.Round(sl_logoendscaleX.Value,2) + " X Zoom";
+        }
+
+        private void sl_logoendscaleX_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            var anim_slideshow = (System.Windows.Media.Animation.Storyboard)Resources["anim_slideshow_start"];
+            anim_slideshow.Begin();
+            Properties.Settings.Default.cinema_slideshowendscale = sl_logoendscaleX.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var endpos = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];
+            endpos.Value = sl_logoendpos.Value*(reso_x/200);
+        }
     }
 
     public class SortAdorner : Adorner

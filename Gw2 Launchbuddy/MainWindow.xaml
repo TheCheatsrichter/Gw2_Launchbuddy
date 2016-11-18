@@ -5,12 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gw2_Launchbuddy"
         xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" x:Class="Gw2_Launchbuddy.MainWindow"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         x:Name="myWindow"
         WindowStyle="None"
         ShowInTaskbar="true"
+
     
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
-        Title="Gw2 Launchbuddy V 1.3" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1">
+        Title="Gw2 Launchbuddy V 1.3.2" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1">
     <Window.Resources>
         <Storyboard x:Key="anim_imgfadeout">
             <DoubleAnimation 
@@ -50,15 +52,18 @@
                 <CubicEase EasingMode="EaseInOut"/>
             </EasingDoubleKeyFrame.EasingFunction>
         </EasingDoubleKeyFrame>
+
+        <EasingDoubleKeyFrame x:Key="Mask_EndScaleX" KeyTime="0:0:4.9" Value="1.205">
+            <EasingDoubleKeyFrame.EasingFunction>
+                <CubicEase EasingMode="EaseInOut"/>
+            </EasingDoubleKeyFrame.EasingFunction>
+        </EasingDoubleKeyFrame>
+
         <Storyboard x:Key="anim_slideshow_start">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="img_slideshow">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0.678"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:4" Value="0.818"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:4.9" Value="1.205">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <CubicEase EasingMode="EaseInOut"/>
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
+                <StaticResource ResourceKey="Mask_EndScaleX"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="img_slideshow">
                 <EasingDoubleKeyFrame KeyTime="0" Value="-19.714"/>
@@ -68,11 +73,7 @@
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="img_slideshow">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0.677"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:4" Value="0.816"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:4.9" Value="1.201">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <CubicEase EasingMode="EaseInOut"/>
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
+                <StaticResource ResourceKey="Mask_EndScaleX"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="img_slideshow">
                 <EasingDoubleKeyFrame KeyTime="0" Value="17.459"/>
@@ -86,14 +87,14 @@
         </Storyboard>
         <SolidColorBrush x:Key="ListBorder" Color="#828790"/>
 
-       
-        
+
+
         <Style x:Key="Style_lvacc" TargetType="{x:Type ListView}">
-            
-            <Setter Property="Background" Value="{x:Null}"/>
+
+            <Setter Property="Background" Value="#4CFFFFFF"/>
             <Setter Property="TextElement.Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="#FF232323"/>
-            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="Foreground" Value="Gainsboro"/>
             <Setter Property="ScrollViewer.Foreground" Value="White"/>
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
@@ -129,7 +130,7 @@
             <Setter Property="FontFamily" Value="Times New Roman"/>
             <Setter Property="FontSize" Value="14"/>
         </Style>
-        
+
         <Style x:Key="lv_blackheader"  TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}">
             <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
             <Setter Property="TextBlock.Foreground" Value="White"/>
@@ -151,7 +152,6 @@
                     />
                 </Storyboard>
             </BeginStoryboard>
-            <BeginStoryboard Storyboard="{StaticResource anim_slideshow_start}"/>
         </EventTrigger>
     </Window.Triggers>
 
@@ -167,7 +167,11 @@
             <RowDefinition x:Name="CinemaHeight" Height="100*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" HorizontalAlignment="Left">
-            <Label Content="Gw2 Launchbuddy V1.3 BETA" FontSize="16" FontWeight="Bold"/>
+            <Label Content="Gw2 Launchbuddy V1.3.2 BETA" FontSize="16" FontWeight="Bold" Foreground="White" >
+                <Label.Background>
+                    <ImageBrush ImageSource="Resources/opacitymask.png"/>
+                </Label.Background>
+            </Label>
         </StackPanel>
 
         <Image x:Name="img_slideshow" Source="Resources/loginwindow.png" Grid.ColumnSpan="5" Grid.RowSpan="5" RenderTransformOrigin="0.5,0.5">
@@ -220,7 +224,7 @@
                 <Image Source="Resources/Icons/settings.png"/>
             </Button>
             <Button x:Name="bt_cinema" Width="40" Click="bt_cinema_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
-                <Image Source="Resources/Icons/popcorn.png"/>
+                <Image Source="Resources/Icons/film.png"/>
             </Button>
             <Button x:Name="bt_minimize" Width="40" Click="bt_minimize_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
                 <Image Source="Resources/Icons/minimize.png"/>
@@ -232,8 +236,11 @@
 
         <Canvas x:Name="Canvas_Custom_UI">
             <Canvas x:Name="Canvas_login" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0">
-                <Image Source="/Resources/loginwindow.png" Height="300" />
+                <Image x:Name="img_loginwindow" Source="/Resources/loginwindow.png" Height="300" />
                 <ListView x:Name="Cinema_Accountlist" BorderThickness="0" Canvas.Left="100" Canvas.Top="80" Width="280" Height="135" SelectionChanged="listview_acc_SelectionChanged" Style="{DynamicResource Style_lvacc}" BorderBrush="#FF5F5F5F">
+                    <ListView.OpacityMask>
+                        <ImageBrush ImageSource="Resources/opacitymask.png"/>
+                    </ListView.OpacityMask>
                     <ListView.View>
                         <GridView >
                             <GridViewColumn Width="280">
@@ -243,8 +250,9 @@
                                         <TextBlock x:Name="Txt" Text="{Binding Nick}" FontSize="14.667" FontWeight="Bold" Background="{x:Null}">
                                             <TextBlock.Foreground>
                                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                                    <GradientStop Color="#FF027A23" Offset="0"/>
-                                                    <GradientStop Color="#FF535353" Offset="1"/>
+                                                    <GradientStop Color="Black" Offset="0"/>
+                                                    <GradientStop Color="White" Offset="1"/>
+                                                    <GradientStop Color="Black" Offset="0.979"/>
                                                 </LinearGradientBrush>
                                             </TextBlock.Foreground>
                                         </TextBlock>
@@ -255,8 +263,22 @@
                     </ListView.View>
                 </ListView>
                 <StackPanel Orientation="Horizontal" Canvas.Left="100" Canvas.Top="220">
-                    <Button x:Name="Cinema_Launchaccount"  Content="Launch" Width="100" Click="Cinema_Launchaccount_Click"/>
-                    <Button x:Name="Settings" Content="Settings"  Width="100" Margin="10,0,0,0" Click="Settings_Click"/>
+                    <Button x:Name="Cinema_Launchaccount"  Width="100" Height="30" Click="Cinema_Launchaccount_Click" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0" BorderBrush="Black"  Background="#CCFFFFFF">
+                        <Button.OpacityMask>
+                            <ImageBrush ImageSource="Resources/opacitymask.png"/>
+                        </Button.OpacityMask>
+                        <Image Source="Resources/launchbutton.png">
+                            <Image.OpacityMask>
+                                <ImageBrush ImageSource="Resources/opacitymask.png"/>
+                            </Image.OpacityMask>
+                        </Image>
+                    </Button>
+                    <Button x:Name="Settings" Width="100" Height="30" Margin="10,0,0,0" Click="Settings_Click" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0" BorderBrush="Black"  Background="#CCFFFFFF">
+                        <Button.OpacityMask>
+                            <ImageBrush ImageSource="Resources/opacitymask.png"/>
+                        </Button.OpacityMask>
+                        <Image Source="Resources/Icons/settings.png" />
+                    </Button>
                 </StackPanel>
             </Canvas>
         </Canvas>
@@ -264,7 +286,7 @@
 
         <Grid  x:Name="SettingsGrid" Grid.Row="1" Background="White" Width="700" Height="650" Grid.RowSpan="3" Grid.ColumnSpan="3">
             <Grid.RowDefinitions>
-                <RowDefinition Height="100*"/>
+                <RowDefinition Height="100*" MinHeight="550"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
@@ -283,7 +305,7 @@
                 <Button x:Name="bt_shortcut" Content="Create Shortcut (Coming back soon)" Grid.Column="1" Grid.Row="1"  Click="bt_shortcut_Click" BorderThickness="1" Margin="5,0,0,0" IsEnabled="false"/>
             </Grid>
 
-            <TabControl x:Name="tab_options" Grid.Row="0" SelectionChanged="tab_options_SelectionChanged" MouseLeave="tab_options_MouseLeave" >
+            <TabControl x:Name="tab_options" Grid.Row="0" SelectionChanged="tab_options_SelectionChanged" MouseLeave="tab_options_MouseLeave">
                 <TabControl.Background>
                     <ImageBrush ImageSource="/Resources/launchbuddyback.png" Stretch="Uniform" AlignmentX="Right" Opacity="0.15" >
                         <ImageBrush.Transform>
@@ -318,7 +340,11 @@
                                 <Label x:Name="lab_para" Content="Latest Startparameters:" Grid.Column="1" Grid.Row="1" />
                                 <Label x:Name="lab_path" Content="Install Path:" Grid.Column="1" Grid.Row="1" />
                             </StackPanel>
-                            <Button x:Name="bt_donate" Background="Gray" FontWeight="Bold" Foreground="LimeGreen" Content="Donate" Grid.Column="1" Grid.Row="1"  VerticalAlignment="Top" Click="bt_donate_Click" Margin="5,0,80,0" Height="27" />
+                            <Button x:Name="bt_donate" Background="Gray" FontWeight="Bold" Foreground="#FFF50000" Content="Donate" Grid.Column="1" Grid.Row="1"  VerticalAlignment="Top" Click="bt_donate_Click" Margin="5,0,80,0" Height="27" FontSize="16" >
+                                <Button.OpacityMask>
+                                    <ImageBrush ImageSource="Resources/opacitymask.png"/>
+                                </Button.OpacityMask>
+                            </Button>
                         </Grid>
 
                         <Grid Grid.Row="1" Margin="5,0,0,0">
@@ -528,13 +554,40 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Cinema Mode">
+                    
                     <StackPanel>
-                        <Label Content="Cinema Mode:" FontSize="16" FontWeight="Bold" />
+                        <Label Content="Cinema Mode (Changes may require restart): " FontSize="16" FontWeight="Bold" />
                         <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
                             <RadioButton x:Name="rb_cinemaslideshowmode" Content="Slideshow Mode" Grid.Column="0" Checked="rb_slideshowmode" IsChecked="True"/>
                             <RadioButton x:Name="rb_cinemavideomode" Content="Video Mode" Grid.Column="1" Checked="rb_videomode" Margin="5,0,0,0"/>
                         </StackPanel>
-
+                        <StackPanel>
+                            <Label Content="General Settings:" FontSize="14.667" FontWeight="Bold"/>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50*"/>
+                                    <ColumnDefinition Width="50*"/>
+                                </Grid.ColumnDefinitions>
+                                <Button Content="Set Loginwindow Image" x:Name="bt_setloginwindow" Click="bt_setloginwindow_Click" />
+                                <Label x:Name="lab_loginwindowpath"  Grid.Column="1" Content="Current Loginwindow: Default" FontWeight="Bold"/>
+                            </Grid>
+                            <Separator Margin="0,5,0,0"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50*"/>
+                                    <ColumnDefinition Width="50*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="32"/>
+                                </Grid.RowDefinitions>
+                                <Label Content="Background Color:" FontWeight="Bold"/>
+                                <xctk:ColorPicker Name="ClrPcker_Background" SelectedColorChanged="ClrPcker_Background_SelectedColorChanged" Grid.Column="1" Margin="5"/>
+                            </Grid>
+                        </StackPanel>
+                        <Separator Margin="0,10"/>
                         <StackPanel x:Name="Videomode" Visibility="Collapsed">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -569,79 +622,96 @@
 
                         </StackPanel>
 
-                        <StackPanel x:Name="Slideshow">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50*"/>
-                                    <ColumnDefinition Width="50*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="150"/>
-                                    <RowDefinition Height="30"/>
-                                </Grid.RowDefinitions>
-                                <Label Content="Slideshow Info:" FontSize="16" FontWeight="Bold"/>
 
-                                <Image x:Name="img_imagepreview" Grid.Row="1" Grid.Column="1" Source="Resources/quaggan.jpg"/>
-                                <Grid Margin="0,5" Grid.Row="1">
-                                    <ListView x:Name="lv_cinema_images" Grid.Row="1" SelectionChanged="lv_cinema_images_SelectionChanged">
-                                        <ListView.View>
-                                            <GridView>
-                                                <GridViewColumn HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
-                                                    <GridViewColumnHeader Tag="Name" Click="listview_auth_Click" Content="Image Name"/>
-                                                </GridViewColumn>
-                                                <GridViewColumn HeaderStringFormat=""  DisplayMemberBinding="{Binding Path}">
-                                                    <GridViewColumnHeader Tag="Path" Click="listview_auth_Click" Content="Path"/>
-                                                </GridViewColumn>
-                                            </GridView>
-                                        </ListView.View>
-                                    </ListView>
-                                </Grid>
-                                <Button Content="Set Imagefolder" x:Name="bt_cinema_setimagefolder" Grid.Row="2" Grid.Column="0" Click="bt_cinema_setimagefolder_Click" />
 
-                                <Label x:Name="lab_imagepreview" Content="Current Image: " Grid.Row="2" Grid.Column="1" FontWeight="Bold"/>
-                            </Grid>
-
-                            <Grid Margin="0,5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50*"/>
-                                    <ColumnDefinition Width="50*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="150"/>
-                                    <RowDefinition Height="30"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Grid.Row="0" Grid.Column="0" x:Name="tb_maskinfo" TextWrapping="Wrap" Text="Instructions:                                                                Set the Maskimage by using a png image with transparent background. Draw the logo/ image with a black color. Press Set MaskImage and check in the Preview if the mask is imported correctly" FontSize="14.667"/>
-                                <Button Content="Set Maskimage" x:Name="bt_cinema_setmask" Grid.Row="1" Click="bt_cinema_setmask_Click"/>
-                                <Label x:Name="lab_maskpreview" Content="Current Mask: " Grid.Row="1" Grid.Column="1" FontWeight="Bold"/>
-                                <Image x:Name="img_maskpreview" Grid.Row="0" Grid.Column="1" Source="Resources/quaggan.jpg"/>
-
-                            </Grid>
-                            <Grid Margin="0,5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50*"/>
-                                    <ColumnDefinition Width="50*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
-                                </Grid.RowDefinitions>
-                                <Button x:Name="bt_setmusic" Content="Set Music" Grid.Column="0" Click="bt_setmusic_Click" Grid.RowSpan="2" VerticalAlignment="Center" Height="30"/>
-                                <Label x:Name="lab_musicpath" Content="Current Music file:" Grid.Column="1" FontWeight="Bold"/>
-                                <Grid Grid.Column="2" Grid.Row="1">
+                        <ScrollViewer Height="350" Background="#19000000" >
+                            <StackPanel x:Name="Slideshow">
+                                <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="50*"/>
                                         <ColumnDefinition Width="50*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Button x:Name="bt_musicstart" Content="Test Music" Grid.Column="0" Click="bt_musicstart_Click"/>
-                                    <Button x:Name="bt_musicstop" Content="Stop Music" Grid.Column="1" Click="bt_musicstop_Click"/>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="110"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+                                    <Label Content="Slideshow Info:" FontSize="16" FontWeight="Bold"/>
+
+                                    <Image x:Name="img_imagepreview" Grid.Row="1" Grid.Column="1" Source="Resources/noimg.png"/>
+                                    <Grid Margin="0,5" Grid.Row="1">
+                                        <ListView x:Name="lv_cinema_images" Grid.Row="1" SelectionChanged="lv_cinema_images_SelectionChanged">
+                                            <ListView.View>
+                                                <GridView>
+                                                    <GridViewColumn HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
+                                                        <GridViewColumnHeader Tag="Name" Click="listview_auth_Click" Content="Image Name"/>
+                                                    </GridViewColumn>
+                                                    <GridViewColumn HeaderStringFormat=""  DisplayMemberBinding="{Binding Path}">
+                                                        <GridViewColumnHeader Tag="Path" Click="listview_auth_Click" Content="Path"/>
+                                                    </GridViewColumn>
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                    </Grid>
+                                    <Button Content="Set Imagefolder" x:Name="bt_cinema_setimagefolder" Grid.Row="2" Grid.Column="0" Click="bt_cinema_setimagefolder_Click" />
+
+                                    <Label x:Name="lab_imagepreview" Content="Current Image: -" Grid.Row="2" Grid.Column="1" FontWeight="Bold"/>
                                 </Grid>
+                                <Separator Margin="0,5,0,0"/>
+                                <Grid Margin="0,5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50*"/>
+                                        <ColumnDefinition Width="50*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="100"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Row="0" Grid.Column="0" x:Name="tb_maskinfo" TextWrapping="Wrap" Text="Instructions:                                                                Set the Maskimage by using a png image with transparent background. Draw the logo/ image with any choosen color, the alpha channel however determines which part of the mask will be visible! Press Set MaskImage and check in the Preview if the mask is imported correctly" FontSize="14.667"/>
+                                    <Button Content="Set Maskimage" x:Name="bt_cinema_setmask" Grid.Row="1" Click="bt_cinema_setmask_Click"/>
+                                    <Label x:Name="lab_maskpreview" Content="Current Mask: Default" Grid.Row="1" Grid.Column="1" FontWeight="Bold"/>
+                                    <Image x:Name="img_maskpreview" Grid.Row="0" Grid.Column="1" Source="Resources/logo_hq_mask.png"/>
+                                </Grid>
+                                <Separator Margin="0,5"/>
+                                <Grid >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50*"/>
+                                        <ColumnDefinition Width="50*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+                                    <Button x:Name="bt_setmusic" Content="Set Music" Grid.Column="0" Click="bt_setmusic_Click" Grid.RowSpan="2" VerticalAlignment="Center" Height="30"/>
+                                    <Label x:Name="lab_musicpath" Content="Current Music file: -" Grid.Column="1" FontWeight="Bold"/>
+                                    <Grid Grid.Column="2" Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="50*"/>
+                                            <ColumnDefinition Width="50*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button x:Name="bt_musicstart" Content="Test Music" Grid.Column="0" Click="bt_musicstart_Click" Margin="5,0"/>
+                                        <Button x:Name="bt_musicstop" Content="Stop Music" Grid.Column="1" Click="bt_musicstop_Click" Margin="5,0"/>
+                                    </Grid>
+                                </Grid>
+                                <Separator Margin="0,5"/>
+                                <Label Content="Animation Settings:" FontSize="14.667" FontWeight="Bold"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50*"/>
+                                        <ColumnDefinition Width="50*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"/>
+                                        <RowDefinition Height="30"/>
+                                    </Grid.RowDefinitions>
+                                    <Label Content="Image EndPosition Horizontal:" FontWeight="Bold"/>
+                                    <Slider x:Name="sl_logoendpos" Grid.Column="1" Maximum="100" Minimum="-100" Value="30" ValueChanged="sl_logoendpos_ValueChanged" Thumb.DragCompleted="sl_logoendpos_DragCompleted"/>
 
-
-                            </Grid>
-                        </StackPanel>
-
-
+                                    <Label x:Name="lab_endscaleX" Content="Image EndScale:" FontWeight="Bold" Grid.Row="1"/>
+                                    <Slider x:Name="sl_logoendscaleX" Grid.Column="1" Grid.Row="1" Value="30" ValueChanged="sl_logoendscaleX_ValueChanged" Thumb.DragCompleted="sl_logoendscaleX_DragCompleted" Maximum="5" Minimum="0.2" LargeChange="0.1"/>
+                                </Grid>
+                            </StackPanel>
+                        </ScrollViewer>
                     </StackPanel>
 
                 </TabItem>

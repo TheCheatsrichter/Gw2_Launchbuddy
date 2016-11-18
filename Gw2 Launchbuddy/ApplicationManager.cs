@@ -19,13 +19,20 @@ namespace Gw2_Launchbuddy
             //if (Process.GetProcesses().ToList().Where(a => !nomutexpros.Contains(a.Id) && a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).Any())
             if (!checkRegClients())
             {
-                MessageBox.Show("At least once instance of Guild Wars is running that was not opened by LaunchBuddy. That instance will need to be closed.");
+                MessageBox.Show("At least one instance of Guild Wars is running that was not opened by LaunchBuddy. That instance will need to be closed.");
                 return;
                 //HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
             }
 
             //Launching the application with arguments
-            for (int i = 0; i <= Globals.selected_accs.Count - 1; i++) launchgw2(i);
+            if (Globals.selected_accs.Count > 0)
+            {
+                for (int i = 0; i <= Globals.selected_accs.Count - 1; i++) launchgw2(i);
+            } else
+            {
+                launchgw2();
+            }
+            
 
             //Launching AddOns
             try
@@ -70,7 +77,7 @@ namespace Gw2_Launchbuddy
             return running == logged;
         }
 
-        static void launchgw2(int accnr)
+        static void launchgw2(int? accnr = null)
         {
             try
             {
