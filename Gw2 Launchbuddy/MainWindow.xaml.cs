@@ -1667,10 +1667,10 @@ namespace Gw2_Launchbuddy
             SetVideoInfo();
         }
 
-        private void Cinema_Launchaccount_Click(object sender, RoutedEventArgs e)
+        private async void Cinema_Launchaccount_Click(object sender, RoutedEventArgs e)
         {
             UpdateServerArgs();
-            LaunchManager.launch_click();
+            await LaunchManager.launch_click();
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)

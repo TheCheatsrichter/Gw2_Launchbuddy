@@ -7,13 +7,14 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Security.Cryptography;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Gw2_Launchbuddy
 {
     static class LaunchManager
     {
         private static List<int> nomutexpros = new List<int>();
-        public static void launch_click()
+        public static async Task launch_click()
         {
             //Checking for existing Gw2 instances. Do not continue until closed.
             //if (Process.GetProcesses().ToList().Where(a => !nomutexpros.Contains(a.Id) && a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).Any())
@@ -27,12 +28,13 @@ namespace Gw2_Launchbuddy
             //Launching the application with arguments
             if (Globals.selected_accs.Count > 0)
             {
-                for (int i = 0; i <= Globals.selected_accs.Count - 1; i++) launchgw2(i);
-            } else
-            {
-                launchgw2();
+                for (int i = 0; i <= Globals.selected_accs.Count - 1; i++) await launchgw2(i, i * 1000);
             }
-            
+            else
+            {
+                await launchgw2();
+            }
+
 
             //Launching AddOns
             try
@@ -77,10 +79,11 @@ namespace Gw2_Launchbuddy
             return running == logged;
         }
 
-        static void launchgw2(int? accnr = null)
+        static async Task launchgw2(int? accnr = null, int delay = 0)
         {
             try
             {
+                if (delay > 0) await Task.Delay(delay);
                 ProcessStartInfo gw2proinfo = new ProcessStartInfo();
                 gw2proinfo.FileName = Globals.exepath + Globals.exename;
                 gw2proinfo.Arguments = Globals.args.Print(accnr);
@@ -145,9 +148,9 @@ namespace Gw2_Launchbuddy
 
         public static string procMD5(Process proc)
         {
-            #if DEBUG
+#if DEBUG
             System.Diagnostics.Debug.WriteLine("Start: " + proc.StartTime + " ID: " + proc.Id + " MD5: " + CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString()));
-            #endif
+#endif
             return CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString());
         }
     }
