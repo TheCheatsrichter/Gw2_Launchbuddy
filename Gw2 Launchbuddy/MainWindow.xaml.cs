@@ -1168,7 +1168,7 @@ namespace Gw2_Launchbuddy
             if (((ListView)sender).SelectedItems.Count != 0 && ((ListView)sender).SelectedItems.Count <= 1)
             {
                 var selectedItems = (dynamic)((ListView)sender).SelectedItems;
-                cb_login.Content = "Use Autologin : " + selectedItems[0].Email;
+                cb_login.Content = "Use Autologin : " + selectedItems[0].Nick;
                 Globals.selected_accs[0].Email = selectedItems[0].Email;
                 Globals.selected_accs[0].Password = selectedItems[0].Password;
                 bt_shortcut.IsEnabled = true;
