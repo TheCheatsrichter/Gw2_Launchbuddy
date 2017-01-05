@@ -432,7 +432,13 @@
 
                 </TabItem>
 
-
+                <TabItem Header="Graphic Settings">
+                    <StackPanel>
+                        <Label Content="TEST"/>
+                        <ListBox x:Name="lv_gfx"></ListBox>
+                    </StackPanel>
+                </TabItem>
+                
                 <TabItem Header="Serverselection">
 
                     <Grid >

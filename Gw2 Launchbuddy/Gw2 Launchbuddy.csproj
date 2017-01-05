@@ -150,6 +150,7 @@
     <Compile Include="CrashReporter.cs" />
     <Compile Include="CustomUI.cs" />
     <Compile Include="Encryption_AES.cs" />
+    <Compile Include="GFXManager.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="HandleManager.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

@@ -151,7 +151,6 @@ namespace Gw2_Launchbuddy
             cinema_setup();
             LoadAddons();
 
-
             AddOnManager.LaunchLbAddons();
         }
 
@@ -699,10 +698,19 @@ namespace Gw2_Launchbuddy
                     sourcepath = config;
                 }
             }
+            GFXManager manager = new GFXManager(sourcepath);
+            var gfx = manager.ReadFile(sourcepath);
 
+            foreach (var option in manager.ConfigToListview(gfx))
+            {
+                lv_gfx.Items.Add(option);
+            }
+            
             // Read the xml file
             try
             {
+
+
                 if (Properties.Settings.Default.use_reshade) cb_reshade.IsChecked = true;
 
                 StreamReader stream = new System.IO.StreamReader(sourcepath);
