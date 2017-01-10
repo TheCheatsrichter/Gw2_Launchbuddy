@@ -698,14 +698,14 @@ namespace Gw2_Launchbuddy
                     sourcepath = config;
                 }
             }
+
+
             GFXManager manager = new GFXManager(sourcepath);
             var gfx = manager.ReadFile(sourcepath);
+            lv_gfx.ItemsSource = gfx.Config;
+            lv_gfx.Items.Refresh();
 
-            foreach (var option in manager.ConfigToListview(gfx))
-            {
-                lv_gfx.Items.Add(option);
-            }
-            
+
             // Read the xml file
             try
             {

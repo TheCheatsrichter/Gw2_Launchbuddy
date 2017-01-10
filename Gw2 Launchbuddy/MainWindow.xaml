@@ -433,10 +433,22 @@
                 </TabItem>
 
                 <TabItem Header="Graphic Settings">
-                    <StackPanel>
-                        <Label Content="TEST"/>
-                        <ListBox x:Name="lv_gfx"></ListBox>
-                    </StackPanel>
+                    <Grid>
+                        <ListView x:Name="lv_gfx" SelectionChanged="lv_gfx_SelectionChanged">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Parameter" Width="300"  DisplayMemberBinding="{Binding Name}"/>
+                                    <GridViewColumn Header="Setup" Width="250">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ComboBox ItemsSource="{Binding Path=IEOptions}" SelectedValuePath="Current" SelectedValue="{Binding Path=value}" Width="200" IsSynchronizedWithCurrentItem="True" SelectionChanged="ComboBox_SelectionChanged" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
                 </TabItem>
                 
                 <TabItem Header="Serverselection">

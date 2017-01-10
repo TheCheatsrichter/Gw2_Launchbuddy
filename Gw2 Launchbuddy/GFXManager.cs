@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,7 @@ namespace Gw2_Launchbuddy
             foreach (GFXOption option in config.Config)
             {
                 items.Add(new ListViewItem(option.Name));
+                //items.Add(new ComboBox());
             }
             return items;
             
@@ -86,18 +88,26 @@ namespace Gw2_Launchbuddy
 
     public class GFXOption
     {
-        public string Name;
-        public bool Registered = false;
-        public string type;
-        public string value;
-        public List<string> Options= new List<string>();
+        public string Name { set; get; }
+        public bool Registered { set; get; }
+        public string type { set; get; }
+        public string value { set; get; }
+        public List<string> Options = new List<string>();
+        public IEnumerable<string> IEOptions
+        {
+            set { IEOptions = value; }
+            get {IEnumerable<string> tmp = Options;
+                return tmp;
+            }
+        }
     }
 
     public class GFXConfig
     {
-        public string Configname;
-        public string ConfigPath;
-        public List<GFXOption> Config = new List<GFXOption>();
+        public string Configname { set; get; }
+        public string ConfigPath { set; get; }
+        public ObservableCollection<GFXOption> Config= new ObservableCollection<GFXOption>();
     }
+
 
 }
