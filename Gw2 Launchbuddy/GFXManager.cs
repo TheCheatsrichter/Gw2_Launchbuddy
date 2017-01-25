@@ -10,40 +10,47 @@ using System.Xml;
 
 namespace Gw2_Launchbuddy
 {
-    public class GFXManager
+
+    public static class GFXManager
     {
-        string xmlpath = "";
-        GFXConfig CurrentConfig = new GFXConfig();
+        static string xmlpath = "";
+        static GFXConfig CurrentConfig = new GFXConfig();
+        static bool iscurrentsetup = true;
+        static string header="";
 
-        public GFXManager(string xmlpath)
+        //Options to skip
+        static List<string> SkippedOptions = new List<string>
         {
-            this.xmlpath = xmlpath;
-        }
+            "gamma",
+        };
+        
 
-        public void ChooseFile()
+        static public void ChooseFile()
         {
             OpenFileDialog filediag = new OpenFileDialog { Multiselect = false,DefaultExt="xml" };
-            while (!File.Exists(xmlpath))
+            xmlpath = "";
+
+            //ToDo: No infinite loop when choosing wrong file
+            while (!IsValidGFX(xmlpath))
             {
                 filediag.ShowDialog();
-                xmlpath = filediag.FileName;
+                xmlpath = filediag.FileName;   
             }
-        }
-
-        public List<ListViewItem> ConfigToListview(GFXConfig config)
-        {
+            iscurrentsetup = false;
             ReadFile(xmlpath);
-            List<ListViewItem> items = new List<ListViewItem>() ;
-            foreach (GFXOption option in config.Config)
-            {
-                items.Add(new ListViewItem(option.Name));
-                //items.Add(new ComboBox());
-            }
-            return items;
-            
         }
 
-        public GFXConfig ReadFile(string path)
+        static public bool IsValidGFX(string path)
+        {
+            if (!File.Exists(path)) return false;
+            if (!(Path.GetExtension(path) == ".xml")) return false;
+            // TODO: Check for formatting errors
+
+            return true;
+        }
+
+
+        static public GFXConfig ReadFile(string path)
         {
             GFXConfig config = new GFXConfig();
             config.Configname = Path.GetFileNameWithoutExtension(path);
@@ -54,9 +61,14 @@ namespace Gw2_Launchbuddy
             {
                 GFXOption gfxoption = new GFXOption();
                 gfxoption.Name = node.Attributes["Name"].Value;
+                if (SkippedOptions.Contains<string>(gfxoption.Name))
+                {
+                    continue;
+                }
                 gfxoption.type = node.Attributes["Type"].Value;
                 gfxoption.Registered = node.Attributes["Registered"].Value == "True";
-                gfxoption.value= node.Attributes["Value"].Value;
+                gfxoption.Value= node.Attributes["Value"].Value;
+                gfxoption.OldValue = gfxoption.Value;
 
                 if (node.ChildNodes.Count == 0 && gfxoption.type == "Bool") 
                 {
@@ -91,7 +103,8 @@ namespace Gw2_Launchbuddy
         public string Name { set; get; }
         public bool Registered { set; get; }
         public string type { set; get; }
-        public string value { set; get; }
+        public string Value { set; get; }
+        public string OldValue { set; get; }
         public List<string> Options = new List<string>();
         public IEnumerable<string> IEOptions
         {

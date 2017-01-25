@@ -15,5 +15,8 @@ namespace Gw2_Launchbuddy
         public static Server selected_assetsv = new Server();
         public static Arguments args = new Arguments();
 
+        public static GFXConfig SelectedGFX = new GFXConfig();
+        public static string ClientXmlpath;
+
     }
 }

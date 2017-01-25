@@ -687,7 +687,7 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show("Guild Wars may not be installed. \n " + e.Message);
                 return;
             }
-            string sourcepath = "";
+            Globals.ClientXmlpath = "";
             long max = 0;
 
             foreach (string config in configfiles)
@@ -695,25 +695,22 @@ namespace Gw2_Launchbuddy
                 if (System.IO.File.GetLastWriteTime(config).Ticks > max)
                 {
                     max = System.IO.File.GetLastWriteTime(config).Ticks;
-                    sourcepath = config;
+                    Globals.ClientXmlpath = config;
                 }
             }
 
 
-            GFXManager manager = new GFXManager(sourcepath);
-            var gfx = manager.ReadFile(sourcepath);
-            lv_gfx.ItemsSource = gfx.Config;
+            //Read the GFX Settings
+            Globals.SelectedGFX = GFXManager.ReadFile(Globals.ClientXmlpath);
+            lv_gfx.ItemsSource = Globals.SelectedGFX.Config;
             lv_gfx.Items.Refresh();
-
 
             // Read the xml file
             try
             {
-
-
                 if (Properties.Settings.Default.use_reshade) cb_reshade.IsChecked = true;
 
-                StreamReader stream = new System.IO.StreamReader(sourcepath);
+                StreamReader stream = new System.IO.StreamReader(Globals.ClientXmlpath);
                 XmlTextReader reader = null;
                 reader = new XmlTextReader(stream);
 
@@ -1904,6 +1901,37 @@ namespace Gw2_Launchbuddy
             anim_slideshow.Begin();
             Properties.Settings.Default.cinema_slideshowendscale = sl_logoendscaleX.Value;
             Properties.Settings.Default.Save();
+        }
+
+
+        private void bt_loadgfx_Click(object sender, RoutedEventArgs e)
+        {
+            GFXManager.ChooseFile();
+        }
+
+        private void bt_resetgfx_Click(object sender, RoutedEventArgs e)
+        {
+            Globals.SelectedGFX = GFXManager.ReadFile(Globals.ClientXmlpath);
+            lv_gfx.ItemsSource = Globals.SelectedGFX.Config;
+            lv_gfx.Items.Refresh();
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            /*
+            ComboBox box = sender as ComboBox;
+            GFXOption option = box.DataContext as GFXOption;
+            
+
+            if (option !=null)
+            {
+                lv_gfx.SelectedItem = option;
+                if(option.Value!=option.OldValue)
+                {
+                    (lv_gfx.SelectedItem as ListViewItem).Background = Brushes.Gray;
+                }
+            }
+            */
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
