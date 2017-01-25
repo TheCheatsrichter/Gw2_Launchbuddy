@@ -1934,6 +1934,16 @@ namespace Gw2_Launchbuddy
             */
         }
 
+        private void lv_gfx_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //if (lv_gfx.SelectedItem != null) MessageBox.Show((lv_gfx.SelectedItem as GFXOption).ToXml());
+        }
+
+        private void bt_savegfx_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(String.Join("\n", GFXManager.ToXml()));
+        }
+
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var endpos = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];

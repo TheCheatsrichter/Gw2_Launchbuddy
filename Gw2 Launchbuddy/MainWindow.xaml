@@ -447,10 +447,10 @@
                         <Label Content="GFX Manager"/>
                         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,5">
                             <Button x:Name="bt_loadgfx" Content="Load Config" Margin="5,0" Width="100" Click="bt_loadgfx_Click"/>
-                            <Button x:Name="bt_savegfx" Content="Save Config" Margin="5,0" Width="100"/>
+                            <Button x:Name="bt_savegfx" Content="Save Config" Margin="5,0" Width="100" Click="bt_savegfx_Click"/>
                             <Button x:Name="bt_resetgfx" Content="Reset Config" Margin="5,0" Width="100" Click="bt_resetgfx_Click"/>
                         </StackPanel>
-                        <ListView x:Name="lv_gfx" Grid.ColumnSpan="2" Grid.Row="2">
+                        <ListView x:Name="lv_gfx" Grid.ColumnSpan="2" Grid.Row="2" SelectionChanged="lv_gfx_SelectionChanged">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Parameter" Width="200"  DisplayMemberBinding="{Binding Name}"/>

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Xml;
+using System.Text.RegularExpressions;
 
 namespace Gw2_Launchbuddy
 {
@@ -15,8 +16,6 @@ namespace Gw2_Launchbuddy
     {
         static string xmlpath = "";
         static GFXConfig CurrentConfig = new GFXConfig();
-        static bool iscurrentsetup = true;
-        static string header="";
 
         //Options to skip
         static List<string> SkippedOptions = new List<string>
@@ -36,7 +35,6 @@ namespace Gw2_Launchbuddy
                 filediag.ShowDialog();
                 xmlpath = filediag.FileName;   
             }
-            iscurrentsetup = false;
             ReadFile(xmlpath);
         }
 
@@ -49,6 +47,42 @@ namespace Gw2_Launchbuddy
             return true;
         }
 
+
+        private static List<string> GetHeader()
+        {
+            List<string> header = new List<string>();
+            string[] lines = System.IO.File.ReadAllLines(Globals.ClientXmlpath);
+            foreach (string line in lines)
+            {
+                header.Add(line);
+                string norm = Regex.Replace(line, @"\s", "");
+                if (norm == "<GAMESETTINGS>") break;
+            }
+            return header;
+        }
+
+        private static List<string> GetFoot()
+        {
+            List<string> foot = new List<string>();
+            foot.Add("</GAMESETTINGS>");
+            foot.Add("</GSA_SDK>");
+            return foot;
+        }
+
+        public static string[] ToXml()
+        {
+            //ToDo: Add Resolution Option and Gamma Slider
+            List<string> XmlFormat = new List<string>();
+            XmlFormat.AddRange(GetHeader());
+            foreach (GFXOption option in CurrentConfig.Config)
+            {
+                XmlFormat.AddRange(option.ToXml());
+            }
+
+            XmlFormat.AddRange(GetFoot());
+            System.IO.File.WriteAllLines("test.xml", XmlFormat);
+            return XmlFormat.ToArray();
+        }
 
         static public GFXConfig ReadFile(string path)
         {
@@ -92,6 +126,7 @@ namespace Gw2_Launchbuddy
 
                 config.Config.Add(gfxoption);
             }
+            CurrentConfig = config;
             return config;
         }
 
@@ -100,6 +135,28 @@ namespace Gw2_Launchbuddy
 
     public class GFXOption
     {
+        public List<string> ToXml()
+        {
+            List<string>output = new List<string>();
+
+            string head = "";
+            head += "<OPTION ";
+            head += "Name=\"" + Name + "\" ";
+            head += "Registered=\"" + Registered.ToString() + "\" ";
+            head += "Type=\"" + type + "\" ";
+            head += "Value=\"" + Value + "\">";
+            output.Add(head);
+
+            foreach (string option in Options)
+            {
+                output.Add("\t<" + "ENUM EnumValue=\"" + option + "\"/>");
+            }
+
+            output.Add("</OPTION>");
+
+            return output;
+        }
+
         public string Name { set; get; }
         public bool Registered { set; get; }
         public string type { set; get; }
