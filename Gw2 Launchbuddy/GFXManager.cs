@@ -14,7 +14,6 @@ namespace Gw2_Launchbuddy
 
     public static class GFXManager
     {
-        static string xmlpath = "";
         static GFXConfig CurrentConfig = new GFXConfig();
 
         //Options to skip
@@ -24,18 +23,19 @@ namespace Gw2_Launchbuddy
         };
         
 
-        static public void ChooseFile()
+        static public GFXConfig LoadFile()
         {
             OpenFileDialog filediag = new OpenFileDialog { Multiselect = false,DefaultExt="xml" };
-            xmlpath = "";
+            CurrentConfig.ConfigPath = "";
 
-            //ToDo: No infinite loop when choosing wrong file
-            while (!IsValidGFX(xmlpath))
-            {
-                filediag.ShowDialog();
-                xmlpath = filediag.FileName;   
-            }
-            ReadFile(xmlpath);
+            filediag.DefaultExt = ".xml";
+            filediag.Filter = "Xml Files(*.xml) | *.xml";
+            filediag.InitialDirectory = Globals.exepath;
+            filediag.ShowDialog();
+
+            CurrentConfig.ConfigPath = filediag.FileName;
+            if (!IsValidGFX(CurrentConfig.ConfigPath)) return null;
+            return ReadFile(CurrentConfig.ConfigPath);
         }
 
         static public bool IsValidGFX(string path)
@@ -45,6 +45,20 @@ namespace Gw2_Launchbuddy
             // TODO: Check for formatting errors
 
             return true;
+        }
+
+        public static void SaveFile()
+        {
+            SaveFileDialog savediag = new System.Windows.Forms.SaveFileDialog();
+            savediag.DefaultExt = ".xml";
+            savediag.Filter = "Xml Files(*.xml) | *.xml";
+            savediag.Title = "Saving GFX Settings";
+            savediag.AddExtension = true;
+            savediag.FileName = "GW2 Custom GFX";
+            savediag.InitialDirectory = Globals.exepath;
+            savediag.ShowDialog();
+
+            if (savediag.FileName != "") ToXml(savediag.FileName);
         }
 
 
@@ -69,7 +83,7 @@ namespace Gw2_Launchbuddy
             return foot;
         }
 
-        public static string[] ToXml()
+        public static string[] ToXml(string dest)
         {
             //ToDo: Add Resolution Option and Gamma Slider
             List<string> XmlFormat = new List<string>();
@@ -80,15 +94,20 @@ namespace Gw2_Launchbuddy
             }
 
             XmlFormat.AddRange(GetFoot());
-            System.IO.File.WriteAllLines("test.xml", XmlFormat);
+            System.IO.File.WriteAllLines(dest, XmlFormat);
             return XmlFormat.ToArray();
+        }
+
+        public static void OverwriteGFX()
+        {
+            ToXml(Globals.ClientXmlpath);
         }
 
         static public GFXConfig ReadFile(string path)
         {
-            GFXConfig config = new GFXConfig();
-            config.Configname = Path.GetFileNameWithoutExtension(path);
-            config.ConfigPath = path;
+            CurrentConfig.Config.Clear();
+            CurrentConfig.Configname = Path.GetFileNameWithoutExtension(path);
+            CurrentConfig.ConfigPath = path;
             var xmlfile = new XmlDocument();
             xmlfile.Load(path);
             foreach (XmlNode node in xmlfile.SelectNodes("//OPTION"))
@@ -124,10 +143,9 @@ namespace Gw2_Launchbuddy
                     }  
                 }
 
-                config.Config.Add(gfxoption);
+                CurrentConfig.Config.Add(gfxoption);
             }
-            CurrentConfig = config;
-            return config;
+            return CurrentConfig;
         }
 
     
@@ -174,6 +192,7 @@ namespace Gw2_Launchbuddy
 
     public class GFXConfig
     {
+        public bool issaved = false;
         public string Configname { set; get; }
         public string ConfigPath { set; get; }
         public ObservableCollection<GFXOption> Config= new ObservableCollection<GFXOption>();

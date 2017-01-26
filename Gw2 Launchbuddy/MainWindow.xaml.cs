@@ -54,8 +54,6 @@ namespace Gw2_Launchbuddy
         List<int> nomutexpros = new List<int>();
         List<string> noKeep = new List<string>();
 
-        string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
-
         AES crypt = new AES();
 
         [Serializable]
@@ -127,9 +125,9 @@ namespace Gw2_Launchbuddy
             try
             {
                 InitializeComponent();
-                if (!Directory.Exists(AppdataPath))
+                if (!Directory.Exists(Globals.AppdataPath))
                 {
-                    Directory.CreateDirectory(AppdataPath);
+                    Directory.CreateDirectory(Globals.AppdataPath);
                 }
             }
             catch
@@ -894,6 +892,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_launch_Click(object sender, RoutedEventArgs e)
         {
+            GFXManager.OverwriteGFX();
             UpdateServerArgs();
             LaunchManager.launch_click();
         }
@@ -1088,12 +1087,12 @@ namespace Gw2_Launchbuddy
 
         void SaveAddons()
         {
-            AddOnManager.SaveAddons(AppdataPath + "Addons.xml");
+            AddOnManager.SaveAddons(Globals.AppdataPath + "Addons.xml");
         }
 
         void LoadAddons()
         {
-            lv_AddOns.ItemsSource = AddOnManager.LoadAddons(AppdataPath + "Addons.xml");
+            lv_AddOns.ItemsSource = AddOnManager.LoadAddons(Globals.AppdataPath + "Addons.xml");
         }
 
         private void bt_addacc_Click(object sender, RoutedEventArgs e)
@@ -1688,7 +1687,7 @@ namespace Gw2_Launchbuddy
         {
             try
             {
-                if (!System.IO.File.Exists(AppdataPath + "handle64.exe") || !System.IO.File.Exists(AppdataPath + "handle.exe"))
+                if (!System.IO.File.Exists(Globals.AppdataPath + "handle64.exe") || !System.IO.File.Exists(Globals.AppdataPath + "handle.exe"))
                 {
                     winsetupinfo.WindowStyle = WindowStyle.None;
                     winsetupinfo.Width = 300;
@@ -1710,12 +1709,12 @@ namespace Gw2_Launchbuddy
         {
             try
             {
-                System.IO.File.Delete(AppdataPath + "handle64.exe");
-                System.IO.File.Delete(AppdataPath + "handle.exe");
-                System.IO.File.Delete(AppdataPath + "Eula.txt");
+                System.IO.File.Delete(Globals.AppdataPath + "handle64.exe");
+                System.IO.File.Delete(Globals.AppdataPath + "handle.exe");
+                System.IO.File.Delete(Globals.AppdataPath + "Eula.txt");
                 WebClient downloadclient = new WebClient();
-                downloadclient.DownloadFile("https://download.sysinternals.com/files/Handle.zip", AppdataPath + "Handle.zip");
-                ZipFile.ExtractToDirectory(AppdataPath + "Handle.zip", AppdataPath);
+                downloadclient.DownloadFile("https://download.sysinternals.com/files/Handle.zip", Globals.AppdataPath + "Handle.zip");
+                ZipFile.ExtractToDirectory(Globals.AppdataPath + "Handle.zip", Globals.AppdataPath);
 
             }
             catch
@@ -1723,8 +1722,8 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show("Official microsoft link is not reachable. Using embbeded handle version!");
                 try
                 {
-                    //System.IO.File.WriteAllBytes(AppdataPath+ "handle64.exe", Properties.Resources.handle64);
-                    //System.IO.File.WriteAllBytes(AppdataPath + "handle.exe", Properties.Resources.handle);
+                    //System.IO.File.WriteAllBytes(Globals.AppdataPath+ "handle64.exe", Properties.Resources.handle64);
+                    //System.IO.File.WriteAllBytes(Globals.AppdataPath + "handle.exe", Properties.Resources.handle);
                 }
 
                 catch (Exception err)
@@ -1743,17 +1742,17 @@ namespace Gw2_Launchbuddy
 
                 if (Environment.Is64BitOperatingSystem)
                 {
-                    prohandleinfo.FileName = AppdataPath + "handle64.exe";
+                    prohandleinfo.FileName = Globals.AppdataPath + "handle64.exe";
                 }
                 else
                 {
-                    prohandleinfo.FileName = AppdataPath + "handle.exe";
+                    prohandleinfo.FileName = Globals.AppdataPath + "handle.exe";
                 }
                 Process prohandle = new Process { StartInfo = prohandleinfo };
                 prohandle.Start();
 
-                System.IO.File.Delete(AppdataPath + "Handle.zip");
-                System.IO.File.Delete(AppdataPath + "Eula.txt");
+                System.IO.File.Delete(Globals.AppdataPath + "Handle.zip");
+                System.IO.File.Delete(Globals.AppdataPath + "Eula.txt");
 
                 Application.Current.Dispatcher.BeginInvoke(
                     System.Windows.Threading.DispatcherPriority.Background,
@@ -1906,7 +1905,16 @@ namespace Gw2_Launchbuddy
 
         private void bt_loadgfx_Click(object sender, RoutedEventArgs e)
         {
-            GFXManager.ChooseFile();
+            var tmp = GFXManager.LoadFile();
+            if (tmp != null)
+            {
+                Globals.SelectedGFX = tmp;
+                lv_gfx.ItemsSource = Globals.SelectedGFX.Config;
+                lv_gfx.Items.Refresh();
+            } else
+            {
+                MessageBox.Show("Invalid GFX Config File selected!");
+            }
         }
 
         private void bt_resetgfx_Click(object sender, RoutedEventArgs e)
@@ -1941,7 +1949,24 @@ namespace Gw2_Launchbuddy
 
         private void bt_savegfx_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(String.Join("\n", GFXManager.ToXml()));
+            GFXManager.SaveFile();
+        }
+
+        private void bt_applygfx_Click(object sender, RoutedEventArgs e)
+        {
+            GFXManager.OverwriteGFX();
+
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = Globals.exepath + Globals.exename;
+            startInfo.Arguments = " -image -shareArchive";
+            Process gw2pro = new Process { StartInfo = startInfo };
+
+            gw2pro.Start();
+            gw2pro.WaitForExit();
+
+            Globals.SelectedGFX = GFXManager.ReadFile(Globals.ClientXmlpath);
+            lv_gfx.ItemsSource = Globals.SelectedGFX.Config;
+            lv_gfx.Items.Refresh();
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

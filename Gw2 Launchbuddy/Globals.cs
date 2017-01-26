@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using static Gw2_Launchbuddy.MainWindow;
+using System;
+
 
 namespace Gw2_Launchbuddy
 {
@@ -17,6 +19,8 @@ namespace Gw2_Launchbuddy
 
         public static GFXConfig SelectedGFX = new GFXConfig();
         public static string ClientXmlpath;
+
+        public static string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
 
     }
 }
