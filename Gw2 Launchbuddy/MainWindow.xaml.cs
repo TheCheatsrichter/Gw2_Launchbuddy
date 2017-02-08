@@ -1969,68 +1969,6 @@ namespace Gw2_Launchbuddy
             lv_gfx.Items.Refresh();
         }
 
-        private void bt_accsortup_Click(object sender, RoutedEventArgs e)
-        {
-            if (listview_acc.SelectedItem != null)
-            {
-                int index = listview_acc.SelectedIndex;
-                Account selectedacc = accountlist[index];
-                if (index - 1 >= 0 )
-                {
-                    accountlist.Remove(selectedacc);
-                    accountlist.Insert(index - 1, selectedacc);
-                    listview_acc.SelectedIndex = index + -1;
-                }
-            }
-        }
-
-        private void bt_accsortdown_Click(object sender, RoutedEventArgs e)
-        {
-            if (listview_acc.SelectedItem != null)
-            {
-                int index = listview_acc.SelectedIndex;
-                Account selectedacc = accountlist[index];
-                if (index + 1 < accountlist.Count)
-                {
-                    accountlist.Remove(selectedacc);
-                    accountlist.Insert(index + 1, selectedacc);
-                    listview_acc.SelectedIndex = index + 1;
-                }
-            }
-        }
-
-        private void bt_accedit_Click(object sender, RoutedEventArgs e)
-        {
-            Account selectedacc = listview_acc.SelectedItem as Account;
-            if (selectedacc != null)
-            {
-                string input = null;
-                string message = "Please enter the password of the account.\n\nNickname:\t" + selectedacc.Nick + "\nEmail:\t\t" + selectedacc.DisplayEmail +"\nCreated at:\t"+selectedacc.Time;
-                TextBoxPopUp pw_win = new Gw2_Launchbuddy.TextBoxPopUp(message,"Editing Account", true);
-                if (pw_win.ShowDialog().Value)
-                {
-                    input = pw_win.Input();
-                }
-                else
-                {
-                    return;
-                }
-
-                if (input == selectedacc.Password)
-                {
-                    tb_email.Text = selectedacc.Email;
-                    tb_nick.Text = selectedacc.Nick;
-                    tb_passw.Password = selectedacc.Password;
-                    accountlist.Remove(selectedacc);
-                    tb_nick.Focus();
-                }
-                else
-                {
-                    MessageBox.Show("Invalid password!\nMake sure the entered password is correct.(Case sensitive!)\n\nIf the account's password allready is saved incorrectly editing is not possible");
-                }
-            }
-        }
-
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var endpos = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];
