@@ -166,6 +166,9 @@
     <Compile Include="SetupInfo.xaml.cs">
       <DependentUpon>SetupInfo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TextBoxPopUp.xaml.cs">
+      <DependentUpon>TextBoxPopUp.xaml</DependentUpon>
+    </Compile>
     <Page Include="Clientfix.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -188,6 +191,10 @@
     <Page Include="SetupInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TextBoxPopUp.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
