@@ -20,6 +20,7 @@ using System.Linq;
 using System.Windows.Media.Imaging;
 using System.IO.Compression;
 using System.Windows.Media.Animation;
+using System.Xml.Serialization;
 
 namespace Gw2_Launchbuddy
 {
@@ -69,6 +70,15 @@ namespace Gw2_Launchbuddy
         [Serializable]
         public class Account
         {
+            [XmlIgnore]
+            public System.Drawing.Icon Icon
+            {
+                get {
+                        if (Iconpath != null && Iconpath != "") return new System.Drawing.Icon(Iconpath);
+                        return Gw2_Launchbuddy.Properties.Resources.launchbuddy; //launchbuddy icon
+                    }
+            }
+            public string Iconpath { get; set; }
             public string Email { get; set; }
             public string Password { get; set; }
             public string DisplayEmail
@@ -2029,6 +2039,24 @@ namespace Gw2_Launchbuddy
                     MessageBox.Show("Invalid password!\nMake sure the entered password is correct.(Case sensitive!)\n\nIf the account's password allready is saved incorrectly editing is not possible");
                 }
             }
+        }
+
+        private void bt_selecticon_Click(object sender, RoutedEventArgs e)
+        {
+            Account acc = (sender as Button).DataContext as Account;
+            acc = accountlist.Single(x=>x.Email==acc.Email);
+
+            System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
+            filedialog.DefaultExt = "ico";
+            filedialog.Multiselect = false;
+            filedialog.Filter = "Icon Files(*.ico) | *.ico";
+            System.Windows.Forms.DialogResult result = filedialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                acc.Iconpath = filedialog.FileName;
+            }
+            listview_acc.ItemsSource = accountlist;
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

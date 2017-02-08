@@ -436,6 +436,19 @@
                                     <GridViewColumn Header="Email" Width="200" DisplayMemberBinding="{Binding DisplayEmail}" />
                                     <GridViewColumn Header="Created at" Width="150" DisplayMemberBinding="{Binding Time}" />
 
+                                    <GridViewColumn Header="Icon" Width="64">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Height="30" x:Name="bt_selecticon" Click="bt_selecticon_Click" >
+                                                    <Grid>
+                                                        <Image Source="{Binding Icon}" Width="30"/>
+                                                    </Grid>
+                                                </Button>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                        
+
                                 </GridView>
                             </ListView.View>
                         </ListView>

@@ -10,6 +10,18 @@ using System.Collections.Generic;
 
 namespace Gw2_Launchbuddy
 {
+    public class ProAccBinding
+    {
+        public Process pro { set; get; }
+        public MainWindow.Account acc { set; get; }
+
+        public ProAccBinding(Process tpro,MainWindow.Account tacc = null)
+        {
+            this.pro = tpro;
+            this.acc = tacc;
+        }
+    }
+
     static class LaunchManager
     {
         private static List<int> nomutexpros = new List<int>();
@@ -86,6 +98,7 @@ namespace Gw2_Launchbuddy
                 gw2proinfo.Arguments = Globals.args.Print(accnr);
                 gw2proinfo.WorkingDirectory = Globals.exepath;
                 Process gw2pro = new Process { StartInfo = gw2proinfo };
+                if (accnr != null) Globals.LinkedAccs.Add(new ProAccBinding(gw2pro,Globals.selected_accs[(int)accnr]));
 
                 try
                 {
