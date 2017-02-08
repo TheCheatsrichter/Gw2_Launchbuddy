@@ -408,15 +408,26 @@
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="100*"/>
                             <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
-                        <Button x:Name="bt_addacc" Content="Add" Click="bt_addacc_Click" IsEnabled="False"  Grid.Row="3" Grid.Column="3" Margin="5,3"/>
-                        <Button x:Name="bt_remacc" Content="Remove" IsEnabled="False" Click="bt_remacc_Click" Grid.Row="3" Grid.Column="4" Margin="5,3" />
-                        <Label x:Name="lab_nick" Content="Nickname:" IsEnabled="False" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left"  VerticalAlignment="Center"  IsEnabled="False" Height="26" Width="62" Grid.Row="2" Grid.Column="1" />
-                        <Label x:Name="lab_email" Content="Email:"  Grid.Row="2" d:LayoutOverrides="Width" VerticalAlignment="Center"/>
-                        <TextBox x:Name="tb_email" Height="23" Grid.Row="2" Margin="44,3.5,0,3.5" IsEnabled="False" />
-                        <PasswordBox x:Name="tb_passw" Height="23" IsEnabled="False" Grid.Row="2" Grid.Column="1" Margin="66,3.5,0,3.5"/>
-                        <TextBox x:Name="tb_nick" Height="23" Grid.Row="2" Grid.Column="2" Margin="68,3.5,0,3.5" IsEnabled="False"/>
+                        <StackPanel Grid.ColumnSpan="5" Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Right">
+                            <Button x:Name="bt_addacc" Content="Add" Click="bt_addacc_Click" IsEnabled="False" Width="100"  Margin="5,3"/>
+                            <Button x:Name="bt_accedit" Content="Edit" Margin="3" IsEnabled="True" Width="100" Click="bt_accedit_Click"/>
+                            <Button x:Name="bt_remacc" Content="Remove" IsEnabled="False" Click="bt_remacc_Click" Width="100" Margin="5,3" />
+                            <Button x:Name="bt_accsortup" Content="↑" IsEnabled="True" Margin="3" Width="30" Click="bt_accsortup_Click"/>
+                            <Button x:Name="bt_accsortdown" Content="↓" IsEnabled="True" Margin="3" Width="30" Click="bt_accsortdown_Click"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5">
+                            <Label x:Name="lab_nick" Content="Nickname:" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox x:Name="tb_nick" Height="23" Width="150"  IsEnabled="False"/>
+                            <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left"  VerticalAlignment="Center"  IsEnabled="False" Height="26" Width="62" Grid.Row="2" Grid.Column="1" />
+                            <PasswordBox x:Name="tb_passw" Height="23" Width="150" IsEnabled="False" />
+                            <Label x:Name="lab_email" Content="Email:"  d:LayoutOverrides="Width" VerticalAlignment="Center"/>
+                            <TextBox x:Name="tb_email" Height="23" Width="150" IsEnabled="False" />
+
+
+                        </StackPanel>
+                        
                         <CheckBox x:Name="cb_login" Content="Use Autologin" FontSize="16" Checked="cb_login_Checked" Unchecked="cb_login_Unchecked" FontWeight="Bold" Grid.Row="0" Grid.ColumnSpan="4" />
                         <ListView ItemsSource="{Binding}" SelectionMode="Multiple" x:Name="listview_acc"  IsEnabled="False" SelectionChanged="listview_acc_SelectionChanged" Grid.Row="1" Grid.ColumnSpan="5">
                             <ListView.View>
