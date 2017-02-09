@@ -11,7 +11,7 @@ namespace Gw2_Launchbuddy
     {
         public static Microsoft.Win32.RegistryKey LBRegKey { get { return Microsoft.Win32.Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("LaunchBuddy"); } set { } }
 
-        public static ObservableCollection<ProAccBinding> LinkedAccs;
+        public static ObservableCollection<ProAccBinding> LinkedAccs = new ObservableCollection<ProAccBinding>();
         public static List<Account> selected_accs = new List<Account>();
         public static string exepath, exename, unlockerpath, version_client, version_api;
 

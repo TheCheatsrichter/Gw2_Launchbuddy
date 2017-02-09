@@ -10,6 +10,7 @@ using System.Collections.Generic;
 
 namespace Gw2_Launchbuddy
 {
+
     public class ProAccBinding
     {
         public Process pro { set; get; }
@@ -25,6 +26,7 @@ namespace Gw2_Launchbuddy
     static class LaunchManager
     {
         private static List<int> nomutexpros = new List<int>();
+        public static GUI_ApplicationManager Appmanager = new GUI_ApplicationManager();
         public static void launch_click()
         {
             //Checking for existing Gw2 instances. Do not continue until closed.
@@ -44,7 +46,7 @@ namespace Gw2_Launchbuddy
             {
                 launchgw2();
             }
-            
+            Appmanager.Show();
 
             //Launching AddOns
             try

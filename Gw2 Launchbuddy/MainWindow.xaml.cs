@@ -57,7 +57,6 @@ namespace Gw2_Launchbuddy
 
         AES crypt = new AES();
 
-        [Serializable]
         public class Server
         {
             public string IP { get; set; }
@@ -67,18 +66,34 @@ namespace Gw2_Launchbuddy
             public string Location { get; set; }
         }
 
-        [Serializable]
+        [Serializable()]
         public class Account
         {
-            [XmlIgnore]
-            public System.Drawing.Icon Icon
+            [NonSerialized]
+            private ImageSource icon;
+            public ImageSource Icon
             {
-                get {
-                        if (Iconpath != null && Iconpath != "") return new System.Drawing.Icon(Iconpath);
-                        return Gw2_Launchbuddy.Properties.Resources.launchbuddy; //launchbuddy icon
-                    }
+                get
+                {
+                    return icon;
+                }
+                set
+                {
+                    icon = value;
+                }
             }
-            public string Iconpath { get; set; }
+            public string Iconpath
+            {
+                get { return iconpath; }
+                set {
+                    if (System.IO.File.Exists(value))
+                    {
+                        Icon = LoadImage(value);
+                    }
+                    iconpath = value;
+                }
+            }
+            public string iconpath { get; set; }
             public string Email { get; set; }
             public string Password { get; set; }
             public string DisplayEmail
@@ -1041,7 +1056,7 @@ namespace Gw2_Launchbuddy
                 aes_accountlist.Clear();
                 foreach (Account acc in accountlist)
                 {
-                    aes_accountlist.Add(new Account { Nick = acc.Nick, Email = acc.Email, Password = crypt.Encrypt(acc.Password), Time = acc.Time });
+                    aes_accountlist.Add(new Account { Nick = acc.Nick, Email = acc.Email, Password = crypt.Encrypt(acc.Password), Time = acc.Time , iconpath=acc.iconpath });
                 }
             }
             catch (Exception err)
@@ -1080,7 +1095,7 @@ namespace Gw2_Launchbuddy
 
                         foreach (Account acc in aes_accountlist)
                         {
-                            accountlist.Add(new Account { Nick = acc.Nick, Email = acc.Email, Password = crypt.Decrypt(acc.Password), Time = acc.Time });
+                            accountlist.Add(new Account { Nick = acc.Nick, Email = acc.Email, Password = crypt.Decrypt(acc.Password), Time = acc.Time, Iconpath= acc.iconpath });
                         }
 
                         listview_acc.ItemsSource = Cinema_Accountlist.ItemsSource = accountlist;
@@ -1166,8 +1181,9 @@ namespace Gw2_Launchbuddy
 
         private void listview_acc_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Globals.selected_accs = ((ListView)sender).SelectedItems.Cast<Account>().ToList();
+            Account selectedacc = listview_acc.SelectedItem as Account;
 
+            Globals.selected_accs = ((ListView)sender).SelectedItems.Cast<Account>().ToList();
             Properties.Settings.Default.selected_acc = ((ListView)sender).SelectedIndex;
             Properties.Settings.Default.Save();
 
@@ -2047,16 +2063,16 @@ namespace Gw2_Launchbuddy
             acc = accountlist.Single(x=>x.Email==acc.Email);
 
             System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
-            filedialog.DefaultExt = "ico";
+            filedialog.DefaultExt = "png";
             filedialog.Multiselect = false;
-            filedialog.Filter = "Icon Files(*.ico) | *.ico";
+            filedialog.Filter = "Png Files(*.png) | *.png";
             System.Windows.Forms.DialogResult result = filedialog.ShowDialog();
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
                 acc.Iconpath = filedialog.FileName;
             }
-            listview_acc.ItemsSource = accountlist;
+            listview_acc.Items.Refresh();
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
