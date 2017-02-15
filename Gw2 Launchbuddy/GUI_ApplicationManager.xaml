@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gw2_Launchbuddy"
         mc:Ignorable="d"
-        Title="GUI_ApplicationManager" Height="300" Width="167.969" ResizeMode="CanResize" WindowStartupLocation="CenterScreen" Topmost="True" WindowStyle="None" Loaded="Window_Loaded" AllowsTransparency="True" Background="Transparent">
+        Title="GUI_ApplicationManager" Height="300" Width="167.969" ResizeMode="CanResize" WindowStartupLocation="CenterScreen" Topmost="True" WindowStyle="None" Loaded="Window_Loaded" AllowsTransparency="True" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="Resources/opacitymask.png"/>

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Data;
 using System.Runtime.InteropServices;
+using System.Collections.ObjectModel;
 
 
 namespace Gw2_Launchbuddy
@@ -15,15 +16,8 @@ namespace Gw2_Launchbuddy
     /// </summary>
     public partial class GUI_ApplicationManager : Window
     {
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-[return: MarshalAs(UnmanagedType.Bool)]
-private static extern bool IsIconic(IntPtr hWnd);
-
-        private const int SW_MAXIMIZE = 3;
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
 
         public GUI_ApplicationManager()
         {
@@ -51,22 +45,39 @@ private static extern bool IsIconic(IntPtr hWnd);
 
         public void UpdateProAccs()
         {
-            while(true)
+            while (true)
             {
-                Process[] pros = Process.GetProcessesByName(Globals.exename);
-                foreach (ProAccBinding proacc in Globals.LinkedAccs)
+                Dispatcher.Invoke(new Action(() =>
                 {
-                    if (pros.Where(x => x.Id == proacc.pro.Id) == null)
-                    {
-                        Globals.LinkedAccs.Remove(proacc);
-                    }
+                   CheckPros();
+                }));
+                Thread.Sleep(1000);
+            }
+        }
+
+        void CheckPros()
+        {
+            ObservableCollection<ProAccBinding> ToRemove = new ObservableCollection<Gw2_Launchbuddy.ProAccBinding>();
+            foreach(ProAccBinding proacc in Globals.LinkedAccs)
+            {
+                try
+                {
+                    Process.GetProcessById(proacc.pro.Id);   
                 }
-                Thread.Sleep(5000);
+                catch
+                {
+                    ToRemove.Add(proacc);
+                }
+            }
+            foreach (ProAccBinding proacc in ToRemove)
+            {
+                Globals.LinkedAccs.Remove(proacc);
             }
         }
 
         private void bt_closeinstance_Click(object sender, RoutedEventArgs e)
         {
+            CheckPros();
             ProAccBinding selinstance = (sender as Button).DataContext as ProAccBinding;
             try{
                 selinstance.pro.Kill();
@@ -77,12 +88,15 @@ private static extern bool IsIconic(IntPtr hWnd);
 
         private void bt_maxmin_Click(object sender, RoutedEventArgs e)
         {
+            CheckPros();
             ProAccBinding selinstance = (sender as Button).DataContext as ProAccBinding;
             IntPtr hwndMain = selinstance.pro.MainWindowHandle;
-            if (IsIconic(hwndMain))
-            {
-                ShowWindow(hwndMain, SW_MAXIMIZE);
-            }
+            SetForegroundWindow(hwndMain);
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.DragMove();
         }
     }
 }

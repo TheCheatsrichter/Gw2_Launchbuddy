@@ -75,6 +75,22 @@ namespace Gw2_Launchbuddy
             {
                 get
                 {
+                    if (icon == null)
+                    {
+                        using (MemoryStream memory = new MemoryStream())
+                        {
+                            System.Drawing.Bitmap bitmap = Properties.Resources.quaggan1;
+                            bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+                            memory.Position = 0;
+                            BitmapImage bitmapimage = new BitmapImage();
+                            bitmapimage.BeginInit();
+                            bitmapimage.StreamSource = memory;
+                            bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+                            bitmapimage.EndInit();
+
+                            return bitmapimage;
+                        }
+                    }
                     return icon;
                 }
                 set
@@ -84,7 +100,9 @@ namespace Gw2_Launchbuddy
             }
             public string Iconpath
             {
-                get { return iconpath; }
+                get {
+                    return iconpath;
+                }
                 set {
                     if (System.IO.File.Exists(value))
                     {
@@ -515,11 +533,13 @@ namespace Gw2_Launchbuddy
                 {
                     if (Globals.version_api == Globals.version_client)
                     {
+                        Globals.ClientIsUptodate = true;
                         versioninfo += "\tStatus: up to date!";
                         lab_version.Foreground = new SolidColorBrush(Colors.Green);
                     }
                     else
                     {
+                        Globals.ClientIsUptodate = false;
                         versioninfo += "\tStatus: outdated!";
                         lab_version.Foreground = new SolidColorBrush(Colors.Red);
                     }

@@ -100,7 +100,15 @@ namespace Gw2_Launchbuddy
                 gw2proinfo.Arguments = Globals.args.Print(accnr);
                 gw2proinfo.WorkingDirectory = Globals.exepath;
                 Process gw2pro = new Process { StartInfo = gw2proinfo };
-                if (accnr != null) Globals.LinkedAccs.Add(new ProAccBinding(gw2pro,Globals.selected_accs[(int)accnr]));
+                if (accnr != null)
+                {
+                    Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, Globals.selected_accs[(int)accnr]));
+                }
+                else
+                {
+                    MainWindow.Account undefacc = new MainWindow.Account { Email = "-", Nick = "Acc Nr"+Globals.LinkedAccs.Count };
+                    Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, undefacc));
+                }
 
                 try
                 {
