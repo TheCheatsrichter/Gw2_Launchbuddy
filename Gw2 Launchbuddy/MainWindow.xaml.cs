@@ -79,8 +79,8 @@ namespace Gw2_Launchbuddy
                     {
                         using (MemoryStream memory = new MemoryStream())
                         {
-                            System.Drawing.Bitmap bitmap = Properties.Resources.quaggan1;
-                            bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+                            System.Drawing.Bitmap bitmap = Properties.Resources.user;
+                            bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Png);
                             memory.Position = 0;
                             BitmapImage bitmapimage = new BitmapImage();
                             bitmapimage.BeginInit();
@@ -1214,7 +1214,7 @@ namespace Gw2_Launchbuddy
                 cb_login.Content = "Use Autologin : " + selectedItems[0].Nick;
                 Globals.selected_accs[0].Email = selectedItems[0].Email;
                 Globals.selected_accs[0].Password = selectedItems[0].Password;
-                bt_shortcut.IsEnabled = true;
+                //bt_shortcut.IsEnabled = true;
             }
 
             if (((ListView)sender).SelectedItems.Count != 0 && ((ListView)sender).SelectedItems.Count > 1)
@@ -1223,7 +1223,7 @@ namespace Gw2_Launchbuddy
                 cb_login.Content = "Use Autologin (Multiboxing): " + ((ListView)sender).SelectedItems.Count + " Accounts selected";
                 Globals.selected_accs[0].Email = selectedItem.Email;
                 Globals.selected_accs[0].Password = selectedItem.Password;
-                bt_shortcut.IsEnabled = false;
+                //bt_shortcut.IsEnabled = false;
             }
 
             //Sync account lists.
@@ -2100,12 +2100,28 @@ namespace Gw2_Launchbuddy
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            bt_downloadrelease.IsEnabled = true;
+            bt_downloadrelease.Content = "Download and use Release V" + (lv_lbversions.SelectedItem as Release).Version;
             wb_releasedescr.NavigateToString((lv_lbversions.SelectedItem as Release).Description);
         }
 
         private void bt_downloadrelease_Click(object sender, RoutedEventArgs e)
         {
-            Versionswitcher.ApplyRelease(lv_lbversions.SelectedItem as Release);
+            if (lv_lbversions.SelectedItem!= null)
+            {
+                Version rl_version = (lv_lbversions.SelectedItem as Release).Version;
+                if (rl_version.CompareTo(Globals.LBVersion)< 0)
+                {
+                    MessageBoxResult win = MessageBox.Show("Usage of older versions of Launchbuddy can corrupt your Accountmanager data!\n\nAre you sure you want to download V"+rl_version, "Release Download", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (win.ToString() == "No")
+                    {
+                        return;
+                    }
+                }
+                (sender as Button).Content = "Downloading LB V" + rl_version;
+                Versionswitcher.ApplyRelease(lv_lbversions.SelectedItem as Release);
+                (sender as Button).Content = "Download";
+            }
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

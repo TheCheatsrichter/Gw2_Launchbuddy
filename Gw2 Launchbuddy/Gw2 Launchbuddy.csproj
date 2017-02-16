@@ -302,6 +302,9 @@
     <Content Include="Resources\CrashReporter.NET.dll" />
     <Resource Include="Resources\opacitymask.png" />
     <Resource Include="Resources\Icons\film.png" />
+    <Resource Include="Resources\Icons\user.png" />
+    <Resource Include="Resources\Icons\close.png" />
+    <Resource Include="Resources\Icons\focus.png" />
     <Content Include="Resources\Xceed.Wpf.Toolkit.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

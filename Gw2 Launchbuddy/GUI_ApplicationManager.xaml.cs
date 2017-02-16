@@ -42,8 +42,13 @@ namespace Gw2_Launchbuddy
 
         private void lv_gfx_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Globals.LinkedAccs.ToString();
-            ProAccBinding bind = sender as ProAccBinding;
+            if(lv_instances.SelectedIndex >=0)
+            {
+                CheckPros();
+                ProAccBinding selinstance = lv_instances.SelectedItem as ProAccBinding;
+                IntPtr hwndMain = selinstance.pro.MainWindowHandle;
+                SetForegroundWindow(hwndMain);
+            }
         }
 
         public void UpdateProAccs()

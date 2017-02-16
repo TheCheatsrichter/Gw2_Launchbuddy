@@ -44,8 +44,12 @@ namespace Gw2_Launchbuddy
         public static void ApplyRelease(Release rel)
         {
             WebClient wc = new WebClient();
-            wc.DownloadFile(rel.DownloadURL,Globals.exepath+"Gw2_Launchbuddy_"+rel.Version+".exe");
+            string dest = Globals.exepath + "Gw2_Launchbuddy_" + rel.Version + ".exe";
+            wc.DownloadFile(rel.DownloadURL,dest);
             Process.Start(Globals.exepath);
+            System.Windows.Application.Current.Shutdown();
+            Process newlaunchbuddy = new Process { StartInfo = new ProcessStartInfo(dest) };
+            newlaunchbuddy.Start();
         }
 
 
@@ -56,10 +60,19 @@ namespace Gw2_Launchbuddy
             Repo_User = Repomatches.Groups["User"].Value;
             Repo_Name = Repomatches.Groups["Name"].Value;
 
-            string HTML_Raw;
+            string HTML_Raw="";
             using (WebClient client = new WebClient())
             {
-                HTML_Raw = client.DownloadString(URL_Releases);
+                try
+                {
+                    HTML_Raw = client.DownloadString(URL_Releases);
+                }
+                catch
+                {
+                    System.Windows.Forms.MessageBox.Show("Unable to check for Launchbuddy Updates.\n Please check your internet connection");
+                    return;
+                }
+                
             }
             Regex filter = new Regex(@"<div class=""release-body commit open"">(\s|\S)+?<\/div><!-- \/.release -->");
             MatchCollection releases_raw = filter.Matches(HTML_Raw);

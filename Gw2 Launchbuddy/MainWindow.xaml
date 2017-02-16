@@ -296,13 +296,19 @@
                 <Label Content="Used Addons:" x:Name="lab_usedaddons"/>
             </StackPanel>
 
-            <Grid Margin="5,5" Grid.Row="2">
+            <Grid Margin="5,5" Grid.Row="2" Background="Black">
+                <Grid.OpacityMask>
+                    <ImageBrush ImageSource="Resources/opacitymask.png"/>
+                </Grid.OpacityMask>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50*"/>
                     <ColumnDefinition Width="50*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="bt_launch" Content="Launch Gw2"  Click="bt_launch_Click" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0"  />
-                <Button x:Name="bt_shortcut" Content="Create Shortcut (Coming back soon)" Grid.Column="1" Grid.Row="1"  Click="bt_shortcut_Click" BorderThickness="1" Margin="5,0,0,0" IsEnabled="false"/>
+                
+                <Button x:Name="bt_launch" Grid.ColumnSpan="2"  Click="bt_launch_Click" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0" BorderBrush="Black" Background="#CC000000">
+                    <Label Content="Launch Guild Wars 2" Background="Black" Foreground="White" FontSize="18" FontStyle="Italic"/>
+                </Button>
+                <!--<Button x:Name="bt_shortcut" Content="Create Shortcut (Coming back soon)" Grid.Column="1" Grid.Row="1"  Click="bt_shortcut_Click" BorderThickness="1" Margin="5,0,0,0" IsEnabled="false"/>-->
             </Grid>
 
             <TabControl x:Name="tab_options" Grid.Row="0" SelectionChanged="tab_options_SelectionChanged" MouseLeave="tab_options_MouseLeave">
@@ -776,7 +782,16 @@
                 <TabItem Header="LB Settings">
                     <StackPanel>
                         <Label Content="Launchbuddy Settings" FontWeight="Bold" FontSize="16"/>
+                        <Separator Margin="3"/>
+                        <!-- Content="Settings" FontWeight="Bold" FontSize="14"/>
+                        <StackPanel Margin="5">
+                            <CheckBox Content="Use Graphical Gameinstance Manager" />
+                            <CheckBox Content="Search for new versions of Launchbuddy on Start"/>
+                        </StackPanel>
+                        
                         <Separator Margin="5"/>
+                        -->
+                        <Label Content="Launchbuddy Releases" FontSize="14" FontWeight="Bold"/>
                         <Grid Height="250" Margin="3">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="60*"/>
@@ -791,14 +806,14 @@
                             <ListView x:Name="lv_lbversions" Grid.Row="0" Grid.RowSpan="2" SelectionChanged="ListView_SelectionChanged">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="Name" Width="175" DisplayMemberBinding="{Binding Name}"/>
+                                        <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding Name}"/>
                                         <GridViewColumn Header="Version" Width="75" DisplayMemberBinding="{Binding Version}"/>
-                                        <GridViewColumn Header="Releasedate" Width="150" DisplayMemberBinding="{Binding Date}"/>
+                                        <GridViewColumn Header="Releasedate" Width="100" DisplayMemberBinding="{Binding Date}"/>
                                     </GridView>
                                 </ListView.View>
                             </ListView>
                             <WebBrowser x:Name="wb_releasedescr" Grid.Row="1" Grid.Column="1" Margin="3,0,0,0"/>
-                            <Button x:Name="bt_downloadrelease" Grid.Row="2" Grid.ColumnSpan="2" Margin="3" Content="Download" Click="bt_downloadrelease_Click"/>
+                            <Button x:Name="bt_downloadrelease" Grid.Row="2" Grid.ColumnSpan="2" Margin="3" Content="Download" Click="bt_downloadrelease_Click" IsEnabled="False"/>
                         </Grid>
                     </StackPanel>
                 </TabItem>
