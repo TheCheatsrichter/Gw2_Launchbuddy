@@ -9,6 +9,8 @@ namespace Gw2_Launchbuddy
 
     static class Globals
     {
+        public static GUI_ApplicationManager Appmanager = new GUI_ApplicationManager();
+
         public static Microsoft.Win32.RegistryKey LBRegKey { get { return Microsoft.Win32.Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("LaunchBuddy"); } set { } }
 
         public static ObservableCollection<ProAccBinding> LinkedAccs = new ObservableCollection<ProAccBinding>();
@@ -24,6 +26,6 @@ namespace Gw2_Launchbuddy
         public static string ClientXmlpath;
 
         public static string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
-
+        public static Version LBVersion = new Version("1.4");
     }
 }

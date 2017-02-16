@@ -50,5 +50,11 @@
     <Setting Name="cinema_slideshowendscale" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1.205</Value>
     </Setting>
+    <Setting Name="instance_win_X" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="instance_win_Y" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

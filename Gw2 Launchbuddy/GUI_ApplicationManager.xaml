@@ -5,11 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gw2_Launchbuddy"
         mc:Ignorable="d"
-        Title="GUI_ApplicationManager" Height="300" Width="167.969" ResizeMode="CanResize" WindowStartupLocation="CenterScreen" Topmost="True" WindowStyle="None" Loaded="Window_Loaded" AllowsTransparency="True" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown">
-    <Grid>
-        <Grid.Background>
+        Title="GUI_ApplicationManager" Height="300" Width="167.969" ResizeMode="CanResize" WindowStartupLocation="Manual" Topmost="True" WindowStyle="None" Loaded="Window_Loaded" AllowsTransparency="True" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown" Initialized="Window_Initialized">
+
+    <Grid Background="#FF706E6E">
+        <Grid.OpacityMask>
             <ImageBrush ImageSource="Resources/opacitymask.png"/>
-        </Grid.Background>
+        </Grid.OpacityMask>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="100*"/>
@@ -18,28 +19,35 @@
             <Image Source="Resources/Icons/error.png"/>
         </Button>
         <StackPanel Grid.Row="2" Margin="5">
-            <ListView x:Name="lv_instances" Grid.ColumnSpan="2" Grid.Row="1" SelectionChanged="lv_gfx_SelectionChanged">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <DockPanel>
-                                        <Button Width="64" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" DockPanel.Dock="Left">
-                                            <Image DataContext="{Binding Path=acc}" Source="{Binding Path=Icon}"></Image>
-                                        </Button>
-                                        <StackPanel>
-                                            <Label DataContext="{Binding Path=acc}" Content="{Binding Path=Nick}"/>
-                                            <Button x:Name="bt_maxmin" Content="Min/Max" Click="bt_maxmin_Click"/>
-                                            <Button x:Name="bt_closeinstance" Content="Close" Click="bt_closeinstance_Click"/>
-                                        </StackPanel>
-                                    </DockPanel>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+            <Grid>
+                <ListView x:Name="lv_instances" Grid.ColumnSpan="2" Grid.Row="1" SelectionChanged="lv_gfx_SelectionChanged" Background="Transparent">
+                    <ListView.Resources>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DockPanel>
+                                            <Button Width="64" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" DockPanel.Dock="Left">
+                                                <Image DataContext="{Binding Path=acc}" Source="{Binding Path=Icon}"></Image>
+                                            </Button>
+                                            <StackPanel>
+                                                <Label DataContext="{Binding Path=acc}" Content="{Binding Path=Nick}"/>
+                                                <Button x:Name="bt_maxmin" Content="Min/Max" Click="bt_maxmin_Click"/>
+                                                <Button x:Name="bt_closeinstance" Content="Close" Click="bt_closeinstance_Click"/>
+                                            </StackPanel>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
         </StackPanel>
     </Grid>
 </Window>

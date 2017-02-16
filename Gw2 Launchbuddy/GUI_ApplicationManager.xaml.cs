@@ -19,9 +19,12 @@ namespace Gw2_Launchbuddy
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
 
+
         public GUI_ApplicationManager()
         {
             InitializeComponent();
+            this.Left = Properties.Settings.Default.instance_win_X;
+            this.Top = Properties.Settings.Default.instance_win_Y;
             Thread updatelist = new Thread(UpdateProAccs);
             updatelist.IsBackground = true;
             updatelist.Start();
@@ -29,7 +32,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_close_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            this.WindowState = WindowState.Minimized;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -97,6 +100,11 @@ namespace Gw2_Launchbuddy
         private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             this.DragMove();
+        }
+
+        private void Window_Initialized(object sender, EventArgs e)
+        {
+
         }
     }
 }

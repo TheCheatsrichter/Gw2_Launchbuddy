@@ -191,8 +191,9 @@ namespace Gw2_Launchbuddy
             checkver.Start();
             cinema_setup();
             LoadAddons();
-
             AddOnManager.LaunchLbAddons();
+            Versionswitcher.CheckForUpdate();
+            lv_lbversions.ItemsSource = Versionswitcher.Releaselist;
         }
 
         private void checklibraries()
@@ -1235,6 +1236,8 @@ namespace Gw2_Launchbuddy
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Properties.Settings.Default.instance_win_X = Globals.Appmanager.Left;
+            Properties.Settings.Default.instance_win_Y = Globals.Appmanager.Top;
             Properties.Settings.Default.use_reshade = (bool)cb_reshade.IsChecked;
             Properties.Settings.Default.Save();
             safeaccounts();
@@ -2093,6 +2096,16 @@ namespace Gw2_Launchbuddy
                 acc.Iconpath = filedialog.FileName;
             }
             listview_acc.Items.Refresh();
+        }
+
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            wb_releasedescr.NavigateToString((lv_lbversions.SelectedItem as Release).Description);
+        }
+
+        private void bt_downloadrelease_Click(object sender, RoutedEventArgs e)
+        {
+            Versionswitcher.ApplyRelease(lv_lbversions.SelectedItem as Release);
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

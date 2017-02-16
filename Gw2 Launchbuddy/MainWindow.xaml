@@ -773,6 +773,35 @@
 
                 </TabItem>
 
+                <TabItem Header="LB Settings">
+                    <StackPanel>
+                        <Label Content="Launchbuddy Settings" FontWeight="Bold" FontSize="16"/>
+                        <Separator Margin="5"/>
+                        <Grid Height="250" Margin="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60*"/>
+                                <ColumnDefinition Width="40*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="150*"/>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+                            <Label Content="Description:" Grid.Row="0" Grid.Column="1" FontSize="14" FontWeight="Bold"/>
+                            <ListView x:Name="lv_lbversions" Grid.Row="0" Grid.RowSpan="2" SelectionChanged="ListView_SelectionChanged">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Name" Width="175" DisplayMemberBinding="{Binding Name}"/>
+                                        <GridViewColumn Header="Version" Width="75" DisplayMemberBinding="{Binding Version}"/>
+                                        <GridViewColumn Header="Releasedate" Width="150" DisplayMemberBinding="{Binding Date}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <WebBrowser x:Name="wb_releasedescr" Grid.Row="1" Grid.Column="1" Margin="3,0,0,0"/>
+                            <Button x:Name="bt_downloadrelease" Grid.Row="2" Grid.ColumnSpan="2" Margin="3" Content="Download" Click="bt_downloadrelease_Click"/>
+                        </Grid>
+                    </StackPanel>
+                </TabItem>
 
             </TabControl>
 
