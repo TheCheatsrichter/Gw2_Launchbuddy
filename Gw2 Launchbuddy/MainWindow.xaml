@@ -803,7 +803,7 @@
                                 <RowDefinition Height="30"/>
                             </Grid.RowDefinitions>
                             <Label Content="Description:" Grid.Row="0" Grid.Column="1" FontSize="14" FontWeight="Bold"/>
-                            <ListView x:Name="lv_lbversions" Grid.Row="0" Grid.RowSpan="2" SelectionChanged="ListView_SelectionChanged">
+                            <ListView x:Name="lv_lbversions" Grid.Row="0" Grid.RowSpan="2" SelectionChanged="ListView_SelectionChanged" IsSynchronizedWithCurrentItem="True">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding Name}"/>

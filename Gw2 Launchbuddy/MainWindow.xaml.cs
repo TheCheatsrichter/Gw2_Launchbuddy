@@ -192,8 +192,25 @@ namespace Gw2_Launchbuddy
             cinema_setup();
             LoadAddons();
             AddOnManager.LaunchLbAddons();
+            Thread checklbver = new Thread(checklbversion);
+            checklbver.Start();
+            
+        }
+
+        private void checklbversion()
+        {
+            Dispatcher.Invoke(new Action(() =>
+            {
+                bt_downloadrelease.Content = "Fetching Releaselist please wait";
+            }));
+            
             Versionswitcher.CheckForUpdate();
-            lv_lbversions.ItemsSource = Versionswitcher.Releaselist;
+            Dispatcher.Invoke(new Action(() =>
+            {
+                lv_lbversions.ItemsSource = Versionswitcher.Releaselist;
+                bt_downloadrelease.Content = "Download";
+            }));
+            
         }
 
         private void checklibraries()
@@ -206,14 +223,22 @@ namespace Gw2_Launchbuddy
         {
             arglistbox.Items.Clear();
             List<CheckBox> tmp = new List<CheckBox>();
-            foreach (var item in Globals.args.ToDictionary(false))
-                tmp.Add(new CheckBox() { Content = item.Key });
-            foreach (var item in tmp)
+            try
             {
-                item.Margin = new Thickness(5, 0, 0, 0);
-                item.Checked += CheckBox_Checked;
-                item.Unchecked += CheckBox_Unchecked;
+                foreach (var item in Globals.args.ToDictionary(false))
+                    tmp.Add(new CheckBox() { Content = item.Key });
+                foreach (var item in tmp)
+                {
+                    item.Margin = new Thickness(5, 0, 0, 0);
+                    item.Checked += CheckBox_Checked;
+                    item.Unchecked += CheckBox_Unchecked;
+                }
             }
+            catch(Exception e)
+            {
+                CrashReporter.ReportCrashToAll(e);
+            }
+
 
             arglistbox.ItemsSource = tmp;
         }
@@ -1577,8 +1602,15 @@ namespace Gw2_Launchbuddy
 
         private void bt_musicstart_Click(object sender, RoutedEventArgs e)
         {
-            Cinema_MediaPlayer.Source = new Uri(Properties.Settings.Default.cinema_musicpath);
-            Cinema_MediaPlayer.Play();
+            if(Properties.Settings.Default.cinema_musicpath != null && Properties.Settings.Default.cinema_musicpath !="")
+            {
+                Cinema_MediaPlayer.Source = new Uri(Properties.Settings.Default.cinema_musicpath);
+                Cinema_MediaPlayer.Play();
+            }else
+            {
+                MessageBox.Show("Invalid musicpath");
+            }
+
         }
 
         private void bt_musicstop_Click(object sender, RoutedEventArgs e)

@@ -7,6 +7,8 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Windows;
+
 
 namespace Gw2_Launchbuddy
 {
@@ -24,6 +26,7 @@ namespace Gw2_Launchbuddy
                 GetReleaseList();
             }
             Version newest_version = new Version();
+            Release newest_release = new Release();
             foreach (Release release in Releaselist)
             {
                 if (release.Version.CompareTo(Globals.LBVersion) > 0)
@@ -31,14 +34,33 @@ namespace Gw2_Launchbuddy
                     if (release.Version.CompareTo(newest_version) > 0)
                     {
                         newest_version = release.Version;
+                        newest_release = release;
                     }             
                 }
             }
             if (newest_version.ToString() != "0.0")
             {
-                System.Windows.Forms.MessageBox.Show("A new Version of Gw2 Launchbuddy is available! Check the Versionswitcher in settings to update.\n\nGw2 Launchbuddy V" + newest_version.ToString());
+                MessageBoxResult win = MessageBox.Show("A new Version of Gw2 Launchbuddy is available!\n\nDo you want to update to Gw2 Launchbuddy V" + newest_version.ToString() + "?\n\nIt is also possible to manually update Launchbuddy via the 'LB settings' tab", "Release Download", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (win.ToString() == "Yes")
+                {
+                    ApplyReleasebyThread(newest_release);
+                }
             }
 
+        }
+
+        private static void ApplyReleasebyThread(Release rel)
+        {
+            WebClient wc = new WebClient();
+            string dest = Globals.exepath + "Gw2_Launchbuddy_" + rel.Version + ".exe";
+            wc.DownloadFile(rel.DownloadURL, dest);
+            Process newlaunchbuddy = new Process { StartInfo = new ProcessStartInfo(dest) };
+            newlaunchbuddy.Start();
+            Process.Start(Globals.exepath);
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+            {            
+                System.Windows.Application.Current.Shutdown();
+            }));
         }
 
         public static void ApplyRelease(Release rel)
@@ -61,18 +83,17 @@ namespace Gw2_Launchbuddy
             Repo_Name = Repomatches.Groups["Name"].Value;
 
             string HTML_Raw="";
-            using (WebClient client = new WebClient())
+            using (WebClient downloader = new WebClient())
             {
                 try
                 {
-                    HTML_Raw = client.DownloadString(URL_Releases);
+                    HTML_Raw= downloader.DownloadString(URL_Releases);
                 }
                 catch
                 {
                     System.Windows.Forms.MessageBox.Show("Unable to check for Launchbuddy Updates.\n Please check your internet connection");
                     return;
                 }
-                
             }
             Regex filter = new Regex(@"<div class=""release-body commit open"">(\s|\S)+?<\/div><!-- \/.release -->");
             MatchCollection releases_raw = filter.Matches(HTML_Raw);
@@ -104,6 +125,7 @@ namespace Gw2_Launchbuddy
             releases.Add(release);
             }
             Releaselist = releases;
+
         }
     }
 
