@@ -238,5 +238,17 @@ namespace Gw2_Launchbuddy.Properties {
                 this["instance_win_Y"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int counter_launches {
+            get {
+                return ((int)(this["counter_launches"]));
+            }
+            set {
+                this["counter_launches"] = value;
+            }
+        }
     }
 }

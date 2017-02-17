@@ -85,8 +85,21 @@ namespace Gw2_Launchbuddy
 
         public static void UseGFX(string path)
         {
-            if (path == "Default" || path == null)
+
+            if (path == null || path == "")
                 return;
+
+            if (!File.Exists(path) && path != "Default")
+            {
+                MessageBox.Show("GFX Setting not found!\n\nPath:" + path+" \n\nLaunching with default settings!");
+                path = "Default";
+            }
+
+            if (path == "Default" && File.Exists(Globals.AppdataPath + "GFX_tmp.xml"))
+            {
+                if (File.Exists(Globals.ClientXmlpath))File.Delete(Globals.ClientXmlpath);
+                File.Move(Globals.AppdataPath + "GFX_tmp.xml",Globals.ClientXmlpath);
+            }
 
             if (File.Exists(path) && Path.GetExtension(path) ==".xml")
             {

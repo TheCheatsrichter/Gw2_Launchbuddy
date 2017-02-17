@@ -477,7 +477,7 @@
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
 
-                        <Label Content="GFX Manager" FontSize="16" FontWeight="Bold"/>
+                        <Label Content="GFX Configurator" FontSize="16" FontWeight="Bold"/>
                         <DockPanel Grid.Row="2" Margin="0,5,0,0" Grid.ColumnSpan="2" LastChildFill="False">
                             <Button x:Name="bt_applygfx" DockPanel.Dock="Right" Width="200" Content="Apply Permanent" Click="bt_applygfx_Click"/>
                             <Button x:Name="bt_loadgfx"  DockPanel.Dock="Left" Content="Load Config"  Width="100" Click="bt_loadgfx_Click" Margin="0,0,5,0"/>

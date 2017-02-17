@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gw2_Launchbuddy"
         mc:Ignorable="d"
-        Title="GUI_ApplicationManager" Height="300" Width="160" ResizeMode="CanResize" WindowStartupLocation="Manual" Topmost="True" WindowStyle="None" Loaded="Window_Loaded" AllowsTransparency="True" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown" Initialized="Window_Initialized">
+        Title="Game Instances" Height="300" Width="160" ResizeMode="CanResize" WindowStartupLocation="Manual" Topmost="True" WindowStyle="None" Loaded="Window_Loaded" AllowsTransparency="True" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown" Initialized="Window_Initialized" Icon="launchbuddy.ico">
 
     <Grid Background="#FF706E6E">
         <Grid.OpacityMask>
@@ -15,6 +15,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="100*"/>
         </Grid.RowDefinitions>
+        <Label Content="Game Instances" FontSize="16" FontStyle="Italic"/>
         <Button x:Name="bt_close" Width="30" Height="30" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" HorizontalAlignment="Right" VerticalAlignment="Top" Click="bt_close_Click">
             <Image Source="Resources/Icons/error.png"/>
         </Button>

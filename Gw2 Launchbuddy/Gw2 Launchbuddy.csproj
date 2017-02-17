@@ -156,6 +156,9 @@
       <DependentUpon>GUI_ApplicationManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="HandleManager.cs" />
+    <Compile Include="Popup.xaml.cs">
+      <DependentUpon>Popup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -196,6 +199,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Popup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SetupInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -305,6 +312,7 @@
     <Resource Include="Resources\Icons\user.png" />
     <Resource Include="Resources\Icons\close.png" />
     <Resource Include="Resources\Icons\focus.png" />
+    <Resource Include="Resources\donate.png" />
     <Content Include="Resources\Xceed.Wpf.Toolkit.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

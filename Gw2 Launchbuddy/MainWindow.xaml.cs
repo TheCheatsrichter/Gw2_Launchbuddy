@@ -198,6 +198,18 @@ namespace Gw2_Launchbuddy
             //ENABLE THIS BEFORE RELEASE!! ##########################################################################################
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionReport);
 #endif
+
+            //LB statistics
+            Properties.Settings.Default.counter_launches += 1;
+            Properties.Settings.Default.Save();
+
+
+#if DEBUG
+            Properties.Settings.Default.counter_launches = 5;
+#endif
+
+            //Setup
+            donatepopup();
             accountlist.Clear(); //clearing accountlist
             fillargs(); //create arglist
             loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
@@ -211,6 +223,15 @@ namespace Gw2_Launchbuddy
             Thread checklbver = new Thread(checklbversion);
             checklbver.Start();
             
+        }
+
+        void donatepopup()
+        {
+            if ((Properties.Settings.Default.counter_launches % 100) == 5)
+            {
+                Popup popup = new Popup();
+                popup.Show();
+            }
         }
 
         private void checklbversion()
@@ -1784,7 +1805,7 @@ namespace Gw2_Launchbuddy
             SettingsGrid.Visibility = SettingsGrid.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
         }
 
-        #region Old Handle Method Functions
+#region Old Handle Method Functions
         void checksetup()
         {
             try
@@ -1866,7 +1887,7 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show(e.Message);
             }
         }
-        #endregion
+#endregion
 
         private void CheckBox_Checked(Object sender, RoutedEventArgs e)
         {
