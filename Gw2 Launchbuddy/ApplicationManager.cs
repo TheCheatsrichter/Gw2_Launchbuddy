@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Security.Cryptography;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Gw2_Launchbuddy
 {
@@ -128,6 +129,7 @@ namespace Gw2_Launchbuddy
                     //Thread.Sleep(1000);
                     //Register the new client to prevent problems.
                     updateRegClients(procMD5(gw2pro));
+                    Thread.Sleep(3000);
                 }
                 catch (Exception err)
                 {

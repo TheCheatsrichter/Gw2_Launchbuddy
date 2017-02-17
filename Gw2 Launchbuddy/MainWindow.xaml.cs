@@ -146,6 +146,17 @@ namespace Gw2_Launchbuddy
             }
             public DateTime Time { get; set; }
             public string Nick { get; set; }
+            public string Configpath { set; get; }
+            /*
+            public string Configname
+            {
+                get {
+                    if(Configpath != null || Configpath!="")
+                    return Path.GetFileNameWithoutExtension(Configpath);
+                    return null;
+                }
+            }
+            */
         }
 
         public class CinemaImage
@@ -2155,6 +2166,23 @@ namespace Gw2_Launchbuddy
                 (sender as Button).Content = "Download";
             }
         }
+        /*
+        private void bt_selectaccgfx_Click(object sender, RoutedEventArgs e)
+        {
+            Account acc = (sender as Button).DataContext as Account;
+            System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
+            filedialog.DefaultExt = "xml";
+            filedialog.Multiselect = false;
+            filedialog.Filter = "GFX Files(*.xml) | *.xml";
+            filedialog.ShowDialog();
+
+            if (filedialog.FileName != "")
+            {
+                acc.Configpath = filedialog.FileName;
+                (sender as Button).Content = acc.Configname;
+            }
+        }
+        */
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {

@@ -33,9 +33,9 @@
                                     <DataTemplate>
                                         <DockPanel Height="50">
                                             <Image DataContext="{Binding Path=acc}"  Source="{Binding Path=Icon}"></Image>
-                                            <StackPanel>
-                                                <Label DataContext="{Binding Path=acc}" Content="{Binding Path=Nick}" FontWeight="Bold" Margin="0,-5,0,0"/>
-                                                <StackPanel Orientation="Horizontal">
+                                            <DockPanel>
+                                                <Label DataContext="{Binding Path=acc}" Content="{Binding Path=Nick}" FontWeight="Bold" Margin="0,-5,0,0" DockPanel.Dock="Top"/>
+                                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                                                     <Button x:Name="bt_maxmin" Click="bt_maxmin_Click" Width="25">
                                                         <Image Source="Resources/Icons/focus.png"/>
                                                     </Button>
@@ -43,7 +43,7 @@
                                                         <Image Source="Resources/Icons/close.png"/>
                                                     </Button>
                                                 </StackPanel>
-                                            </StackPanel>
+                                            </DockPanel>
                                         </DockPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
