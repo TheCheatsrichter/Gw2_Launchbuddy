@@ -83,6 +83,35 @@ namespace Gw2_Launchbuddy
             return foot;
         }
 
+        public static void UseGFX(string path)
+        {
+            if (path == "Default" || path == null)
+                return;
+
+            if (File.Exists(path) && Path.GetExtension(path) ==".xml")
+            {
+                if (!File.Exists(Globals.AppdataPath + "GFX_tmp.xml"))
+                {
+                    File.Move(Globals.ClientXmlpath, Globals.AppdataPath + "GFX_tmp.xml");
+                }
+                if (File.Exists(Globals.ClientXmlpath))
+                {
+                    File.Delete(Globals.ClientXmlpath);
+                }
+                File.Copy(path,Globals.ClientXmlpath);
+            }
+        }
+
+        public static void RestoreDefault()
+        {
+            if (File.Exists(Globals.AppdataPath + "GFX_tmp.xml"))
+            {
+                if (File.Exists(Globals.ClientXmlpath))File.Delete(Globals.ClientXmlpath);
+                File.Move(Globals.AppdataPath + "GFX_tmp.xml", Globals.ClientXmlpath);
+            }
+        }
+
+
         public static string[] ToXml(string dest)
         {
             //ToDo: Add Resolution Option and Gamma Slider

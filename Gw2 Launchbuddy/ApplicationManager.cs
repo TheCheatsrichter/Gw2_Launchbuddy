@@ -46,6 +46,9 @@ namespace Gw2_Launchbuddy
             {
                 launchgw2();
             }
+
+            GFXManager.RestoreDefault();
+
             Globals.Appmanager.Show();
             Globals.Appmanager.Topmost= true;
             Globals.Appmanager.Focus();
@@ -107,6 +110,7 @@ namespace Gw2_Launchbuddy
                 if (accnr != null)
                 {
                     Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, Globals.selected_accs[(int)accnr]));
+                    GFXManager.UseGFX(Globals.selected_accs[(int)accnr].Configpath);
                 }
                 else
                 {

@@ -146,17 +146,22 @@ namespace Gw2_Launchbuddy
             }
             public DateTime Time { get; set; }
             public string Nick { get; set; }
-            public string Configpath { set; get; }
-            /*
-            public string Configname
-            {
+
+            public string Configpath {
+                set {
+                    configpath = value;
+                    Configname = Path.GetFileNameWithoutExtension(value);
+                }
                 get {
-                    if(Configpath != null || Configpath!="")
-                    return Path.GetFileNameWithoutExtension(Configpath);
-                    return null;
+                    if (configpath != "" && configpath != null)
+                    return configpath;
+                    return "Default";
                 }
             }
-            */
+
+            public string configpath { set; get; }
+            public string Configname { set; get; }
+            
         }
 
         public class CinemaImage
@@ -1113,7 +1118,7 @@ namespace Gw2_Launchbuddy
                 aes_accountlist.Clear();
                 foreach (Account acc in accountlist)
                 {
-                    aes_accountlist.Add(new Account { Nick = acc.Nick, Email = acc.Email, Password = crypt.Encrypt(acc.Password), Time = acc.Time , iconpath=acc.iconpath });
+                    aes_accountlist.Add(new Account { Nick = acc.Nick, Email = acc.Email, Password = crypt.Encrypt(acc.Password), Time = acc.Time , iconpath=acc.iconpath , Configpath=acc.Configpath });
                 }
             }
             catch (Exception err)
@@ -1152,7 +1157,7 @@ namespace Gw2_Launchbuddy
 
                         foreach (Account acc in aes_accountlist)
                         {
-                            accountlist.Add(new Account { Nick = acc.Nick, Email = acc.Email, Password = crypt.Decrypt(acc.Password), Time = acc.Time, Iconpath= acc.iconpath });
+                            accountlist.Add(new Account { Nick = acc.Nick, Email = acc.Email, Password = crypt.Decrypt(acc.Password), Time = acc.Time, Iconpath= acc.iconpath , Configpath=acc.Configpath });
                         }
 
                         listview_acc.ItemsSource = Cinema_Accountlist.ItemsSource = accountlist;
@@ -2166,7 +2171,7 @@ namespace Gw2_Launchbuddy
                 (sender as Button).Content = "Download";
             }
         }
-        /*
+
         private void bt_selectaccgfx_Click(object sender, RoutedEventArgs e)
         {
             Account acc = (sender as Button).DataContext as Account;
@@ -2182,7 +2187,6 @@ namespace Gw2_Launchbuddy
                 (sender as Button).Content = acc.Configname;
             }
         }
-        */
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
