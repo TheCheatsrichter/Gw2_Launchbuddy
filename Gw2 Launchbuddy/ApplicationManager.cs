@@ -38,22 +38,24 @@ namespace Gw2_Launchbuddy
                 //HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
             }
 
+            Globals.Appmanager.Show();
+            Globals.Appmanager.Topmost = true;
+            Globals.Appmanager.Focus();
+            Globals.Appmanager.WindowState = WindowState.Normal;
+
             //Launching the application with arguments
             if (Globals.selected_accs.Count > 0)
             {
-                for (int i = 0; i <= Globals.selected_accs.Count - 1; i++) launchgw2(i);
+                for (int i = 0; i <= Globals.selected_accs.Count - 1; i++)
+                {
+                    launchgw2(i);
+                }
             } else
             {
                 launchgw2();
             }
 
             GFXManager.RestoreDefault();
-
-            Globals.Appmanager.Show();
-            Globals.Appmanager.Topmost= true;
-            Globals.Appmanager.Focus();
-            Globals.Appmanager.WindowState = WindowState.Normal;
-
 
             //Launching AddOns
             try

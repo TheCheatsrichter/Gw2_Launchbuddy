@@ -63,7 +63,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        void CheckPros()
+        public void CheckPros()
         {
             ObservableCollection<ProAccBinding> ToRemove = new ObservableCollection<Gw2_Launchbuddy.ProAccBinding>();
             foreach(ProAccBinding proacc in Globals.LinkedAccs)

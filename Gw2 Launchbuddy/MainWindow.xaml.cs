@@ -1188,7 +1188,7 @@ namespace Gw2_Launchbuddy
             {
                 if (tb_passw.Password.Length > 4)
                 {
-                    Account acc = new Account { Nick = tb_nick.Text, Email = tb_email.Text, Password = tb_passw.Password, Time = DateTime.Now };
+                    Account acc = new Account { Nick = tb_nick.Text, Email = tb_email.Text, Password = tb_passw.Password, Time = DateTime.Now ,Configpath="Default" };
                     accountlist.Add(acc);
                     listview_acc.ItemsSource = accountlist;
                     tb_email.Clear();
@@ -1243,6 +1243,11 @@ namespace Gw2_Launchbuddy
 
         private void listview_acc_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            bt_accsortup.IsEnabled = true;
+            bt_accsortdown.IsEnabled = true;
+            bt_accedit.IsEnabled = true;
+            bt_remacc.IsEnabled = true;
+
             Account selectedacc = listview_acc.SelectedItem as Account;
 
             Globals.selected_accs = ((ListView)sender).SelectedItems.Cast<Account>().ToList();

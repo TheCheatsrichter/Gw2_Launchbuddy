@@ -304,7 +304,7 @@
                     <ColumnDefinition Width="50*"/>
                     <ColumnDefinition Width="50*"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <Button x:Name="bt_launch" Grid.ColumnSpan="2"  Click="bt_launch_Click" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0" BorderBrush="Black" Background="#CC000000">
                     <Label Content="Launch Guild Wars 2" Background="Black" Foreground="White" FontSize="18" FontStyle="Italic"/>
                 </Button>
@@ -418,10 +418,10 @@
                         </Grid.RowDefinitions>
                         <StackPanel Grid.ColumnSpan="5" Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Right">
                             <Button x:Name="bt_addacc" Content="Add" Click="bt_addacc_Click" IsEnabled="False" Width="100"  Margin="5,3"/>
-                            <Button x:Name="bt_accedit" Content="Edit" Margin="3" IsEnabled="True" Width="100" Click="bt_accedit_Click"/>
+                            <Button x:Name="bt_accedit" Content="Edit" Margin="3" IsEnabled="False" Width="100" Click="bt_accedit_Click"/>
                             <Button x:Name="bt_remacc" Content="Remove" IsEnabled="False" Click="bt_remacc_Click" Width="100" Margin="5,3" />
-                            <Button x:Name="bt_accsortup" Content="↑" IsEnabled="True" Margin="3" Width="30" Click="bt_accsortup_Click"/>
-                            <Button x:Name="bt_accsortdown" Content="↓" IsEnabled="True" Margin="3" Width="30" Click="bt_accsortdown_Click"/>
+                            <Button x:Name="bt_accsortup" Content="↑" IsEnabled="False" Margin="3" Width="30" Click="bt_accsortup_Click"/>
+                            <Button x:Name="bt_accsortdown" Content="↓" IsEnabled="False" Margin="3" Width="30" Click="bt_accsortdown_Click"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5">
                             <Label x:Name="lab_nick" Content="Nickname:" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Center"/>
@@ -436,7 +436,7 @@
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Nickname" Width="150" DisplayMemberBinding="{Binding Nick}" />
-                                    <GridViewColumn Header="Email" Width="200" DisplayMemberBinding="{Binding DisplayEmail}" />
+                                    <GridViewColumn Header="Email" Width="150" DisplayMemberBinding="{Binding DisplayEmail}" />
                                     <GridViewColumn Header="Created at" Width="150" DisplayMemberBinding="{Binding Time}" />
                                     <GridViewColumn Header="Icon" Width="64">
                                         <GridViewColumn.CellTemplate>
@@ -449,15 +449,15 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    
-                                    <GridViewColumn Header="GFX" Width="100">
+
+                                    <GridViewColumn Header="Graphic Config" Width="100">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Button Content="{Binding Configname}" Height="32" x:Name="bt_selectaccgfx" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="bt_selectaccgfx_Click" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    
+
                                 </GridView>
                             </ListView.View>
                         </ListView>
