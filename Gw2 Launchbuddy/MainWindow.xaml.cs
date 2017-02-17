@@ -2193,6 +2193,11 @@ namespace Gw2_Launchbuddy
             }
         }
 
+        private void bt_bugreport_Click(object sender, RoutedEventArgs e)
+        {
+            CrashReporter.ReportCrashToAll(new Exception("Bugreport"));
+        }
+
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var endpos = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];

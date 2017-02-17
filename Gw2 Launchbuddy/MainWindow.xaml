@@ -174,7 +174,7 @@
             </Label>
         </StackPanel>
 
-        <Image x:Name="img_slideshow" Source="Resources/loginwindow.png" Grid.ColumnSpan="5" Grid.RowSpan="5" RenderTransformOrigin="0.5,0.5">
+        <Image x:Name="img_slideshow" Source="Resources/loginwindow.png" Grid.ColumnSpan="2" Grid.RowSpan="3" RenderTransformOrigin="0.5,0.5">
             <Image.OpacityMask>
                 <ImageBrush ImageSource="Resources/logo_hq_mask.png" Stretch="Uniform"/>
             </Image.OpacityMask>
@@ -789,7 +789,6 @@
                 <TabItem Header="LB Settings">
                     <StackPanel>
                         <Label Content="Launchbuddy Settings" FontWeight="Bold" FontSize="16"/>
-                        <Separator Margin="3"/>
                         <!-- Content="Settings" FontWeight="Bold" FontSize="14"/>
                         <StackPanel Margin="5">
                             <CheckBox Content="Use Graphical Gameinstance Manager" />
@@ -798,6 +797,7 @@
                         
                         <Separator Margin="5"/>
                         -->
+                        <Separator Margin="3"/>
                         <Label Content="Launchbuddy Releases" FontSize="14" FontWeight="Bold"/>
                         <Grid Height="250" Margin="3">
                             <Grid.ColumnDefinitions>
@@ -822,6 +822,9 @@
                             <WebBrowser x:Name="wb_releasedescr" Grid.Row="1" Grid.Column="1" Margin="3,0,0,0"/>
                             <Button x:Name="bt_downloadrelease" Grid.Row="2" Grid.ColumnSpan="2" Margin="3" Content="Download" Click="bt_downloadrelease_Click" IsEnabled="False"/>
                         </Grid>
+                        <Separator Margin="-3,100,0,0"/>
+                        <Button x:Name="bt_bugreport" Content="Report a Bug" Margin="5" Click="bt_bugreport_Click"/>
+                        <Separator/>
                     </StackPanel>
                 </TabItem>
 
