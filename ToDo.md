@@ -6,12 +6,12 @@ Goals for Version 2.0:
 - [ ] Seperating Serverselection from MainWindow
 - [x] GFX Manager for individual graphic settings
 - [x] Cinemamode Prototype
-- [ ] QoL changes for Accountmanagement
+- [x] QoL changes for Accountmanagement
 - [ ] UI Polish
 - [ ] Toolbox information
-- [ ] Handling multiple Game instances via UI
+- [x] Handling multiple Game instances via UI
 - [ ] Fixing Mutex Closing Bugs
-- [ ] Update function for Launchbuddy
+- [x] Update function for Launchbuddy
 
 Eventually:
 
@@ -19,4 +19,4 @@ Eventually:
 - [ ] Custom Cinemamode animations
 - [ ] Custom UI foundation
 - [ ] Custom Music Setup
-- [ ] Ingame Overlay
+- [x] Ingame Overlay
