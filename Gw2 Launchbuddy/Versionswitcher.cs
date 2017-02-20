@@ -40,7 +40,7 @@ namespace Gw2_Launchbuddy
             }
             if (newest_version.ToString() != "0.0")
             {
-                MessageBoxResult win = MessageBox.Show("A new Version of Gw2 Launchbuddy is available!\n\nDo you want to update to Gw2 Launchbuddy V" + newest_version.ToString() + "?\n\nIt is also possible to manually update Launchbuddy via the 'LB settings' tab", "Release Download", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                MessageBoxResult win = MessageBox.Show("A new Version of Gw2 Launchbuddy is available!\n\nDo you want to update to Gw2 Launchbuddy V" + newest_version.ToString() + "?\n\nIt is also possible to manually update Launchbuddy or to disable the autoupdatecheck in the 'LB settings' tab", "Release Download", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (win.ToString() == "Yes")
                 {
                     ApplyReleasebyThread(newest_release);

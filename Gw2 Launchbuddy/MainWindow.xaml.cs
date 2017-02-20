@@ -203,9 +203,8 @@ namespace Gw2_Launchbuddy
             Properties.Settings.Default.counter_launches += 1;
             Properties.Settings.Default.Save();
 
-
 #if DEBUG
-            Properties.Settings.Default.counter_launches = 5;
+            Properties.Settings.Default.counter_launches = 1;
 #endif
 
             //Setup
@@ -219,10 +218,20 @@ namespace Gw2_Launchbuddy
             checkver.Start();
             cinema_setup();
             LoadAddons();
+            SettingsTabSetup();
             AddOnManager.LaunchLbAddons();
-            Thread checklbver = new Thread(checklbversion);
-            checklbver.Start();
+            if (Properties.Settings.Default.notifylbupdate)
+            {
+                Thread checklbver = new Thread(checklbversion);
+                checklbver.Start();
+            }
             
+        }
+
+        void SettingsTabSetup()
+        {
+            cb_lbupdatescheck.IsChecked = Properties.Settings.Default.notifylbupdate;
+            cb_useinstancegui.IsChecked = Properties.Settings.Default.useinstancegui;
         }
 
         void donatepopup()
@@ -240,14 +249,14 @@ namespace Gw2_Launchbuddy
             {
                 bt_downloadrelease.Content = "Fetching Releaselist please wait";
             }));
-            
+
             Versionswitcher.CheckForUpdate();
             Dispatcher.Invoke(new Action(() =>
             {
                 lv_lbversions.ItemsSource = Versionswitcher.Releaselist;
                 bt_downloadrelease.Content = "Download";
             }));
-            
+
         }
 
         private void checklibraries()
@@ -1461,6 +1470,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_close_Click(object sender, RoutedEventArgs e)
         {
+            Properties.Settings.Default.Save();
             Application.Current.Shutdown();
         }
 
@@ -2217,6 +2227,24 @@ namespace Gw2_Launchbuddy
         private void bt_bugreport_Click(object sender, RoutedEventArgs e)
         {
             CrashReporter.ReportCrashToAll(new Exception("Bugreport"));
+        }
+
+        private void bt_fetchlbversions_Click(object sender, RoutedEventArgs e)
+        {
+            Thread checkforlbupdate = new Thread(checklbversion);
+            checkforlbupdate.Start();
+        }
+
+        private void cb_lbupdatescheck_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.notifylbupdate = (bool)cb_lbupdatescheck.IsChecked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void cb_useinstancegui_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.useinstancegui= (bool)cb_useinstancegui.IsChecked;
+            Properties.Settings.Default.Save();
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

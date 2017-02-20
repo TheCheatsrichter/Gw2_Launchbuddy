@@ -32,10 +32,10 @@
                             <GridViewColumn>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <DockPanel Height="50">
-                                            <Image DataContext="{Binding Path=acc}"  Source="{Binding Path=Icon}"></Image>
+                                        <DockPanel Height="50" >
+                                            <Image DataContext="{Binding Path=acc}" Width="45" Height="45" Source="{Binding Path=Icon}"></Image>
                                             <DockPanel>
-                                                <Label DataContext="{Binding Path=acc}" Content="{Binding Path=Nick}" FontWeight="Bold" Margin="0,-5,0,0" DockPanel.Dock="Top"/>
+                                                <Label DataContext="{Binding Path=acc}" Content="{Binding Path=Nick}" Width="100" FontWeight="Bold" Margin="0,-5,0,0" DockPanel.Dock="Top"/>
                                                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                                                     <Button x:Name="bt_maxmin" Click="bt_maxmin_Click" Width="25">
                                                         <Image Source="Resources/Icons/focus.png"/>

@@ -38,10 +38,20 @@ namespace Gw2_Launchbuddy
                 //HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
             }
 
-            Globals.Appmanager.Show();
-            Globals.Appmanager.Topmost = true;
-            Globals.Appmanager.Focus();
-            Globals.Appmanager.WindowState = WindowState.Normal;
+            if (Gw2_Launchbuddy.Properties.Settings.Default.useinstancegui)
+            {
+                if (Globals.Appmanager != null && Globals.Appmanager.Visibility == Visibility.Visible)
+                {
+                    Globals.Appmanager.Topmost = true;
+                    Globals.Appmanager.Focus();
+                    Globals.Appmanager.WindowState = WindowState.Normal;
+                }
+                else
+                {
+                    Globals.Appmanager.Show();
+                }
+
+            }
 
             //Launching the application with arguments
             if (Globals.selected_accs.Count > 0)

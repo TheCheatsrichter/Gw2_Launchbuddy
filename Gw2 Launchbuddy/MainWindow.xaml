@@ -167,7 +167,7 @@
             <RowDefinition x:Name="CinemaHeight" Height="100*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" HorizontalAlignment="Left">
-            <Label Content="Gw2 Launchbuddy V1.4 BETA" FontSize="16" FontWeight="Bold" Foreground="White" >
+            <Label Content="Gw2 Launchbuddy V1.4.1 BETA" FontSize="16" FontWeight="Bold" Foreground="White" >
                 <Label.Background>
                     <ImageBrush ImageSource="Resources/opacitymask.png"/>
                 </Label.Background>
@@ -798,6 +798,8 @@
                         <Separator Margin="5"/>
                         -->
                         <Separator Margin="3"/>
+                        <CheckBox x:Name="cb_lbupdatescheck" Content="Automatically Check for Launchbuddy Updates" Margin="5" Click="cb_lbupdatescheck_Click"/>
+                        <CheckBox x:Name="cb_useinstancegui" Content="Use Game Instance GUI" Margin="5" Click="cb_useinstancegui_Click"/>
                         <Label Content="Launchbuddy Releases" FontSize="14" FontWeight="Bold"/>
                         <Grid Height="250" Margin="3">
                             <Grid.ColumnDefinitions>
@@ -820,7 +822,11 @@
                                 </ListView.View>
                             </ListView>
                             <WebBrowser x:Name="wb_releasedescr" Grid.Row="1" Grid.Column="1" Margin="3,0,0,0"/>
-                            <Button x:Name="bt_downloadrelease" Grid.Row="2" Grid.ColumnSpan="2" Margin="3" Content="Download" Click="bt_downloadrelease_Click" IsEnabled="False"/>
+                            <DockPanel  Grid.Row="2" Grid.ColumnSpan="2">
+                                <Button x:Name="bt_fetchlbversions" Margin="3" Content="Check for Updates" DockPanel.Dock="Left" Click="bt_fetchlbversions_Click"/>
+                                <Button x:Name="bt_downloadrelease" Margin="3" Content="Download" Click="bt_downloadrelease_Click" IsEnabled="False" DockPanel.Dock="Right"/>
+                            </DockPanel>
+                           
                         </Grid>
                         <Separator Margin="-3,100,0,0"/>
                         <Button x:Name="bt_bugreport" Content="Report a Bug" Margin="5" Click="bt_bugreport_Click"/>

@@ -250,5 +250,29 @@ namespace Gw2_Launchbuddy.Properties {
                 this["counter_launches"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool notifylbupdate {
+            get {
+                return ((bool)(this["notifylbupdate"]));
+            }
+            set {
+                this["notifylbupdate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool useinstancegui {
+            get {
+                return ((bool)(this["useinstancegui"]));
+            }
+            set {
+                this["useinstancegui"] = value;
+            }
+        }
     }
 }
