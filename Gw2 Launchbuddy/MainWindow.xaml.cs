@@ -585,7 +585,7 @@ namespace Gw2_Launchbuddy
         {
             try
             {
-                if (!isclientuptodate())
+                if (!isclientuptodate() && Globals.version_api!=null)
                 {
 
                     Dispatcher.Invoke(new Action(() =>
@@ -611,9 +611,17 @@ namespace Gw2_Launchbuddy
                     }
                     else
                     {
-                        Globals.ClientIsUptodate = false;
-                        versioninfo += "\tStatus: outdated!";
-                        lab_version.Foreground = new SolidColorBrush(Colors.Red);
+                        if(Globals.version_api != null)
+                        {
+                            versioninfo += "\tStatus: outdated!";
+                            lab_version.Foreground = new SolidColorBrush(Colors.Red);
+                        }else
+                        {
+                            Globals.ClientIsUptodate = true;
+                            versioninfo += "\tStatus: unknown!(API down)";
+                            lab_version.Foreground = new SolidColorBrush(Colors.Red);
+                        }
+
                     }
 
                     lab_version.Content = versioninfo;
@@ -628,9 +636,18 @@ namespace Gw2_Launchbuddy
 
         bool isclientuptodate()
         {
+            
             WebClient downloader = new WebClient();
             Regex filter = new Regex(@"\d*\d");
-            Globals.version_api = filter.Match(downloader.DownloadString("https://api.guildwars2.com/v2/build")).Value;
+            try {
+                Globals.version_api = filter.Match(downloader.DownloadString("https://api.guildwars2.com/v2/build")).Value;
+            }
+            catch
+            {
+                Globals.ClientIsUptodate = true;
+                MessageBox.Show("The official Gw2 API is not reachable / down! Launchbuddy can't make sure that your gameclient is uptodate.\nPlease keep your game manually uptodate to avoid crashes!");
+            }
+            
 
             if (Globals.version_api == Globals.version_client) return true;
             return false;

@@ -167,7 +167,7 @@
             <RowDefinition x:Name="CinemaHeight" Height="100*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" HorizontalAlignment="Left">
-            <Label Content="Gw2 Launchbuddy V1.4.1 BETA" FontSize="16" FontWeight="Bold" Foreground="White" >
+            <Label Content="Gw2 Launchbuddy V1.4.2 BETA" FontSize="16" FontWeight="Bold" Foreground="White" >
                 <Label.Background>
                     <ImageBrush ImageSource="Resources/opacitymask.png"/>
                 </Label.Background>
