@@ -53,6 +53,12 @@ namespace Gw2_Launchbuddy
         {
             WebClient wc = new WebClient();
             string dest = Globals.exepath + "Gw2_Launchbuddy_" + rel.Version + ".exe";
+            int i = 2;
+            while (System.IO.File.Exists(dest))
+            {
+                dest = Globals.exepath + "Gw2_Launchbuddy_" + rel.Version + "_("+ i.ToString()+").exe";
+                i++;
+            }
             wc.DownloadFile(rel.DownloadURL, dest);
             Process newlaunchbuddy = new Process { StartInfo = new ProcessStartInfo(dest) };
             newlaunchbuddy.Start();
@@ -67,6 +73,12 @@ namespace Gw2_Launchbuddy
         {
             WebClient wc = new WebClient();
             string dest = Globals.exepath + "Gw2_Launchbuddy_" + rel.Version + ".exe";
+            int i = 2;
+            while (System.IO.File.Exists(dest))
+            {
+                dest = Globals.exepath + "Gw2_Launchbuddy_" + rel.Version + "_(" + i.ToString() + ").exe";
+                i++;
+            }
             wc.DownloadFile(rel.DownloadURL,dest);
             Process.Start(Globals.exepath);
             System.Windows.Application.Current.Shutdown();
