@@ -157,9 +157,17 @@ namespace Gw2_Launchbuddy
             {
                 if ((addon.IsMultilaunch || addon.ChildProcess.Count <= 0) && !addon.IsLbAddon)
                 {
-                    Process addon_pro = new Process { StartInfo = addon.Info };
-                    addon.ChildProcess.Add(addon_pro);
-                    addon_pro.Start();
+                    try
+                    {
+                        Process addon_pro = new Process { StartInfo = addon.Info };
+                        addon.ChildProcess.Add(addon_pro);
+                        addon_pro.Start();
+                    }
+                    catch
+                    {
+                        MessageBox.Show(addon.Name + " could not be started!\nMake sure that the entered path is correct!");
+                    }
+                    
                 }
             }
         }
@@ -171,9 +179,16 @@ namespace Gw2_Launchbuddy
             {
                 if((addon.IsMultilaunch ||  addon.ChildProcess.Count <= 0) && addon.IsLbAddon)
                 {
-                    Process addon_pro = new Process { StartInfo = addon.Info };
-                    addon.ChildProcess.Add(addon_pro);
-                    addon_pro.Start();
+                    try
+                    {
+                        Process addon_pro = new Process { StartInfo = addon.Info };
+                        addon.ChildProcess.Add(addon_pro);
+                        addon_pro.Start();
+                    }
+                    catch (Exception e)
+                    {
+                        CrashReporter.ReportCrashToAll(e);
+                    }
                 }
             }
         }

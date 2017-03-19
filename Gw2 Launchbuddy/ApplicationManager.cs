@@ -8,9 +8,23 @@ using System.Windows;
 using System.Security.Cryptography;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Gw2_Launchbuddy
 {
+
+    public class ProAccBinding
+    {
+        public Process pro { set; get; }
+        public MainWindow.Account acc { set; get; }
+
+        public ProAccBinding(Process tpro,MainWindow.Account tacc = null)
+        {
+            this.pro = tpro;
+            this.acc = tacc;
+        }
+    }
+
     static class LaunchManager
     {
         private static List<int> nomutexpros = new List<int>();
@@ -25,6 +39,21 @@ namespace Gw2_Launchbuddy
                 //HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
             }
 
+            if (Gw2_Launchbuddy.Properties.Settings.Default.useinstancegui)
+            {
+                if (Globals.Appmanager != null && Globals.Appmanager.Visibility == Visibility.Visible)
+                {
+                    Globals.Appmanager.Topmost = true;
+                    Globals.Appmanager.Focus();
+                    Globals.Appmanager.WindowState = WindowState.Normal;
+                }
+                else
+                {
+                    Globals.Appmanager.Show();
+                }
+
+            }
+
             //Launching the application with arguments
             if (Globals.selected_accs.Count > 0)
             {
@@ -35,6 +64,7 @@ namespace Gw2_Launchbuddy
                 await launchgw2();
             }
 
+            GFXManager.RestoreDefault();
 
             //Launching AddOns
             try
@@ -89,6 +119,16 @@ namespace Gw2_Launchbuddy
                 gw2proinfo.Arguments = Globals.args.Print(accnr);
                 gw2proinfo.WorkingDirectory = Globals.exepath;
                 Process gw2pro = new Process { StartInfo = gw2proinfo };
+                if (accnr != null)
+                {
+                    Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, Globals.selected_accs[(int)accnr]));
+                    GFXManager.UseGFX(Globals.selected_accs[(int)accnr].Configpath);
+                }
+                else
+                {
+                    MainWindow.Account undefacc = new MainWindow.Account { Email = "-", Nick = "Acc Nr"+Globals.LinkedAccs.Count };
+                    Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, undefacc));
+                }
 
                 try
                 {
@@ -105,6 +145,7 @@ namespace Gw2_Launchbuddy
                     //Thread.Sleep(1000);
                     //Register the new client to prevent problems.
                     updateRegClients(procMD5(gw2pro));
+                    Thread.Sleep(3000);
                 }
                 catch (Exception err)
                 {

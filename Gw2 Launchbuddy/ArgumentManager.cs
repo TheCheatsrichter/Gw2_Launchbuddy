@@ -45,7 +45,7 @@ namespace Gw2_Launchbuddy
         public List<Argument> arguments { get; set; }
         public string Print(int? i = null)
         {
-            AddTemp("-shareArchive");
+            if (Globals.ClientIsUptodate) AddTemp("-shareArchive");
             try
             {
                 if (i == null)

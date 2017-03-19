@@ -12,7 +12,7 @@
 
     
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
-        Title="Gw2 Launchbuddy V 1.3.2" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1">
+        Title="Gw2 Launchbuddy V 1.4" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1">
     <Window.Resources>
         <Storyboard x:Key="anim_imgfadeout">
             <DoubleAnimation 
@@ -167,14 +167,14 @@
             <RowDefinition x:Name="CinemaHeight" Height="100*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" HorizontalAlignment="Left">
-            <Label Content="Gw2 Launchbuddy V1.3.2 BETA" FontSize="16" FontWeight="Bold" Foreground="White" >
+            <Label Content="Gw2 Launchbuddy V1.4.2 BETA" FontSize="16" FontWeight="Bold" Foreground="White" >
                 <Label.Background>
                     <ImageBrush ImageSource="Resources/opacitymask.png"/>
                 </Label.Background>
             </Label>
         </StackPanel>
 
-        <Image x:Name="img_slideshow" Source="Resources/loginwindow.png" Grid.ColumnSpan="5" Grid.RowSpan="5" RenderTransformOrigin="0.5,0.5">
+        <Image x:Name="img_slideshow" Source="Resources/loginwindow.png" Grid.ColumnSpan="2" Grid.RowSpan="3" RenderTransformOrigin="0.5,0.5">
             <Image.OpacityMask>
                 <ImageBrush ImageSource="Resources/logo_hq_mask.png" Stretch="Uniform"/>
             </Image.OpacityMask>
@@ -296,13 +296,19 @@
                 <Label Content="Used Addons:" x:Name="lab_usedaddons"/>
             </StackPanel>
 
-            <Grid Margin="5,5" Grid.Row="2">
+            <Grid Margin="5,5" Grid.Row="2" Background="Black">
+                <Grid.OpacityMask>
+                    <ImageBrush ImageSource="Resources/opacitymask.png"/>
+                </Grid.OpacityMask>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50*"/>
                     <ColumnDefinition Width="50*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="bt_launch" Content="Launch Gw2"  Click="bt_launch_Click" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0"  />
-                <Button x:Name="bt_shortcut" Content="Create Shortcut (Coming back soon)" Grid.Column="1" Grid.Row="1"  Click="bt_shortcut_Click" BorderThickness="1" Margin="5,0,0,0" IsEnabled="false"/>
+
+                <Button x:Name="bt_launch" Grid.ColumnSpan="2"  Click="bt_launch_Click" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0" BorderBrush="Black" Background="#CC000000">
+                    <Label Content="Launch Guild Wars 2" Background="Black" Foreground="White" FontSize="18" FontStyle="Italic"/>
+                </Button>
+                <!--<Button x:Name="bt_shortcut" Content="Create Shortcut (Coming back soon)" Grid.Column="1" Grid.Row="1"  Click="bt_shortcut_Click" BorderThickness="1" Margin="5,0,0,0" IsEnabled="false"/>-->
             </Grid>
 
             <TabControl x:Name="tab_options" Grid.Row="0" SelectionChanged="tab_options_SelectionChanged" MouseLeave="tab_options_MouseLeave">
@@ -408,22 +414,49 @@
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="100*"/>
                             <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
-                        <Button x:Name="bt_addacc" Content="Add" Click="bt_addacc_Click" IsEnabled="False"  Grid.Row="3" Grid.Column="3" Margin="5,3"/>
-                        <Button x:Name="bt_remacc" Content="Remove" IsEnabled="False" Click="bt_remacc_Click" Grid.Row="3" Grid.Column="4" Margin="5,3" />
-                        <Label x:Name="lab_nick" Content="Nickname:" IsEnabled="False" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left"  VerticalAlignment="Center"  IsEnabled="False" Height="26" Width="62" Grid.Row="2" Grid.Column="1" />
-                        <Label x:Name="lab_email" Content="Email:"  Grid.Row="2" d:LayoutOverrides="Width" VerticalAlignment="Center"/>
-                        <TextBox x:Name="tb_email" Height="23" Grid.Row="2" Margin="44,3.5,0,3.5" IsEnabled="False" />
-                        <PasswordBox x:Name="tb_passw" Height="23" IsEnabled="False" Grid.Row="2" Grid.Column="1" Margin="66,3.5,0,3.5"/>
-                        <TextBox x:Name="tb_nick" Height="23" Grid.Row="2" Grid.Column="2" Margin="68,3.5,0,3.5" IsEnabled="False"/>
+                        <StackPanel Grid.ColumnSpan="5" Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Right">
+                            <Button x:Name="bt_addacc" Content="Add" Click="bt_addacc_Click" IsEnabled="False" Width="100"  Margin="5,3"/>
+                            <Button x:Name="bt_accedit" Content="Edit" Margin="3" IsEnabled="False" Width="100" Click="bt_accedit_Click"/>
+                            <Button x:Name="bt_remacc" Content="Remove" IsEnabled="False" Click="bt_remacc_Click" Width="100" Margin="5,3" />
+                            <Button x:Name="bt_accsortup" Content="↑" IsEnabled="False" Margin="3" Width="30" Click="bt_accsortup_Click"/>
+                            <Button x:Name="bt_accsortdown" Content="↓" IsEnabled="False" Margin="3" Width="30" Click="bt_accsortdown_Click"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5">
+                            <Label x:Name="lab_nick" Content="Nickname:" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBox x:Name="tb_nick" Height="23" Width="150"  IsEnabled="False"/>
+                            <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left"  VerticalAlignment="Center"  IsEnabled="False" Height="26" Width="62" Grid.Row="2" Grid.Column="1" />
+                            <PasswordBox x:Name="tb_passw" Height="23" Width="150" IsEnabled="False" />
+                            <Label x:Name="lab_email" Content="Email:"  d:LayoutOverrides="Width" VerticalAlignment="Center"/>
+                            <TextBox x:Name="tb_email" Height="23" Width="150" IsEnabled="False" />
+                        </StackPanel>
                         <CheckBox x:Name="cb_login" Content="Use Autologin" FontSize="16" Checked="cb_login_Checked" Unchecked="cb_login_Unchecked" FontWeight="Bold" Grid.Row="0" Grid.ColumnSpan="4" />
                         <ListView ItemsSource="{Binding}" SelectionMode="Multiple" x:Name="listview_acc"  IsEnabled="False" SelectionChanged="listview_acc_SelectionChanged" Grid.Row="1" Grid.ColumnSpan="5">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Nickname" Width="150" DisplayMemberBinding="{Binding Nick}" />
-                                    <GridViewColumn Header="Email" Width="200" DisplayMemberBinding="{Binding DisplayEmail}" />
+                                    <GridViewColumn Header="Email" Width="150" DisplayMemberBinding="{Binding DisplayEmail}" />
                                     <GridViewColumn Header="Created at" Width="150" DisplayMemberBinding="{Binding Time}" />
+                                    <GridViewColumn Header="Icon" Width="64">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Height="32" Width="32" x:Name="bt_selecticon" Click="bt_selecticon_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                                                    <Grid>
+                                                        <Image Source="{Binding Icon}"/>
+                                                    </Grid>
+                                                </Button>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn Header="Graphic Config" Width="100">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="{Binding Configname}" Height="32" x:Name="bt_selectaccgfx" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="bt_selectaccgfx_Click" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
 
                                 </GridView>
                             </ListView.View>
@@ -432,6 +465,43 @@
 
                 </TabItem>
 
+                <TabItem Header="Graphic Settings">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*"/>
+                            <ColumnDefinition Width="50*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="100*"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Content="GFX Configurator" FontSize="16" FontWeight="Bold"/>
+                        <DockPanel Grid.Row="2" Margin="0,5,0,0" Grid.ColumnSpan="2" LastChildFill="False">
+                            <Button x:Name="bt_applygfx" DockPanel.Dock="Right" Width="200" Content="Apply Permanent" Click="bt_applygfx_Click"/>
+                            <Button x:Name="bt_loadgfx"  DockPanel.Dock="Left" Content="Load Config"  Width="100" Click="bt_loadgfx_Click" Margin="0,0,5,0"/>
+                            <Button x:Name="bt_savegfx"  DockPanel.Dock="Left" Content="Save Config"  Width="100" Click="bt_savegfx_Click" Margin="0,0,5,0"/>
+                            <Button x:Name="bt_resetgfx" DockPanel.Dock="Left" Content="Reset Config"  Width="100" Click="bt_resetgfx_Click" Margin="0,0,5,0"/>
+                        </DockPanel>
+
+                        <ListView x:Name="lv_gfx" Grid.ColumnSpan="2" Grid.Row="1" SelectionChanged="lv_gfx_SelectionChanged">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Parameter" Width="200"  DisplayMemberBinding="{Binding Name}"/>
+                                    <GridViewColumn Header="Setup" Width="250">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ComboBox ItemsSource="{Binding Path=IEOptions}" SelectedValue="{Binding Path=Value}" Width="200" SelectionChanged="ComboBox_SelectionChanged"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Previous" Width="150"  DisplayMemberBinding="{Binding Path=OldValue}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                </TabItem>
 
                 <TabItem Header="Serverselection">
 
@@ -554,7 +624,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Cinema Mode">
-                    
+
                     <StackPanel>
                         <Label Content="Cinema Mode (Changes may require restart): " FontSize="16" FontWeight="Bold" />
                         <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
@@ -716,6 +786,53 @@
 
                 </TabItem>
 
+                <TabItem Header="LB Settings">
+                    <StackPanel>
+                        <Label Content="Launchbuddy Settings" FontWeight="Bold" FontSize="16"/>
+                        <!-- Content="Settings" FontWeight="Bold" FontSize="14"/>
+                        <StackPanel Margin="5">
+                            <CheckBox Content="Use Graphical Gameinstance Manager" />
+                            <CheckBox Content="Search for new versions of Launchbuddy on Start"/>
+                        </StackPanel>
+                        
+                        <Separator Margin="5"/>
+                        -->
+                        <Separator Margin="3"/>
+                        <CheckBox x:Name="cb_lbupdatescheck" Content="Automatically Check for Launchbuddy Updates" Margin="5" Click="cb_lbupdatescheck_Click"/>
+                        <CheckBox x:Name="cb_useinstancegui" Content="Use Game Instance GUI" Margin="5" Click="cb_useinstancegui_Click"/>
+                        <Label Content="Launchbuddy Releases" FontSize="14" FontWeight="Bold"/>
+                        <Grid Height="250" Margin="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60*"/>
+                                <ColumnDefinition Width="40*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="150*"/>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+                            <Label Content="Description:" Grid.Row="0" Grid.Column="1" FontSize="14" FontWeight="Bold"/>
+                            <ListView x:Name="lv_lbversions" Grid.Row="0" Grid.RowSpan="2" SelectionChanged="ListView_SelectionChanged" IsSynchronizedWithCurrentItem="True">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding Name}"/>
+                                        <GridViewColumn Header="Version" Width="75" DisplayMemberBinding="{Binding Version}"/>
+                                        <GridViewColumn Header="Releasedate" Width="100" DisplayMemberBinding="{Binding Date}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <WebBrowser x:Name="wb_releasedescr" Grid.Row="1" Grid.Column="1" Margin="3,0,0,0"/>
+                            <DockPanel  Grid.Row="2" Grid.ColumnSpan="2">
+                                <Button x:Name="bt_fetchlbversions" Margin="3" Content="Check for Updates" DockPanel.Dock="Left" Click="bt_fetchlbversions_Click"/>
+                                <Button x:Name="bt_downloadrelease" Margin="3" Content="Download" Click="bt_downloadrelease_Click" IsEnabled="False" DockPanel.Dock="Right"/>
+                            </DockPanel>
+                           
+                        </Grid>
+                        <Separator Margin="-3,100,0,0"/>
+                        <Button x:Name="bt_bugreport" Content="Report a Bug" Margin="5" Click="bt_bugreport_Click"/>
+                        <Separator/>
+                    </StackPanel>
+                </TabItem>
 
             </TabControl>
 

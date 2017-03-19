@@ -214,5 +214,65 @@ namespace Gw2_Launchbuddy.Properties {
                 this["cinema_slideshowendscale"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double instance_win_X {
+            get {
+                return ((double)(this["instance_win_X"]));
+            }
+            set {
+                this["instance_win_X"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double instance_win_Y {
+            get {
+                return ((double)(this["instance_win_Y"]));
+            }
+            set {
+                this["instance_win_Y"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int counter_launches {
+            get {
+                return ((int)(this["counter_launches"]));
+            }
+            set {
+                this["counter_launches"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool notifylbupdate {
+            get {
+                return ((bool)(this["notifylbupdate"]));
+            }
+            set {
+                this["notifylbupdate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool useinstancegui {
+            get {
+                return ((bool)(this["useinstancegui"]));
+            }
+            set {
+                this["useinstancegui"] = value;
+            }
+        }
     }
 }
