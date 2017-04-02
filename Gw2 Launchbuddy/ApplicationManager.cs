@@ -59,7 +59,9 @@
             //Launching the application with arguments
             if (Globals.selected_accs.Count > 0)
             {
-                for (int i = 0; i <= Globals.selected_accs.Count - 1; i++) await launchgw2(i, i * 1000);
+                var delayValue = Properties.Settings.Default.delaybetweeninstaces 
+                    ? Properties.Settings.Default.secondsbetweeninstances * 1000 : 0;
+                for (int i = 0; i <= Globals.selected_accs.Count - 1; i++) await launchgw2(i, i * delayValue);
             }
             else
             {

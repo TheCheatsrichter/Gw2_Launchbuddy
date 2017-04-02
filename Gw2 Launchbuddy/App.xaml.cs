@@ -13,5 +13,10 @@ namespace Gw2_Serverselection
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            log4net.Config.XmlConfigurator.Configure();
+        }
     }
 }

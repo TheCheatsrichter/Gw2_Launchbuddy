@@ -222,6 +222,8 @@
         {
             cb_lbupdatescheck.IsChecked = Properties.Settings.Default.notifylbupdate;
             cb_useinstancegui.IsChecked = Properties.Settings.Default.useinstancegui;
+            cb_delaybetweeninstaces.IsChecked = Properties.Settings.Default.delaybetweeninstaces;
+            UpdateSecondsBetweenInstancesVisibility();
         }
 
         void donatepopup()
@@ -2305,6 +2307,28 @@
         private void cb_useinstancegui_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.useinstancegui = (bool)cb_useinstancegui.IsChecked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void cb_delaybetweeninstaces_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.delaybetweeninstaces = (bool)cb_delaybetweeninstaces.IsChecked;
+            Properties.Settings.Default.Save();
+            UpdateSecondsBetweenInstancesVisibility();
+        }
+
+        private void UpdateSecondsBetweenInstancesVisibility()
+        {
+            iud_secondsbetweeninstances.Value = Properties.Settings.Default.secondsbetweeninstances;
+            var newVisibility = Properties.Settings.Default.delaybetweeninstaces ? Visibility.Visible : Visibility.Hidden;
+            lab_delaylabel.Visibility = newVisibility;
+            iud_secondsbetweeninstances.Visibility = newVisibility;
+        }
+
+        private void iud_secondsbetweeninstances_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (iud_secondsbetweeninstances.Value == null) return;
+            Properties.Settings.Default.secondsbetweeninstances = iud_secondsbetweeninstances.Value.Value;
             Properties.Settings.Default.Save();
         }
 

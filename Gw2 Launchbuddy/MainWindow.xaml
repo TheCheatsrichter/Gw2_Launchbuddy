@@ -800,7 +800,12 @@
                         <Separator Margin="3"/>
                         <CheckBox x:Name="cb_lbupdatescheck" Content="Automatically Check for Launchbuddy Updates" Margin="5" Click="cb_lbupdatescheck_Click"/>
                         <CheckBox x:Name="cb_useinstancegui" Content="Use Game Instance GUI" Margin="5" Click="cb_useinstancegui_Click"/>
-                        <Label Content="Launchbuddy Releases" FontSize="14" FontWeight="Bold"/>
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox x:Name="cb_delaybetweeninstaces" Content="Add delay between instances" Margin="5" Click="cb_delaybetweeninstaces_Click"/>
+                            <Label x:Name="lab_delaylabel" Content="Delay in seconds:" Margin="50,-1,-1,-1" Visibility="Hidden"/>
+                            <xctk:IntegerUpDown x:Name="iud_secondsbetweeninstances" Width="60" Margin="10,0,0,0" Maximum="30" Minimum="1" Visibility="Hidden" ValueChanged="iud_secondsbetweeninstances_ValueChanged"/>
+                        </StackPanel>
+                        <Label Content="Launchbuddy Releases" FontSize="14" FontWeight="Bold" Margin="0,0,-0.4,0" Height="26"/>
                         <Grid Height="250" Margin="3">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="60*"/>
@@ -811,8 +816,8 @@
                                 <RowDefinition Height="150*"/>
                                 <RowDefinition Height="30"/>
                             </Grid.RowDefinitions>
-                            <Label Content="Description:" Grid.Row="0" Grid.Column="1" FontSize="14" FontWeight="Bold"/>
-                            <ListView x:Name="lv_lbversions" Grid.Row="0" Grid.RowSpan="2" SelectionChanged="ListView_SelectionChanged" IsSynchronizedWithCurrentItem="True">
+                            <Label Content="Description:" Grid.Row="0" Grid.Column="1" FontSize="14" FontWeight="Bold" Margin="0.2,-2,0,2.4"/>
+                            <ListView x:Name="lv_lbversions" Grid.Row="0" Grid.RowSpan="3" SelectionChanged="ListView_SelectionChanged" IsSynchronizedWithCurrentItem="True" Grid.ColumnSpan="2" Margin="0,6,275,24.6">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding Name}"/>
@@ -821,12 +826,12 @@
                                     </GridView>
                                 </ListView.View>
                             </ListView>
-                            <WebBrowser x:Name="wb_releasedescr" Grid.Row="1" Grid.Column="1" Margin="3,0,0,0"/>
+                            <WebBrowser x:Name="wb_releasedescr" Grid.Column="1" Margin="3.2,28,0,24.6" Grid.RowSpan="3"/>
                             <DockPanel  Grid.Row="2" Grid.ColumnSpan="2">
-                                <Button x:Name="bt_fetchlbversions" Margin="3" Content="Check for Updates" DockPanel.Dock="Left" Click="bt_fetchlbversions_Click"/>
-                                <Button x:Name="bt_downloadrelease" Margin="3" Content="Download" Click="bt_downloadrelease_Click" IsEnabled="False" DockPanel.Dock="Right"/>
+                                <Button x:Name="bt_fetchlbversions" Margin="3,13,3,-6.6" Content="Check for Updates" DockPanel.Dock="Left" Click="bt_fetchlbversions_Click"/>
+                                <Button x:Name="bt_downloadrelease" Margin="3,13,3,-6.6" Content="Download" Click="bt_downloadrelease_Click" IsEnabled="False" DockPanel.Dock="Right"/>
                             </DockPanel>
-                           
+
                         </Grid>
                         <Separator Margin="-3,100,0,0"/>
                         <Button x:Name="bt_bugreport" Content="Report a Bug" Margin="5" Click="bt_bugreport_Click"/>
