@@ -116,6 +116,8 @@ namespace Gw2_Launchbuddy
         {
             arguments.Where(a => a.Temporary).All(a => { a.Active = false; a.Temporary = false; return true; });
         }
+        public bool ContainsItems() => arguments != null && arguments.Any();
+        public bool IsEmpty() => !ContainsItems();
     }
     public class Argument
     {

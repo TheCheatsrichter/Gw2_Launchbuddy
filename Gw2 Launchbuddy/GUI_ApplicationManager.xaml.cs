@@ -72,7 +72,7 @@ namespace Gw2_Launchbuddy
                 {
                     Process.GetProcessById(proacc.pro.Id);   
                 }
-                catch
+                catch // logging not required?
                 {
                     ToRemove.Add(proacc);
                 }
@@ -90,7 +90,7 @@ namespace Gw2_Launchbuddy
             try{
                 selinstance.pro.Kill();
             }
-            catch { }
+            catch { } // logging not required?
             Globals.LinkedAccs.Remove(selinstance);
         }
 

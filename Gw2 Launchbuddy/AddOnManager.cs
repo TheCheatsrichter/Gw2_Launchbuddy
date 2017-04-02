@@ -1,18 +1,22 @@
-﻿using System;
-using System.Windows;
-using System.IO;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Xml.Serialization;
-
-
-namespace Gw2_Launchbuddy
+﻿namespace Gw2_Launchbuddy
 {
+    using System;
+    using System.Windows;
+    using System.IO;
+    using System.Diagnostics;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using System.Xml.Serialization;
+    using log4net;
+    using log4net.Config;
+
     [Serializable]
     public class AddOn
     {
+
+        private static ILog Log { get; } = LogManager.GetLogger(typeof(AddOn));
+
         [System.Xml.Serialization.XmlElement("Name")]
         public string Name { set; get; }
 
@@ -49,7 +53,7 @@ namespace Gw2_Launchbuddy
             this.IsMultilaunch = IsMultilaunch;
             this.IsLbAddon = IsLbAddon;
             args = Info.Arguments;
-            Path= Info.FileName;
+            Path = Info.FileName;
         }
 
         public AddOn() { }
@@ -68,11 +72,13 @@ namespace Gw2_Launchbuddy
 
     public static class AddOnManager
     {
+        private static ILog Log { get; } = LogManager.GetLogger(typeof(AddOnManager));
+
         public static ObservableCollection<AddOn> AddOns = new ObservableCollection<AddOn>();
 
-        public static void Add(string name,string[] args,bool IsMultilaunch,bool IsLbAddon)
+        public static void Add(string name, string[] args, bool IsMultilaunch, bool IsLbAddon)
         {
-            if(name != "")
+            if (name != "")
             {
                 System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
                 filedialog.Multiselect = false;
@@ -94,7 +100,7 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show("Please enter a name!");
             }
         }
-        
+
         public static void CheckExisting()
         {
             Process[] processes = Process.GetProcesses();
@@ -113,7 +119,7 @@ namespace Gw2_Launchbuddy
             CheckExisting();
             Process[] processes = Process.GetProcesses();
 
-            foreach(AddOn addon in AddOns)
+            foreach (AddOn addon in AddOns)
             {
                 foreach (Process childpro in addon.ChildProcess.ToList())
                 {
@@ -121,7 +127,7 @@ namespace Gw2_Launchbuddy
                     {
                         addon.ChildProcess.Remove(childpro);
                     }
-                }  
+                }
             }
         }
 
@@ -139,7 +145,10 @@ namespace Gw2_Launchbuddy
                     AddOns.Remove(addon);
                 }
             }
-            catch { }
+            catch (Exception e) // logged
+            {
+                Log.Error($"Unable to remove add on called {name}", e);
+            }
         }
 
         public static void LaunchSingle(string name)
@@ -163,11 +172,12 @@ namespace Gw2_Launchbuddy
                         addon.ChildProcess.Add(addon_pro);
                         addon_pro.Start();
                     }
-                    catch
+                    catch (Exception e) // logged
                     {
+                        Log.Error($"Unable to launch add on called {addon.Name}.", e);
                         MessageBox.Show(addon.Name + " could not be started!\nMake sure that the entered path is correct!");
                     }
-                    
+
                 }
             }
         }
@@ -177,7 +187,7 @@ namespace Gw2_Launchbuddy
             UpdateList();
             foreach (AddOn addon in AddOns)
             {
-                if((addon.IsMultilaunch ||  addon.ChildProcess.Count <= 0) && addon.IsLbAddon)
+                if ((addon.IsMultilaunch || addon.ChildProcess.Count <= 0) && addon.IsLbAddon)
                 {
                     try
                     {
@@ -185,14 +195,15 @@ namespace Gw2_Launchbuddy
                         addon.ChildProcess.Add(addon_pro);
                         addon_pro.Start();
                     }
-                    catch (Exception e)
+                    catch (Exception e) // logged
                     {
+                        Log.Error($"Unable to launch add on called {addon.Name}.", e);
                         CrashReporter.ReportCrashToAll(e);
                     }
                 }
             }
         }
-        
+
         public static void SaveAddons(string path)
         {
             try
@@ -200,7 +211,7 @@ namespace Gw2_Launchbuddy
                 XmlSerializer x = new XmlSerializer(typeof(ObservableCollection<AddOn>));
                 TextWriter writer = new StreamWriter(path);
                 x.Serialize(writer, AddOns);
-                
+
                 /*
                 using (Stream stream = System.IO.File.Open(path, FileMode.Create))
                 {
@@ -209,12 +220,13 @@ namespace Gw2_Launchbuddy
                 }
                 */
             }
-            catch (Exception e)
+            catch (Exception e) // logged
             {
+                Log.Error($"Unable to save add on for path {path}.", e);
                 MessageBox.Show(e.Message);
             }
         }
-        
+
         public static ObservableCollection<AddOn> LoadAddons(string path)
         {
             try
@@ -241,8 +253,9 @@ namespace Gw2_Launchbuddy
                 }
                 return null;
             }
-            catch (Exception e)
+            catch (Exception e) // logged
             {
+                Log.Error($"Unable to load add ons from path {path}.", e);
                 MessageBox.Show(e.Message);
                 return null;
             }

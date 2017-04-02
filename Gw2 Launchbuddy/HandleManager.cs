@@ -19,23 +19,21 @@
 //The original code was modified between 2010 and 2016 multiple times
 //by KairuByte. Adaptations made for GW2 use.
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
-using System.IO;
-using System.Text.RegularExpressions;
-
 namespace Gw2_Launchbuddy
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Diagnostics;
+    using System.Text.RegularExpressions;
+    using log4net;
+
     public static class HandleManager
     {
+        private static ILog Log { get; } = LogManager.GetLogger(typeof(LaunchManager));
+
         #region Native Method Signatures
 
         [DllImport("kernel32.dll")]
@@ -469,8 +467,12 @@ namespace Gw2_Launchbuddy
 
                 return fileName;
             }
-            catch (Exception)
+            catch (Exception e) // logged
             {
+                Log.Error($"Unable to retrieve filename from process.", e);
+                // is it really a good thing to return an empty string here
+                // when the operation we just did failed? Why not letting
+                // the user process handle the exception? Just saying...
                 return string.Empty;
             }
         }

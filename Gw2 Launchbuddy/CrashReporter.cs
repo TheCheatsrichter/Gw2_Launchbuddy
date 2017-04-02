@@ -22,7 +22,7 @@ namespace Gw2_Launchbuddy
             {
                 throw new System.Exception("This is a test exception report");
             }
-            catch (Exception err)
+            catch (Exception err) // logging not required
             {
                 ReportCrashToSingle(err,name);
             }
@@ -35,7 +35,7 @@ namespace Gw2_Launchbuddy
             {
                 throw new System.Exception("This is a test exception report");
             }
-            catch (Exception err)
+            catch (Exception err) // logging not required
             {
                 ReportCrashToAll(err);
             }

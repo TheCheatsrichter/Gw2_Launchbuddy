@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Windows;
-
-
-namespace Gw2_Launchbuddy
+﻿namespace Gw2_Launchbuddy
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Net;
+    using System.Text.RegularExpressions;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics;
+    using System.Windows;
+    using log4net;
+
     public static class Versionswitcher
     {
+        private static ILog Log { get; } = LogManager.GetLogger(typeof(MainWindow));
         static string URL_Releases = @"https://github.com/TheCheatsrichter/Gw2_Launchbuddy/releases";
         static List<string> URL_Versions = new List<string>();
-        static string Repo_User,Repo_Name;
+        static string Repo_User, Repo_Name;
         public static ObservableCollection<Release> Releaselist = new ObservableCollection<Release>();
 
         public static void CheckForUpdate()
@@ -35,7 +36,7 @@ namespace Gw2_Launchbuddy
                     {
                         newest_version = release.Version;
                         newest_release = release;
-                    }             
+                    }
                 }
             }
             if (newest_version.ToString() != "0.0")
@@ -58,7 +59,7 @@ namespace Gw2_Launchbuddy
             newlaunchbuddy.Start();
             Process.Start(Globals.exepath);
             Application.Current.Dispatcher.Invoke(new Action(() =>
-            {            
+            {
                 System.Windows.Application.Current.Shutdown();
             }));
         }
@@ -67,7 +68,7 @@ namespace Gw2_Launchbuddy
         {
             WebClient wc = new WebClient();
             string dest = Globals.exepath + "Gw2_Launchbuddy_" + rel.Version + ".exe";
-            wc.DownloadFile(rel.DownloadURL,dest);
+            wc.DownloadFile(rel.DownloadURL, dest);
             Process.Start(Globals.exepath);
             System.Windows.Application.Current.Shutdown();
             Process newlaunchbuddy = new Process { StartInfo = new ProcessStartInfo(dest) };
@@ -82,16 +83,17 @@ namespace Gw2_Launchbuddy
             Repo_User = Repomatches.Groups["User"].Value;
             Repo_Name = Repomatches.Groups["Name"].Value;
 
-            string HTML_Raw="";
+            string HTML_Raw = "";
             using (WebClient downloader = new WebClient())
             {
                 try
                 {
-                    HTML_Raw= downloader.DownloadString(URL_Releases);
+                    HTML_Raw = downloader.DownloadString(URL_Releases);
                 }
-                catch
+                catch (Exception e) // logged
                 {
-                    System.Windows.Forms.MessageBox.Show("Unable to check for Launchbuddy Updates.\n Please check your internet connection");
+                    Log.Error("Unable to check for Launchbuddy Updates.", e);
+                    System.Windows.Forms.MessageBox.Show("Unable to check for Launchbuddy Updates.\nPlease check your internet connection");
                     return;
                 }
             }
@@ -119,10 +121,10 @@ namespace Gw2_Launchbuddy
                     Date = Regex.Match(version.Value, datefilter).Groups["Date"].Value,
                     Name = Regex.Match(version.Value, namefilter).Groups["Name"].Value,
                     Version = new Version(Regex.Match(version.Value, versionfilter).Groups["Version"].Value),
-                    Description = "<html>\n"+Regex.Match(version.Value, descriptionfilter).Value+"\n</html>",
+                    Description = "<html>\n" + Regex.Match(version.Value, descriptionfilter).Value + "\n</html>",
                     DownloadURL = URL_Releases + "/download/" + Regex.Match(version.Value, downloadurlfilter).Groups["Exename"].Value,
                 };
-            releases.Add(release);
+                releases.Add(release);
             }
             Releaselist = releases;
 
