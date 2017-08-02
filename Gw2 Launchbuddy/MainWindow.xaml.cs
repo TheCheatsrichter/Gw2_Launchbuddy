@@ -184,7 +184,7 @@ namespace Gw2_Launchbuddy
 
         public MainWindow()
         {
-            checklibraries();
+            //checklibraries(); //TODO: Remove
             try
             {
                 InitializeComponent();
@@ -199,15 +199,13 @@ namespace Gw2_Launchbuddy
             }
 
 #if !DEBUG
-            //ENABLE THIS BEFORE RELEASE!! ##########################################################################################
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionReport);
-#endif
-
+            
             //LB statistics
             Properties.Settings.Default.counter_launches += 1;
             Properties.Settings.Default.Save();
-
-#if DEBUG
+#else
+            System.Diagnostics.Debug.WriteLine("Compiled without crash handler, and always first run.");
             Properties.Settings.Default.counter_launches = 1;
 #endif
 
@@ -263,6 +261,7 @@ namespace Gw2_Launchbuddy
 
         private void checklibraries()
         {
+            //No longer needed, added Costura.Fody to keep files within exe TODO: Remove
             if (!System.IO.File.Exists("CrashReporter.NET.dll")) System.IO.File.WriteAllBytes("CrashReporter.NET.dll", Properties.Resources.CrashReporter_NET);
             if (!System.IO.File.Exists("Xceed.Wpf.Toolkit.dll")) System.IO.File.WriteAllBytes("Xceed.Wpf.Toolkit.dll", Properties.Resources.Xceed_Wpf_Toolkit);
         }
