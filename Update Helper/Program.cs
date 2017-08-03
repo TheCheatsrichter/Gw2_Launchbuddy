@@ -36,14 +36,16 @@ namespace Update_Helper
                 //Gather Info
                 var dir = System.IO.Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath) + "\\";
                 var dest = dir + args[3];
+                var bakdest = dest + ".bak";
                 var tempdest = dir + "Gw2_Launchbuddy_" + args[1] + ".exe";
 
                 //Download new LB
                 WebClient wc = new WebClient();
                 wc.DownloadFile(args[2], tempdest);
 
-                //Delete old LB
-                File.Delete(dest);
+                //Delete existing backup and create new one
+                if (!System.IO.File.Exists(bakdest)) File.Delete(bakdest);
+                File.Move(dest, bakdest);
 
                 //Rename new LB to old LB name
                 File.Move(tempdest, dest);
