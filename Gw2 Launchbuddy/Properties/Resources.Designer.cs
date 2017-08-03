@@ -301,6 +301,16 @@ namespace Gw2_Launchbuddy.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Update_Helper {
+            get {
+                object obj = ResourceManager.GetObject("Update_Helper", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap user {
