@@ -111,8 +111,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CrashReporter.NET, Version=1.5.1.0, Culture=neutral, PublicKeyToken=986591a91592b7e6, processorArchitecture=MSIL">
-      <HintPath>..\packages\CrashReporter.NET.Official.1.5.1\lib\net40\CrashReporter.NET.dll</HintPath>
+    <Reference Include="CrashReporter.NET, Version=1.5.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CrashReporter.NET.Official.1.5.2\lib\net452\CrashReporter.NET.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
@@ -121,6 +122,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -175,7 +177,7 @@
     <Compile Include="TextBoxPopUp.xaml.cs">
       <DependentUpon>TextBoxPopUp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Versionswitcher.cs" />
+    <Compile Include="VersionSwitcher.cs" />
     <Page Include="Clientfix.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

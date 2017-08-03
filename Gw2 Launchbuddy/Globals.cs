@@ -3,10 +3,8 @@ using System.Collections.ObjectModel;
 using static Gw2_Launchbuddy.MainWindow;
 using System;
 
-
 namespace Gw2_Launchbuddy
 {
-
     static class Globals
     {
         public static GUI_ApplicationManager Appmanager = new GUI_ApplicationManager();

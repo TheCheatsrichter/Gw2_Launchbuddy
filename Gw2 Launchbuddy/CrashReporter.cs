@@ -26,7 +26,6 @@ namespace Gw2_Launchbuddy
             {
                 ReportCrashToSingle(err,name);
             }
-            
         }
 
         public static void TestReportAll()
@@ -39,7 +38,6 @@ namespace Gw2_Launchbuddy
             {
                 ReportCrashToAll(err);
             }
-
         }
 
         public static void ReportCrashToSingle(Exception err,string targetname)

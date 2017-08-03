@@ -11,7 +11,6 @@ using System.Threading;
 
 namespace Gw2_Launchbuddy
 {
-
     public class ProAccBinding
     {
         public Process pro { set; get; }
@@ -50,7 +49,6 @@ namespace Gw2_Launchbuddy
                 {
                     Globals.Appmanager.Show();
                 }
-
             }
 
             //Launching the application with arguments
