@@ -71,16 +71,6 @@ namespace Gw2_Launchbuddy.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] CrashReporter_NET {
-            get {
-                object obj = ResourceManager.GetObject("CrashReporter_NET", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap error {
@@ -317,16 +307,6 @@ namespace Gw2_Launchbuddy.Properties {
             get {
                 object obj = ResourceManager.GetObject("user", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] Xceed_Wpf_Toolkit {
-            get {
-                object obj = ResourceManager.GetObject("Xceed_Wpf_Toolkit", resourceCulture);
-                return ((byte[])(obj));
             }
         }
     }

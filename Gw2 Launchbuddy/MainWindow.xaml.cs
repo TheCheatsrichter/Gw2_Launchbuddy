@@ -184,7 +184,6 @@ namespace Gw2_Launchbuddy
 
         public MainWindow()
         {
-            //checklibraries(); //TODO: Remove
             try
             {
                 InitializeComponent();
@@ -257,13 +256,6 @@ namespace Gw2_Launchbuddy
                 lv_lbversions.ItemsSource = VersionSwitcher.Releaselist;
                 bt_downloadrelease.Content = "Download";
             }));
-        }
-
-        private void checklibraries()
-        {
-            //No longer needed, added Costura.Fody to keep files within exe TODO: Remove
-            if (!System.IO.File.Exists("CrashReporter.NET.dll")) System.IO.File.WriteAllBytes("CrashReporter.NET.dll", Properties.Resources.CrashReporter_NET);
-            if (!System.IO.File.Exists("Xceed.Wpf.Toolkit.dll")) System.IO.File.WriteAllBytes("Xceed.Wpf.Toolkit.dll", Properties.Resources.Xceed_Wpf_Toolkit);
         }
 
         private void fillargs()
