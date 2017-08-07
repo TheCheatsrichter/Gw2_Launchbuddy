@@ -14,9 +14,9 @@ namespace Gw2_Launchbuddy
     public class ProAccBinding
     {
         public Process pro { set; get; }
-        public MainWindow.Account acc { set; get; }
+        public Account acc { set; get; }
 
-        public ProAccBinding(Process tpro, MainWindow.Account tacc = null)
+        public ProAccBinding(Process tpro, Account tacc = null)
         {
             this.pro = tpro;
             this.acc = tacc;
@@ -26,11 +26,11 @@ namespace Gw2_Launchbuddy
     static class LaunchManager
     {
         private static List<int> nomutexpros = new List<int>();
-        public static void launch_click()
+        public static void Launch()
         {
             //Checking for existing Gw2 instances. Do not continue until closed.
             //if (Process.GetProcesses().ToList().Where(a => !nomutexpros.Contains(a.Id) && a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).Any())
-            if (!checkRegClients())
+            if (!RegClients())
             {
                 MessageBox.Show("At least one instance of Guild Wars is running that was not opened by LaunchBuddy. That instance will need to be closed.");
                 return;
@@ -52,16 +52,16 @@ namespace Gw2_Launchbuddy
             }
 
             //Launching the application with arguments
-            if (Globals.selected_accs.Count > 0)
+            if (Accounts.Count > 0)
             {
-                for (int i = 0; i <= Globals.selected_accs.Count - 1; i++)
+                for (int i = 0; i <= Accounts.Count - 1; i++)
                 {
-                    launchgw2(i);
+                    LaunchGW2(i);
                 }
             }
             else
             {
-                launchgw2();
+                LaunchGW2();
             }
 
             GFXManager.RestoreDefault();
@@ -76,11 +76,7 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show("One or more AddOns could not be launched.\n" + err.Message);
             }
         }
-        static bool checkRegClients()
-        {
-            return RegClients();
-        }
-        static bool updateRegClients(string created)
+        static bool UpdateRegClients(string created)
         {
             return RegClients(created);
         }
@@ -98,7 +94,7 @@ namespace Gw2_Launchbuddy
                 System.Diagnostics.Debug.WriteLine("Reg key likely does not exist: " + e.Message);
 #endif
             }
-            var gw2Procs = Process.GetProcesses().ToList().Where(a => a.ProcessName == Regex.Replace(Globals.exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).ToList().ConvertAll<string>(new Converter<Process, string>(procMD5));
+            var gw2Procs = Process.GetProcesses().ToList().Where(a => a.ProcessName == Regex.Replace(Globals.exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).ToList().ConvertAll<string>(new Converter<Process, string>(ProcMD5));
             var running = gw2Procs.Count();
             var temp = listClients.Where(a => !gw2Procs.Contains(a)).ToList();
             foreach (var t in temp) listClients.Remove(t);
@@ -109,23 +105,24 @@ namespace Gw2_Launchbuddy
             return running == logged;
         }
 
-        static void launchgw2(int? accnr = null)
+        static void LaunchGW2(int? accnr = null)
         {
             try
             {
                 ProcessStartInfo gw2proinfo = new ProcessStartInfo();
                 gw2proinfo.FileName = Globals.exepath + Globals.exename;
-                gw2proinfo.Arguments = Globals.args.Print(accnr);
+                var selected = Accounts.ToList().Skip(accnr ?? Accounts.Count).SingleOrDefault();
+                gw2proinfo.Arguments = Arguments.CommandLine(selected);
                 gw2proinfo.WorkingDirectory = Globals.exepath;
                 Process gw2pro = new Process { StartInfo = gw2proinfo };
                 if (accnr != null)
                 {
-                    Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, Globals.selected_accs[(int)accnr]));
-                    GFXManager.UseGFX(Globals.selected_accs[(int)accnr].Configpath);
+                    Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, Accounts.ToList()[(int)accnr]));
+                    GFXManager.UseGFX(Accounts.ToList()[(int)accnr].ConfigurationPath);
                 }
                 else
                 {
-                    MainWindow.Account undefacc = new MainWindow.Account { Email = "-", Nick = "Acc Nr" + Globals.LinkedAccs.Count };
+                    Account undefacc = new Account ("Acc Nr" + Globals.LinkedAccs.Count, null, null);
                     Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, undefacc));
                 }
 
@@ -143,7 +140,7 @@ namespace Gw2_Launchbuddy
                     gw2pro.WaitForInputIdle(10000);
                     //Thread.Sleep(1000);
                     //Register the new client to prevent problems.
-                    updateRegClients(procMD5(gw2pro));
+                    UpdateRegClients(ProcMD5(gw2pro));
                     Thread.Sleep(3000);
                 }
                 catch (Exception err)
@@ -172,6 +169,14 @@ namespace Gw2_Launchbuddy
             }
         }
 
+        public static string ProcMD5(Process proc)
+        {
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("Start: " + proc.StartTime + " ID: " + proc.Id + " MD5: " + CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString()));
+#endif
+            return CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString());
+        }
+
         public static string CalculateMD5(string input)
         {
             var md5 = MD5.Create();
@@ -184,14 +189,6 @@ namespace Gw2_Launchbuddy
                 sb.Append(hash[i].ToString("X2"));
 
             return sb.ToString();
-        }
-
-        public static string procMD5(Process proc)
-        {
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine("Start: " + proc.StartTime + " ID: " + proc.Id + " MD5: " + CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString()));
-#endif
-            return CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString());
         }
     }
 }

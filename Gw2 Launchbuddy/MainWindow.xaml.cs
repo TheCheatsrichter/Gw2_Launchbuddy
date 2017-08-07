@@ -50,10 +50,9 @@ namespace Gw2_Launchbuddy
 
         ObservableCollection<Server> assetlist = new ObservableCollection<Server>();
         ObservableCollection<Server> authlist = new ObservableCollection<Server>();
-        ObservableCollection<Account> accountlist = new ObservableCollection<Account>();
+        //ObservableCollection<Account> accountlist = new ObservableCollection<Account>();
 
         List<int> nomutexpros = new List<int>();
-        List<string> noKeep = new List<string>();
 
         AES crypt = new AES();
 
@@ -66,7 +65,7 @@ namespace Gw2_Launchbuddy
             public string Location { get; set; }
         }
 
-        [Serializable()]
+        /*[Serializable()]
         public class Account
         {
             [NonSerialized]
@@ -166,7 +165,7 @@ namespace Gw2_Launchbuddy
 
             public string configpath { set; get; }
             public string Configname { set; get; }
-        }
+        }*/
 
         public class CinemaImage
         {
@@ -210,7 +209,7 @@ namespace Gw2_Launchbuddy
 
             //Setup
             donatepopup();
-            accountlist.Clear(); //clearing accountlist
+            //accountlist.Clear(); //clearing accountlist
             fillargs(); //create arglist
             loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
             loadaccounts(); // loading saved accounts from launchbuddy
@@ -260,12 +259,13 @@ namespace Gw2_Launchbuddy
 
         private void fillargs()
         {
-            arglistbox.Items.Clear();
             List<CheckBox> tmp = new List<CheckBox>();
             try
             {
-                foreach (var item in Globals.args.ToDictionary(false))
-                    tmp.Add(new CheckBox() { Content = item.Key });
+                foreach (var item in Arguments.ToDictionary(false))
+                {
+                    tmp.Add(new CheckBox() { Content = item.Key, IsEnabled = item.Value.Selectable, IsChecked = item.Value.Selected });
+                }
                 foreach (var item in tmp)
                 {
                     item.Margin = new Thickness(5, 0, 0, 0);
@@ -277,7 +277,7 @@ namespace Gw2_Launchbuddy
             {
                 CrashReporter.ReportCrashToAll(e);
             }
-
+            
             arglistbox.ItemsSource = tmp;
         }
 
@@ -848,36 +848,22 @@ namespace Gw2_Launchbuddy
                         case "EXECCMD":
                             //Filter arguments from path
                             lab_para.Content = "Latest Startparameters: ";
-                            Regex regex = new Regex(@"-\w*");
+                            Regex regex = new Regex(@"(?<=^|\s)-\w*");
                             string input = getvalue(reader);
                             MatchCollection matchList = regex.Matches(input);
 
-                            // Automatically set checks of previously used arguments. No game halting ones allowed.
-                            noKeep.Add("-shareArchive");
-                            noKeep.Add("-image");
-                            noKeep.Add("-log");
-                            noKeep.Add("-verify");
-                            noKeep.Add("-repair");
-                            noKeep.Add("-diag");
-                            noKeep.Add("-exit");
-                            noKeep.Add("-allowinstall");
-                            noKeep.Add("-exit");
+                            Arguments.ToList().Where(a => matchList.Cast<Match>().Select(b => b.Value).Contains(a.Flag) && !a.Blocker).ToList().ForEach(c => c.IsSelected());
+                            RefreshUI();
 
-                            foreach (Match parameter in matchList)
-                            {
-                                if (!parameter.Value.Equals("-shareArchive", StringComparison.OrdinalIgnoreCase))
-                                    lab_para.Content = lab_para.Content + " " + parameter.Value;
-                            }
-
-                            foreach (CheckBox entry in arglistbox.Items)
-                            {
-                                foreach (Match parameter in matchList)
-                                {
-                                    if (entry.Content.ToString().Equals(parameter.Value, StringComparison.OrdinalIgnoreCase) &&
-                                        !noKeep.Contains(parameter.Value, StringComparer.OrdinalIgnoreCase))
-                                        entry.IsChecked = true;
-                                }
-                            }
+                            //foreach (CheckBox entry in arglistbox.Items)
+                            //{
+                            //    foreach (Match parameter in matchList)
+                            //    {
+                            //        if (entry.Content.ToString().Equals(parameter.Value, StringComparison.OrdinalIgnoreCase) &&
+                            //            !noKeep.Contains(parameter.Value, StringComparer.OrdinalIgnoreCase))
+                            //            entry.IsChecked = true;
+                            //    }
+                            //}
                             break;
                     }
                 }
@@ -975,6 +961,16 @@ namespace Gw2_Launchbuddy
             lab_port_auth.IsEnabled = true;
             tb_authport.IsEnabled = true;
             tb_authport.Text = Globals.selected_authsv.Port;
+            Arguments.Argument("-authsrv").IsSelected().OptionString = Globals.selected_authsv.IP + ":" + tb_authport.Text;
+            RefreshUI();
+        }
+
+        private void checkb_auth_Unchecked(object sender, RoutedEventArgs e)
+        {
+            lab_port_auth.IsEnabled = false;
+            tb_authport.IsEnabled = false;
+            Arguments.Argument("-authsrv").IsSelected(false).OptionString = "";
+            RefreshUI();
         }
 
         private void checkb_assets_Checked(object sender, RoutedEventArgs e)
@@ -982,25 +978,39 @@ namespace Gw2_Launchbuddy
             lab_port_assets.IsEnabled = true;
             tb_assetsport.IsEnabled = true;
             tb_assetsport.Text = Globals.selected_assetsv.Port;
-
-        }
-        private void checkb_auth_Unchecked(object sender, RoutedEventArgs e)
-        {
-            lab_port_auth.IsEnabled = false;
-            tb_authport.IsEnabled = false;
+            Arguments.Argument("-assetsrv").IsSelected().OptionString = Globals.selected_assetsv.IP + ":" + tb_assetsport.Text;
+            RefreshUI();
         }
 
         private void checkb_assets_Unchecked(object sender, RoutedEventArgs e)
         {
             lab_port_assets.IsEnabled = false;
             tb_assetsport.IsEnabled = false;
+            Arguments.Argument("-assetsrv").IsSelected(false).OptionString = "";
+            RefreshUI();
+        }
+
+        private void checkb_clientport_Checked(object sender, RoutedEventArgs e)
+        {
+            tb_clientport.IsEnabled = true;
+            lab_port_client.IsEnabled = true;
+            Arguments.Argument("-clientport").IsSelected().OptionString = tb_clientport.Text;
+            RefreshUI();
+        }
+
+        private void checkb_clientport_Unchecked(object sender, RoutedEventArgs e)
+        {
+            tb_clientport.IsEnabled = false;
+            lab_port_client.IsEnabled = false;
+            Arguments.Argument("-clientport").IsSelected(false).OptionString = tb_clientport.Text;
+            RefreshUI();
         }
 
         private void bt_launch_Click(object sender, RoutedEventArgs e)
         {
             GFXManager.OverwriteGFX();
-            UpdateServerArgs();
-            LaunchManager.launch_click();
+            //UpdateServerArgs();
+            LaunchManager.Launch();
         }
 
         private void bt_installpath_Click(object sender, RoutedEventArgs e)
@@ -1023,13 +1033,14 @@ namespace Gw2_Launchbuddy
 
         public void CreateShortcut(string shortcutName, string shortcutPath, string targetFileLocation)
         {
+            // Needs rewrite
             // Modified Shortcut script by "CooLMinE" at http://www.fluxbytes.com/
             try
             {
                 string shortcutLocation = System.IO.Path.Combine(shortcutPath, shortcutName + ".lnk");
                 WshShell shell = new WshShell();
                 IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
-                string arguments = Globals.args.Print(0);
+                string arguments = Arguments.CommandLine(null);
                 shortcut.IconLocation = Assembly.GetExecutingAssembly().Location;
                 shortcut.Description = "Created with Gw2 Launchbuddy, © TheCheatsrichter";
 
@@ -1072,7 +1083,7 @@ namespace Gw2_Launchbuddy
                 System.Windows.Controls.CheckBox item = (System.Windows.Controls.CheckBox)selecteditem;
                 lab_descr.Content = "Description (" + item.Content.ToString() + "):";
 
-                textblock_descr.Text = Globals.args.ToDictionary(false).Where(a => a.Key == item.Content.ToString()).Select(a => a.Value).FirstOrDefault() ?? "Description missing!. (PLS REPORT)";
+                textblock_descr.Text = Arguments.ToDictionary(false).Where(a => a.Key == item.Content.ToString()).Select(a => a.Value.Description).FirstOrDefault() ?? "Description missing! (PLEASE REPORT)";
             }
         }
 
@@ -1082,7 +1093,7 @@ namespace Gw2_Launchbuddy
             {
                 try
                 {
-                    CreateShortcut("Gw2_Launcher_" + Globals.selected_accs[0].Nick, Globals.exepath, Globals.exepath + Globals.exename);
+                    CreateShortcut("Gw2_Launcher_" + Accounts.ToList()[0].Nickname, Globals.exepath, Globals.exepath + Globals.exename);
                 }
                 catch (Exception err)
                 {
@@ -1101,18 +1112,6 @@ namespace Gw2_Launchbuddy
             {
                 MessageBox.Show("Could not open file directory\n" + err.Message);
             }
-        }
-
-        private void checkb_clientport_Checked(object sender, RoutedEventArgs e)
-        {
-            tb_clientport.IsEnabled = true;
-            lab_port_client.IsEnabled = true;
-        }
-
-        private void checkb_clientport_Unchecked(object sender, RoutedEventArgs e)
-        {
-            tb_clientport.IsEnabled = false;
-            lab_port_client.IsEnabled = false;
         }
 
         bool IsValidEmail(string email)
@@ -1134,9 +1133,9 @@ namespace Gw2_Launchbuddy
             try
             {
                 aes_accountlist.Clear();
-                foreach (Account acc in accountlist)
+                foreach (Account acc in Accounts.ToList())
                 {
-                    aes_accountlist.Add(new Account { Nick = acc.Nick, Email = acc.Email, Password = crypt.Encrypt(acc.Password), Time = acc.Time, iconpath = acc.iconpath, Configpath = acc.Configpath });
+                    aes_accountlist.Add(acc);
                 }
             }
             catch (Exception err)
@@ -1167,7 +1166,7 @@ namespace Gw2_Launchbuddy
 
                 if (System.IO.File.Exists(path) == true)
                 {
-                    accountlist.Clear();
+                    //accountlist.Clear();
                     using (Stream stream = System.IO.File.Open(path, FileMode.Open))
                     {
                         var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
@@ -1175,10 +1174,10 @@ namespace Gw2_Launchbuddy
 
                         foreach (Account acc in aes_accountlist)
                         {
-                            accountlist.Add(new Account { Nick = acc.Nick, Email = acc.Email, Password = crypt.Decrypt(acc.Password), Time = acc.Time, Iconpath = acc.iconpath, Configpath = acc.Configpath });
+                            Accounts.Add(acc);
                         }
 
-                        listview_acc.ItemsSource = Cinema_Accountlist.ItemsSource = accountlist;
+                        listview_acc.ItemsSource = Cinema_Accountlist.ItemsSource = Accounts.ToList();
                     }
                 }
 
@@ -1206,9 +1205,9 @@ namespace Gw2_Launchbuddy
             {
                 if (tb_passw.Password.Length > 4)
                 {
-                    Account acc = new Account { Nick = tb_nick.Text, Email = tb_email.Text, Password = tb_passw.Password, Time = DateTime.Now, Configpath = "Default" };
-                    accountlist.Add(acc);
-                    listview_acc.ItemsSource = accountlist;
+                    Account acc = new Account (tb_nick.Text, tb_email.Text,tb_passw.Password);
+                    Accounts.Add(acc);
+                    listview_acc.ItemsSource = Accounts.ToList();
                     tb_email.Clear();
                     tb_passw.Clear();
                     tb_nick.Clear();
@@ -1239,6 +1238,7 @@ namespace Gw2_Launchbuddy
 
             Properties.Settings.Default.use_autologin = true;
             Properties.Settings.Default.Save();
+            CheckAutoLogin();
         }
 
         private void cb_login_Unchecked(object sender, RoutedEventArgs e)
@@ -1257,6 +1257,7 @@ namespace Gw2_Launchbuddy
             listview_acc.SelectedIndex = -1;
             Properties.Settings.Default.use_autologin = false;
             Properties.Settings.Default.Save();
+            CheckAutoLogin();
         }
 
         private void listview_acc_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1266,27 +1267,22 @@ namespace Gw2_Launchbuddy
             bt_accedit.IsEnabled = true;
             bt_remacc.IsEnabled = true;
 
-            Account selectedacc = listview_acc.SelectedItem as Account;
-
-            Globals.selected_accs = ((ListView)sender).SelectedItems.Cast<Account>().ToList();
+            Accounts.ToList().Where(a => ((ListView)sender).SelectedItems.Cast<Account>().Where(b => b.Nickname == a.Nickname).Any()).Select(a => a.IsSelected());
+            
             Properties.Settings.Default.selected_acc = ((ListView)sender).SelectedIndex;
             Properties.Settings.Default.Save();
 
-            if (((ListView)sender).SelectedItems.Count != 0 && ((ListView)sender).SelectedItems.Count <= 1)
+            if (((ListView)sender).SelectedItems.Count == 1)
             {
                 var selectedItems = (dynamic)((ListView)sender).SelectedItems;
-                cb_login.Content = "Use Autologin : " + selectedItems[0].Nick;
-                Globals.selected_accs[0].Email = selectedItems[0].Email;
-                Globals.selected_accs[0].Password = selectedItems[0].Password;
+                cb_login.Content = "Use Autologin : " + selectedItems[0].Nickname;
                 //bt_shortcut.IsEnabled = true;
             }
 
-            if (((ListView)sender).SelectedItems.Count != 0 && ((ListView)sender).SelectedItems.Count > 1)
+            if (((ListView)sender).SelectedItems.Count > 1)
             {
                 var selectedItem = (dynamic)((ListView)sender).SelectedItem;
                 cb_login.Content = "Use Autologin (Multiboxing): " + ((ListView)sender).SelectedItems.Count + " Accounts selected";
-                Globals.selected_accs[0].Email = selectedItem.Email;
-                Globals.selected_accs[0].Password = selectedItem.Password;
                 //bt_shortcut.IsEnabled = false;
             }
 
@@ -1296,6 +1292,24 @@ namespace Gw2_Launchbuddy
             list.SelectedItems.Clear();
             foreach (Account s in ((ListView)sender).SelectedItems) if (!list.SelectedItems.Contains(s)) list.SelectedItems.Add(s);
             list.SelectionChanged += listview_acc_SelectionChanged;
+            CheckAutoLogin();
+        }
+
+        private void CheckAutoLogin()
+        {
+            if (listview_acc.SelectedItems.Count == 0)
+            {
+                Arguments.Argument("-email").IsSelected(false);
+                Arguments.Argument("-password").IsSelected(false);
+                Arguments.Argument("-nopatchui").IsSelected(false);
+            }
+            else
+            {
+                Arguments.Argument("-email").IsSelected();
+                Arguments.Argument("-password").IsSelected();
+                Arguments.Argument("-nopatchui").IsSelected();
+            }
+            RefreshUI();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -1313,7 +1327,7 @@ namespace Gw2_Launchbuddy
         {
             if (listview_acc.SelectedItem != null)
             {
-                accountlist.Remove(listview_acc.SelectedItem as Account);
+                Accounts.Remove(listview_acc.SelectedItem as Account);
                 listview_acc.SelectedIndex = -1;
             }
         }
@@ -1787,8 +1801,8 @@ namespace Gw2_Launchbuddy
 
         private void Cinema_Launchaccount_Click(object sender, RoutedEventArgs e)
         {
-            UpdateServerArgs();
-            LaunchManager.launch_click();
+            //UpdateServerArgs();
+            LaunchManager.Launch();
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
@@ -1882,30 +1896,31 @@ namespace Gw2_Launchbuddy
 
         private void CheckBox_Checked(Object sender, RoutedEventArgs e)
         {
-            Globals.args.Add(((CheckBox)sender).Content.ToString());
+            Arguments.Argument(((CheckBox)sender).Content.ToString()).IsSelected();
             RefreshUI();
         }
         private void CheckBox_Unchecked(Object sender, RoutedEventArgs e)
         {
-            Globals.args.Remove(((CheckBox)sender).Content.ToString());
+            Arguments.Argument(((CheckBox)sender).Content.ToString()).IsSelected(false);
             RefreshUI();
         }
 
         void RefreshUI()
         {
-            lab_currentsetup.Content = "Current Setup: " + Globals.args.PrintSterile(0);
+            lab_currentsetup.Content = "Current Setup: " + Arguments.Print();
             lab_usedaddons.Content = "Used AddOns: " + AddOnManager.ListAddons();
+            fillargs();
         }
 
         private void UpdateServerArgs()
         {
             //Should really be bound to changing applicable UI elements
             if (checkb_assets.IsChecked == true)
-                Globals.args.Argument("-assetsrv", Globals.selected_assetsv.IP + ":" + tb_assetsport.Text);
+                Arguments.Argument("-assetsrv").OptionString = Globals.selected_assetsv.IP + ":" + tb_assetsport.Text;
             if (checkb_auth.IsChecked == true)
-                Globals.args.Argument("-authsrv ", Globals.selected_authsv.IP + ":" + tb_authport.Text);
+                Arguments.Argument("-authsrv ").OptionString = Globals.selected_authsv.IP + ":" + tb_authport.Text;
             if (checkb_clientport.IsChecked == true)
-                Globals.args.Argument("-clientport", tb_clientport.Text);
+                Arguments.Argument("-clientport").OptionString = tb_clientport.Text;
         }
 
         private void Window_LostKeyboardFocus(Object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
@@ -2088,12 +2103,12 @@ namespace Gw2_Launchbuddy
             if (listview_acc.SelectedItem != null)
             {
                 int index = listview_acc.SelectedIndex;
-                Account selectedacc = accountlist[index];
+                Account selectedacc = Accounts.ToList()[index];
                 if (index - 1 >= 0)
                 {
-                    accountlist.Remove(selectedacc);
-                    accountlist.Insert(index - 1, selectedacc);
-                    listview_acc.SelectedIndex = index + -1;
+                    //accountlist.Remove(selectedacc);
+                    //accountlist.Insert(index - 1, selectedacc);
+                    //listview_acc.SelectedIndex = index + -1;
                 }
             }
         }
@@ -2103,12 +2118,12 @@ namespace Gw2_Launchbuddy
             if (listview_acc.SelectedItem != null)
             {
                 int index = listview_acc.SelectedIndex;
-                Account selectedacc = accountlist[index];
-                if (index + 1 < accountlist.Count)
+                Account selectedacc = Accounts.ToList()[index];
+                if (index + 1 < Accounts.Count)
                 {
-                    accountlist.Remove(selectedacc);
-                    accountlist.Insert(index + 1, selectedacc);
-                    listview_acc.SelectedIndex = index + 1;
+                    //accountlist.Remove(selectedacc);
+                    //accountlist.Insert(index + 1, selectedacc);
+                    //listview_acc.SelectedIndex = index + 1;
                 }
             }
         }
@@ -2119,7 +2134,7 @@ namespace Gw2_Launchbuddy
             if (selectedacc != null)
             {
                 string input = null;
-                string message = "Please enter the password of the account.\n\nNickname:\t" + selectedacc.Nick + "\nEmail:\t\t" + selectedacc.DisplayEmail + "\nCreated at:\t" + selectedacc.Time;
+                string message = "Please enter the password of the account.\n\nNickname:\t" + selectedacc.Nickname + /*"\nEmail:\t\t" + selectedacc.DisplayEmail +*/ "\nCreated at:\t" + selectedacc.CreateDate;
                 TextBoxPopUp pw_win = new Gw2_Launchbuddy.TextBoxPopUp(message, "Editing Account", true);
                 if (pw_win.ShowDialog().Value)
                 {
@@ -2133,9 +2148,9 @@ namespace Gw2_Launchbuddy
                 if (input == selectedacc.Password)
                 {
                     tb_email.Text = selectedacc.Email;
-                    tb_nick.Text = selectedacc.Nick;
+                    tb_nick.Text = selectedacc.Nickname;
                     tb_passw.Password = selectedacc.Password;
-                    accountlist.Remove(selectedacc);
+                    Accounts.Account(selectedacc.Nickname).Remove();
                     tb_nick.Focus();
                 }
                 else
@@ -2148,7 +2163,7 @@ namespace Gw2_Launchbuddy
         private void bt_selecticon_Click(object sender, RoutedEventArgs e)
         {
             Account acc = (sender as Button).DataContext as Account;
-            acc = accountlist.Single(x => x.Email == acc.Email);
+            acc = Accounts.ToList().Single(x => x.Email == acc.Email);
 
             System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
             filedialog.DefaultExt = "png";
@@ -2158,7 +2173,7 @@ namespace Gw2_Launchbuddy
 
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                acc.Iconpath = filedialog.FileName;
+                acc.SetIcon(filedialog.FileName);
             }
             listview_acc.Items.Refresh();
         }
@@ -2200,8 +2215,7 @@ namespace Gw2_Launchbuddy
 
             if (filedialog.FileName != "")
             {
-                acc.Configpath = filedialog.FileName;
-                (sender as Button).Content = acc.Configname;
+                (sender as Button).Content = acc.ConfigurationPath = filedialog.FileName;
             }
         }
 
@@ -2270,6 +2284,52 @@ namespace Gw2_Launchbuddy
             drawingContext.DrawGeometry(Brushes.Black, null, geometry);
 
             drawingContext.Pop();
+        }
+    }
+    public class ListBoxHelper : DependencyObject
+    {
+        public static int GetAutoSizeItemCount(DependencyObject obj)
+        {
+            return (int)obj.GetValue(AutoSizeItemCountProperty);
+        }
+
+        public static void SetAutoSizeItemCount(DependencyObject obj, int value)
+        {
+            obj.SetValue(AutoSizeItemCountProperty, value);
+        }
+
+        // Using a DependencyProperty as the backing store for AutoSizeItemCount.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty AutoSizeItemCountProperty =
+            DependencyProperty.RegisterAttached("AutoSizeItemCount", typeof(int), typeof(ListBoxHelper), new PropertyMetadata(0, OnAutoSizeItemCountChanged));
+
+        private static void OnAutoSizeItemCountChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ListBox listBox = d as ListBox;
+            listBox.AddHandler(ScrollViewer.ScrollChangedEvent, new ScrollChangedEventHandler((lb, arg) => UpdateSize(listBox)));
+            listBox.ItemContainerGenerator.ItemsChanged += (ig, arg) => UpdateSize(listBox);
+        }
+
+        static void UpdateSize(ListBox listBox)
+        {
+            ItemContainerGenerator gen = listBox.ItemContainerGenerator;
+            FrameworkElement element = listBox.InputHitTest(new Point(listBox.Padding.Left + 5, listBox.Padding.Top + 5)) as FrameworkElement;
+            if (element != null && gen != null)
+            {
+                object item = element.DataContext;
+                if (item != null)
+                {
+                    FrameworkElement container = gen.ContainerFromItem(item) as FrameworkElement;
+                    if (container == null)
+                    {
+                        container = element;
+                    }
+                    int maxCount = GetAutoSizeItemCount(listBox);
+                    double newHeight = Math.Min(maxCount, gen.Items.Count) * container.ActualHeight;
+                    newHeight += listBox.Padding.Top + listBox.Padding.Bottom + listBox.BorderThickness.Top + listBox.BorderThickness.Bottom + 2;
+                    if (listBox.ActualHeight != newHeight)
+                        listBox.Height = newHeight;
+                }
+            }
         }
     }
 }

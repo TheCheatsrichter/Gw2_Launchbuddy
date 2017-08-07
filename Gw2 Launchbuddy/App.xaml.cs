@@ -31,12 +31,13 @@ namespace Gw2_Launchbuddy
         }
         public static void RunParsed(Options options)
         {
+            Globals.options = options;
             if (!options.Silent)
             {
                 var app = new App();
                 app.InitializeComponent();
                 app.Run();
-            }   
+            }
         }
     }
 }

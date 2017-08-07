@@ -362,7 +362,7 @@
                                 <ColumnDefinition Width="50*"/>
                                 <ColumnDefinition Width="50*"/>
                             </Grid.ColumnDefinitions>
-                            <ListBox x:Name="arglistbox" ItemsSource="{Binding}"   SelectionChanged="arglistbox_SelectionChanged" Grid.Row="1" Grid.Column="0" Margin="0,0,5,0" >
+                            <ListBox x:Name="arglistbox" ItemsSource="{Binding}" local:ListBoxHelper.AutoSizeItemCount="20" SelectionChanged="arglistbox_SelectionChanged" Grid.Row="1" Grid.Column="0" Margin="0,0,5,0" >
                                 <ListBox.Resources>
                                     <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                         <Style.Triggers>
@@ -372,26 +372,6 @@
                                         </Style.Triggers>
                                     </Style>
                                 </ListBox.Resources>
-                                <CheckBox Content="-32" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-repair" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-bmp" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-diag" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-dx9single" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-forwardrenderer" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-image" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-log" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-maploadinfo" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-mce" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-nomusic" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-noui" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-nosound" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-prefreset" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-uispanallmonitors" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-uninstall" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-useOldFov" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-verify" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-umbra gpu" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-windowed" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
                             </ListBox>
                             <Label x:Name="lab_descr" Content="Description (Wiki):"  FontSize="16" FontWeight="Bold"  Grid.Column="1"/>
                             <TextBlock x:Name="textblock_descr" TextWrapping="Wrap" FontSize="13.333" Grid.Row="1" Grid.Column="1" Margin="5,0"/>
@@ -435,9 +415,9 @@
                         <ListView ItemsSource="{Binding}" SelectionMode="Multiple" x:Name="listview_acc"  IsEnabled="False" SelectionChanged="listview_acc_SelectionChanged" Grid.Row="1" Grid.ColumnSpan="5">
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="Nickname" Width="150" DisplayMemberBinding="{Binding Nick}" />
-                                    <GridViewColumn Header="Email" Width="150" DisplayMemberBinding="{Binding DisplayEmail}" />
-                                    <GridViewColumn Header="Created at" Width="150" DisplayMemberBinding="{Binding Time}" />
+                                    <GridViewColumn Header="Nickname" Width="150" DisplayMemberBinding="{Binding Nickname}" />
+                                    <GridViewColumn Header="Email" Width="150" DisplayMemberBinding="{Binding Email}" />
+                                    <GridViewColumn Header="Created at" Width="150" DisplayMemberBinding="{Binding CreateDate}" />
                                     <GridViewColumn Header="Icon" Width="64">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -453,7 +433,7 @@
                                     <GridViewColumn Header="Graphic Config" Width="100">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Button Content="{Binding Configname}" Height="32" x:Name="bt_selectaccgfx" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="bt_selectaccgfx_Click" />
+                                                <Button Content="{Binding ConfigurationName}" Height="32" x:Name="bt_selectaccgfx" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="bt_selectaccgfx_Click" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
@@ -516,7 +496,7 @@
                             <RowDefinition Height="30"/>
                             <RowDefinition/>
                             <RowDefinition Height="40"/>
-                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
