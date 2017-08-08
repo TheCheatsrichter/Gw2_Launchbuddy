@@ -2,11 +2,10 @@
 using System.Collections.ObjectModel;
 using static Gw2_Launchbuddy.MainWindow;
 using System;
-
+using CommandLine;
 
 namespace Gw2_Launchbuddy
 {
-
     static class Globals
     {
         public static GUI_ApplicationManager Appmanager = new GUI_ApplicationManager();
@@ -28,4 +27,10 @@ namespace Gw2_Launchbuddy
         public static string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
         public static Version LBVersion = new Version("1.4.2");
     }
+    public class Options
+    {
+        [Option('s', "silent", HelpText = "Run Launchbuddy silently.")]
+        public bool Silent { get; set; }
+    }
+
 }
