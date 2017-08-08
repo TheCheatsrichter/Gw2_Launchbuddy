@@ -785,7 +785,41 @@
                     </StackPanel>
 
                 </TabItem>
-
+                <TabItem Header="Crash Fixes">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50*"/>
+                            <RowDefinition Height="50*"/>
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50*"/>
+                                <ColumnDefinition Width="50*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="100*"/>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+                            <Button Content="Fix" Grid.Column="1" Grid.Row="2" IsEnabled="False"/>
+                            <Label Content="Latest Crashes"/>
+                            <Label Content="Info" Grid.Column="1"/>
+                            <ListView Grid.Row="1" Grid.RowSpan="2"/>
+                            <TextBlock Grid.Column="1" Grid.Row="1" Margin="5"/>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="70*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="Clientifix the Quaggan" FontSize="16" FontWeight="Bold"/>
+                            <Image Source="Resources/opacitymask.png"/>
+                            <Image Source="Resources/quaggan.jpg"/>
+                            <Image Grid.Column="1" Source="Resources/opacitymask.png" Stretch="Fill"/>
+                            <TextBlock Grid.Column="1" Text="This is an example text" Foreground="White" Margin="10"/>
+                        </Grid>
+                    </Grid>
+                </TabItem>
                 <TabItem Header="LB Settings">
                     <StackPanel>
                         <Label Content="Launchbuddy Settings" FontWeight="Bold" FontSize="16"/>

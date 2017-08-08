@@ -25,7 +25,6 @@ using System.Windows.Input;
 
 namespace Gw2_Launchbuddy
 {
-
     //Small Custom UI Brainstorming
 
     public class LBUIElement
@@ -37,7 +36,7 @@ namespace Gw2_Launchbuddy
         public bool IsDragged { set; get; }
         public Point GrabPoint { set; get; }
 
-        public  void StartDrag(object sender, MouseButtonEventArgs e)
+        public void StartDrag(object sender, MouseButtonEventArgs e)
         {
             UserControl control = sender as UserControl;
             control.CaptureMouse();
@@ -45,13 +44,13 @@ namespace Gw2_Launchbuddy
             //GrabPoint = e.GetPosition(this);
         }
 
-        public  void StopDrag(object sender)
+        public void StopDrag(object sender)
         {
             (sender as UserControl).ReleaseMouseCapture();
             IsDragged = false;
         }
 
-        public void Drag(object sender,Point MousePos)
+        public void Drag(object sender, Point MousePos)
         {
             var UserControl = sender as UserControl;
 
@@ -66,18 +65,16 @@ namespace Gw2_Launchbuddy
         public int Height { set; get; }
     }
 
-
     public static class CustomUI
     {
         public static List<LBUIElement> UIElements = new List<LBUIElement>();
         public static Canvas UiCanvas = new Canvas();
 
         //And here would go the functions
-        public static void S (object sender)
+        public static void S(object sender)
         {
             var UIControl = sender as UserControl;
 
         }
-
     }
 }

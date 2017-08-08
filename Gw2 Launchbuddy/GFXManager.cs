@@ -21,11 +21,10 @@ namespace Gw2_Launchbuddy
         {
             "gamma",
         };
-        
 
         static public GFXConfig LoadFile()
         {
-            OpenFileDialog filediag = new OpenFileDialog { Multiselect = false,DefaultExt="xml" };
+            OpenFileDialog filediag = new OpenFileDialog { Multiselect = false, DefaultExt = "xml" };
             CurrentConfig.ConfigPath = "";
 
             filediag.DefaultExt = ".xml";
@@ -61,7 +60,6 @@ namespace Gw2_Launchbuddy
             if (savediag.FileName != "") ToXml(savediag.FileName);
         }
 
-
         private static List<string> GetHeader()
         {
             List<string> header = new List<string>();
@@ -85,23 +83,22 @@ namespace Gw2_Launchbuddy
 
         public static void UseGFX(string path)
         {
-
             if (path == null || path == "")
                 return;
 
             if (!File.Exists(path) && path != "Default")
             {
-                MessageBox.Show("GFX Setting not found!\n\nPath:" + path+" \n\nLaunching with default settings!");
+                MessageBox.Show("GFX Setting not found!\n\nPath:" + path + " \n\nLaunching with default settings!");
                 path = "Default";
             }
 
             if (path == "Default" && File.Exists(Globals.AppdataPath + "GFX_tmp.xml"))
             {
-                if (File.Exists(Globals.ClientXmlpath))File.Delete(Globals.ClientXmlpath);
-                File.Move(Globals.AppdataPath + "GFX_tmp.xml",Globals.ClientXmlpath);
+                if (File.Exists(Globals.ClientXmlpath)) File.Delete(Globals.ClientXmlpath);
+                File.Move(Globals.AppdataPath + "GFX_tmp.xml", Globals.ClientXmlpath);
             }
 
-            if (File.Exists(path) && Path.GetExtension(path) ==".xml")
+            if (File.Exists(path) && Path.GetExtension(path) == ".xml")
             {
                 if (!File.Exists(Globals.AppdataPath + "GFX_tmp.xml"))
                 {
@@ -111,7 +108,7 @@ namespace Gw2_Launchbuddy
                 {
                     File.Delete(Globals.ClientXmlpath);
                 }
-                File.Copy(path,Globals.ClientXmlpath);
+                File.Copy(path, Globals.ClientXmlpath);
             }
         }
 
@@ -119,11 +116,10 @@ namespace Gw2_Launchbuddy
         {
             if (File.Exists(Globals.AppdataPath + "GFX_tmp.xml"))
             {
-                if (File.Exists(Globals.ClientXmlpath))File.Delete(Globals.ClientXmlpath);
+                if (File.Exists(Globals.ClientXmlpath)) File.Delete(Globals.ClientXmlpath);
                 File.Move(Globals.AppdataPath + "GFX_tmp.xml", Globals.ClientXmlpath);
             }
         }
-
 
         public static string[] ToXml(string dest)
         {
@@ -162,15 +158,14 @@ namespace Gw2_Launchbuddy
                 }
                 gfxoption.type = node.Attributes["Type"].Value;
                 gfxoption.Registered = node.Attributes["Registered"].Value == "True";
-                gfxoption.Value= node.Attributes["Value"].Value;
+                gfxoption.Value = node.Attributes["Value"].Value;
                 gfxoption.OldValue = gfxoption.Value;
 
-                if (node.ChildNodes.Count == 0 && gfxoption.type == "Bool") 
+                if (node.ChildNodes.Count == 0 && gfxoption.type == "Bool")
                 {
                     gfxoption.Options.Add("true");
                     gfxoption.Options.Add("false");
                 }
-
 
                 foreach (XmlNode childnode in node.ChildNodes)
                 {
@@ -181,23 +176,20 @@ namespace Gw2_Launchbuddy
                         case "ENUM":
                             gfxoption.Options.Add(childnode.Attributes["EnumValue"].Value);
                             break;
-
-                    }  
+                    }
                 }
 
                 CurrentConfig.Config.Add(gfxoption);
             }
             return CurrentConfig;
         }
-
-    
     }
 
     public class GFXOption
     {
         public List<string> ToXml()
         {
-            List<string>output = new List<string>();
+            List<string> output = new List<string>();
 
             string head = "";
             head += "<OPTION ";
@@ -226,7 +218,9 @@ namespace Gw2_Launchbuddy
         public IEnumerable<string> IEOptions
         {
             set { IEOptions = value; }
-            get {IEnumerable<string> tmp = Options;
+            get
+            {
+                IEnumerable<string> tmp = Options;
                 return tmp;
             }
         }
@@ -237,8 +231,6 @@ namespace Gw2_Launchbuddy
         public bool issaved = false;
         public string Configname { set; get; }
         public string ConfigPath { set; get; }
-        public ObservableCollection<GFXOption> Config= new ObservableCollection<GFXOption>();
+        public ObservableCollection<GFXOption> Config = new ObservableCollection<GFXOption>();
     }
-
-
 }

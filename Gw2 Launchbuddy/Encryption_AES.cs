@@ -4,10 +4,8 @@ using System.Security.Cryptography;
 using System.IO;
 using System.Text;
 
-
 public class AES
 {
-   
     private static byte[] key = { 100, 217, 19, 11, 24, 26, 85, 45, 114, 184, 27, 162, 37, 112, 222, 209, 241, 24, 175, 144, 173, 53, 196, 29, 24, 26, 17, 218, 131, 236, 53, 209 };
     private static byte[] vector = { 34, 64, 58, 111, 23, 3, 113, 119, 89, 121, 200, 112, 19, 32, 111, 13 };
     private static byte[] entropy = { 12 };
@@ -35,7 +33,6 @@ public class AES
         System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
         return new string(chars);
     }
-
 
     public string Encrypt(string unencrypted)
     {

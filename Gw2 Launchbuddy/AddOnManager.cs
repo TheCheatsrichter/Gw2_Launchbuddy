@@ -49,7 +49,7 @@ namespace Gw2_Launchbuddy
             this.IsMultilaunch = IsMultilaunch;
             this.IsLbAddon = IsLbAddon;
             args = Info.Arguments;
-            Path= Info.FileName;
+            Path = Info.FileName;
         }
 
         public AddOn() { }
@@ -70,9 +70,9 @@ namespace Gw2_Launchbuddy
     {
         public static ObservableCollection<AddOn> AddOns = new ObservableCollection<AddOn>();
 
-        public static void Add(string name,string[] args,bool IsMultilaunch,bool IsLbAddon)
+        public static void Add(string name, string[] args, bool IsMultilaunch, bool IsLbAddon)
         {
-            if(name != "")
+            if (name != "")
             {
                 System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
                 filedialog.Multiselect = false;
@@ -94,7 +94,7 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show("Please enter a name!");
             }
         }
-        
+
         public static void CheckExisting()
         {
             Process[] processes = Process.GetProcesses();
@@ -113,7 +113,7 @@ namespace Gw2_Launchbuddy
             CheckExisting();
             Process[] processes = Process.GetProcesses();
 
-            foreach(AddOn addon in AddOns)
+            foreach (AddOn addon in AddOns)
             {
                 foreach (Process childpro in addon.ChildProcess.ToList())
                 {
@@ -121,7 +121,7 @@ namespace Gw2_Launchbuddy
                     {
                         addon.ChildProcess.Remove(childpro);
                     }
-                }  
+                }
             }
         }
 
@@ -167,7 +167,6 @@ namespace Gw2_Launchbuddy
                     {
                         MessageBox.Show(addon.Name + " could not be started!\nMake sure that the entered path is correct!");
                     }
-                    
                 }
             }
         }
@@ -177,7 +176,7 @@ namespace Gw2_Launchbuddy
             UpdateList();
             foreach (AddOn addon in AddOns)
             {
-                if((addon.IsMultilaunch ||  addon.ChildProcess.Count <= 0) && addon.IsLbAddon)
+                if ((addon.IsMultilaunch || addon.ChildProcess.Count <= 0) && addon.IsLbAddon)
                 {
                     try
                     {
@@ -192,7 +191,7 @@ namespace Gw2_Launchbuddy
                 }
             }
         }
-        
+
         public static void SaveAddons(string path)
         {
             try
@@ -200,7 +199,7 @@ namespace Gw2_Launchbuddy
                 XmlSerializer x = new XmlSerializer(typeof(ObservableCollection<AddOn>));
                 TextWriter writer = new StreamWriter(path);
                 x.Serialize(writer, AddOns);
-                
+
                 /*
                 using (Stream stream = System.IO.File.Open(path, FileMode.Create))
                 {
@@ -214,7 +213,7 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show(e.Message);
             }
         }
-        
+
         public static ObservableCollection<AddOn> LoadAddons(string path)
         {
             try
