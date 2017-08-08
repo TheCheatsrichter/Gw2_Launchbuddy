@@ -9,14 +9,13 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
 
-
 namespace Gw2_Launchbuddy
 {
-    public static class Versionswitcher
+    public static class VersionSwitcher
     {
         static string URL_Releases = @"https://github.com/TheCheatsrichter/Gw2_Launchbuddy/releases";
         static List<string> URL_Versions = new List<string>();
-        static string Repo_User,Repo_Name;
+        static string Repo_User, Repo_Name;
         public static ObservableCollection<Release> Releaselist = new ObservableCollection<Release>();
 
         public static void CheckForUpdate()
@@ -35,7 +34,7 @@ namespace Gw2_Launchbuddy
                     {
                         newest_version = release.Version;
                         newest_release = release;
-                    }             
+                    }
                 }
             }
             if (newest_version.ToString() != "0.0")
@@ -43,37 +42,25 @@ namespace Gw2_Launchbuddy
                 MessageBoxResult win = MessageBox.Show("A new Version of Gw2 Launchbuddy is available!\n\nDo you want to update to Gw2 Launchbuddy V" + newest_version.ToString() + "?\n\nIt is also possible to manually update Launchbuddy or to disable the autoupdatecheck in the 'LB settings' tab", "Release Download", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (win.ToString() == "Yes")
                 {
-                    ApplyReleasebyThread(newest_release);
+                    ApplyRelease(newest_release);
                 }
             }
-
-        }
-
-        private static void ApplyReleasebyThread(Release rel)
-        {
-            WebClient wc = new WebClient();
-            string dest = Globals.exepath + "Gw2_Launchbuddy_" + rel.Version + ".exe";
-            wc.DownloadFile(rel.DownloadURL, dest);
-            Process newlaunchbuddy = new Process { StartInfo = new ProcessStartInfo(dest) };
-            newlaunchbuddy.Start();
-            Process.Start(Globals.exepath);
-            Application.Current.Dispatcher.Invoke(new Action(() =>
-            {            
-                System.Windows.Application.Current.Shutdown();
-            }));
         }
 
         public static void ApplyRelease(Release rel)
         {
-            WebClient wc = new WebClient();
-            string dest = Globals.exepath + "Gw2_Launchbuddy_" + rel.Version + ".exe";
-            wc.DownloadFile(rel.DownloadURL,dest);
-            Process.Start(Globals.exepath);
-            System.Windows.Application.Current.Shutdown();
-            Process newlaunchbuddy = new Process { StartInfo = new ProcessStartInfo(dest) };
-            newlaunchbuddy.Start();
-        }
+            //Create Update Helper
+            string pathToUH = System.IO.Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath) + "\\Update Helper.exe";
+            if (!System.IO.File.Exists(pathToUH)) System.IO.File.WriteAllBytes(pathToUH, Properties.Resources.Update_Helper);
 
+            //Execute Update Helper
+            ProcessStartInfo Info = new ProcessStartInfo();
+            Info.Arguments = Process.GetCurrentProcess().Id + " \"" + rel.Version + "\" \"" + rel.DownloadURL + "\" \"" + System.IO.Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName) + "\"";
+            Info.WindowStyle = ProcessWindowStyle.Hidden;
+            Info.CreateNoWindow = true;
+            Info.FileName = pathToUH;
+            Process.Start(Info);
+        }
 
         public static void GetReleaseList()
         {
@@ -82,12 +69,12 @@ namespace Gw2_Launchbuddy
             Repo_User = Repomatches.Groups["User"].Value;
             Repo_Name = Repomatches.Groups["Name"].Value;
 
-            string HTML_Raw="";
+            string HTML_Raw = "";
             using (WebClient downloader = new WebClient())
             {
                 try
                 {
-                    HTML_Raw= downloader.DownloadString(URL_Releases);
+                    HTML_Raw = downloader.DownloadString(URL_Releases);
                 }
                 catch
                 {
@@ -99,7 +86,6 @@ namespace Gw2_Launchbuddy
             MatchCollection releases_raw = filter.Matches(HTML_Raw);
 
             ObservableCollection<Release> releases = new ObservableCollection<Release>();
-
 
             string repoprefix = @"\/" + Repo_User + @"\/" + Repo_Name;
             //Filters
@@ -119,13 +105,12 @@ namespace Gw2_Launchbuddy
                     Date = Regex.Match(version.Value, datefilter).Groups["Date"].Value,
                     Name = Regex.Match(version.Value, namefilter).Groups["Name"].Value,
                     Version = new Version(Regex.Match(version.Value, versionfilter).Groups["Version"].Value),
-                    Description = "<html>\n"+Regex.Match(version.Value, descriptionfilter).Value+"\n</html>",
+                    Description = "<html>\n" + Regex.Match(version.Value, descriptionfilter).Value + "\n</html>",
                     DownloadURL = URL_Releases + "/download/" + Regex.Match(version.Value, downloadurlfilter).Groups["Exename"].Value,
                 };
-            releases.Add(release);
+                releases.Add(release);
             }
             Releaselist = releases;
-
         }
     }
 

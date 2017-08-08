@@ -87,8 +87,12 @@ namespace Gw2_Launchbuddy
         {
             CheckPros();
             ProAccBinding selinstance = (sender as Button).DataContext as ProAccBinding;
-            try{
-                selinstance.pro.Kill();
+            try
+            {
+                if(!selinstance.pro.CloseMainWindow())
+                    selinstance.pro.Kill();
+                if (!selinstance.pro.WaitForExit(1000))
+                    selinstance.pro.Kill();
             }
             catch { }
             Globals.LinkedAccs.Remove(selinstance);

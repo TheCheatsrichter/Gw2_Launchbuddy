@@ -1,7 +1,7 @@
-﻿<Application x:Class="Gw2_Serverselection.App"
+﻿<Application x:Class="Gw2_Launchbuddy.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Gw2_Serverselection"
+             xmlns:local="clr-namespace:Gw2_Launchbuddy"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
