@@ -2233,6 +2233,20 @@ namespace Gw2_Launchbuddy
             Properties.Settings.Default.useinstancegui = (bool)cb_useinstancegui.IsChecked;
             Properties.Settings.Default.Save();
         }
+        
+         private void myWindow_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.D1 || e.Key == System.Windows.Input.Key.D2 || e.Key == System.Windows.Input.Key.D3 || e.Key == System.Windows.Input.Key.D4 || e.Key == System.Windows.Input.Key.D5 || e.Key == System.Windows.Input.Key.D6 || e.Key == System.Windows.Input.Key.D7 || e.Key == System.Windows.Input.Key.D8 || e.Key == System.Windows.Input.Key.D9)
+            {
+                int KeyNumber = Int32.Parse(e.Key.ToString().Replace("D", ""));
+
+                if (KeyNumber <= Cinema_Accountlist.Items.Count)
+                {
+                    if (Cinema_Accountlist.SelectedItems.Contains(Cinema_Accountlist.Items[KeyNumber - 1])) { Cinema_Accountlist.SelectedItems.Remove(Cinema_Accountlist.Items[KeyNumber - 1]); }
+                    else { Cinema_Accountlist.SelectedItems.Add(Cinema_Accountlist.Items[KeyNumber - 1]); }
+                }
+            }
+        }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
