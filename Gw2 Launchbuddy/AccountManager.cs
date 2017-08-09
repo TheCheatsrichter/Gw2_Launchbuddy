@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 
 namespace Gw2_Launchbuddy
 {
-    public static class Accounts
+    public static class AccountManager
     {
         private static List<Account> accountList = new List<Account>();
         public static int Count => accountList.Count;
@@ -39,9 +39,33 @@ namespace Gw2_Launchbuddy
     [Serializable()]
     public class Account
     {
+        private string email;
+        private string password;
+
         public string Nickname { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string Email
+        {
+            get
+            {
+                return email;
+            }
+            set
+            {
+                email = value;
+                AccountArgumentManager.ArgumentNoCreate(this, "-email")?.WithOptionString(value);
+            }
+        }
+        public string Password {
+            get
+            {
+                return password;
+            }
+            set
+            {
+                password = value;
+                AccountArgumentManager.ArgumentNoCreate(this, "-password")?.WithOptionString(value);
+            }
+        }
 
         public DateTime CreateDate { get; set; }
         public DateTime ModifyDate { get; set; }
@@ -138,6 +162,26 @@ namespace Gw2_Launchbuddy
                     icon = bitmap;
                 }
             }
+        }
+
+        public AccountArgument Argument(string Flag)
+        {
+            return AccountArgumentManager.Argument(this, Flag);
+        }
+
+        public List<AccountArgument> GetArgumentList()
+        {
+            return AccountArgumentManager.GetAccountArguments(this);
+        }
+
+        public string PrintArguments()
+        {
+            return String.Join(" ", GetArgumentList().Where(a => a.Selected == true).Select(a => a.Argument.Flag + (a.Argument.Sensitive ? null : " " + a.OptionString)));
+        }
+        public string CommandLine(Account account = null)
+        {
+            string output = String.Join(" ", GetArgumentList().Where(a => a.Selected == true).Select(a => a.Argument.Flag + " " + a.OptionString));
+            return output;
         }
     }
     /*[Serializable()]

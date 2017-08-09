@@ -177,6 +177,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AccountArgumentManager.cs" />
     <Compile Include="AccountManager.cs" />
     <Compile Include="AddOnManager.cs" />
     <Compile Include="ApplicationManager.cs" />

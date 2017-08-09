@@ -5,11 +5,11 @@ using static Gw2_Launchbuddy.MainWindow;
 
 namespace Gw2_Launchbuddy
 {
-    public static class Arguments
+    public static class ArgumentManager
     {
         private static List<Argument> argumentList = new List<Argument>();
 
-        static Arguments()
+        static ArgumentManager()
         {
             Add("-32", "Forces the game to run in 32 bit.").IsActive().IsSelectable();
             Add("-bmp", "Forces the game to create lossless screenshots as .BMP files. Use for creating high-quality screenshots at the expense of much larger files.").IsActive().IsSelectable();
@@ -31,7 +31,7 @@ namespace Gw2_Launchbuddy
             Add("-windowed", "Forces Guild Wars 2 to run in windowed mode. In game, you can switch to windowed mode by pressing Alt + Enter or clicking the window icon in the upper right corner.").IsActive().IsSelectable();
             Add("-umbra gpu", "Forces the use of umbra's GPU accelerated culling. In most cases, using this results in higher cpu usage and lower gpu usage decreasing the frame-rate.").IsActive().IsSelectable();
             Add("-maploadinfo", "Shows diagnostic information during map loads, including load percentages and elapsed time.").IsActive().IsSelectable();
-            Add("-shareArchive", "Opens the Gw2.dat file in shared mode so that it can be accessed from other processes while the game is running.").IsActive().IsSelected();
+            Add("-shareArchive", "Opens the Gw2.dat file in shared mode so that it can be accessed from other processes while the game is running.").IsActive();//.IsSelected();
             Add("-nopatchui", "Hides the user interface during the update process.").IsActive();
             Add("-email", null).IsActive().IsSensitive();
             Add("-password", null).IsActive().IsSensitive();
@@ -46,38 +46,17 @@ namespace Gw2_Launchbuddy
         }
         public static Argument Add(string Flag, string Description = null) { return Add(new Argument(Flag, Description)); }
 
-        public static Argument Argument(string Flag) { if (!argumentList.Where(a => a.Flag == Flag).Any()) Add(Flag, "??????????").IsActive(); return argumentList.Where(a => a.Flag == Flag).FirstOrDefault(); }
+        public static Argument Argument(string Flag) {
+            return argumentList.Where(a => a.Flag == Flag).SingleOrDefault() ?? Add(Flag, "??????????").IsActive();
+        }
 
         public static void Remove(this Argument argument) { argumentList.Remove(argument); }
 
         public static List<Argument> ToList() {  return argumentList; }
-        public static string Print()
-        {
-            return String.Join(" ", argumentList.Where(a => a.Selected == true).Select(a => a.Flag + (a.Sensitive ? null :  " " + a.OptionString)));
-        }
-        public static string CommandLine(Account account = null)
-        {
-            if (account != null) SetCredentials(account.Email, account.Password);
-            string tmp = String.Join(" ", argumentList.Where(a => a.Selected == true).Select(a => a.Flag + " " + a.OptionString));
-            ClearCredentials();
-            return tmp;
-
-        }
 
         public static Dictionary<string, Argument> ToDictionary(bool IncludeSensitive = false)
         {
             return argumentList.Where(a => a.Active).ToDictionary(a => a.Flag, a => a);
-        }
-
-        private static void SetCredentials(string Email, string Password)
-        {
-            Argument("-email").OptionString = Email;
-            Argument("-password").OptionString = Password;
-        }
-        private static void ClearCredentials()
-        {
-            Argument("-email").OptionString = null;
-            Argument("-password").OptionString = null;
         }
     }
 
@@ -92,16 +71,12 @@ namespace Gw2_Launchbuddy
         public string Flag { get; private set; }
         public string Description { get; private set; }
 
-        public Argument WithOptionString(string OptionString) { this.OptionString = OptionString; return this; }
-        public Argument IsSelected(bool Selected = true) { this.Selected = Selected; return this; }
         public Argument IsSensitive(bool Sensitive = true) { this.Sensitive = Sensitive; return this; }
         public Argument IsActive(bool Active = true) { this.Active = Active; return this; }
         public Argument IsBlocker(bool Blocker = true) { this.Blocker = Blocker; return this; }
         public Argument IsTemporary (bool Temporary = true) { this.Temporary = Temporary; return this; }
         public Argument IsSelectable(bool Selectable = true) { this.Selectable = Selectable; return this; }
 
-        public string OptionString { get; set; }
-        public bool Selected { get; set; }
         public bool Sensitive { get; private set; }
         public bool Active { get; private set; }
         public bool Blocker { get; private set; }

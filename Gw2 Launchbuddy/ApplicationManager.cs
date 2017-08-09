@@ -52,9 +52,9 @@ namespace Gw2_Launchbuddy
             }
 
             //Launching the application with arguments
-            if (Accounts.Count > 0)
+            if (AccountManager.Count > 0)
             {
-                for (int i = 0; i <= Accounts.Count - 1; i++)
+                for (int i = 0; i <= AccountManager.Count - 1; i++)
                 {
                     LaunchGW2(i);
                 }
@@ -111,14 +111,14 @@ namespace Gw2_Launchbuddy
             {
                 ProcessStartInfo gw2proinfo = new ProcessStartInfo();
                 gw2proinfo.FileName = Globals.exepath + Globals.exename;
-                var selected = Accounts.ToList().Skip(accnr ?? Accounts.Count).SingleOrDefault();
-                gw2proinfo.Arguments = Arguments.CommandLine(selected);
+                var selected = AccountManager.ToList().Skip(accnr ?? AccountManager.Count).SingleOrDefault();
+                gw2proinfo.Arguments = selected.CommandLine();
                 gw2proinfo.WorkingDirectory = Globals.exepath;
                 Process gw2pro = new Process { StartInfo = gw2proinfo };
                 if (accnr != null)
                 {
-                    Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, Accounts.ToList()[(int)accnr]));
-                    GFXManager.UseGFX(Accounts.ToList()[(int)accnr].ConfigurationPath);
+                    Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, AccountManager.ToList()[(int)accnr]));
+                    GFXManager.UseGFX(AccountManager.ToList()[(int)accnr].ConfigurationPath);
                 }
                 else
                 {
