@@ -1914,10 +1914,12 @@ namespace Gw2_Launchbuddy
 
         private void Window_LostKeyboardFocus(Object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
+            if (cinemamode || rb_cinemavideomode.IsChecked == true) { Cinema_MediaPlayer.Pause(); }
             BeginStoryboard(this.FindResource("anim_musicfadeout") as System.Windows.Media.Animation.Storyboard);
         }
         private void Window_GotKeyboardFocus(Object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
+            if (cinemamode || rb_cinemavideomode.IsChecked == true) { Cinema_MediaPlayer.Play(); } 
             BeginStoryboard(this.FindResource("anim_musicfadein") as System.Windows.Media.Animation.Storyboard);
         }
 
