@@ -111,14 +111,14 @@ namespace Gw2_Launchbuddy
             {
                 ProcessStartInfo gw2proinfo = new ProcessStartInfo();
                 gw2proinfo.FileName = Globals.exepath + Globals.exename;
-                var selected = AccountManager.ToList().Skip(accnr ?? AccountManager.Count).SingleOrDefault();
+                var selected = AccountManager.ToList(true).Skip(accnr ?? AccountManager.Count).SingleOrDefault();
                 gw2proinfo.Arguments = selected.CommandLine();
                 gw2proinfo.WorkingDirectory = Globals.exepath;
                 Process gw2pro = new Process { StartInfo = gw2proinfo };
                 if (accnr != null)
                 {
-                    Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, AccountManager.ToList()[(int)accnr]));
-                    GFXManager.UseGFX(AccountManager.ToList()[(int)accnr].ConfigurationPath);
+                    Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, AccountManager.ToList(true)[(int)accnr]));
+                    GFXManager.UseGFX(AccountManager.ToList(true)[(int)accnr].ConfigurationPath);
                 }
                 else
                 {

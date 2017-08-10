@@ -11,9 +11,14 @@ namespace Gw2_Launchbuddy
 {
     public static class AccountManager
     {
+        static AccountManager()
+        {
+            //Add dummy account
+            Add(null, null, null).Default = true;
+        }
         private static List<Account> accountList = new List<Account>();
         public static int Count => accountList.Count;
-        public static List<Account> ToList() => accountList;
+        public static List<Account> ToList(bool includeDefault = false) => accountList.Where(a => a.Default = includeDefault).ToList();
 
         public static Account Account(string Nickname)
         {
@@ -23,6 +28,10 @@ namespace Gw2_Launchbuddy
         public static Account Add(Account Account)
         {
             accountList.Add(Account);
+            foreach(Argument Argument in ArgumentManager.ToList())
+            {
+                AccountArgumentManager.Add(Account, Argument);
+            }
             return Account;
         }
         public static Account Add(string Nickname, string Email, string Password)
@@ -32,7 +41,17 @@ namespace Gw2_Launchbuddy
 
         public static void Remove(this Account Account)
         {
+            //Dont allow deletion of dummy account
+            if (accountList.IndexOf(Account) == 0) return;
             accountList.Remove(Account);
+        }
+
+        public static Account DefaultAccount
+        {
+            get
+            {
+                return accountList.Where(a => a.Default == true).SingleOrDefault();
+            }
         }
     }
 
@@ -52,7 +71,7 @@ namespace Gw2_Launchbuddy
             set
             {
                 email = value;
-                AccountArgumentManager.ArgumentNoCreate(this, "-email")?.WithOptionString(value);
+                AccountArgumentManager.Get(this, "-email")?.WithOptionString(value);
             }
         }
         public string Password {
@@ -63,10 +82,10 @@ namespace Gw2_Launchbuddy
             set
             {
                 password = value;
-                AccountArgumentManager.ArgumentNoCreate(this, "-password")?.WithOptionString(value);
+                AccountArgumentManager.Get(this, "-password")?.WithOptionString(value);
             }
         }
-
+        
         public DateTime CreateDate { get; set; }
         public DateTime ModifyDate { get; set; }
         public DateTime RunDate { get; set; }
@@ -83,8 +102,7 @@ namespace Gw2_Launchbuddy
             this.CreateDate = DateTime.Now;
             this.ModifyDate = DateTime.Now;
         }
-
-        [NonSerialized]
+        
         private string configurationPath;
 
         public string ConfigurationPath
@@ -98,7 +116,7 @@ namespace Gw2_Launchbuddy
                 configurationPath = value;
             }
         }
-
+        
         public string ConfigurationName
         {
             get
@@ -166,7 +184,7 @@ namespace Gw2_Launchbuddy
 
         public AccountArgument Argument(string Flag)
         {
-            return AccountArgumentManager.Argument(this, Flag);
+            return AccountArgumentManager.GetOrCreate(this, Flag);
         }
 
         public List<AccountArgument> GetArgumentList()
@@ -178,11 +196,12 @@ namespace Gw2_Launchbuddy
         {
             return String.Join(" ", GetArgumentList().Where(a => a.Selected == true).Select(a => a.Argument.Flag + (a.Argument.Sensitive ? null : " " + a.OptionString)));
         }
-        public string CommandLine(Account account = null)
+        public string CommandLine()
         {
-            string output = String.Join(" ", GetArgumentList().Where(a => a.Selected == true).Select(a => a.Argument.Flag + " " + a.OptionString));
-            return output;
+            return String.Join(" ", GetArgumentList().Where(a => a.Selected == true).Select(a => a.Argument.Flag + " " + a.OptionString));
         }
+
+        public bool Default { get; set; }
     }
     /*[Serializable()]
     public class AccountOld

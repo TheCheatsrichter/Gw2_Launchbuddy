@@ -36,7 +36,9 @@ namespace Gw2_Launchbuddy
             {
                 var app = new App();
                 app.InitializeComponent();
+#if DEBUG
                 app.Run();
+#endif
             }
         }
     }

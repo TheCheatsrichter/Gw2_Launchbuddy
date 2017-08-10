@@ -210,9 +210,9 @@ namespace Gw2_Launchbuddy
             //Setup
             donatepopup();
             //accountlist.Clear(); //clearing accountlist
-            fillargs(); //create arglist
-            loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
             loadaccounts(); // loading saved accounts from launchbuddy
+            loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
+            fillargs(); //create arglist
             Thread checkver = new Thread(checkversion);
             checkver.IsBackground = true;
             checkver.Start();
@@ -262,9 +262,9 @@ namespace Gw2_Launchbuddy
             List<CheckBox> tmp = new List<CheckBox>();
             try
             {
-                foreach (var item in ArgumentManager.ToDictionary(false))
+                foreach (var item in AccountArgumentManager.StopGap.ToDictionary())
                 {
-                    tmp.Add(new CheckBox() { Content = item.Key, IsEnabled = item.Value.Selectable, IsChecked = item.Value.Selected });
+                    tmp.Add(new CheckBox() { Content = item.Key, IsEnabled = item.Value.Argument.Selectable, IsChecked = item.Value.Selected });
                 }
                 foreach (var item in tmp)
                 {
@@ -848,12 +848,16 @@ namespace Gw2_Launchbuddy
                         case "EXECCMD":
                             //Filter arguments from path
                             lab_para.Content = "Latest Startparameters: ";
-                            Regex regex = new Regex(@"(?<=^|\s)-\w*");
+                            Regex regex = new Regex(@"(?<=^|\s)-(umbra.(\w)*|\w*)");
                             string input = getvalue(reader);
                             MatchCollection matchList = regex.Matches(input);
-
-                            ArgumentManager.ToList().Where(a => matchList.Cast<Match>().Select(b => b.Value).Contains(a.Flag) && !a.Blocker).ToList().ForEach(c => c.IsSelected());
-                            RefreshUI();
+                            
+                            //ArgumentManager.ToList().Where(a => matchList.Cast<Match>().Select(b => b.Value).Contains(a.Flag) && !a.Blocker).ToList().ForEach(c => c.IsSelected());
+                            
+                            foreach(Argument argument in  ArgumentManager.ToList())
+                                foreach (Match parameter in matchList)
+                                    if (argument.Flag == parameter.Value && !argument.Blocker)
+                                        AccountArgumentManager.StopGap.IsSelected(parameter.Value, true);
 
                             //foreach (CheckBox entry in arglistbox.Items)
                             //{
@@ -864,6 +868,9 @@ namespace Gw2_Launchbuddy
                             //            entry.IsChecked = true;
                             //    }
                             //}
+
+
+                            RefreshUI();
                             break;
                     }
                 }
@@ -1040,7 +1047,7 @@ namespace Gw2_Launchbuddy
                 string shortcutLocation = System.IO.Path.Combine(shortcutPath, shortcutName + ".lnk");
                 WshShell shell = new WshShell();
                 IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation);
-                string arguments = ArgumentManager.CommandLine(null);
+                string arguments = AccountManager.Account(null).CommandLine();
                 shortcut.IconLocation = Assembly.GetExecutingAssembly().Location;
                 shortcut.Description = "Created with Gw2 Launchbuddy, © TheCheatsrichter";
 
@@ -1083,7 +1090,7 @@ namespace Gw2_Launchbuddy
                 System.Windows.Controls.CheckBox item = (System.Windows.Controls.CheckBox)selecteditem;
                 lab_descr.Content = "Description (" + item.Content.ToString() + "):";
 
-                textblock_descr.Text = ArgumentManager.ToDictionary(false).Where(a => a.Key == item.Content.ToString()).Select(a => a.Value.Description).FirstOrDefault() ?? "Description missing! (PLEASE REPORT)";
+                textblock_descr.Text = ArgumentManager.ToDictionary().Where(a => a.Key == item.Content.ToString()).Select(a => a.Value.Description).FirstOrDefault() ?? "Description missing! (PLEASE REPORT)";
             }
         }
 
@@ -1177,7 +1184,7 @@ namespace Gw2_Launchbuddy
                             AccountManager.Add(acc);
                         }
 
-                        listview_acc.ItemsSource = Cinema_Accountlist.ItemsSource = AccountManager.ToList();
+                        listview_acc.ItemsSource = Cinema_Accountlist.ItemsSource = AccountManager.ToList().Where(a => a != AccountManager.ToList()[0]);
                     }
                 }
 
@@ -1896,18 +1903,18 @@ namespace Gw2_Launchbuddy
 
         private void CheckBox_Checked(Object sender, RoutedEventArgs e)
         {
-            ArgumentManager.Argument(((CheckBox)sender).Content.ToString()).IsSelected();
+            AccountArgumentManager.StopGap.IsSelected(((CheckBox)sender).Content.ToString(), true);
             RefreshUI();
         }
         private void CheckBox_Unchecked(Object sender, RoutedEventArgs e)
         {
-            ArgumentManager.Argument(((CheckBox)sender).Content.ToString()).IsSelected(false);
+            AccountArgumentManager.StopGap.IsSelected(((CheckBox)sender).Content.ToString(), false);
             RefreshUI();
         }
 
         void RefreshUI()
         {
-            lab_currentsetup.Content = "Current Setup: " + ArgumentManager.Print();
+            lab_currentsetup.Content = "Current Setup: " + AccountArgumentManager.StopGap.Print();
             lab_usedaddons.Content = "Used AddOns: " + AddOnManager.ListAddons();
             fillargs();
         }
@@ -1916,11 +1923,11 @@ namespace Gw2_Launchbuddy
         {
             //Should really be bound to changing applicable UI elements
             if (checkb_assets.IsChecked == true)
-                ArgumentManager.Argument("-assetsrv").OptionString = Globals.selected_assetsv.IP + ":" + tb_assetsport.Text;
+                AccountArgumentManager.StopGap.SetOptionString("-assetsrv", Globals.selected_assetsv.IP + ":" + tb_assetsport.Text);
             if (checkb_auth.IsChecked == true)
-                ArgumentManager.Argument("-authsrv ").OptionString = Globals.selected_authsv.IP + ":" + tb_authport.Text;
+                AccountArgumentManager.StopGap.SetOptionString("-authsrv ", Globals.selected_authsv.IP + ":" + tb_authport.Text);
             if (checkb_clientport.IsChecked == true)
-                ArgumentManager.Argument("-clientport").OptionString = tb_clientport.Text;
+                AccountArgumentManager.StopGap.SetOptionString("-clientport", tb_clientport.Text);
         }
 
         private void Window_LostKeyboardFocus(Object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
