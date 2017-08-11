@@ -63,6 +63,16 @@ namespace Gw2_Launchbuddy
         {
             return accountList.Where(a => a.Selected).ToList();
         }
+
+        public static void Move(Account Account, int Incriment)
+        {
+            var index = accountList.IndexOf(Account);
+            accountList.RemoveAt(index);
+            index = (1 <= index ? index : 1);
+            if (index < accountList.Count() || Incriment <= 0)
+                accountList.Insert(index + Incriment, Account);
+            else accountList.Add(Account);
+        }
     }
 
     [Serializable()]
@@ -213,6 +223,8 @@ namespace Gw2_Launchbuddy
         }
 
         public bool Default { get; set; }
+
+        public void Move(int Incriment) => AccountManager.Move(this, Incriment);
     }
     /*[Serializable()]
     public class AccountOld

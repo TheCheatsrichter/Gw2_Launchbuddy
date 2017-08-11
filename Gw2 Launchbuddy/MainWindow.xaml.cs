@@ -2126,11 +2126,11 @@ namespace Gw2_Launchbuddy
                 Account selectedacc = AccountManager.ToList()[index];
                 if (index - 1 >= 0)
                 {
-                    //accountlist.Remove(selectedacc);
-                    //accountlist.Insert(index - 1, selectedacc);
-                    //listview_acc.SelectedIndex = index + -1;
+                    selectedacc.Move(-1);
+                    //listview_acc.SelectedIndex = index - 1;
                 }
             }
+            listview_acc.ItemsSource = AccountManager.ToList(false);
         }
 
         private void bt_accsortdown_Click(object sender, RoutedEventArgs e)
@@ -2141,11 +2141,11 @@ namespace Gw2_Launchbuddy
                 Account selectedacc = AccountManager.ToList()[index];
                 if (index + 1 < AccountManager.Count)
                 {
-                    //accountlist.Remove(selectedacc);
-                    //accountlist.Insert(index + 1, selectedacc);
+                    selectedacc.Move(+1);
                     //listview_acc.SelectedIndex = index + 1;
                 }
             }
+            listview_acc.ItemsSource = AccountManager.ToList(false);
         }
 
         private void bt_accedit_Click(object sender, RoutedEventArgs e)

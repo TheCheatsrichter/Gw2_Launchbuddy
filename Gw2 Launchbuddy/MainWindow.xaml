@@ -406,10 +406,10 @@
                         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5">
                             <Label x:Name="lab_nick" Content="Nickname:" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                             <TextBox x:Name="tb_nick" Height="23" Width="150"  IsEnabled="False"/>
-                            <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left"  VerticalAlignment="Center"  IsEnabled="False" Height="26" Width="62" Grid.Row="2" Grid.Column="1" />
-                            <PasswordBox x:Name="tb_passw" Height="23" Width="150" IsEnabled="False" />
-                            <Label x:Name="lab_email" Content="Email:"  d:LayoutOverrides="Width" VerticalAlignment="Center"/>
+                            <Label x:Name="lab_email" Content="Email:"  d:LayoutOverrides="Width" VerticalAlignment="Center" RenderTransformOrigin="-2.293,0.5"/>
                             <TextBox x:Name="tb_email" Height="23" Width="150" IsEnabled="False" />
+                            <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left"  VerticalAlignment="Center"  IsEnabled="False" Height="26" Width="62" RenderTransformOrigin="4.565,0.5" Margin="0,2" />
+                            <PasswordBox x:Name="tb_passw" Height="23" Width="150" IsEnabled="False" Margin="0,4" RenderTransformOrigin="0.867,0.348" />
                         </StackPanel>
                         <CheckBox x:Name="cb_login" Content="Use Autologin" FontSize="16" Checked="cb_login_Checked" Unchecked="cb_login_Unchecked" FontWeight="Bold" Grid.Row="0" Grid.ColumnSpan="4" />
                         <ListView ItemsSource="{Binding}" SelectionMode="Multiple" x:Name="listview_acc"  IsEnabled="False" SelectionChanged="listview_acc_SelectionChanged" Grid.Row="1" Grid.ColumnSpan="5">
@@ -840,7 +840,7 @@
                                 <Button x:Name="bt_fetchlbversions" Margin="3" Content="Check for Updates" DockPanel.Dock="Left" Click="bt_fetchlbversions_Click"/>
                                 <Button x:Name="bt_downloadrelease" Margin="3" Content="Download" Click="bt_downloadrelease_Click" IsEnabled="False" DockPanel.Dock="Right"/>
                             </DockPanel>
-                           
+
                         </Grid>
                         <Separator Margin="-3,100,0,0"/>
                         <Button x:Name="bt_bugreport" Content="Report a Bug" Margin="5" Click="bt_bugreport_Click"/>
