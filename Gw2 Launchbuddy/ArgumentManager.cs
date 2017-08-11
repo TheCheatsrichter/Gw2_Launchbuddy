@@ -76,6 +76,12 @@ namespace Gw2_Launchbuddy
         {
             this.Flag = Flag;
             this.Description = Description;
+            Sensitive = false;
+            Active = false;
+            Blocker = false;
+            Temporary = false;
+            Selectable = false;
+            Default = false;
         }
 
         public string Flag { get; private set; }

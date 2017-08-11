@@ -52,16 +52,14 @@ namespace Gw2_Launchbuddy
             }
 
             //Launching the application with arguments
-            if (AccountManager.Count > 0)
+            if (AccountManager.GetSelected().Count > 0)
             {
-                for (int i = 0; i <= AccountManager.Count - 1; i++)
-                {
-                    LaunchGW2(i);
-                }
+                foreach (var Account in AccountManager.GetSelected())
+                    LaunchGW2(Account);
             }
             else
             {
-                LaunchGW2();
+                LaunchGW2(AccountManager.DefaultAccount);
             }
 
             GFXManager.RestoreDefault();
@@ -105,20 +103,19 @@ namespace Gw2_Launchbuddy
             return running == logged;
         }
 
-        static void LaunchGW2(int? accnr = null)
+        static void LaunchGW2(Account Selected)
         {
             try
             {
                 ProcessStartInfo gw2proinfo = new ProcessStartInfo();
                 gw2proinfo.FileName = Globals.exepath + Globals.exename;
-                var selected = AccountManager.ToList(true).Skip(accnr ?? AccountManager.Count).SingleOrDefault();
-                gw2proinfo.Arguments = selected.CommandLine();
+                gw2proinfo.Arguments = Selected.CommandLine();
                 gw2proinfo.WorkingDirectory = Globals.exepath;
                 Process gw2pro = new Process { StartInfo = gw2proinfo };
-                if (accnr != null)
+                if (Selected != AccountManager.DefaultAccount)
                 {
-                    Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, AccountManager.ToList(true)[(int)accnr]));
-                    GFXManager.UseGFX(AccountManager.ToList(true)[(int)accnr].ConfigurationPath);
+                    Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, Selected));
+                    GFXManager.UseGFX(Selected.ConfigurationPath);
                 }
                 else
                 {

@@ -775,7 +775,7 @@ namespace Gw2_Launchbuddy
                 if (Properties.Settings.Default.use_reshade && cb_reshade.IsEnabled == true) cb_reshade.IsChecked = true;
                 if (Properties.Settings.Default.use_autologin == true) cb_login.IsChecked = true;
 
-                if (Properties.Settings.Default.selected_acc != 0) listview_acc.SelectedIndex = Cinema_Accountlist.SelectedIndex = Properties.Settings.Default.selected_acc;
+                //if (Properties.Settings.Default.selected_acc != 0) listview_acc.SelectedIndex = Cinema_Accountlist.SelectedIndex = Properties.Settings.Default.selected_acc;
             }
             catch (Exception err)
             {
@@ -968,7 +968,8 @@ namespace Gw2_Launchbuddy
             lab_port_auth.IsEnabled = true;
             tb_authport.IsEnabled = true;
             tb_authport.Text = Globals.selected_authsv.Port;
-            ArgumentManager.Argument("-authsrv").IsSelected().OptionString = Globals.selected_authsv.IP + ":" + tb_authport.Text;
+            AccountArgumentManager.StopGap.IsSelected("-authsrv");
+            AccountArgumentManager.StopGap.SetOptionString("-authsrv",Globals.selected_authsv.IP + ":" + tb_authport.Text);
             RefreshUI();
         }
 
@@ -976,7 +977,8 @@ namespace Gw2_Launchbuddy
         {
             lab_port_auth.IsEnabled = false;
             tb_authport.IsEnabled = false;
-            ArgumentManager.Argument("-authsrv").IsSelected(false).OptionString = "";
+            AccountArgumentManager.StopGap.IsSelected("-authsrv", false);
+            AccountArgumentManager.StopGap.SetOptionString("-authsrv", null);
             RefreshUI();
         }
 
@@ -985,7 +987,8 @@ namespace Gw2_Launchbuddy
             lab_port_assets.IsEnabled = true;
             tb_assetsport.IsEnabled = true;
             tb_assetsport.Text = Globals.selected_assetsv.Port;
-            ArgumentManager.Argument("-assetsrv").IsSelected().OptionString = Globals.selected_assetsv.IP + ":" + tb_assetsport.Text;
+            AccountArgumentManager.StopGap.IsSelected("-assetsrv");
+            AccountArgumentManager.StopGap.SetOptionString("-assetsrv", Globals.selected_assetsv.IP + ":" + tb_assetsport.Text);
             RefreshUI();
         }
 
@@ -993,7 +996,8 @@ namespace Gw2_Launchbuddy
         {
             lab_port_assets.IsEnabled = false;
             tb_assetsport.IsEnabled = false;
-            ArgumentManager.Argument("-assetsrv").IsSelected(false).OptionString = "";
+            AccountArgumentManager.StopGap.IsSelected("-assetsrv", false);
+            AccountArgumentManager.StopGap.SetOptionString("-assetsrv", null);
             RefreshUI();
         }
 
@@ -1001,7 +1005,8 @@ namespace Gw2_Launchbuddy
         {
             tb_clientport.IsEnabled = true;
             lab_port_client.IsEnabled = true;
-            ArgumentManager.Argument("-clientport").IsSelected().OptionString = tb_clientport.Text;
+            AccountArgumentManager.StopGap.IsSelected("-clientport");
+            AccountArgumentManager.StopGap.SetOptionString("-clientport", tb_clientport.Text);
             RefreshUI();
         }
 
@@ -1009,7 +1014,8 @@ namespace Gw2_Launchbuddy
         {
             tb_clientport.IsEnabled = false;
             lab_port_client.IsEnabled = false;
-            ArgumentManager.Argument("-clientport").IsSelected(false).OptionString = tb_clientport.Text;
+            AccountArgumentManager.StopGap.IsSelected("-clientport", false);
+            AccountArgumentManager.StopGap.SetOptionString("-clientport", null);
             RefreshUI();
         }
 
@@ -1183,12 +1189,12 @@ namespace Gw2_Launchbuddy
                         {
                             AccountManager.Add(acc);
                         }
-
-                        listview_acc.ItemsSource = Cinema_Accountlist.ItemsSource = AccountManager.ToList().Where(a => a != AccountManager.ToList()[0]);
+                        
+                        listview_acc.ItemsSource = AccountManager.ToList(false);
                     }
                 }
 
-                //listview_acc.ItemsSource = accountlist;
+                AccountManager.ToList(false).ForEach(a => listview_acc.SelectedItems.Add(a));
             }
             catch (Exception e)
             {
@@ -1274,24 +1280,27 @@ namespace Gw2_Launchbuddy
             bt_accedit.IsEnabled = true;
             bt_remacc.IsEnabled = true;
 
-            AccountManager.ToList().Where(a => ((ListView)sender).SelectedItems.Cast<Account>().Where(b => b.Nickname == a.Nickname).Any()).Select(a => a.IsSelected());
-            
-            Properties.Settings.Default.selected_acc = ((ListView)sender).SelectedIndex;
-            Properties.Settings.Default.Save();
+            var selectedAccounts = ((ListView)sender).SelectedItems.Cast<Account>();
+            AccountManager.ToList().ForEach(a => a.IsSelected(selectedAccounts.Where(b => b.Nickname == a.Nickname).Any()));
 
-            if (((ListView)sender).SelectedItems.Count == 1)
-            {
-                var selectedItems = (dynamic)((ListView)sender).SelectedItems;
-                cb_login.Content = "Use Autologin : " + selectedItems[0].Nickname;
-                //bt_shortcut.IsEnabled = true;
-            }
+            //Properties.Settings.Default.selected_acc = ((ListView)sender).SelectedIndex;
+            //Properties.Settings.Default.Save();
 
-            if (((ListView)sender).SelectedItems.Count > 1)
-            {
-                var selectedItem = (dynamic)((ListView)sender).SelectedItem;
-                cb_login.Content = "Use Autologin (Multiboxing): " + ((ListView)sender).SelectedItems.Count + " Accounts selected";
-                //bt_shortcut.IsEnabled = false;
-            }
+            cb_login.Content = "Use Autologin: " + (AccountManager.GetSelected().Count == 1 ? AccountManager.GetSelected()[0].Nickname : AccountManager.GetSelected().Count + " Accounts Total");
+
+            //if (((ListView)sender).SelectedItems.Count == 1)
+            //{
+            //    var selectedItems = (dynamic)((ListView)sender).SelectedItems;
+            //    cb_login.Content = "Use Autologin : " + selectedItems[0].Nickname;
+            //    //bt_shortcut.IsEnabled = true;
+            //}
+
+            //if (((ListView)sender).SelectedItems.Count > 1)
+            //{
+            //    var selectedItem = (dynamic)((ListView)sender).SelectedItem;
+            //    cb_login.Content = "Use Autologin (Multiboxing): " + ((ListView)sender).SelectedItems.Count + " Accounts selected";
+            //    //bt_shortcut.IsEnabled = false;
+            //}
 
             //Sync account lists.
             var list = ((ListView)sender) != listview_acc ? listview_acc : Cinema_Accountlist;
@@ -1306,15 +1315,15 @@ namespace Gw2_Launchbuddy
         {
             if (listview_acc.SelectedItems.Count == 0)
             {
-                ArgumentManager.Argument("-email").IsSelected(false);
-                ArgumentManager.Argument("-password").IsSelected(false);
-                ArgumentManager.Argument("-nopatchui").IsSelected(false);
+                AccountArgumentManager.StopGap.IsSelected("-email",false);
+                AccountArgumentManager.StopGap.IsSelected("-password",false);
+                AccountArgumentManager.StopGap.IsSelected("-nopatchui",false);
             }
             else
             {
-                ArgumentManager.Argument("-email").IsSelected();
-                ArgumentManager.Argument("-password").IsSelected();
-                ArgumentManager.Argument("-nopatchui").IsSelected();
+                AccountArgumentManager.StopGap.IsSelected("-email");
+                AccountArgumentManager.StopGap.IsSelected("-password");
+                AccountArgumentManager.StopGap.IsSelected("-nopatchui");
             }
             RefreshUI();
         }

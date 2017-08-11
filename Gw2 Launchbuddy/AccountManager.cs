@@ -18,7 +18,7 @@ namespace Gw2_Launchbuddy
         }
         private static List<Account> accountList = new List<Account>();
         public static int Count => accountList.Count;
-        public static List<Account> ToList(bool includeDefault = false) => accountList.Where(a => a.Default = includeDefault).ToList();
+        public static List<Account> ToList(bool includeDefault = false) => accountList.Where(a => (!includeDefault ? a.Default == false : true)).ToList();
 
         public static Account Account(string Nickname)
         {
@@ -28,9 +28,14 @@ namespace Gw2_Launchbuddy
         public static Account Add(Account Account)
         {
             accountList.Add(Account);
-            foreach(Argument Argument in ArgumentManager.ToList())
+            foreach (Argument Argument in ArgumentManager.ToList())
             {
                 AccountArgumentManager.Add(Account, Argument);
+            }
+            foreach (AccountArgument AccountArgument in AccountArgumentManager.GetAccountArguments(DefaultAccount))
+            {
+                var temp = AccountArgumentManager.Get(Account, AccountArgument.Argument.Flag).IsSelected(AccountArgument.Selected);
+                if (AccountArgument.Argument.Flag != "-email" && AccountArgument.Argument.Flag != "-password") temp.OptionString = AccountArgument.OptionString;
             }
             return Account;
         }
@@ -53,6 +58,11 @@ namespace Gw2_Launchbuddy
                 return accountList.Where(a => a.Default == true).SingleOrDefault();
             }
         }
+
+        public static List<Account> GetSelected()
+        {
+            return accountList.Where(a => a.Selected).ToList();
+        }
     }
 
     [Serializable()]
@@ -74,7 +84,8 @@ namespace Gw2_Launchbuddy
                 AccountArgumentManager.Get(this, "-email")?.WithOptionString(value);
             }
         }
-        public string Password {
+        public string Password
+        {
             get
             {
                 return password;
@@ -85,13 +96,13 @@ namespace Gw2_Launchbuddy
                 AccountArgumentManager.Get(this, "-password")?.WithOptionString(value);
             }
         }
-        
+
         public DateTime CreateDate { get; set; }
         public DateTime ModifyDate { get; set; }
         public DateTime RunDate { get; set; }
 
         public Account IsSelected(bool Selected = true) { this.Selected = Selected; return this; }
-        
+
         public bool Selected { get; set; }
 
         public Account(string Nickname, string Email, string Password)
@@ -102,7 +113,7 @@ namespace Gw2_Launchbuddy
             this.CreateDate = DateTime.Now;
             this.ModifyDate = DateTime.Now;
         }
-        
+
         private string configurationPath;
 
         public string ConfigurationPath
@@ -116,7 +127,7 @@ namespace Gw2_Launchbuddy
                 configurationPath = value;
             }
         }
-        
+
         public string ConfigurationName
         {
             get
@@ -198,7 +209,7 @@ namespace Gw2_Launchbuddy
         }
         public string CommandLine()
         {
-            return String.Join(" ", GetArgumentList().Where(a => a.Selected == true).Select(a => a.Argument.Flag + " " + a.OptionString));
+            return String.Join(" ", GetArgumentList().Where(a => a.Selected == true).Select(a => a.Argument.Flag + (!String.IsNullOrWhiteSpace(a.OptionString) ? " " + a.OptionString : null)));
         }
 
         public bool Default { get; set; }
