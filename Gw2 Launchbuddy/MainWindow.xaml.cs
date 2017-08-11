@@ -225,6 +225,7 @@ namespace Gw2_Launchbuddy
                 Thread checklbver = new Thread(checklbversion);
                 checklbver.Start();
             }
+            CrashAnalyzer.ReadCrashLogs();
         }
 
         void SettingsTabSetup()
@@ -1520,7 +1521,10 @@ namespace Gw2_Launchbuddy
         private void bt_RemAddon_Click(object sender, RoutedEventArgs e)
         {
             AddOn item = lv_AddOns.SelectedItem as AddOn;
-            AddOnManager.Remove(item.Name);
+            if (item!= null)
+            {
+                AddOnManager.Remove(item.Name);
+            }
         }
 
         private void bt_cinema_setimagefolder_Click(object sender, RoutedEventArgs e)
