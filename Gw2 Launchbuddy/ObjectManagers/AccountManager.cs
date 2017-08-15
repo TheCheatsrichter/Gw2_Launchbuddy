@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Gw2_Launchbuddy
+namespace Gw2_Launchbuddy.ObjectManagers
 {
     public static class AccountManager
     {
@@ -17,6 +16,7 @@ namespace Gw2_Launchbuddy
             Add(null, null, null).Default = true;
         }
         private static List<Account> accountList = new List<Account>();
+        
         public static int Count => accountList.Count;
         public static List<Account> ToList(bool includeDefault = false) => accountList.Where(a => (!includeDefault ? a.Default == false : true)).ToList();
 
@@ -225,6 +225,12 @@ namespace Gw2_Launchbuddy
         public bool Default { get; set; }
 
         public void Move(int Incriment) => AccountManager.Move(this, Incriment);
+
+        public Client CreateClient()
+        {
+            var Client = new Client();
+            return Client;
+        }
     }
     /*[Serializable()]
     public class AccountOld

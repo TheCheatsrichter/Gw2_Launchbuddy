@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Xml;
 using System.Text.RegularExpressions;
+using Gw2_Launchbuddy.ObjectManagers;
 
 namespace Gw2_Launchbuddy
 {
@@ -29,7 +30,7 @@ namespace Gw2_Launchbuddy
 
             filediag.DefaultExt = ".xml";
             filediag.Filter = "Xml Files(*.xml) | *.xml";
-            filediag.InitialDirectory = Globals.exepath;
+            filediag.InitialDirectory = ClientManager.ClientInfo.InstallPath;
             filediag.ShowDialog();
 
             CurrentConfig.ConfigPath = filediag.FileName;
@@ -54,7 +55,7 @@ namespace Gw2_Launchbuddy
             savediag.Title = "Saving GFX Settings";
             savediag.AddExtension = true;
             savediag.FileName = "GW2 Custom GFX";
-            savediag.InitialDirectory = Globals.exepath;
+            savediag.InitialDirectory = ClientManager.ClientInfo.InstallPath;
             savediag.ShowDialog();
 
             if (savediag.FileName != "") ToXml(savediag.FileName);

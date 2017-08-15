@@ -61,7 +61,7 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>false</GenerateManifests>
+    <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
@@ -177,11 +177,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AccountArgumentManager.cs" />
-    <Compile Include="AccountManager.cs" />
+    <Compile Include="ObjectManagers\AccountArgumentManager.cs" />
+    <Compile Include="ObjectManagers\AccountManager.cs" />
     <Compile Include="AddOnManager.cs" />
-    <Compile Include="ApplicationManager.cs" />
-    <Compile Include="ArgumentManager.cs" />
+    <Compile Include="LaunchManager.cs" />
+    <Compile Include="ObjectManagers\ArgumentManager.cs" />
+    <Compile Include="ObjectManagers\ClientManager.cs" />
     <Compile Include="CrashAnalyzer.cs" />
     <Compile Include="CrashReporter.cs" />
     <Compile Include="CustomUI.cs" />
@@ -192,9 +193,11 @@
       <DependentUpon>GUI_ApplicationManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="HandleManager.cs" />
+    <Compile Include="ObjectManagers\ServerManager.cs" />
     <Compile Include="Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ObjectManagers\AccountClientManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

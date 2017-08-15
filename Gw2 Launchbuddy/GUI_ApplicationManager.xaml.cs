@@ -7,6 +7,7 @@ using System.Threading;
 using System.Data;
 using System.Runtime.InteropServices;
 using System.Collections.ObjectModel;
+using Gw2_Launchbuddy.ObjectManagers;
 
 
 namespace Gw2_Launchbuddy
@@ -37,7 +38,7 @@ namespace Gw2_Launchbuddy
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            lv_instances.ItemsSource = Globals.LinkedAccs;
+            lv_instances.ItemsSource = Globals.LinkedAccs.Where(a => a.Client.Arguments == "");
         }
 
         private void lv_gfx_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -45,8 +46,8 @@ namespace Gw2_Launchbuddy
             if(lv_instances.SelectedIndex >=0)
             {
                 CheckPros();
-                ProAccBinding selinstance = lv_instances.SelectedItem as ProAccBinding;
-                IntPtr hwndMain = selinstance.pro.MainWindowHandle;
+                AccountClient selinstance = lv_instances.SelectedItem as AccountClient;
+                IntPtr hwndMain = selinstance.Client.Process.MainWindowHandle;
                 SetForegroundWindow(hwndMain);
             }
         }
@@ -65,19 +66,19 @@ namespace Gw2_Launchbuddy
 
         public void CheckPros()
         {
-            ObservableCollection<ProAccBinding> ToRemove = new ObservableCollection<Gw2_Launchbuddy.ProAccBinding>();
-            foreach(ProAccBinding proacc in Globals.LinkedAccs)
+            ObservableCollection<AccountClient> ToRemove = new ObservableCollection<AccountClient>();
+            foreach(AccountClient proacc in Globals.LinkedAccs)
             {
                 try
                 {
-                    Process.GetProcessById(proacc.pro.Id);   
+                    Process.GetProcessById(proacc.Client.Process.Id);   
                 }
                 catch
                 {
                     ToRemove.Add(proacc);
                 }
             }
-            foreach (ProAccBinding proacc in ToRemove)
+            foreach (AccountClient proacc in ToRemove)
             {
                 Globals.LinkedAccs.Remove(proacc);
             }
@@ -86,13 +87,13 @@ namespace Gw2_Launchbuddy
         private void bt_closeinstance_Click(object sender, RoutedEventArgs e)
         {
             CheckPros();
-            ProAccBinding selinstance = (sender as Button).DataContext as ProAccBinding;
+            AccountClient selinstance = (sender as Button).DataContext as AccountClient;
             try
             {
-                if(!selinstance.pro.CloseMainWindow())
-                    selinstance.pro.Kill();
-                if (!selinstance.pro.WaitForExit(1000))
-                    selinstance.pro.Kill();
+                if(!selinstance.Client.Process.CloseMainWindow())
+                    selinstance.Client.Process.Kill();
+                if (!selinstance.Client.Process.WaitForExit(1000))
+                    selinstance.Client.Process.Kill();
             }
             catch { }
             Globals.LinkedAccs.Remove(selinstance);
@@ -101,8 +102,8 @@ namespace Gw2_Launchbuddy
         private void bt_maxmin_Click(object sender, RoutedEventArgs e)
         {
             CheckPros();
-            ProAccBinding selinstance = (sender as Button).DataContext as ProAccBinding;
-            IntPtr hwndMain = selinstance.pro.MainWindowHandle;
+            AccountClient selinstance = (sender as Button).DataContext as AccountClient;
+            IntPtr hwndMain = selinstance.Client.Process.MainWindowHandle;
             SetForegroundWindow(hwndMain);
         }
 

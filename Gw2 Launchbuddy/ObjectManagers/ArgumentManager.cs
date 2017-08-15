@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static Gw2_Launchbuddy.MainWindow;
 
-namespace Gw2_Launchbuddy
+namespace Gw2_Launchbuddy.ObjectManagers
 {
     public static class ArgumentManager
     {

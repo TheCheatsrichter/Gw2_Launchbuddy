@@ -21,6 +21,7 @@ using System.Windows.Media.Imaging;
 using System.IO.Compression;
 using System.Windows.Media.Animation;
 using System.Xml.Serialization;
+using Gw2_Launchbuddy.ObjectManagers;
 
 namespace Gw2_Launchbuddy
 {
@@ -56,14 +57,6 @@ namespace Gw2_Launchbuddy
 
         AES crypt = new AES();
 
-        public class Server
-        {
-            public string IP { get; set; }
-            public string Port { get; set; }
-            public string Ping { get; set; }
-            public string Type { get; set; }
-            public string Location { get; set; }
-        }
 
         /*[Serializable()]
         public class Account
@@ -580,13 +573,13 @@ namespace Gw2_Launchbuddy
                         }
                     }));
                 }
-                string versioninfo = "Build Version: " + Globals.version_client;
+                string versioninfo = "Build Version: " + ClientManager.ClientInfo.Version;
 
                 Dispatcher.Invoke(new Action(() =>
                 {
-                    if (Globals.version_api == Globals.version_client)
+                    if (Globals.version_api == ClientManager.ClientInfo.Version)
                     {
-                        Globals.ClientIsUptodate = true;
+                        ClientManager.ClientInfo.IsUpToDate = true;
                         versioninfo += "\tStatus: up to date!";
                         lab_version.Foreground = new SolidColorBrush(Colors.Green);
                     }
@@ -599,7 +592,7 @@ namespace Gw2_Launchbuddy
                         }
                         else
                         {
-                            Globals.ClientIsUptodate = true;
+                            ClientManager.ClientInfo.IsUpToDate = true;
                             versioninfo += "\tStatus: unknown!(API down)";
                             lab_version.Foreground = new SolidColorBrush(Colors.Red);
                         }
@@ -624,18 +617,18 @@ namespace Gw2_Launchbuddy
             }
             catch
             {
-                Globals.ClientIsUptodate = true;
+                ClientManager.ClientInfo.IsUpToDate = true;
                 MessageBox.Show("The official Gw2 API is not reachable / down! Launchbuddy can't make sure that your gameclient is uptodate.\nPlease keep your game manually uptodate to avoid crashes!");
             }
 
-            if (Globals.version_api == Globals.version_client) return true;
+            if (Globals.version_api == ClientManager.ClientInfo.Version) return true;
             return false;
         }
 
         void updateclient()
         {
             Process progw2 = new Process();
-            ProcessStartInfo infoprogw2 = new ProcessStartInfo { FileName = Globals.exepath + Globals.exename, Arguments = "-image" };
+            ProcessStartInfo infoprogw2 = new ProcessStartInfo { FileName = ClientManager.ClientInfo.InstallPath + ClientManager.ClientInfo.Executable, Arguments = "-image" };
             progw2.StartInfo = infoprogw2;
             progw2.Start();
             progw2.WaitForExit();
@@ -830,20 +823,20 @@ namespace Gw2_Launchbuddy
                     {
                         case "VERSIONNAME":
                             Regex filter = new Regex(@"\d*\d");
-                            Globals.version_client = filter.Match(getvalue(reader)).Value;
-                            lab_version.Content = "Client Version: " + Globals.version_client;
+                            ClientManager.ClientInfo.Version = filter.Match(getvalue(reader)).Value;
+                            lab_version.Content = "Client Version: " + ClientManager.ClientInfo.Version;
                             break;
 
                         case "INSTALLPATH":
 
-                            Globals.exepath = getvalue(reader);
-                            lab_path.Content = "Install Path: " + Globals.exepath;
+                            ClientManager.ClientInfo.InstallPath = getvalue(reader);
+                            lab_path.Content = "Install Path: " + ClientManager.ClientInfo.InstallPath;
                             break;
 
                         case "EXECUTABLE":
 
-                            Globals.exename = getvalue(reader);
-                            lab_path.Content += Globals.exename;
+                            ClientManager.ClientInfo.Executable = getvalue(reader);
+                            lab_path.Content += ClientManager.ClientInfo.Executable;
                             break;
 
                         case "EXECCMD":
@@ -1038,9 +1031,9 @@ namespace Gw2_Launchbuddy
 
             if (filedialog.FileName != "")
             {
-                Globals.exepath = Path.GetDirectoryName(filedialog.FileName) + @"\";
-                Globals.exename = Path.GetFileName(filedialog.Fi‌​leName);
-                lab_path.Content = Globals.exepath + Globals.exename;
+                ClientManager.ClientInfo.InstallPath = Path.GetDirectoryName(filedialog.FileName) + @"\";
+                ClientManager.ClientInfo.Executable = Path.GetFileName(filedialog.Fi‌​leName);
+                lab_path.Content = ClientManager.ClientInfo.InstallPath + ClientManager.ClientInfo.Executable;
                 //Gw2_Launchbuddy.Properties.Settings.Default.reshadepath = exename;
             }
         }
@@ -1062,7 +1055,7 @@ namespace Gw2_Launchbuddy
                 {
                     // Using commandline to launch both exe files from the link file
                     // EXAMPLE: cmd.exe /c start "" "C:\Program Files (x86)\Guild Wars 2\ReshadeUnlocker" && start "" "C:\Program Files (x86)\Guild Wars 2\Gw2"
-                    shortcut.Arguments = " /c start \"\" \"" + Globals.unlockerpath + "\" && start \"\" \"" + Globals.exepath + Globals.exename + "\" " + arguments;
+                    shortcut.Arguments = " /c start \"\" \"" + Globals.unlockerpath + "\" && start \"\" \"" + ClientManager.ClientInfo.InstallPath + ClientManager.ClientInfo.Executable + "\" " + arguments;
                     MessageBox.Show(shortcut.Arguments);
                     shortcut.TargetPath = "cmd.exe"; // win will automatically extend this to the cmd path
                     shortcut.Save();
@@ -1080,7 +1073,7 @@ namespace Gw2_Launchbuddy
                     dynamicinfo += arg + "\n\t\t";
                 }
 
-                System.Windows.MessageBox.Show("Custom Launcher created at : " + Globals.exepath + "\nUse ReshadeUnlocker: " + cb_reshade.IsChecked.ToString() + "\nUsed arguments:" + dynamicinfo);
+                System.Windows.MessageBox.Show("Custom Launcher created at : " + ClientManager.ClientInfo.InstallPath + "\nUse ReshadeUnlocker: " + cb_reshade.IsChecked.ToString() + "\nUsed arguments:" + dynamicinfo);
             }
             catch (Exception err)
             {
@@ -1107,7 +1100,7 @@ namespace Gw2_Launchbuddy
             {
                 try
                 {
-                    CreateShortcut("Gw2_Launcher_" + AccountManager.ToList()[0].Nickname, Globals.exepath, Globals.exepath + Globals.exename);
+                    CreateShortcut("Gw2_Launcher_" + AccountManager.ToList()[0].Nickname, ClientManager.ClientInfo.InstallPath, ClientManager.ClientInfo.InstallPath + ClientManager.ClientInfo.Executable);
                 }
                 catch (Exception err)
                 {
@@ -1116,11 +1109,11 @@ namespace Gw2_Launchbuddy
             }
             else
             {
-                CreateShortcut("Gw2_Custom_Launcher", Globals.exepath, Globals.exepath + Globals.exename);
+                CreateShortcut("Gw2_Custom_Launcher", ClientManager.ClientInfo.InstallPath, ClientManager.ClientInfo.InstallPath + ClientManager.ClientInfo.Executable);
             }
             try
             {
-                Process.Start(Globals.exepath);
+                Process.Start(ClientManager.ClientInfo.InstallPath);
             }
             catch (Exception err)
             {
@@ -1351,11 +1344,11 @@ namespace Gw2_Launchbuddy
 
         private void bt_quaggan_Click(object sender, RoutedEventArgs e)
         {
-            if (Globals.exepath != "")
+            if (ClientManager.ClientInfo.InstallPath != "")
             {
                 Clientfix clientfix = new Clientfix();
-                clientfix.exepath = Globals.exepath;
-                clientfix.exename = Globals.exename;
+                clientfix.exepath = ClientManager.ClientInfo.InstallPath;
+                clientfix.exename = ClientManager.ClientInfo.Executable;
                 clientfix.Show();
             }
             else
@@ -1424,7 +1417,7 @@ namespace Gw2_Launchbuddy
             if (!System.IO.File.Exists(Globals.unlockerpath))
             {
                 cb_reshade.IsChecked = false;
-                MessageBox.Show("Reshade Unlocker exe not found at :\n" + Globals.exepath + "\nPlease select the ReshadeUnlocker.exe manually!");
+                MessageBox.Show("Reshade Unlocker exe not found at :\n" + ClientManager.ClientInfo.InstallPath + "\nPlease select the ReshadeUnlocker.exe manually!");
                 System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
                 filedialog.DefaultExt = "exe";
                 filedialog.Multiselect = false;
@@ -2106,7 +2099,7 @@ namespace Gw2_Launchbuddy
             GFXManager.OverwriteGFX();
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.FileName = Globals.exepath + Globals.exename;
+            startInfo.FileName = ClientManager.ClientInfo.InstallPath + ClientManager.ClientInfo.Executable;
             startInfo.Arguments = " -image -shareArchive";
             Process gw2pro = new Process { StartInfo = startInfo };
 

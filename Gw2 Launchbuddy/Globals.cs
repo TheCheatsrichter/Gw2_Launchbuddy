@@ -3,25 +3,23 @@ using System.Collections.ObjectModel;
 using static Gw2_Launchbuddy.MainWindow;
 using System;
 using CommandLine;
+using Gw2_Launchbuddy.ObjectManagers;
 
 namespace Gw2_Launchbuddy
 {
     static class Globals
     {
-        public static GUI_ApplicationManager Appmanager = new GUI_ApplicationManager();
+        public static GUI_ApplicationManager Appmanager = new GUI_ApplicationManager(); //Should not be created here/should have its own controller.
 
-        public static Microsoft.Win32.RegistryKey LBRegKey { get { return Microsoft.Win32.Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("LaunchBuddy"); } set { } }
-
-        public static ObservableCollection<ProAccBinding> LinkedAccs = new ObservableCollection<ProAccBinding>();
+        public static ObservableCollection<AccountClient> LinkedAccs = new ObservableCollection<AccountClient>(); //Should nto be needed?
         //public static List<Account> selected_accs = new List<Account>();
-        public static string exepath, exename, unlockerpath, version_client, version_api;
+        public static string unlockerpath, version_api; //Should be split out into respective managers
 
-        public static bool ClientIsUptodate = false;
-        public static Server selected_authsv = new Server();
-        public static Server selected_assetsv = new Server();
+        public static Server selected_authsv = new Server(); //Should be removed/Unneeded with Manager
+        public static Server selected_assetsv = new Server(); //Should be removed/Unneeded with Manager
 
-        public static GFXConfig SelectedGFX = new GFXConfig();
-        public static string ClientXmlpath;
+        public static GFXConfig SelectedGFX = new GFXConfig(); //Should be removed/Unneeded with Manager
+        public static string ClientXmlpath; //Should be part of Client
 
         public static string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
         public static Version LBVersion = new Version("1.4.2");

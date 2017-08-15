@@ -8,21 +8,10 @@ using System.Windows;
 using System.Security.Cryptography;
 using System.Collections.Generic;
 using System.Threading;
+using Gw2_Launchbuddy.ObjectManagers;
 
 namespace Gw2_Launchbuddy
 {
-    public class ProAccBinding
-    {
-        public Process pro { set; get; }
-        public Account acc { set; get; }
-
-        public ProAccBinding(Process tpro, Account tacc = null)
-        {
-            this.pro = tpro;
-            this.acc = tacc;
-        }
-    }
-
     static class LaunchManager
     {
         private static List<int> nomutexpros = new List<int>();
@@ -30,7 +19,7 @@ namespace Gw2_Launchbuddy
         {
             //Checking for existing Gw2 instances. Do not continue until closed.
             //if (Process.GetProcesses().ToList().Where(a => !nomutexpros.Contains(a.Id) && a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).Any())
-            if (!RegClients())
+            if (!ClientManager.ClientReg.CheckRegClients())
             {
                 MessageBox.Show("At least one instance of Guild Wars is running that was not opened by LaunchBuddy. That instance will need to be closed.");
                 return;
@@ -74,58 +63,26 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show("One or more AddOns could not be launched.\n" + err.Message);
             }
         }
-        static bool UpdateRegClients(string created)
-        {
-            return RegClients(created);
-        }
-        static bool RegClients(string created = null)
-        {
-            var key = Globals.LBRegKey;
-            List<string> listClients = new List<string>();
-            try
-            {
-                listClients = ((string[])key.GetValue("Clients")).ToList();
-            }
-            catch (Exception e)
-            {
-#if DEBUG
-                System.Diagnostics.Debug.WriteLine("Reg key likely does not exist: " + e.Message);
-#endif
-            }
-            var gw2Procs = Process.GetProcesses().ToList().Where(a => a.ProcessName == Regex.Replace(Globals.exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).ToList().ConvertAll<string>(new Converter<Process, string>(ProcMD5));
-            var running = gw2Procs.Count();
-            var temp = listClients.Where(a => !gw2Procs.Contains(a)).ToList();
-            foreach (var t in temp) listClients.Remove(t);
-            if (created != null) listClients.Add(created);
-            key.SetValue("Clients", listClients.ToArray(), Microsoft.Win32.RegistryValueKind.MultiString);
-            var logged = listClients.Count();
-            key.Close();
-            return running == logged;
-        }
 
         static void LaunchGW2(Account Selected)
         {
             try
             {
-                ProcessStartInfo gw2proinfo = new ProcessStartInfo();
-                gw2proinfo.FileName = Globals.exepath + Globals.exename;
-                gw2proinfo.Arguments = Selected.CommandLine();
-                gw2proinfo.WorkingDirectory = Globals.exepath;
-                Process gw2pro = new Process { StartInfo = gw2proinfo };
+                var gw2Client = Selected.CreateClient();
                 if (Selected != AccountManager.DefaultAccount)
                 {
-                    Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, Selected));
+                    Globals.LinkedAccs.Add(new AccountClient(Selected, gw2Client));
                     GFXManager.UseGFX(Selected.ConfigurationPath);
                 }
                 else
                 {
                     Account undefacc = new Account ("Acc Nr" + Globals.LinkedAccs.Count, null, null);
-                    Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, undefacc));
+                    Globals.LinkedAccs.Add(new AccountClient(undefacc, gw2Client));
                 }
 
                 try
                 {
-                    gw2pro.Start();
+                    gw2Client.Start();
                 }
                 catch (Exception err)
                 {
@@ -133,11 +90,11 @@ namespace Gw2_Launchbuddy
                 }
                 try
                 {
-                    HandleManager.ClearMutex(Globals.exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
-                    gw2pro.WaitForInputIdle(10000);
+                    HandleManager.ClearMutex(ClientManager.ClientInfo.ProcessName, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
+                    gw2Client.Process.WaitForInputIdle(10000);
                     //Thread.Sleep(1000);
                     //Register the new client to prevent problems.
-                    UpdateRegClients(ProcMD5(gw2pro));
+                    //UpdateRegClients();
                     Thread.Sleep(3000);
                 }
                 catch (Exception err)
@@ -164,28 +121,6 @@ namespace Gw2_Launchbuddy
             {
                 MessageBox.Show(err.Message);
             }
-        }
-
-        public static string ProcMD5(Process proc)
-        {
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine("Start: " + proc.StartTime + " ID: " + proc.Id + " MD5: " + CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString()));
-#endif
-            return CalculateMD5(proc.StartTime.ToString() + proc.Id.ToString());
-        }
-
-        public static string CalculateMD5(string input)
-        {
-            var md5 = MD5.Create();
-            var inputBytes = Encoding.ASCII.GetBytes(input);
-            var hash = md5.ComputeHash(inputBytes);
-
-            var sb = new StringBuilder();
-
-            for (int i = 0; i < hash.Length; i++)
-                sb.Append(hash[i].ToString("X2"));
-
-            return sb.ToString();
         }
     }
 }

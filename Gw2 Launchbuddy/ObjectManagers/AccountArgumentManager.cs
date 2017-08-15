@@ -5,7 +5,7 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gw2_Launchbuddy
+namespace Gw2_Launchbuddy.ObjectManagers
 {
     public static class AccountArgumentManager
     {
