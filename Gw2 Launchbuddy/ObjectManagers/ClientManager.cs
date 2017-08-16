@@ -9,6 +9,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace Gw2_Launchbuddy.ObjectManagers
@@ -134,6 +135,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 try
                 {
+                    UpdateRegClients();
                     List<string> listClients = getClientListFromReg();
 
                     var currentProcesses = Process.GetProcesses().ToList().Where(a => a.ProcessName == ClientInfo.ProcessName).ToList();
@@ -215,9 +217,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void Start()
         {
+            Process.EnableRaisingEvents = true;
+            Process.Exited += ClientProcess_Exited;
             Process.Start();
             md5 = ClientManager.CalculateProcessMD5(this.Process);
             ClientManager.ClientReg.RegClient(this);
+        }
+
+        private void ClientProcess_Exited(object sender, EventArgs e)
+        {
+            AccountClientManager.Remove(this);
         }
 
         public void Stop()

@@ -433,7 +433,7 @@
                                     <GridViewColumn Header="Graphic Config" Width="100">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Button Content="{Binding ConfigurationName}" Height="32" x:Name="bt_selectaccgfx" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="bt_selectaccgfx_Click" />
+                                                <Button Content="{Binding ConfigurationName}" Height="32" Width="80"  x:Name="bt_selectaccgfx" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="bt_selectaccgfx_Click" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>

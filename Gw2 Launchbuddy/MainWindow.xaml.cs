@@ -2228,7 +2228,8 @@ namespace Gw2_Launchbuddy
 
             if (filedialog.FileName != "")
             {
-                (sender as Button).Content = acc.ConfigurationPath = filedialog.FileName;
+                acc.ConfigurationPath = filedialog.FileName;
+                (sender as Button).Content = acc.ConfigurationName;
             }
         }
 

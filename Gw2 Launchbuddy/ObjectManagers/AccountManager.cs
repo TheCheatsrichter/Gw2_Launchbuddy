@@ -178,7 +178,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             get
             {
-                return icon ?? defaultIcon;
+                return icon ?? DefaultIcon;
             }
             private set
             {
@@ -229,6 +229,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public Client CreateClient()
         {
             var Client = new Client();
+            AccountClientManager.Add(this, Client); //Not sure this is the best place for this create/assign
             return Client;
         }
     }

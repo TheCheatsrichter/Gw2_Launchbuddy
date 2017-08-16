@@ -88,18 +88,21 @@ namespace Gw2_Launchbuddy
                 {
                     System.Windows.MessageBox.Show("Could not launch Gw2. Invalid path?\n" + err.Message);
                 }
-                try
+                for (int i = 0; i < 10; i++)
                 {
-                    HandleManager.ClearMutex(ClientManager.ClientInfo.ProcessName, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
-                    gw2Client.Process.WaitForInputIdle(10000);
-                    //Thread.Sleep(1000);
-                    //Register the new client to prevent problems.
-                    //UpdateRegClients();
-                    Thread.Sleep(3000);
-                }
-                catch (Exception err)
-                {
-                    MessageBox.Show(err.Message);
+                    try
+                    {
+                        if (HandleManager.ClearMutex(ClientManager.ClientInfo.ProcessName, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros)) i = 10;
+                        //gw2Client.Process.WaitForInputIdle(10000);
+                        //Thread.Sleep(1000);
+                        //Register the new client to prevent problems.
+                        //UpdateRegClients();
+                        //Thread.Sleep(3000);
+                    }
+                    catch (Exception err)
+                    {
+                        MessageBox.Show(err.Message);
+                    }
                 }
 
                 if (Properties.Settings.Default.use_reshade)

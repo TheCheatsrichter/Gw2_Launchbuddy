@@ -1,28 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
     public static class AccountClientManager
     {
-        private static List<AccountClient> accountClientList = new List<AccountClient>();
+        //public static List<AccountClient> AccountClientList { get; private set; }
+
+        public static ObservableCollection<AccountClient> AccountClientCollection { get; private set; }
+
+        static AccountClientManager()
+        {
+            AccountClientCollection = new ObservableCollection<AccountClient>();
+            //AccountClientList = new List<AccountClient>();
+        }
 
         public static AccountClient Add(Account Account, Client Client) => Add(new AccountClient(Account, Client));
         public static AccountClient Add(AccountClient AccountClient)
         {
-            accountClientList.Add(AccountClient);
+            //AccountClientList.Add(AccountClient);
+            AccountClientCollection.Add(AccountClient);
             return AccountClient;
         }
 
-        public static void Remove(Account Account, Client Client) => Remove(accountClientList.Where(a => a.Account == Account && a.Client == Client).Single());
+        public static void Remove(Account Account, Client Client) => Remove(AccountClientCollection.Where(a => a.Account == Account && a.Client == Client).Single());
         public static void Remove(AccountClient AccountClient)
         {
-            accountClientList.Remove(AccountClient);
+            //AccountClientList.Remove(AccountClient);
+            AccountClientCollection.Remove(AccountClient);
         }
+        public static void Remove(Client Client)
+        {
+            AccountClientCollection.Remove(AccountClientCollection.Where(a => a.Client == Client).SingleOrDefault());
+        }
+
+        public static List<AccountClient> ToList() => AccountClientCollection.ToList();
+
     }
 
     public class AccountClient
