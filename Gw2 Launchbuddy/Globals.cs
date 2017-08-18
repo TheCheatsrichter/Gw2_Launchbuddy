@@ -12,7 +12,7 @@ namespace Gw2_Launchbuddy
         public static ObservableCollection<AccountClient> LinkedAccs = new ObservableCollection<AccountClient>(); //Should nto be needed?
 
         //public static List<Account> selected_accs = new List<Account>();
-        public static string unlockerpath, version_api; //Should be split out into respective managers
+        public static string version_api; //Should be split out into respective managers
 
         public static Server selected_authsv = new Server(); //Should be removed/Unneeded with Manager
         public static Server selected_assetsv = new Server(); //Should be removed/Unneeded with Manager

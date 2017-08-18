@@ -107,7 +107,7 @@ namespace Gw2_Launchbuddy
             cinema_setup();
             LoadAddons();
             SettingsTabSetup();
-            AddOnManager.LaunchLbAddons();
+            AddOnManager.SingletonAddon();
             if (Properties.Settings.Default.notifylbupdate)
             {
                 Thread checklbver = new Thread(checklbversion);
@@ -1077,6 +1077,7 @@ namespace Gw2_Launchbuddy
             Properties.Settings.Default.Save();
             AccountManager.ImportExport.SaveAccountInfo();
             SaveAddons();
+            AddOnManager.CloseAll();
             Environment.Exit(Environment.ExitCode);
         }
 
@@ -1194,22 +1195,6 @@ namespace Gw2_Launchbuddy
         {
             myWindow.WindowState = WindowState.Minimized;
             myWindow.Opacity = 0;
-        }
-
-        private void bt_AddAddon_Click(object sender, RoutedEventArgs e)
-        {
-            string[] args = Regex.Matches(tb_AddonArgs.Text, "-\\w* ?(\".*\")?").Cast<Match>().Select(m => m.Value).ToArray();
-            AddOnManager.Add(tb_AddonName.Text, args, (bool)cb_AddonMultilaunch.IsChecked, (bool)cb_AddonOnLB.IsChecked);
-            lv_AddOns.ItemsSource = AddOnManager.AddOns;
-        }
-
-        private void bt_RemAddon_Click(object sender, RoutedEventArgs e)
-        {
-            AddOn item = lv_AddOns.SelectedItem as AddOn;
-            if (item != null)
-            {
-                AddOnManager.Remove(item.Name);
-            }
         }
 
         private void bt_cinema_setimagefolder_Click(object sender, RoutedEventArgs e)
@@ -1866,6 +1851,76 @@ namespace Gw2_Launchbuddy
         private void priority_type_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Properties.Settings.Default.priority = (ProcessPriorityClass)priority_type.SelectedItem;
+        }
+
+        private void cb_enable_Click(object sender, RoutedEventArgs e)
+        {
+            AddOn addon = (sender as CheckBox).DataContext as AddOn;
+            addon.IsEnabled = (bool)(sender as CheckBox).IsChecked;
+        }
+
+        private void bt_EditAddon_Click(object sender, RoutedEventArgs e)
+        {
+            AddOn selectedaddon = lv_AddOns.SelectedItem as AddOn;
+            if (selectedaddon != null)
+            {
+                cb_AddonMultiBefore.IsChecked = selectedaddon.IsMultibefore;
+                cb_AddonMultiLaunch.IsChecked = selectedaddon.IsMultilaunch;
+                cb_AddonSingle.IsChecked = selectedaddon.IsSinglelaunch;
+                tb_AddonName.Text = selectedaddon.Name;
+                tb_AddonArgs.Text = selectedaddon.args;
+            }
+            else
+            {
+                MessageBox.Show("Please select addon!");
+            }
+
+            AddOn item = lv_AddOns.SelectedItem as AddOn;
+            AddOnManager.Remove(item.Name);
+        }
+
+        private void bt_AddAddon_Click(object sender, RoutedEventArgs e)
+        {
+            string[] args = Regex.Matches(tb_AddonArgs.Text, "--\\w* ?(\".*\")?|-\\w* ?(\".*\")?").Cast<Match>().Select(m => m.Value).ToArray(); //New Regex --\w* ?(\".*\")?|-\w* ?(\".*\")?
+            AddOnManager.Add(tb_AddonName.Text, args, (bool)cb_AddonMultiLaunch.IsChecked, (bool)cb_AddonMultiBefore.IsChecked, (bool)cb_AddonSingle.IsChecked, true);
+            tb_AddonName.Text = "";
+            tb_AddonArgs.Text = "";
+            cb_AddonMultiLaunch.IsChecked = false;
+            cb_AddonMultiBefore.IsChecked = false;
+            cb_AddonSingle.IsChecked = false;
+            lv_AddOns.ItemsSource = AddOnManager.AddOns;
+        }
+
+        private void bt_RemAddon_Click(object sender, RoutedEventArgs e)
+        {
+            AddOn item = lv_AddOns.SelectedItem as AddOn;
+            if (item != null)
+            {
+                AddOnManager.Remove(item.Name);
+            }
+        }
+
+        private void cb_AddonMulti_Checked(object sender, RoutedEventArgs e)
+        {
+            cb_AddonMultiBefore.IsEnabled = true;
+            cb_AddonSingle.IsEnabled = false;
+        }
+
+        private void cb_AddonMulti_Unchecked(object sender, RoutedEventArgs e)
+        {
+            cb_AddonMultiBefore.IsEnabled = false;
+            cb_AddonMultiBefore.IsChecked = false;
+            cb_AddonSingle.IsEnabled = true;
+        }
+
+        private void cb_AddonSingle_Unchecked(object sender, RoutedEventArgs e)
+        {
+            cb_AddonMultiLaunch.IsEnabled = true;
+        }
+
+        private void cb_AddonSingle_Checked(object sender, RoutedEventArgs e)
+        {
+            cb_AddonMultiLaunch.IsEnabled = false;
         }
 
         private void cb_useinstancegui_Click(object sender, RoutedEventArgs e)

@@ -32,8 +32,14 @@ namespace Gw2_Launchbuddy
         [System.Xml.Serialization.XmlElement("Multilaunch")]
         public bool IsMultilaunch { set; get; }
 
-        [System.Xml.Serialization.XmlElement("LbAddon")]
-        public bool IsLbAddon { set; get; }
+        [System.Xml.Serialization.XmlElement("Multibefore")]
+        public bool IsMultibefore { set; get; }
+
+        [System.Xml.Serialization.XmlElement("Singlelauch")]
+        public bool IsSinglelaunch { set; get; }
+
+        [System.Xml.Serialization.XmlElement("Enabled")]
+        public bool IsEnabled { set; get; }
 
         [System.Xml.Serialization.XmlElement("Arguments")]
         public string args { set; get; }
@@ -44,12 +50,14 @@ namespace Gw2_Launchbuddy
         [XmlIgnore]
         public List<Process> ChildProcess = new List<Process>();
 
-        public AddOn(string Name, ProcessStartInfo Info, bool IsMultilaunch, bool IsLbAddon)
+        public AddOn(string Name, ProcessStartInfo Info, bool IsMultilaunch, bool IsMultibefore, bool IsSinglelaunch, bool IsEnabled)
         {
             this.Name = Name;
             this.Info = Info;
             this.IsMultilaunch = IsMultilaunch;
-            this.IsLbAddon = IsLbAddon;
+            this.IsMultibefore = IsMultibefore;
+            this.IsSinglelaunch = IsSinglelaunch;
+            this.IsEnabled = IsEnabled;
             args = Info.Arguments;
             Path = Info.FileName;
         }
@@ -74,14 +82,14 @@ namespace Gw2_Launchbuddy
     {
         public static ObservableCollection<AddOn> AddOns = new ObservableCollection<AddOn>();
 
-        public static void Add(string name, string[] args, bool IsMultilaunch, bool IsLbAddon)
+        public static void Add(string name, string[] args, bool IsMultilaunch, bool IsMultibefore, bool IsSinglelaunch, bool IsEnabled)
         {
             if (name != "")
             {
                 System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
                 filedialog.Multiselect = false;
                 filedialog.DefaultExt = "exe";
-                filedialog.Filter = "Exe Files(*.exe) | *.exe";
+                filedialog.Filter = "Exe Files (*.exe)|*.exe|All files (*.*)|*.*";//"Exe Files(*.exe) | *.exe | XPR64 Files(*.xpr64)| *.xpr64";
                 filedialog.ShowDialog();
 
                 if (filedialog.FileName != "" && !AddOns.Any(a => a.Name == name))
@@ -90,7 +98,11 @@ namespace Gw2_Launchbuddy
                     ProInfo.FileName = filedialog.FileName;
                     ProInfo.Arguments = String.Join(" ", args);
                     ProInfo.WorkingDirectory = Path.GetDirectoryName(filedialog.FileName);
-                    AddOns.Add(new AddOn(name, ProInfo, IsMultilaunch, IsLbAddon));
+                    AddOns.Add(new AddOn(name, ProInfo, IsMultilaunch, IsMultibefore, IsSinglelaunch, IsEnabled));
+                }
+                else
+                {
+                    MessageBox.Show("Name already exist!");
                 }
             }
             else
@@ -129,6 +141,17 @@ namespace Gw2_Launchbuddy
             }
         }
 
+        public static void CloseAll()
+        {
+            foreach (AddOn addon in AddOns)
+            {
+                foreach (Process childpro in addon.ChildProcess.ToList())
+                {
+                    childpro.Kill();
+                }
+            }
+        }
+
         public static string ListAddons(string seperator = ", ")
         {
             return String.Join(seperator, AddOns.Select(a => a.Name));
@@ -149,48 +172,83 @@ namespace Gw2_Launchbuddy
         public static void LaunchSingle(string name)
         {
             AddOn addon = AddOns.FirstOrDefault(a => a.Name == name);
-            Process addon_pro = new Process { StartInfo = addon.Info };
-            addon.ChildProcess.Add(addon_pro);
-            addon_pro.Start();
+            if (addon.IsEnabled)
+            {
+                Process addon_pro = new Process { StartInfo = addon.Info };
+                addon.ChildProcess.Add(addon_pro);
+                addon_pro.Start();
+            }
         }
 
-        public static void LaunchAll()
+        public static void LaunchAllBefore()
         {
             UpdateList();
             foreach (AddOn addon in AddOns)
             {
-                if ((addon.IsMultilaunch || addon.ChildProcess.Count <= 0) && !addon.IsLbAddon)
+                if (addon.IsEnabled)
                 {
-                    try
+                    if ((addon.IsMultilaunch && addon.IsMultibefore == true) && !addon.IsSinglelaunch)
                     {
-                        Process addon_pro = new Process { StartInfo = addon.Info };
-                        addon.ChildProcess.Add(addon_pro);
-                        addon_pro.Start();
-                    }
-                    catch
-                    {
-                        MessageBox.Show(addon.Name + " could not be started!\nMake sure that the entered path is correct!");
+                        try
+                        {
+                            Process addon_pro = new Process { StartInfo = addon.Info };
+                            addon.ChildProcess.Add(addon_pro);
+                            addon_pro.Start();
+                            addon_pro.WaitForInputIdle(1000);
+                        }
+                        catch
+                        {
+                            MessageBox.Show(addon.Name + " could not be started!\nMake sure that the entered path is correct!");
+                        }
                     }
                 }
             }
         }
 
-        public static void LaunchLbAddons()
+        public static void LaunchAllAfter()
         {
             UpdateList();
             foreach (AddOn addon in AddOns)
             {
-                if ((addon.IsMultilaunch || addon.ChildProcess.Count <= 0) && addon.IsLbAddon)
+                if (addon.IsEnabled)
                 {
-                    try
+                    if ((addon.IsMultilaunch && addon.IsMultibefore == false) && !addon.IsSinglelaunch)
                     {
-                        Process addon_pro = new Process { StartInfo = addon.Info };
-                        addon.ChildProcess.Add(addon_pro);
-                        addon_pro.Start();
+                        try
+                        {
+                            Process addon_pro = new Process { StartInfo = addon.Info };
+                            addon.ChildProcess.Add(addon_pro);
+                            addon_pro.Start();
+                            addon_pro.WaitForInputIdle(1000);
+                        }
+                        catch
+                        {
+                            MessageBox.Show(addon.Name + " could not be started!\nMake sure that the entered path is correct!");
+                        }
                     }
-                    catch (Exception e)
+                }
+            }
+        }
+
+        public static void SingletonAddon()
+        {
+            CheckExisting();
+            foreach (AddOn addon in AddOns)
+            {
+                if (addon.IsEnabled)
+                {
+                    if ((addon.ChildProcess.Count < 1 && addon.IsSinglelaunch) && !(addon.IsMultibefore || addon.IsMultilaunch))
                     {
-                        CrashReporter.ReportCrashToAll(e);
+                        try
+                        {
+                            Process addon_pro = new Process { StartInfo = addon.Info };
+                            addon.ChildProcess.Add(addon_pro);
+                            addon_pro.Start();
+                        }
+                        catch (Exception e)
+                        {
+                            CrashReporter.ReportCrashToAll(e);
+                        }
                     }
                 }
             }

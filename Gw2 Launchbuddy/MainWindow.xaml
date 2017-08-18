@@ -556,16 +556,79 @@
                     <Grid Grid.Row="4">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30" />
-                            <RowDefinition Height="150*" />
-                            <RowDefinition Height="40" />
-                            <RowDefinition Height="30" />
+                            <RowDefinition Height="140*" />
+                            <RowDefinition Height="20*" />
+                            <RowDefinition Height="10*" />
                         </Grid.RowDefinitions>
 
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50*" />
-                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="119*" />
+                            <ColumnDefinition Width="228*" />
+                            <ColumnDefinition Width="347*" />
                         </Grid.ColumnDefinitions>
-                        <CheckBox x:Name="cb_priority" Content="Use Priority Unlocker" Checked="cb_priority_Checked" Unchecked="cb_priority_Unchecked" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="3" Margin="5,0,0,0" />
+
+                        <Label x:Name="lab_AddOnManager" Content="AddOn Manager:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Grid.ColumnSpan="2" />
+
+                        <ListView x:Name="lv_AddOns" Grid.Row="1" Grid.ColumnSpan="3">
+                            <ListView.View>
+                                <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
+                                    <GridViewColumn>
+                                        <GridViewColumnHeader Tag="Enabled" Click="listview_auth_Click" Content="Enable" Padding="10,0" />
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox x:Name="cb_enable" Click="cb_enable_Click" IsChecked="{Binding IsEnabled}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn  HeaderStringFormat="" DisplayMemberBinding="{Binding Name}">
+                                        <GridViewColumnHeader Tag="Name" Click="listview_auth_Click" Content="Name" Padding="10,0" />
+                                    </GridViewColumn>
+                                    <GridViewColumn HeaderStringFormat="" DisplayMemberBinding="{Binding args}">
+                                        <GridViewColumnHeader Tag="args" Click="listview_auth_Click" Content="Parameters" Padding="10,0" />
+                                    </GridViewColumn>
+                                    <GridViewColumn HeaderStringFormat="" DisplayMemberBinding="{Binding IsMultilaunch}">
+                                        <GridViewColumnHeader Tag="IsMultilaunch" Click="listview_auth_Click" Content="Multilaunch" Padding="10,0" />
+                                    </GridViewColumn>
+                                    <GridViewColumn HeaderStringFormat="" DisplayMemberBinding="{Binding IsMultibefore}">
+                                        <GridViewColumnHeader Tag="IsMultibefore" Click="listview_auth_Click" Content="Before" Padding="10,0" />
+                                    </GridViewColumn>
+                                    <GridViewColumn HeaderStringFormat="" DisplayMemberBinding="{Binding IsSinglelaunch}">
+                                        <GridViewColumnHeader Tag="IsSinglelaunch" Click="listview_auth_Click" Content="Single" Padding="10,0" />
+                                    </GridViewColumn>
+                                    <GridViewColumn HeaderStringFormat="" DisplayMemberBinding="{Binding Path}">
+                                        <GridViewColumnHeader Tag="Path" Click="listview_auth_Click" Content="Path" Padding="10,0" />
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                        <Grid x:Name="grid_Addons_Add" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,10,-1,0" Width="695">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="24" />
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140*" />
+                                <ColumnDefinition Width="140*" />
+                                <ColumnDefinition Width="95*" />
+                                <ColumnDefinition Width="100*" />
+                                <ColumnDefinition Width="100*" />
+                                <ColumnDefinition Width="100*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Content="Name:" Grid.ColumnSpan="2"  FontSize="13" />
+                            <TextBox x:Name="tb_AddonName" Grid.Row="1" Margin="5,0" />
+                            <Label Content="Parameters:" Grid.Column="1" FontSize="13" />
+                            <TextBox x:Name="tb_AddonArgs" Grid.Column="1" Grid.Row="1" Margin="5,0" />
+                            <CheckBox x:Name="cb_AddonMultiLaunch" Grid.Row="1" Grid.Column="2" Content="Multilaunch" Margin="5,0" VerticalContentAlignment="Center" Checked="cb_AddonMulti_Checked" Unchecked="cb_AddonMulti_Unchecked" />
+                            <CheckBox x:Name="cb_AddonMultiBefore" Grid.Row="1" Grid.Column="3" Content="Before" Margin="5,0" VerticalContentAlignment="Center" IsEnabled="False" />
+                            <CheckBox x:Name="cb_AddonSingle" Grid.Row="1" Grid.Column="4" Content="Singlelaunch" Margin="5,0"  VerticalContentAlignment="Center" Unchecked="cb_AddonSingle_Unchecked" Checked="cb_AddonSingle_Checked" />
+                            <Button x:Name="bt_AddAddon" Grid.Column="3" Content="Add" Click="bt_AddAddon_Click" Margin="5,0" />
+                            <Button x:Name="bt_RemAddon" Grid.Column="5" Content="Remove" Click="bt_RemAddon_Click" Margin="5,0" />
+                            <Button x:Name="bt_EditAddon" Grid.Column="4" Content="Edit" Click="bt_EditAddon_Click" Margin="5,0" />
+                        </Grid>
+
+                        <CheckBox x:Name="cb_priority" Grid.Row="3" Content="Use Priority Unlocker" Checked="cb_priority_Checked" Unchecked="cb_priority_Unchecked" FontSize="16" FontWeight="Bold" Margin="5,5,5,0" VerticalContentAlignment="Center" Grid.ColumnSpan="2" />
                         <ComboBox x:Name="priority_type" Grid.Column="2" Grid.Row="3" SelectedValue="Normal" SelectionChanged="priority_type_SelectionChanged" Margin="5,5,5,0">
                             <ComboBox.DataContext>
                                 <Diagnostics:ProcessPriorityClass>Normal</Diagnostics:ProcessPriorityClass>
@@ -576,39 +639,6 @@
                             <Diagnostics:ProcessPriorityClass>AboveNormal</Diagnostics:ProcessPriorityClass>
                             <Diagnostics:ProcessPriorityClass>High</Diagnostics:ProcessPriorityClass>
                         </ComboBox>
-                        <Label x:Name="lab_AddOnManager" Content="AddOn Manager:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" />
-
-                        <ListView x:Name="lv_AddOns" Grid.Row="1" Grid.ColumnSpan="2">
-                            <ListView.View>
-                                <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
-                                    <GridViewColumn  HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
-                                        <GridViewColumnHeader Tag="Name" Click="listview_auth_Click" Content="Name" />
-                                    </GridViewColumn>
-                                    <GridViewColumn HeaderStringFormat="" Width="200" DisplayMemberBinding="{Binding args}">
-                                        <GridViewColumnHeader Tag="args" Click="listview_auth_Click" Content="Parameters" />
-                                    </GridViewColumn>
-                                    <GridViewColumn HeaderStringFormat="" Width="70" DisplayMemberBinding="{Binding IsMultilaunch}">
-                                        <GridViewColumnHeader Tag="IsMultilaunch" Click="listview_auth_Click" Content="Multilaunch" />
-                                    </GridViewColumn>
-                                    <GridViewColumn Width="80" DisplayMemberBinding="{Binding IsLbAddon}">
-                                        <GridViewColumnHeader Tag="IsLbAddon" Click="listview_auth_Click" Content="Start with LB" />
-                                    </GridViewColumn>
-                                    <GridViewColumn  DisplayMemberBinding="{Binding Path}">
-                                        <GridViewColumnHeader Tag="Path" Click="listview_auth_Click" Content="Path" />
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2" Margin="0,5">
-                            <Label Content="Name:" />
-                            <TextBox x:Name="tb_AddonName" Width="100" />
-                            <Label Content="Parameters" />
-                            <TextBox x:Name="tb_AddonArgs" Width="100" />
-                            <CheckBox x:Name="cb_AddonMultilaunch" Content="Multilaunch"  VerticalAlignment="Center" Margin="5,0" />
-                            <CheckBox x:Name="cb_AddonOnLB" Content="Start with LB" VerticalAlignment="Center" Margin="5,0" />
-                            <Button x:Name="bt_AddAddon" Content="Add" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_AddAddon_Click" />
-                            <Button x:Name="bt_RemAddon" Content="Remove" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_RemAddon_Click" />
-                        </StackPanel>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Cinema Mode">
