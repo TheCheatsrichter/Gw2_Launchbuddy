@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Gw2_Launchbuddy"
         xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" x:Class="Gw2_Launchbuddy.MainWindow"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:Diagnostics="clr-namespace:System.Diagnostics;assembly=System"
         x:Name="myWindow"
         WindowStyle="None"
         ShowInTaskbar="true"
@@ -564,8 +565,17 @@
                             <ColumnDefinition Width="50*" />
                             <ColumnDefinition Width="50*" />
                         </Grid.ColumnDefinitions>
-                        <CheckBox x:Name="cb_reshade" Content="Use Reshade Unlocker" Checked="cb_reshade_Checked" Unchecked="cb_reshade_Unchecked" FontSize="16" FontWeight="Bold" IsEnabled="False"  VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="3" Margin="5,0,0,0" />
-                        <Button x:Name="bt_reshadepath" Content="Set ReshadeUnlocker Path" Click="bt_reshadepath_Click" Grid.Column="1" Grid.Row="3" Margin="5,0,0,0" />
+                        <CheckBox x:Name="cb_priority" Content="Use Priority Unlocker" Checked="cb_priority_Checked" Unchecked="cb_priority_Unchecked" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="3" Margin="5,0,0,0" />
+                        <ComboBox x:Name="priority_type" Grid.Column="2" Grid.Row="3" SelectedValue="Normal" SelectionChanged="priority_type_SelectionChanged" Margin="5,5,5,0">
+                            <ComboBox.DataContext>
+                                <Diagnostics:ProcessPriorityClass>Normal</Diagnostics:ProcessPriorityClass>
+                            </ComboBox.DataContext>
+                            <Diagnostics:ProcessPriorityClass>Idle</Diagnostics:ProcessPriorityClass>
+                            <Diagnostics:ProcessPriorityClass>BelowNormal</Diagnostics:ProcessPriorityClass>
+                            <Diagnostics:ProcessPriorityClass>Normal</Diagnostics:ProcessPriorityClass>
+                            <Diagnostics:ProcessPriorityClass>AboveNormal</Diagnostics:ProcessPriorityClass>
+                            <Diagnostics:ProcessPriorityClass>High</Diagnostics:ProcessPriorityClass>
+                        </ComboBox>
                         <Label x:Name="lab_AddOnManager" Content="AddOn Manager:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" FontWeight="Bold" />
 
                         <ListView x:Name="lv_AddOns" Grid.Row="1" Grid.ColumnSpan="2">

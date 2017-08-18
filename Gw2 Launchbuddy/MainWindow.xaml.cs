@@ -623,23 +623,12 @@ namespace Gw2_Launchbuddy
 
         private void LoadConfig()
         {
-            //Checking if path for reshade unlocker is saved
-
-            if (Properties.Settings.Default.reshadepath != "")
-            {
-                try
-                {
-                    Globals.unlockerpath = Properties.Settings.Default.reshadepath;
-                }
-                catch { }
-                cb_reshade.IsEnabled = true;
-            }
-
             try
             {
-                if (Properties.Settings.Default.use_reshade && cb_reshade.IsEnabled == true) cb_reshade.IsChecked = true;
+                // Checking if saved priority is different then normal and if its enabled.
+                if (Properties.Settings.Default.priority != 0) priority_type.SelectedValue = Properties.Settings.Default.priority;
+                if (Properties.Settings.Default.use_priority == true) cb_priority.IsChecked = true;
                 if (Properties.Settings.Default.use_autologin == true) cb_login.IsChecked = true;
-
                 //if (Properties.Settings.Default.selected_acc != 0) listview_acc.SelectedIndex = Cinema_Accountlist.SelectedIndex = Properties.Settings.Default.selected_acc;
             }
             catch (Exception err)
@@ -682,8 +671,6 @@ namespace Gw2_Launchbuddy
             // Read the xml file
             try
             {
-                if (Properties.Settings.Default.use_reshade) cb_reshade.IsChecked = true;
-
                 StreamReader stream = new System.IO.StreamReader(Globals.ClientXmlpath);
                 XmlTextReader reader = null;
                 reader = new XmlTextReader(stream);
@@ -922,21 +909,9 @@ namespace Gw2_Launchbuddy
                 shortcut.IconLocation = Assembly.GetExecutingAssembly().Location;
                 shortcut.Description = "Created with Gw2 Launchbuddy, © TheCheatsrichter";
 
-                if (cb_reshade.IsChecked == true)
-                {
-                    // Using commandline to launch both exe files from the link file
-                    // EXAMPLE: cmd.exe /c start "" "C:\Program Files (x86)\Guild Wars 2\ReshadeUnlocker" && start "" "C:\Program Files (x86)\Guild Wars 2\Gw2"
-                    shortcut.Arguments = " /c start \"\" \"" + Globals.unlockerpath + "\" && start \"\" \"" + ClientManager.ClientInfo.InstallPath + ClientManager.ClientInfo.Executable + "\" " + arguments;
-                    MessageBox.Show(shortcut.Arguments);
-                    shortcut.TargetPath = "cmd.exe"; // win will automatically extend this to the cmd path
-                    shortcut.Save();
-                }
-                else
-                {
-                    shortcut.Arguments = arguments;
-                    shortcut.TargetPath = targetFileLocation;
-                    shortcut.Save();
-                }
+                shortcut.Arguments = arguments;
+                shortcut.TargetPath = targetFileLocation;
+                shortcut.Save();
 
                 string dynamicinfo = "";
                 foreach (string arg in arguments.Split(' '))
@@ -944,7 +919,7 @@ namespace Gw2_Launchbuddy
                     dynamicinfo += arg + "\n\t\t";
                 }
 
-                System.Windows.MessageBox.Show("Custom Launcher created at : " + ClientManager.ClientInfo.InstallPath + "\nUse ReshadeUnlocker: " + cb_reshade.IsChecked.ToString() + "\nUsed arguments:" + dynamicinfo);
+                System.Windows.MessageBox.Show("Custom Launcher created at : " + ClientManager.ClientInfo.InstallPath + "\nUsed arguments:" + dynamicinfo);
             }
             catch (Exception err)
             {
@@ -1097,7 +1072,8 @@ namespace Gw2_Launchbuddy
         {
             Properties.Settings.Default.instance_win_X = Globals.Appmanager.Left;
             Properties.Settings.Default.instance_win_Y = Globals.Appmanager.Top;
-            Properties.Settings.Default.use_reshade = (bool)cb_reshade.IsChecked;
+            Properties.Settings.Default.use_priority = (bool)cb_priority.IsChecked;
+            Properties.Settings.Default.priority = (ProcessPriorityClass)priority_type.SelectedValue;
             Properties.Settings.Default.Save();
             AccountManager.ImportExport.SaveAccountInfo();
             SaveAddons();
@@ -1136,31 +1112,6 @@ namespace Gw2_Launchbuddy
             Globals.selected_assetsv.Port = tb_assetsport.Text;
         }
 
-        private void cb_reshade_Unchecked(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void bt_reshadepath_Click(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
-            filedialog.DefaultExt = "exe";
-            filedialog.Multiselect = false;
-            filedialog.Filter = "Exe Files(*.exe) | *.exe";
-            filedialog.ShowDialog();
-
-            if (filedialog.FileName == "" || !filedialog.FileName.EndsWith(".exe"))
-            {
-                MessageBox.Show("Invalid .exe file selected!");
-                cb_reshade.IsChecked = false;
-            }
-            else
-            {
-                Globals.unlockerpath = filedialog.FileName;
-                cb_reshade.IsEnabled = true;
-                Gw2_Launchbuddy.Properties.Settings.Default.reshadepath = Globals.unlockerpath;
-            }
-        }
-
         private void exp_server_Collapsed(object sender, RoutedEventArgs e)
         {
             //ServerUI.Height = new GridLength(30);
@@ -1179,34 +1130,6 @@ namespace Gw2_Launchbuddy
             view.SortDescriptions.Add(new SortDescription("Ping", ListSortDirection.Ascending));
             CollectionView sview = (CollectionView)CollectionViewSource.GetDefaultView(listview_assets.ItemsSource);
             sview.SortDescriptions.Add(new SortDescription("Ping", ListSortDirection.Ascending));
-        }
-
-        private void cb_reshade_Checked(object sender, RoutedEventArgs e)
-        {
-            if (!System.IO.File.Exists(Globals.unlockerpath))
-            {
-                cb_reshade.IsChecked = false;
-                MessageBox.Show("ReShadeUnlocker.exe not found at :\n" + ClientManager.ClientInfo.InstallPath + "\nPlease select the ReshadeUnlocker.exe manually!");
-                System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
-                filedialog.DefaultExt = "exe";
-                filedialog.Multiselect = false;
-                filedialog.Filter = "Exe Files(*.exe) | *.exe";
-                filedialog.ShowDialog();
-
-                if (filedialog.FileName == "" || !filedialog.FileName.EndsWith(".exe"))
-                {
-                    MessageBox.Show("Invalid .exe file selected!");
-                }
-                else
-                {
-                    Globals.unlockerpath = filedialog.FileName;
-                    try
-                    {
-                        Gw2_Launchbuddy.Properties.Settings.Default.reshadepath = Globals.unlockerpath;
-                    }
-                    catch { }
-                }
-            }
         }
 
         private void SortByColumn(ListView list, object sender)
@@ -1928,6 +1851,21 @@ namespace Gw2_Launchbuddy
         {
             Properties.Settings.Default.notifylbupdate = (bool)cb_lbupdatescheck.IsChecked;
             Properties.Settings.Default.Save();
+        }
+
+        private void cb_priority_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.use_priority = false;
+        }
+
+        private void cb_priority_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.use_priority = true;
+        }
+
+        private void priority_type_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Properties.Settings.Default.priority = (ProcessPriorityClass)priority_type.SelectedItem;
         }
 
         private void cb_useinstancegui_Click(object sender, RoutedEventArgs e)

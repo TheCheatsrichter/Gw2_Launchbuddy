@@ -101,19 +101,9 @@ namespace Gw2_Launchbuddy
                     }
                 }
 
-                if (Properties.Settings.Default.use_reshade)
+                if (Properties.Settings.Default.use_priority)
                 {
-                    try
-                    {
-                        ProcessStartInfo unlockerpro = new ProcessStartInfo();
-                        unlockerpro.FileName = Globals.unlockerpath;
-                        unlockerpro.WorkingDirectory = Path.GetDirectoryName(Globals.unlockerpath);
-                        Process.Start(unlockerpro);
-                    }
-                    catch (Exception err)
-                    {
-                        MessageBox.Show("Could not launch ReshadeUnlocker. Invalid path?\n" + err.Message);
-                    }
+                    gw2Client.SetPriority(Properties.Settings.Default.priority);
                 }
             }
             catch (Exception err)

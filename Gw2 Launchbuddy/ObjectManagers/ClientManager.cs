@@ -170,6 +170,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Process.WaitForExit();
         }
 
+        public void SetPriority(ProcessPriorityClass priority)
+        {
+            Process.PriorityClass = priority;
+        }
+
         private void ClientProcess_Exited(object sender, EventArgs e)
         {
             Process.Exited -= ClientProcess_Exited;

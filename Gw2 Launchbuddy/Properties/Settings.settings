@@ -2,10 +2,10 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Gw2_Launchbuddy.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="use_reshade" Type="System.Boolean" Scope="User">
+    <Setting Name="use_priority" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="reshadepath" Type="System.String" Scope="User">
+    <Setting Name="priority" Type="System.Diagnostics.ProcessPriorityClass" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="use_autologin" Type="System.Boolean" Scope="User">
