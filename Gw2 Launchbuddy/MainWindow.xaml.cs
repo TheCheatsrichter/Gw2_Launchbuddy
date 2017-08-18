@@ -1,33 +1,29 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Net.NetworkInformation;
-using System.Xml;
-using System.IO;
-using System.Diagnostics;
+﻿using Gw2_Launchbuddy.ObjectManagers;
 using IWshRuntimeLibrary;
-using System.Reflection;
-using System.ComponentModel;
+using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Net;
-using System.Windows.Data;
+using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Media.Imaging;
-using System.IO.Compression;
 using System.Windows.Media.Animation;
-using System.Xml.Serialization;
-using Gw2_Launchbuddy.ObjectManagers;
+using System.Windows.Media.Imaging;
+using System.Xml;
 
 namespace Gw2_Launchbuddy
 {
     public partial class MainWindow : Window
     {
-
         ///Gw2 Launchbuddy by TheCheatsrichter 2016
         ///
         ///Argument generator and shortcut creator for Guild Wars 2
@@ -36,129 +32,23 @@ namespace Gw2_Launchbuddy
         ///     bt= button
         ///     lab = label
         ///     cb = checkbox
-        /// 
+        ///
         ///##########################################
-        /// 
+        ///
 
-        bool cinemamode = false;
-        bool slideshowthread_isrunning = false;
+        private bool cinemamode = false;
+        private bool slideshowthread_isrunning = false;
 
-        int reso_x, reso_y;
+        private int reso_x, reso_y;
 
-        SetupInfo winsetupinfo = new SetupInfo();
+        private SetupInfo winsetupinfo = new SetupInfo();
         private SortAdorner listViewSortAdorner = null;
         private GridViewColumnHeader listViewSortCol = null;
 
-        ObservableCollection<Server> assetlist = new ObservableCollection<Server>();
-        ObservableCollection<Server> authlist = new ObservableCollection<Server>();
-        //ObservableCollection<Account> accountlist = new ObservableCollection<Account>();
+        private ObservableCollection<Server> assetlist = new ObservableCollection<Server>();
+        private ObservableCollection<Server> authlist = new ObservableCollection<Server>();
 
-        List<int> nomutexpros = new List<int>();
-
-        AES crypt = new AES();
-
-
-        /*[Serializable()]
-        public class Account
-        {
-            [NonSerialized]
-            private ImageSource icon;
-            public ImageSource Icon
-            {
-                get
-                {
-                    if (icon == null)
-                    {
-                        using (MemoryStream memory = new MemoryStream())
-                        {
-                            System.Drawing.Bitmap bitmap = Properties.Resources.user;
-                            bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Png);
-                            memory.Position = 0;
-                            BitmapImage bitmapimage = new BitmapImage();
-                            bitmapimage.BeginInit();
-                            bitmapimage.StreamSource = memory;
-                            bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                            bitmapimage.EndInit();
-
-                            return bitmapimage;
-                        }
-                    }
-                    return icon;
-                }
-                set
-                {
-                    icon = value;
-                }
-            }
-            public string Iconpath
-            {
-                get
-                {
-                    return iconpath;
-                }
-                set
-                {
-                    if (System.IO.File.Exists(value))
-                    {
-                        Icon = LoadImage(value);
-                    }
-                    iconpath = value;
-                }
-            }
-            public string iconpath { get; set; }
-            public string Email { get; set; }
-            public string Password { get; set; }
-            public string DisplayEmail
-            {
-                get
-                {
-                    string tmp = "";
-                    try
-                    {
-                        tmp += Email.Substring(0, 2);
-                        tmp += "********@*****";
-                        return tmp;
-                    }
-                    catch
-                    {
-                        return "*********@*****";
-                    }
-
-                }
-                set { }
-            }
-            public string DisplayPW
-            {
-                get
-                {
-                    return "*********";
-                }
-                set
-                {
-                    DisplayPW = value;
-                }
-            }
-            public DateTime Time { get; set; }
-            public string Nick { get; set; }
-
-            public string Configpath
-            {
-                set
-                {
-                    configpath = value;
-                    Configname = Path.GetFileNameWithoutExtension(value);
-                }
-                get
-                {
-                    if (configpath != "" && configpath != null)
-                        return configpath;
-                    return "Default";
-                }
-            }
-
-            public string configpath { set; get; }
-            public string Configname { set; get; }
-        }*/
+        private AES crypt = new AES();
 
         public class CinemaImage
         {
@@ -167,7 +57,9 @@ namespace Gw2_Launchbuddy
                 set { }
                 get { return System.IO.Path.GetFileName(Path); }
             }
+
             public string Path { set; get; }
+
             public CinemaImage(string Path)
             {
                 this.Path = Path;
@@ -179,9 +71,9 @@ namespace Gw2_Launchbuddy
             try
             {
                 InitializeComponent();
-                if (!Directory.Exists(Globals.AppdataPath))
+                if (!Directory.Exists(Globals.AppDataPath))
                 {
-                    Directory.CreateDirectory(Globals.AppdataPath);
+                    Directory.CreateDirectory(Globals.AppDataPath);
                 }
             }
             catch
@@ -191,7 +83,7 @@ namespace Gw2_Launchbuddy
 
 #if !DEBUG
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionReport);
-            
+
             //LB statistics
             Properties.Settings.Default.counter_launches += 1;
             Properties.Settings.Default.Save();
@@ -202,10 +94,13 @@ namespace Gw2_Launchbuddy
 
             //Setup
             donatepopup();
-            //accountlist.Clear(); //clearing accountlist
-            loadaccounts(); // loading saved accounts from launchbuddy
-            loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
-            fillargs(); //create arglist
+
+            AccountManager.ImportExport.LoadAccountInfo(); // Load saved accounts from XML
+            LoadConfig(); // loading the gw2 xml config file from appdata and loading user settings
+
+            Cinema_Accountlist.ItemsSource = listview_acc.ItemsSource = AccountManager.AccountCollection;
+            arglistbox.ItemsSource = AccountArgumentManager.AccountArgumentCollection.Where(a => a.Argument.Active && a.Account == AccountManager.DefaultAccount);
+
             Thread checkver = new Thread(checkversion);
             checkver.IsBackground = true;
             checkver.Start();
@@ -221,13 +116,13 @@ namespace Gw2_Launchbuddy
             CrashAnalyzer.ReadCrashLogs();
         }
 
-        void SettingsTabSetup()
+        private void SettingsTabSetup()
         {
             cb_lbupdatescheck.IsChecked = Properties.Settings.Default.notifylbupdate;
             cb_useinstancegui.IsChecked = Properties.Settings.Default.useinstancegui;
         }
 
-        void donatepopup()
+        private void donatepopup()
         {
             if ((Properties.Settings.Default.counter_launches % 100) == 5)
             {
@@ -240,7 +135,7 @@ namespace Gw2_Launchbuddy
         {
             Dispatcher.Invoke(new Action(() =>
             {
-                bt_downloadrelease.Content = "Fetching Releaselist please wait";
+                bt_downloadrelease.Content = "Fetching Release List please wait";
             }));
 
             VersionSwitcher.CheckForUpdate();
@@ -251,37 +146,13 @@ namespace Gw2_Launchbuddy
             }));
         }
 
-        private void fillargs()
-        {
-            List<CheckBox> tmp = new List<CheckBox>();
-            try
-            {
-                foreach (var item in AccountArgumentManager.StopGap.ToDictionary())
-                {
-                    tmp.Add(new CheckBox() { Content = item.Key, IsEnabled = item.Value.Argument.Selectable, IsChecked = item.Value.Selected });
-                }
-                foreach (var item in tmp)
-                {
-                    item.Margin = new Thickness(5, 0, 0, 0);
-                    item.Checked += CheckBox_Checked;
-                    item.Unchecked += CheckBox_Unchecked;
-                }
-            }
-            catch (Exception e)
-            {
-                CrashReporter.ReportCrashToAll(e);
-            }
-            
-            arglistbox.ItemsSource = tmp;
-        }
-
-        static void UnhandledExceptionReport(object sender, UnhandledExceptionEventArgs args)
+        private static void UnhandledExceptionReport(object sender, UnhandledExceptionEventArgs args)
         {
             Exception e = (Exception)args.ExceptionObject;
             CrashReporter.ReportCrashToAll(e);
         }
 
-        void slideshow_diashow(string imagespath)
+        private void slideshow_diashow(string imagespath)
         {
             bool isactive = false;
             string[] files = Directory.GetFiles(imagespath, "*.*", SearchOption.AllDirectories).Where(a => a.EndsWith(".png") || a.EndsWith(".jpg") || a.EndsWith(".jpeg") || a.EndsWith(".bmp")).ToArray<string>();
@@ -330,7 +201,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        bool cinema_checksetup(bool checkslideshow, bool checkvideomode)
+        private bool cinema_checksetup(bool checkslideshow, bool checkvideomode)
         {
             string imagespath = Properties.Settings.Default.cinema_imagepath;
             string musicpath = Properties.Settings.Default.cinema_musicpath;
@@ -398,7 +269,7 @@ namespace Gw2_Launchbuddy
             return true;
         }
 
-        void cinema_setup()
+        private void cinema_setup()
         {
             bool videomode = Properties.Settings.Default.cinema_video;
             bool slideshowmode = Properties.Settings.Default.cinema_slideshow;
@@ -422,12 +293,12 @@ namespace Gw2_Launchbuddy
             }
             catch (Exception err)
             {
-                MessageBox.Show("Videofile for videomode could not be found! \nPath: " + videopath + "\n" + err.Message);
+                MessageBox.Show("Video File for Video Mode could not be found! \nPath: " + videopath + "\n" + err.Message);
             }
             if (videomode && !slideshowmode) rb_cinemavideomode.IsChecked = true;
             if (!videomode && slideshowmode) rb_cinemaslideshowmode.IsChecked = true;
             ClrPcker_Background.SelectedColor = backgroundcolor;
-            lab_loginwindowpath.Content = "Current Loginwindow: " + Path.GetFileNameWithoutExtension(loginwindowpath);
+            lab_loginwindowpath.Content = "Current Login Window: " + Path.GetFileNameWithoutExtension(loginwindowpath);
             sl_logoendpos.Value = Properties.Settings.Default.cinema_slideshowendpos;
             sl_logoendscaleX.Value = Properties.Settings.Default.cinema_slideshowendscale;
             sl_volumecontrol.Value = Properties.Settings.Default.mediaplayer_volume;
@@ -469,7 +340,7 @@ namespace Gw2_Launchbuddy
                 var endscale = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndScaleX"];
                 endscale.Value = (double)Properties.Settings.Default.cinema_slideshowendscale;
 
-                //General UI Hidding/Scaling
+                //General UI Hiding/Scaling
                 SettingsGrid.Visibility = Visibility.Hidden;
                 bt_ShowSettings.Visibility = Visibility.Visible;
                 Grid.SetColumnSpan(WindowOptionsColum, 2);
@@ -485,7 +356,7 @@ namespace Gw2_Launchbuddy
                 }
                 catch (Exception err)
                 {
-                    MessageBox.Show("Loginwindow image could not be found!\nPath: " + loginwindowpath + "\n" + err.Message);
+                    MessageBox.Show("Login Window Image could not be found!\nPath: " + loginwindowpath + "\n" + err.Message);
                 }
 
                 if (videomode)
@@ -499,7 +370,7 @@ namespace Gw2_Launchbuddy
                     }
                     catch (Exception err)
                     {
-                        MessageBox.Show("The choosen video for cinemamode is not valid/ does not exist!\n" + err.Message);
+                        MessageBox.Show("The chosen video for cinemamode is not valid/ does not exist!\n" + err.Message);
                         Properties.Settings.Default.cinema_use = false;
                         Properties.Settings.Default.Save();
                     }
@@ -556,7 +427,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        void checkversion()
+        private void checkversion()
         {
             try
             {
@@ -568,7 +439,7 @@ namespace Gw2_Launchbuddy
                         if (win.ToString() == "Yes")
                         {
                             updateclient();
-                            loadconfig();
+                            LoadConfig();
                             checkversion();
                         }
                     }));
@@ -607,7 +478,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        bool isclientuptodate()
+        private bool isclientuptodate()
         {
             WebClient downloader = new WebClient();
             Regex filter = new Regex(@"\d*\d");
@@ -625,7 +496,7 @@ namespace Gw2_Launchbuddy
             return false;
         }
 
-        void updateclient()
+        private void updateclient()
         {
             Process progw2 = new Process();
             ProcessStartInfo infoprogw2 = new ProcessStartInfo { FileName = ClientManager.ClientInfo.InstallPath + ClientManager.ClientInfo.Executable, Arguments = "-image" };
@@ -634,7 +505,7 @@ namespace Gw2_Launchbuddy
             progw2.WaitForExit();
         }
 
-        void setupend()
+        private void setupend()
         {
             try
             {
@@ -647,7 +518,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        void createlist()
+        private void createlist()
         {
             ObservableCollection<Server> tmp_authlist = new ObservableCollection<Server>();
             ObservableCollection<Server> tmp_assetlist = new ObservableCollection<Server>();
@@ -700,7 +571,7 @@ namespace Gw2_Launchbuddy
                     tmp_authlist.Add(new Server { IP = "206.127.159.108", Port = default_auth2port, Ping = getping("206.127.159.108").ToString() });
                     tmp_authlist.Add(new Server { IP = "206.127.159.77", Port = default_auth2port, Ping = getping("206.127.159.77").ToString() });
 
-                    // Assets servers 
+                    // Assets servers
                     tmp_assetlist.Add(new Server { IP = "54.192.201.89", Port = default_assetport, Ping = getping("54.192.201.89").ToString() });
                     tmp_assetlist.Add(new Server { IP = "54.192.201.14", Port = default_assetport, Ping = getping("54.192.201.14").ToString() });
                     tmp_assetlist.Add(new Server { IP = "54.192.201.65", Port = default_assetport, Ping = getping("54.192.201.65").ToString() });
@@ -728,7 +599,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        void updateserverlist(ObservableCollection<Server> newauthlist, ObservableCollection<Server> newassetlist)
+        private void updateserverlist(ObservableCollection<Server> newauthlist, ObservableCollection<Server> newassetlist)
         {
             bt_checkservers.IsEnabled = true;
 
@@ -750,7 +621,7 @@ namespace Gw2_Launchbuddy
             sview.Refresh();
         }
 
-        void loadconfig()
+        private void LoadConfig()
         {
             //Checking if path for reshade unlocker is saved
 
@@ -845,10 +716,10 @@ namespace Gw2_Launchbuddy
                             Regex regex = new Regex(@"(?<=^|\s)-(umbra.(\w)*|\w*)");
                             string input = getvalue(reader);
                             MatchCollection matchList = regex.Matches(input);
-                            
+
                             //ArgumentManager.ToList().Where(a => matchList.Cast<Match>().Select(b => b.Value).Contains(a.Flag) && !a.Blocker).ToList().ForEach(c => c.IsSelected());
-                            
-                            foreach(Argument argument in  ArgumentManager.ToList())
+
+                            foreach (Argument argument in ArgumentManager.ArgumentCollection)
                                 foreach (Match parameter in matchList)
                                     if (argument.Flag == parameter.Value && !argument.Blocker)
                                         AccountArgumentManager.StopGap.IsSelected(parameter.Value, true);
@@ -863,7 +734,6 @@ namespace Gw2_Launchbuddy
                             //    }
                             //}
 
-
                             RefreshUI();
                             break;
                     }
@@ -875,7 +745,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        string getvalue(XmlTextReader reader)
+        private string getvalue(XmlTextReader reader)
         {
             while (reader.MoveToNextAttribute())
             {
@@ -884,7 +754,7 @@ namespace Gw2_Launchbuddy
             return null;
         }
 
-        string getlocation(string ip)
+        private string getlocation(string ip)
         {
             //Getting the geolocation of the asset CDN servers
             //This might be the origin of AV flagging the exe!
@@ -907,7 +777,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        long getping(string ip)
+        private long getping(string ip)
         {
             // Get Ping in ms
             Ping pingsender = new Ping();
@@ -917,7 +787,7 @@ namespace Gw2_Launchbuddy
         private void bt_checkservers_Click(object sender, RoutedEventArgs e)
         {
             //Starting servercheck thread
-            bt_checkservers.Content = "Loading Serverlist";
+            bt_checkservers.Content = "Loading Server List";
             bt_checkservers.IsEnabled = false;
             Thread serverthread = new Thread(createlist);
             serverthread.IsBackground = true;
@@ -939,6 +809,7 @@ namespace Gw2_Launchbuddy
                 checkb_assets.IsChecked = false;
             }
         }
+
         private void listview_auth_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // UI Handling for selected Auth Server
@@ -963,7 +834,7 @@ namespace Gw2_Launchbuddy
             tb_authport.IsEnabled = true;
             tb_authport.Text = Globals.selected_authsv.Port;
             AccountArgumentManager.StopGap.IsSelected("-authsrv");
-            AccountArgumentManager.StopGap.SetOptionString("-authsrv",Globals.selected_authsv.IP + ":" + tb_authport.Text);
+            AccountArgumentManager.StopGap.SetOptionString("-authsrv", Globals.selected_authsv.IP + ":" + tb_authport.Text);
             RefreshUI();
         }
 
@@ -1083,14 +954,12 @@ namespace Gw2_Launchbuddy
 
         private void arglistbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Description switch. Should have used extern file / dictionary?
             if (arglistbox.SelectedItem != null)
             {
-                object selecteditem = arglistbox.SelectedItem;
-                System.Windows.Controls.CheckBox item = (System.Windows.Controls.CheckBox)selecteditem;
-                lab_descr.Content = "Description (" + item.Content.ToString() + "):";
+                var item = (Gw2_Launchbuddy.ObjectManagers.AccountArgument)arglistbox.SelectedItem;
+                lab_descr.Content = "Description (" + item.Argument.Flag + "):";
 
-                textblock_descr.Text = ArgumentManager.ToDictionary().Where(a => a.Key == item.Content.ToString()).Select(a => a.Value.Description).FirstOrDefault() ?? "Description missing! (PLEASE REPORT)";
+                textblock_descr.Text = ArgumentManager.ArgumentCollection.Where(a => a.Flag == item.Argument.Flag).Select(a => a.Description).FirstOrDefault() ?? "Description missing! (PLEASE REPORT)";
             }
         }
 
@@ -1100,7 +969,7 @@ namespace Gw2_Launchbuddy
             {
                 try
                 {
-                    CreateShortcut("Gw2_Launcher_" + AccountManager.ToList()[0].Nickname, ClientManager.ClientInfo.InstallPath, ClientManager.ClientInfo.InstallPath + ClientManager.ClientInfo.Executable);
+                    CreateShortcut("Gw2_Launcher_" + AccountManager.DefaultAccount.Nickname, ClientManager.ClientInfo.InstallPath, ClientManager.ClientInfo.InstallPath + ClientManager.ClientInfo.Executable);
                 }
                 catch (Exception err)
                 {
@@ -1121,100 +990,25 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        bool IsValidEmail(string email)
+        private void SaveAddons()
         {
-            try
-            {
-                var addr = new System.Net.Mail.MailAddress(email);
-                return addr.Address == email;
-            }
-            catch
-            {
-                return false;
-            }
+            AddOnManager.SaveAddons(Globals.AppDataPath + "Addons.xml");
         }
 
-        void safeaccounts()
+        private void LoadAddons()
         {
-            ObservableCollection<Account> aes_accountlist = new ObservableCollection<Account>();
-            try
-            {
-                aes_accountlist.Clear();
-                foreach (Account acc in AccountManager.ToList())
-                {
-                    aes_accountlist.Add(acc);
-                }
-            }
-            catch (Exception err)
-            {
-                MessageBox.Show("Could not encrypt passwords\n" + err.Message);
-            }
-
-            try
-            {
-                var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\Launchbuddy.bin";
-                using (Stream stream = System.IO.File.Open(path, FileMode.Create))
-                {
-                    var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                    bformatter.Serialize(stream, aes_accountlist);
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
-
-        void loadaccounts()
-        {
-            try
-            {
-                var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\Launchbuddy.bin";
-
-                if (System.IO.File.Exists(path) == true)
-                {
-                    //accountlist.Clear();
-                    using (Stream stream = System.IO.File.Open(path, FileMode.Open))
-                    {
-                        var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                        ObservableCollection<Account> aes_accountlist = (ObservableCollection<Account>)bformatter.Deserialize(stream);
-
-                        foreach (Account acc in aes_accountlist)
-                        {
-                            AccountManager.Add(acc);
-                        }
-                        
-                        listview_acc.ItemsSource = AccountManager.ToList(false);
-                    }
-                }
-
-                AccountManager.ToList(false).ForEach(a => listview_acc.SelectedItems.Add(a));
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
-
-        void SaveAddons()
-        {
-            AddOnManager.SaveAddons(Globals.AppdataPath + "Addons.xml");
-        }
-
-        void LoadAddons()
-        {
-            lv_AddOns.ItemsSource = AddOnManager.LoadAddons(Globals.AppdataPath + "Addons.xml");
+            lv_AddOns.ItemsSource = AddOnManager.LoadAddons(Globals.AppDataPath + "Addons.xml");
         }
 
         private void bt_addacc_Click(object sender, RoutedEventArgs e)
         {
-            if (IsValidEmail(tb_email.Text))
+            if (ObjectManagers.AccountManager.IsValidEmail(tb_email.Text))
             {
                 if (tb_passw.Password.Length > 4)
                 {
-                    Account acc = new Account (tb_nick.Text, tb_email.Text,tb_passw.Password);
+                    Account acc = new Account(tb_nick.Text, tb_email.Text, tb_passw.Password);
                     AccountManager.Add(acc);
-                    listview_acc.ItemsSource = AccountManager.ToList();
+                    listview_acc.ItemsSource = AccountManager.AccountCollection;
                     tb_email.Clear();
                     tb_passw.Clear();
                     tb_nick.Clear();
@@ -1274,44 +1068,21 @@ namespace Gw2_Launchbuddy
             bt_accedit.IsEnabled = true;
             bt_remacc.IsEnabled = true;
 
-            var selectedAccounts = ((ListView)sender).SelectedItems.Cast<Account>();
-            AccountManager.ToList().ForEach(a => a.IsSelected(selectedAccounts.Where(b => b.Nickname == a.Nickname).Any()));
+            var selectedAccounts = ((ListView)sender).Items.Cast<Account>();
+            AccountManager.SetSelected(selectedAccounts);
 
-            //Properties.Settings.Default.selected_acc = ((ListView)sender).SelectedIndex;
-            //Properties.Settings.Default.Save();
+            cb_login.Content = "Use Autologin: " + (AccountManager.SelectedAccountCollection.Count == 1 ? AccountManager.SelectedAccountCollection[0].Nickname : AccountManager.SelectedAccountCollection.Count + " Accounts Total");
 
-            cb_login.Content = "Use Autologin: " + (AccountManager.GetSelected().Count == 1 ? AccountManager.GetSelected()[0].Nickname : AccountManager.GetSelected().Count + " Accounts Total");
-
-            //if (((ListView)sender).SelectedItems.Count == 1)
-            //{
-            //    var selectedItems = (dynamic)((ListView)sender).SelectedItems;
-            //    cb_login.Content = "Use Autologin : " + selectedItems[0].Nickname;
-            //    //bt_shortcut.IsEnabled = true;
-            //}
-
-            //if (((ListView)sender).SelectedItems.Count > 1)
-            //{
-            //    var selectedItem = (dynamic)((ListView)sender).SelectedItem;
-            //    cb_login.Content = "Use Autologin (Multiboxing): " + ((ListView)sender).SelectedItems.Count + " Accounts selected";
-            //    //bt_shortcut.IsEnabled = false;
-            //}
-
-            //Sync account lists.
-            var list = ((ListView)sender) != listview_acc ? listview_acc : Cinema_Accountlist;
-            list.SelectionChanged -= listview_acc_SelectionChanged;
-            list.SelectedItems.Clear();
-            foreach (Account s in ((ListView)sender).SelectedItems) if (!list.SelectedItems.Contains(s)) list.SelectedItems.Add(s);
-            list.SelectionChanged += listview_acc_SelectionChanged;
             CheckAutoLogin();
         }
 
         private void CheckAutoLogin()
         {
-            if (listview_acc.SelectedItems.Count == 0)
+            if (AccountManager.SelectedAccountCollection.Count == 0)
             {
-                AccountArgumentManager.StopGap.IsSelected("-email",false);
-                AccountArgumentManager.StopGap.IsSelected("-password",false);
-                AccountArgumentManager.StopGap.IsSelected("-nopatchui",false);
+                AccountArgumentManager.StopGap.IsSelected("-email", false);
+                AccountArgumentManager.StopGap.IsSelected("-password", false);
+                AccountArgumentManager.StopGap.IsSelected("-nopatchui", false);
             }
             else
             {
@@ -1328,7 +1099,7 @@ namespace Gw2_Launchbuddy
             Properties.Settings.Default.instance_win_Y = Globals.Appmanager.Top;
             Properties.Settings.Default.use_reshade = (bool)cb_reshade.IsChecked;
             Properties.Settings.Default.Save();
-            safeaccounts();
+            AccountManager.ImportExport.SaveAccountInfo();
             SaveAddons();
             Environment.Exit(Environment.ExitCode);
         }
@@ -1346,14 +1117,12 @@ namespace Gw2_Launchbuddy
         {
             if (ClientManager.ClientInfo.InstallPath != "")
             {
-                Clientfix clientfix = new Clientfix();
-                clientfix.exepath = ClientManager.ClientInfo.InstallPath;
-                clientfix.exename = ClientManager.ClientInfo.Executable;
+                ClientFix clientfix = new ClientFix();
                 clientfix.Show();
             }
             else
             {
-                MessageBox.Show("Gw2.exe  installpath is empty!");
+                MessageBox.Show("Gw2.exe install path is empty!");
             }
         }
 
@@ -1417,7 +1186,7 @@ namespace Gw2_Launchbuddy
             if (!System.IO.File.Exists(Globals.unlockerpath))
             {
                 cb_reshade.IsChecked = false;
-                MessageBox.Show("Reshade Unlocker exe not found at :\n" + ClientManager.ClientInfo.InstallPath + "\nPlease select the ReshadeUnlocker.exe manually!");
+                MessageBox.Show("ReShadeUnlocker.exe not found at :\n" + ClientManager.ClientInfo.InstallPath + "\nPlease select the ReshadeUnlocker.exe manually!");
                 System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
                 filedialog.DefaultExt = "exe";
                 filedialog.Multiselect = false;
@@ -1440,7 +1209,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        void sortbycolum(ListView list, object sender)
+        private void SortByColumn(ListView list, object sender)
         {
             GridViewColumnHeader column = (sender as GridViewColumnHeader);
             string sortBy = column.Tag.ToString();
@@ -1514,7 +1283,7 @@ namespace Gw2_Launchbuddy
         private void bt_RemAddon_Click(object sender, RoutedEventArgs e)
         {
             AddOn item = lv_AddOns.SelectedItem as AddOn;
-            if (item!= null)
+            if (item != null)
             {
                 AddOnManager.Remove(item.Name);
             }
@@ -1538,7 +1307,6 @@ namespace Gw2_Launchbuddy
                     Properties.Settings.Default.Save();
                 }
             }
-
         }
 
         private void lv_cinema_images_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1549,7 +1317,6 @@ namespace Gw2_Launchbuddy
                 img_imagepreview.Source = LoadImage(selectedimage.Path);
                 lab_imagepreview.Content = "Current Image: " + selectedimage.Name;
             }
-
         }
 
         private void bt_cinema_setmask_Click(object sender, RoutedEventArgs e)
@@ -1573,7 +1340,7 @@ namespace Gw2_Launchbuddy
 
         private void listview_auth_Click(object sender, RoutedEventArgs e)
         {
-            sortbycolum(listview_auth, sender);
+            SortByColumn(listview_auth, sender);
         }
 
         private void bt_setmusic_Click(object sender, RoutedEventArgs e)
@@ -1587,12 +1354,12 @@ namespace Gw2_Launchbuddy
             {
                 Properties.Settings.Default.cinema_musicpath = filedialog.FileName;
                 Properties.Settings.Default.Save();
-                lab_musicpath.Content = "Current Musicfile: " + Path.GetFileName(filedialog.FileName);
+                lab_musicpath.Content = "Current Music File: " + Path.GetFileName(filedialog.FileName);
                 Cinema_MediaPlayer.Source = (new Uri(filedialog.FileName));
             }
         }
 
-        bool IsValidPath(string path)
+        private bool IsValidPath(string path)
         {
             try
             {
@@ -1605,7 +1372,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        void LoadCinemaSettings()
+        private void LoadCinemaSettings()
         {
             string imagepath = Properties.Settings.Default.cinema_imagepath;
             string maskpath = Properties.Settings.Default.cinema_maskpath;
@@ -1644,7 +1411,7 @@ namespace Gw2_Launchbuddy
             {
                 if (IsValidPath(loginpath) && Path.GetExtension(maskpath) == ".png")
                 {
-                    lab_loginwindowpath.Content = "Current Loginwindow: " + Path.GetFileName(loginpath);
+                    lab_loginwindowpath.Content = "Current Login Window: " + Path.GetFileName(loginpath);
                 }
             }
             catch
@@ -1657,14 +1424,13 @@ namespace Gw2_Launchbuddy
                 if (IsValidPath(musicpath))
                 {
                     Cinema_MediaPlayer.Source = (new Uri(musicpath));
-                    lab_musicpath.Content = "Current Musicfile: " + Path.GetFileName(musicpath);
+                    lab_musicpath.Content = "Current Music File: " + Path.GetFileName(musicpath);
                 }
             }
             catch
             {
-                lab_maskpreview.Content = "Current Musicfile: ERROR! " + Path.GetFileName(musicpath) + " file not found!";
+                lab_maskpreview.Content = "Current Music File: ERROR! " + Path.GetFileName(musicpath) + " file not found!";
             }
-
         }
 
         private void bt_musicstart_Click(object sender, RoutedEventArgs e)
@@ -1676,9 +1442,8 @@ namespace Gw2_Launchbuddy
             }
             else
             {
-                MessageBox.Show("Invalid musicpath");
+                MessageBox.Show("Invalid Music Path");
             }
-
         }
 
         private void bt_musicstop_Click(object sender, RoutedEventArgs e)
@@ -1750,7 +1515,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        void SetVideoInfo()
+        private void SetVideoInfo()
         {
             try
             {
@@ -1764,7 +1529,6 @@ namespace Gw2_Launchbuddy
             }
             catch { }
         }
-
 
         private void bt_cinema_videoplay_Click(object sender, RoutedEventArgs e)
         {
@@ -1784,7 +1548,7 @@ namespace Gw2_Launchbuddy
 
         private void listview_assets_Click(object sender, RoutedEventArgs e)
         {
-            sortbycolum(listview_assets, sender);
+            SortByColumn(listview_assets, sender);
         }
 
         private static BitmapSource LoadImage(string path)
@@ -1823,106 +1587,22 @@ namespace Gw2_Launchbuddy
             SettingsGrid.Visibility = SettingsGrid.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
         }
 
-        #region Old Handle Method Functions
-        void checksetup()
-        {
-            try
-            {
-                if (!System.IO.File.Exists(Globals.AppdataPath + "handle64.exe") || !System.IO.File.Exists(Globals.AppdataPath + "handle.exe"))
-                {
-                    winsetupinfo.WindowStyle = WindowStyle.None;
-                    winsetupinfo.Width = 300;
-                    winsetupinfo.Height = 200;
-                    winsetupinfo.Show();
-                    myWindow.Visibility = Visibility.Hidden;
-                    Thread th_gethandleexe = new Thread(gethandleexe);
-                    th_gethandleexe.IsBackground = true;
-                    th_gethandleexe.Start();
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
-
-        void gethandleexe()
-        {
-            try
-            {
-                System.IO.File.Delete(Globals.AppdataPath + "handle64.exe");
-                System.IO.File.Delete(Globals.AppdataPath + "handle.exe");
-                System.IO.File.Delete(Globals.AppdataPath + "Eula.txt");
-                WebClient downloadclient = new WebClient();
-                downloadclient.DownloadFile("https://download.sysinternals.com/files/Handle.zip", Globals.AppdataPath + "Handle.zip");
-                ZipFile.ExtractToDirectory(Globals.AppdataPath + "Handle.zip", Globals.AppdataPath);
-
-            }
-            catch
-            {
-                MessageBox.Show("Official microsoft link is not reachable. Using embbeded handle version!");
-                try
-                {
-                    //System.IO.File.WriteAllBytes(Globals.AppdataPath+ "handle64.exe", Properties.Resources.handle64);
-                    //System.IO.File.WriteAllBytes(Globals.AppdataPath + "handle.exe", Properties.Resources.handle);
-                }
-
-                catch (Exception err)
-                {
-                    MessageBox.Show("Could not extract handle components. No admin privilges?\n" + err.Message);
-                }
-            }
-
-            try
-            {
-                ProcessStartInfo prohandleinfo = new ProcessStartInfo();
-                prohandleinfo.UseShellExecute = false;
-                prohandleinfo.CreateNoWindow = true;
-                prohandleinfo.Arguments = "-accepteula";
-
-
-                if (Environment.Is64BitOperatingSystem)
-                {
-                    prohandleinfo.FileName = Globals.AppdataPath + "handle64.exe";
-                }
-                else
-                {
-                    prohandleinfo.FileName = Globals.AppdataPath + "handle.exe";
-                }
-                Process prohandle = new Process { StartInfo = prohandleinfo };
-                prohandle.Start();
-
-                System.IO.File.Delete(Globals.AppdataPath + "Handle.zip");
-                System.IO.File.Delete(Globals.AppdataPath + "Eula.txt");
-
-                Application.Current.Dispatcher.BeginInvoke(
-                    System.Windows.Threading.DispatcherPriority.Background,
-                    new Action(() => setupend()));
-
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
-        #endregion
-
         private void CheckBox_Checked(Object sender, RoutedEventArgs e)
         {
             AccountArgumentManager.StopGap.IsSelected(((CheckBox)sender).Content.ToString(), true);
             RefreshUI();
         }
+
         private void CheckBox_Unchecked(Object sender, RoutedEventArgs e)
         {
             AccountArgumentManager.StopGap.IsSelected(((CheckBox)sender).Content.ToString(), false);
             RefreshUI();
         }
 
-        void RefreshUI()
+        private void RefreshUI()
         {
             lab_currentsetup.Content = "Current Setup: " + AccountArgumentManager.StopGap.Print();
             lab_usedaddons.Content = "Used AddOns: " + AddOnManager.ListAddons();
-            fillargs();
         }
 
         private void UpdateServerArgs()
@@ -1938,10 +1618,13 @@ namespace Gw2_Launchbuddy
 
         private void Window_LostKeyboardFocus(Object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
+            if (cinemamode || rb_cinemavideomode.IsChecked == true) { Cinema_MediaPlayer.Pause(); }
             BeginStoryboard(this.FindResource("anim_musicfadeout") as System.Windows.Media.Animation.Storyboard);
         }
+
         private void Window_GotKeyboardFocus(Object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
+            if (cinemamode || rb_cinemavideomode.IsChecked == true) { Cinema_MediaPlayer.Play(); }
             BeginStoryboard(this.FindResource("anim_musicfadein") as System.Windows.Media.Animation.Storyboard);
         }
 
@@ -2071,7 +1754,6 @@ namespace Gw2_Launchbuddy
             /*
             ComboBox box = sender as ComboBox;
             GFXOption option = box.DataContext as GFXOption;
-            
 
             if (option !=null)
             {
@@ -2116,14 +1798,13 @@ namespace Gw2_Launchbuddy
             if (listview_acc.SelectedItem != null)
             {
                 int index = listview_acc.SelectedIndex;
-                Account selectedacc = AccountManager.ToList()[index];
+                Account selectedacc = AccountManager.SelectedAccountCollection[index];
                 if (index - 1 >= 0)
                 {
                     selectedacc.Move(-1);
-                    //listview_acc.SelectedIndex = index - 1;
+                    listview_acc.SelectedIndex = index - 1;
                 }
             }
-            listview_acc.ItemsSource = AccountManager.ToList(false);
         }
 
         private void bt_accsortdown_Click(object sender, RoutedEventArgs e)
@@ -2131,14 +1812,13 @@ namespace Gw2_Launchbuddy
             if (listview_acc.SelectedItem != null)
             {
                 int index = listview_acc.SelectedIndex;
-                Account selectedacc = AccountManager.ToList()[index];
-                if (index + 1 < AccountManager.Count)
+                Account selectedacc = AccountManager.AccountCollection[index];
+                if (index + 1 < AccountManager.AccountCollection.Count)
                 {
                     selectedacc.Move(+1);
-                    //listview_acc.SelectedIndex = index + 1;
+                    listview_acc.SelectedIndex = index + 1;
                 }
             }
-            listview_acc.ItemsSource = AccountManager.ToList(false);
         }
 
         private void bt_accedit_Click(object sender, RoutedEventArgs e)
@@ -2147,7 +1827,7 @@ namespace Gw2_Launchbuddy
             if (selectedacc != null)
             {
                 string input = null;
-                string message = "Please enter the password of the account.\n\nNickname:\t" + selectedacc.Nickname + /*"\nEmail:\t\t" + selectedacc.DisplayEmail +*/ "\nCreated at:\t" + selectedacc.CreateDate;
+                string message = "Please enter the password of the account.\n\nNickname:\t" + selectedacc.Nickname + "\nCreated at:\t" + selectedacc.CreateDate;
                 TextBoxPopUp pw_win = new Gw2_Launchbuddy.TextBoxPopUp(message, "Editing Account", true);
                 if (pw_win.ShowDialog().Value)
                 {
@@ -2176,7 +1856,7 @@ namespace Gw2_Launchbuddy
         private void bt_selecticon_Click(object sender, RoutedEventArgs e)
         {
             Account acc = (sender as Button).DataContext as Account;
-            acc = AccountManager.ToList().Single(x => x.Email == acc.Email);
+            acc = AccountManager.AccountCollection.Single(x => x.Email == acc.Email);
 
             System.Windows.Forms.OpenFileDialog filedialog = new System.Windows.Forms.OpenFileDialog();
             filedialog.DefaultExt = "png";
@@ -2300,6 +1980,7 @@ namespace Gw2_Launchbuddy
             drawingContext.Pop();
         }
     }
+
     public class ListBoxHelper : DependencyObject
     {
         public static int GetAutoSizeItemCount(DependencyObject obj)
@@ -2323,7 +2004,7 @@ namespace Gw2_Launchbuddy
             listBox.ItemContainerGenerator.ItemsChanged += (ig, arg) => UpdateSize(listBox);
         }
 
-        static void UpdateSize(ListBox listBox)
+        private static void UpdateSize(ListBox listBox)
         {
             ItemContainerGenerator gen = listBox.ItemContainerGenerator;
             FrameworkElement element = listBox.InputHitTest(new Point(listBox.Padding.Left + 5, listBox.Padding.Top + 5)) as FrameworkElement;

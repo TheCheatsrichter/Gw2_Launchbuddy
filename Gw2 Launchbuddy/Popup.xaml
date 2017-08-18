@@ -8,11 +8,11 @@
         Title="Gw2 Launchbuddy" Height="300" Width="500" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="CenterScreen" Icon="launchbuddy.ico">
     <StackPanel Margin="5">
         <StackPanel.Background>
-            <ImageBrush ImageSource="Resources/launchbuddyback.png" Stretch="Uniform" Opacity="0.15" AlignmentX="Right" AlignmentY="Top"/>
+            <ImageBrush ImageSource="Resources/launchbuddyback.png" Stretch="Uniform" Opacity="0.15" AlignmentX="Right" AlignmentY="Top" />
         </StackPanel.Background>
-        <Label x:Name="lb_donatelabel" Content="Gw2 Launchbuddy V" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Margin="-5,0,0,0"/>
-        <Separator Margin="3"/>
-        <TextBlock x:Name="textb_Message" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="Guild Wars 2 Launchbuddy is a free, opensource software, which therefore doesn't earn me anything. \n Personally spend many hours to create and maintain this application. Do you like it? Then feel free to press the donate button to keep this project alive for future updates!" VerticalAlignment="Top" FontWeight="Bold" FontSize="13.333"/>
+        <Label x:Name="lb_donatelabel" Content="Gw2 Launchbuddy V" VerticalAlignment="Top" FontWeight="Bold" FontSize="16" Margin="-5,0,0,0" />
+        <Separator Margin="3" />
+        <TextBlock x:Name="textb_Message" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="Guild Wars 2 Launchbuddy is a free, opensource software, which therefore doesn't earn me anything. \n Personally spend many hours to create and maintain this application. Do you like it? Then feel free to press the donate button to keep this project alive for future updates!" VerticalAlignment="Top" FontWeight="Bold" FontSize="13.333" />
         <Button x:Name="bt_donate" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"  VerticalAlignment="Top" Width="474" Height="45" Click="bt_donate_Click">
             <Image Source="Resources/donate.png" />
         </Button>

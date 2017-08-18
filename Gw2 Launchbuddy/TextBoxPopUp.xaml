@@ -8,19 +8,19 @@
         Title="TextBoxPopUp" Height="187.5" Width="295.313" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="launchbuddy.ico">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100*"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="100*" />
+            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50*"/>
-            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="50*" />
+            <ColumnDefinition Width="50*" />
         </Grid.ColumnDefinitions>
-        <TextBox x:Name="tb_input" Margin="5" Height="23" Grid.Row="1" Visibility="Visible"/>
-        <PasswordBox x:Name="pwbox_input" Margin="5" Height="23" Grid.Row="1" Visibility="Hidden"/>
+        <TextBox x:Name="tb_input" Margin="5" Height="23" Grid.Row="1" Visibility="Visible" />
+        <PasswordBox x:Name="pwbox_input" Margin="5" Height="23" Grid.Row="1" Visibility="Hidden" />
         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" Margin="5">
-            <Button x:Name="bt_ok" Content="Ok" Width="60" Margin="3" Click="bt_ok_Click"/>
-            <Button x:Name="bt_cancel" Content="Cancel" Width="60"  Margin="3" Click="bt_cancel_Click"/>
+            <Button x:Name="bt_ok" Content="Ok" Width="60" Margin="3" Click="bt_ok_Click" />
+            <Button x:Name="bt_cancel" Content="Cancel" Width="60"  Margin="3" Click="bt_cancel_Click" />
         </StackPanel>
-        <TextBlock x:Name="textblock_info" HorizontalAlignment="Left" Grid.ColumnSpan="2" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Margin="5"/>
+        <TextBlock x:Name="textblock_info" HorizontalAlignment="Left" Grid.ColumnSpan="2" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Margin="5" />
     </Grid>
 </Window>

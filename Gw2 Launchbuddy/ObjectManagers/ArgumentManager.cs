@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using static Gw2_Launchbuddy.MainWindow;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
     public static class ArgumentManager
     {
-        private static List<Argument> argumentList = new List<Argument>();
+        private static ObservableCollection<Argument> argumentCollection { get; set; }
+        public static ReadOnlyObservableCollection<Argument> ArgumentCollection { get; set; }
 
         static ArgumentManager()
         {
+            argumentCollection = new ObservableCollection<Argument>();
+            ArgumentCollection = new ReadOnlyObservableCollection<ObjectManagers.Argument>(argumentCollection);
+
             InternalAdd("-32", "Forces the game to run in 32 bit.").IsActive().IsSelectable();
             InternalAdd("-bmp", "Forces the game to create lossless screenshots as .BMP files. Use for creating high-quality screenshots at the expense of much larger files.").IsActive().IsSelectable();
             InternalAdd("-diag", "Instead of launching the game, this command creates a detailed diagnostic file that contains diagnostic data that can be used for troubleshooting. The file, NetworkDiag.log, will be located in your game directory or Documents/Guild Wars . If you want to use this feature, be sure to create a separate shortcut for it.").IsActive().IsSelectable().IsBlocker();
@@ -38,36 +40,29 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             //IsBlocker needs to be added to -exit and -allowinstall when added.
         }
-        public static Argument InternalAdd(string Flag, string Description = null)
+
+        private static Argument InternalAdd(string Flag, string Description = null)
         {
             var Argument = new Argument(Flag, Description);
-            argumentList.Add(Argument);
+            AccountArgumentManager.Add(AccountManager.DefaultAccount, Argument);
+            argumentCollection.Add(Argument);
             return Argument;
         }
+
         public static Argument Add(Argument Argument)
         {
-            argumentList.Add(Argument);
-            foreach (Account Account in AccountManager.ToList())
-            {
+            argumentCollection.Add(Argument);
+            AccountArgumentManager.Add(AccountManager.DefaultAccount, Argument);
+            foreach (Account Account in AccountManager.AccountCollection)
                 AccountArgumentManager.Add(Account, Argument);
-            }
             return Argument;
         }
-        public static Argument Add(string Flag, string Description = null) { return Add(new Argument(Flag, Description)); }
 
-        public static Argument Argument(string Flag)
-        {
-            return argumentList.Where(a => a.Flag == Flag).SingleOrDefault() ?? Add(Flag, "??????????").IsActive();
-        }
+        public static Argument Add(string Flag, string Description = null) => Add(new Argument(Flag, Description));
 
-        public static void Remove(this Argument argument) { argumentList.Remove(argument); }
+        public static Argument Argument(string Flag) => argumentCollection.Where(a => a.Flag == Flag).SingleOrDefault() ?? Add(Flag, "??????????").IsActive();
 
-        public static List<Argument> ToList() { return argumentList; }
-
-        public static Dictionary<string, Argument> ToDictionary()
-        {
-            return argumentList.Where(a => a.Active).ToDictionary(a => a.Flag, a => a);
-        }
+        public static void Remove(this Argument argument) => argumentCollection.Remove(argument);
     }
 
     public class Argument
@@ -87,18 +82,42 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public string Flag { get; private set; }
         public string Description { get; private set; }
 
-        public Argument IsSensitive(bool Sensitive = true) { this.Sensitive = Sensitive; return this; }
-        public Argument IsActive(bool Active = true) { this.Active = Active; return this; }
-        public Argument IsBlocker(bool Blocker = true) { this.Blocker = Blocker; return this; }
-        public Argument IsTemporary(bool Temporary = true) { this.Temporary = Temporary; return this; }
-        public Argument IsSelectable(bool Selectable = true) { this.Selectable = Selectable; return this; }
-        public Argument IsDefault(bool Default = true) { this.Default = Default; return this; }
+        public Argument IsSensitive(bool Sensitive = true)
+        {
+            this.Sensitive = Sensitive; return this;
+        }
+
+        public Argument IsActive(bool Active = true)
+        {
+            this.Active = Active; return this;
+        }
+
+        public Argument IsBlocker(bool Blocker = true)
+        {
+            this.Blocker = Blocker; return this;
+        }
+
+        public Argument IsTemporary(bool Temporary = true)
+        {
+            this.Temporary = Temporary; return this;
+        }
+
+        public Argument IsSelectable(bool Selectable = true)
+        {
+            this.Selectable = Selectable; return this;
+        }
+
+        public Argument IsDefault(bool Default = true)
+        {
+            this.Default = Default; return this;
+        }
 
         public Argument IsSelected(bool Selected = true)
         {
             AccountArgumentManager.StopGap.IsSelected(Flag, Selected);
             return this;
         }
+
         public string OptionString
         {
             get
@@ -120,6 +139,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
     }
 
     #region Scrapped Argument
+
     /* Scrapped for method chaining.
     public class Argument
     {
@@ -155,9 +175,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             private Is properties;
     }*/
-    #endregion
+
+    #endregion Scrapped Argument
 
     #region Old Argument Code
+
     /*
     public class Arguments
     {
@@ -284,7 +306,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public bool Selectable { get; set; }
         public bool Active { get; set; }
 
-
         public Argument(string flag) : this(flag, null, active: true, selectable: true, sensitive: false, load: true) { }
         public Argument(string flag, bool sensitive) : this(flag, null, active: true, selectable: true, sensitive: sensitive, load: true) { }
         public Argument(string flag, string description) : this(flag, description, active: true, selectable: true, sensitive: null, load: true) { }
@@ -300,7 +321,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Active = active ?? true;
             //Load = load ?? false;
         }
-
     }
     public class ArgumentProperties
     {
@@ -335,5 +355,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
             IsSelectable = true;
         }
     }*/
-    #endregion
+
+    #endregion Old Argument Code
 }

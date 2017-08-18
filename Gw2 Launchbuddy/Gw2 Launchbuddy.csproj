@@ -177,6 +177,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ObjectManagers\AccountArgumentManager.cs" />
     <Compile Include="ObjectManagers\AccountManager.cs" />
     <Compile Include="AddOnManager.cs" />

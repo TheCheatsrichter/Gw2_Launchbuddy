@@ -1,39 +1,53 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Management;
 using System.Security.Cryptography;
-using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
     public static class ClientManager
     {
+        private static ObservableCollection<Client> clientCollection { get; set; }
+        public static ReadOnlyObservableCollection<Client> ClientCollection { get; set; }
+
         static ClientManager()
         {
-            //If running as admin, use WML which is much more reliable
-            if ((new WindowsPrincipal(WindowsIdentity.GetCurrent())).IsInRole(WindowsBuiltInRole.Administrator))
-            {
-                ClientWatcher.StartWatch.Start();
-                ClientWatcher.StopWatch.Stop();
-            }
-            //Otherwise use polling in a thread
-            else
-            {
-
-            }
+            clientCollection = new ObservableCollection<Client>();
+            ClientCollection = new ReadOnlyObservableCollection<Client>(clientCollection);
         }
+
+        public static Client CreateClient()
+        {
+            var createdClient = new Client();
+            clientCollection.Add(createdClient);
+            return createdClient;
+        }
+
+        public static string CalculateProcessMD5(Process Process)
+        {
+            var md5 = MD5.Create();
+            var inputBytes = Encoding.ASCII.GetBytes(Process.StartTime.ToString() + Process.Id.ToString());
+            var hash = md5.ComputeHash(inputBytes);
+
+            var sb = new StringBuilder();
+
+            for (int i = 0; i < hash.Length; i++)
+                sb.Append(hash[i].ToString("X2"));
+
+            return sb.ToString();
+        }
+
         public static class ClientInfo
         {
             //Info about the client
             private static string executable;
+
             public static bool IsUpToDate { get; set; }
             public static string InstallPath { get; set; }
             public static string Executable { get { return executable; } set { executable = value; ProcessName = Regex.Replace(value, @"\.exe(?=$)", "", RegexOptions.IgnoreCase); } }
@@ -42,74 +56,15 @@ namespace Gw2_Launchbuddy.ObjectManagers
             public static string Version { get; set; }
         }
 
-        public static class ClientPoller
-        {
-            public static Thread Poller { get; set; }
-
-            static ClientPoller()
-            {
-                Poller = new Thread(poller);
-                Poller.IsBackground = true;
-                Poller.Start();
-            }
-
-            private static void poller()
-            {
-                while (true)
-                {
-                    Dispatcher.CurrentDispatcher.Invoke(new Action(() =>
-                    {
-                        ClientReg.UpdateRegClients();
-                    }));
-                    Thread.Sleep(1000);
-                }
-            }
-        }
-
-        public static class ClientWatcher
-        {
-            public static ManagementEventWatcher StartWatch { get; set; }
-            public static ManagementEventWatcher StopWatch { get; set; }
-            static ClientWatcher()
-            {
-                WaitForProcessStart();
-                WaitForProcessStop();
-            }
-            private static void WaitForProcessStart()
-            {
-                StartWatch = new ManagementEventWatcher(
-                  new WqlEventQuery("SELECT * FROM Win32_ProcessStartTrace"));
-                StartWatch.EventArrived
-                                    += new EventArrivedEventHandler(StartWatch_EventArrived);
-                StartWatch.Start();
-            }
-            private static void WaitForProcessStop()
-            {
-                StopWatch = new ManagementEventWatcher(
-                  new WqlEventQuery("SELECT * FROM Win32_ProcessStopTrace"));
-                StopWatch.EventArrived
-                                    += new EventArrivedEventHandler(StopWatch_EventArrived);
-                StopWatch.Start();
-            }
-
-            private static void StartWatch_EventArrived(object sender, EventArrivedEventArgs e)
-            {
-                if (e.NewEvent.Properties["ProcessName"].Value.ToString() == ClientInfo.ProcessName) ClientReg.UpdateRegClients();
-            }
-
-            private static void StopWatch_EventArrived(object sender, EventArrivedEventArgs e)
-            {
-                if (e.NewEvent.Properties["ProcessName"].Value.ToString() == ClientInfo.ProcessName) ClientReg.UpdateRegClients();
-            }
-        }
-
         public static class ClientReg
         {
             static ClientReg()
             {
                 UpdateRegClients();
             }
+
             private static RegistryKey key { get { return Microsoft.Win32.Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("LaunchBuddy"); } }
+
             public static void UpdateRegClients()
             {
                 try
@@ -123,7 +78,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw;
                 }
                 finally
                 {
@@ -144,7 +99,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw;
                 }
                 finally
                 {
@@ -163,7 +118,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw;
                 }
                 finally
                 {
@@ -186,21 +141,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 }
             }
         }
-
-        public static string CalculateProcessMD5(Process Process)
-        {
-            var md5 = MD5.Create();
-            var inputBytes = Encoding.ASCII.GetBytes(Process.StartTime.ToString() + Process.Id.ToString());
-            var hash = md5.ComputeHash(inputBytes);
-
-            var sb = new StringBuilder();
-
-            for (int i = 0; i < hash.Length; i++)
-                sb.Append(hash[i].ToString("X2"));
-
-            return sb.ToString();
-        }
-
     }
 
     public class Client
@@ -213,7 +153,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Process = new Process() { StartInfo = new ProcessStartInfo(ClientManager.ClientInfo.FullPath) };
         }
 
-        public string Arguments { get; set; }
+        public string Arguments { get => Process.StartInfo.Arguments; set => Process.StartInfo.Arguments = value; }
 
         public void Start()
         {
@@ -224,9 +164,17 @@ namespace Gw2_Launchbuddy.ObjectManagers
             ClientManager.ClientReg.RegClient(this);
         }
 
+        public void StartAndWait()
+        {
+            Start();
+            Process.WaitForExit();
+        }
+
         private void ClientProcess_Exited(object sender, EventArgs e)
         {
-            AccountClientManager.Remove(this);
+            Process.Exited -= ClientProcess_Exited;
+            Application.Current.Dispatcher.Invoke(delegate { AccountClientManager.Remove(this); });
+            Process.Dispose();
         }
 
         public void Stop()

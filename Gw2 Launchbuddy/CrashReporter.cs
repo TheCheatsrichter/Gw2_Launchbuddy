@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CrashReporterDotNET;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CrashReporterDotNET;
 using System.Net.Mail;
 
 namespace Gw2_Launchbuddy
@@ -24,7 +21,7 @@ namespace Gw2_Launchbuddy
             }
             catch (Exception err)
             {
-                ReportCrashToSingle(err,name);
+                ReportCrashToSingle(err, name);
             }
         }
 
@@ -40,7 +37,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        public static void ReportCrashToSingle(Exception err,string targetname)
+        public static void ReportCrashToSingle(Exception err, string targetname)
         {
             ReportCrash reportCrash = new ReportCrash
             {

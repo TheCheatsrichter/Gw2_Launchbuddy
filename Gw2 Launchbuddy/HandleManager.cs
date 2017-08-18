@@ -21,16 +21,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
-using System.IO;
-using System.Text.RegularExpressions;
+using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Gw2_Launchbuddy
 {
@@ -65,7 +59,7 @@ namespace Gw2_Launchbuddy
         private static extern NTSTATUS NtQuerySystemInformation(SYSTEM_INFORMATION_CLASS SystemInformationClass,
             IntPtr SystemInformation, int SystemInformationLength, out int ReturnLength);
 
-        #endregion
+        #endregion Native Method Signatures
 
         #region Structures
 
@@ -105,7 +99,7 @@ namespace Gw2_Launchbuddy
             public UInt64 Information;
         }
 
-        #endregion
+        #endregion Structures
 
         #region Enumerations
 
@@ -166,9 +160,10 @@ namespace Gw2_Launchbuddy
             FileNameInformation = 9
         } //partial enum, actual set is huge, google SYSTEM_INFORMATION_CLASS
 
-        #endregion
+        #endregion Enumerations
 
         #region Functions
+
         /// <summary>
         /// Clears file locks on the specified file, from specified process.
         /// </summary>
@@ -180,6 +175,7 @@ namespace Gw2_Launchbuddy
             var temp = new List<int>();
             return ClearFileLock(Proc, File, ref temp);
         }
+
         /// <summary>
         /// Clears file locks on the specified file, from specified process.
         /// </summary>
@@ -200,7 +196,6 @@ namespace Gw2_Launchbuddy
 
             foreach (Process i in processList.Where(a => !excList.Contains(a.Id)).Where(a => a.ProcessName.Equals(ProcName, StringComparison.OrdinalIgnoreCase)))
             {
-
                 if (HandleManager.KillHandle(i, File, true))
                 {
                     success = true;
@@ -502,7 +497,7 @@ namespace Gw2_Launchbuddy
             // Allocate unmanaged memory to store name
             IntPtr pStringBuffer = Marshal.AllocHGlobal(bufferSize);
 
-            // Query to fill string buffer with name 
+            // Query to fill string buffer with name
             NtQueryObject(handle, OBJECT_INFORMATION_CLASS.ObjectNameInformation, pStringBuffer, bufferSize, out bufferSize);
 
             // Close this handle
@@ -547,6 +542,6 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        #endregion
+        #endregion Functions
     }
 }

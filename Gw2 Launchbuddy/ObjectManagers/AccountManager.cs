@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -10,25 +13,29 @@ namespace Gw2_Launchbuddy.ObjectManagers
 {
     public static class AccountManager
     {
+        private static ObservableCollection<Account> accountCollection { get; set; }
+        public static ReadOnlyObservableCollection<Account> AccountCollection { get; private set; }
+
+        public static Account DefaultAccount { get; private set; }
+
+        public static ReadOnlyObservableCollection<Account> SelectedAccountCollection { get => new ReadOnlyObservableCollection<ObjectManagers.Account>(new ObservableCollection<ObjectManagers.Account>(accountCollection.Where(a => a.Selected))); }
+
         static AccountManager()
         {
-            //Add dummy account
-            Add(null, null, null).Default = true;
-        }
-        private static List<Account> accountList = new List<Account>();
-        
-        public static int Count => accountList.Count;
-        public static List<Account> ToList(bool includeDefault = false) => accountList.Where(a => (!includeDefault ? a.Default == false : true)).ToList();
+            accountCollection = new ObservableCollection<Account>();
+            AccountCollection = new ReadOnlyObservableCollection<Account>(accountCollection);
 
-        public static Account Account(string Nickname)
-        {
-            return accountList.Where(a => a.Nickname == Nickname).Single();
+            DefaultAccount = new ObjectManagers.Account(null, null, null);
         }
+
+        public static Account Account(string Nickname) => accountCollection.Where(a => a.Nickname == Nickname).Single();
+
+        public static Account Add(string Nickname, string Email, string Password) => Add(new Account(Nickname, Email, Password));
 
         public static Account Add(Account Account)
         {
-            accountList.Add(Account);
-            foreach (Argument Argument in ArgumentManager.ToList())
+            accountCollection.Add(Account);
+            foreach (Argument Argument in ArgumentManager.ArgumentCollection)
             {
                 AccountArgumentManager.Add(Account, Argument);
             }
@@ -39,67 +46,123 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             return Account;
         }
-        public static Account Add(string Nickname, string Email, string Password)
-        {
-            return Add(new Account(Nickname, Email, Password));
-        }
 
-        public static void Remove(this Account Account)
-        {
-            //Dont allow deletion of dummy account
-            if (accountList.IndexOf(Account) == 0) return;
-            accountList.Remove(Account);
-        }
-
-        public static Account DefaultAccount
-        {
-            get
-            {
-                return accountList.Where(a => a.Default == true).SingleOrDefault();
-            }
-        }
-
-        public static List<Account> GetSelected()
-        {
-            return accountList.Where(a => a.Selected).ToList();
-        }
+        public static void Remove(this Account Account) => accountCollection.Remove(Account);
 
         public static void Move(Account Account, int Incriment)
         {
-            var index = accountList.IndexOf(Account);
-            accountList.RemoveAt(index);
+            var index = accountCollection.IndexOf(Account);
+            accountCollection.RemoveAt(index);
             index = (1 <= index ? index : 1);
-            if (index < accountList.Count() || Incriment <= 0)
-                accountList.Insert(index + Incriment, Account);
-            else accountList.Add(Account);
+            if (index < accountCollection.Count() || Incriment <= 0)
+                accountCollection.Insert(index + Incriment, Account);
+            else accountCollection.Add(Account);
+        }
+
+        public static void SetSelected(IEnumerable<Account> accounts)
+        {
+            foreach (var account in accounts)
+                accountCollection.Where(a => a == account).SingleOrDefault().IsSelected(account.Selected);
+        }
+
+        public static bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public static class ImportExport
+        {
+            public static void LoadAccountInfo()
+            {
+                try
+                {
+                    var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\Launchbuddy.bin";
+
+                    if (File.Exists(path) == true)
+                    {
+                        using (Stream stream = File.Open(path, FileMode.Open))
+                        {
+                            var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                            ObservableCollection<Account> aes_accountlist = (ObservableCollection<Account>)bformatter.Deserialize(stream);
+
+                            foreach (Account acc in aes_accountlist)
+                            {
+                                Add(acc);
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
+            }
+
+            public static void SaveAccountInfo()
+            {
+                ObservableCollection<Account> aes_accountlist = new ObservableCollection<Account>();
+                try
+                {
+                    aes_accountlist.Clear();
+                    foreach (Account acc in AccountManager.AccountCollection)
+                    {
+                        aes_accountlist.Add(acc);
+                    }
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show("Could not encrypt passwords\n" + err.Message);
+                }
+
+                try
+                {
+                    var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\Launchbuddy.bin";
+                    using (Stream stream = System.IO.File.Open(path, FileMode.Create))
+                    {
+                        var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                        bformatter.Serialize(stream, aes_accountlist);
+                    }
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
+            }
         }
     }
 
     [Serializable()]
-    public class Account
+    public class Account : INotifyPropertyChanged
     {
+        [field: NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private string email;
         private string password;
 
         public string Nickname { get; set; }
+
         public string Email
         {
-            get
-            {
-                return email;
-            }
+            get => email;
             set
             {
                 email = value;
                 AccountArgumentManager.Get(this, "-email")?.WithOptionString(value);
             }
         }
+
         public string Password
         {
-            get
-            {
-                return password;
-            }
+            get => password;
             set
             {
                 password = value;
@@ -107,13 +170,21 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
         public DateTime CreateDate { get; set; }
         public DateTime ModifyDate { get; set; }
         public DateTime RunDate { get; set; }
 
-        public Account IsSelected(bool Selected = true) { this.Selected = Selected; return this; }
+        public Account IsSelected(bool Selected = true)
+        {
+            this.Selected = Selected; return this;
+        }
 
-        public bool Selected { get; set; }
+        [NonSerialized]
+        public bool selected;
+
+        public bool Selected { get => selected; set { selected = value; NotifyPropertyChanged(); } }
 
         public Account(string Nickname, string Email, string Password)
         {
@@ -128,26 +199,18 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public string ConfigurationPath
         {
-            get
-            {
-                return String.IsNullOrWhiteSpace(configurationPath) ? "Default" : configurationPath;
-            }
-            set
-            {
-                configurationPath = value;
-            }
+            get => String.IsNullOrWhiteSpace(configurationPath) ? "Default" : configurationPath;
+            set => configurationPath = value;
         }
 
         public string ConfigurationName
         {
-            get
-            {
-                return Path.GetFileNameWithoutExtension(ConfigurationPath);
-            }
+            get => Path.GetFileNameWithoutExtension(ConfigurationPath);
         }
 
         [NonSerialized]
         private static ImageSource defaultIcon;
+
         public static ImageSource DefaultIcon
         {
             get
@@ -174,16 +237,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         [NonSerialized]
         private ImageSource icon;
+
         public ImageSource Icon
         {
-            get
-            {
-                return icon ?? DefaultIcon;
-            }
-            private set
-            {
-                icon = value;
-            }
+            get => icon ?? DefaultIcon;
+            private set => icon = value;
         }
 
         public void SetIcon(string Path)
@@ -203,105 +261,21 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
-        public AccountArgument Argument(string Flag)
-        {
-            return AccountArgumentManager.GetOrCreate(this, Flag);
-        }
+        public AccountArgument Argument(string Flag) => AccountArgumentManager.GetOrCreate(this, Flag);
 
-        public List<AccountArgument> GetArgumentList()
-        {
-            return AccountArgumentManager.GetAccountArguments(this);
-        }
+        public List<AccountArgument> GetArgumentList() => AccountArgumentManager.GetAccountArguments(this);
 
-        public string PrintArguments()
-        {
-            return String.Join(" ", GetArgumentList().Where(a => a.Selected == true).Select(a => a.Argument.Flag + (a.Argument.Sensitive ? null : " " + a.OptionString)));
-        }
-        public string CommandLine()
-        {
-            return String.Join(" ", GetArgumentList().Where(a => a.Selected == true).Select(a => a.Argument.Flag + (!String.IsNullOrWhiteSpace(a.OptionString) ? " " + a.OptionString : null)));
-        }
+        public string PrintArguments() => String.Join(" ", GetArgumentList().Where(a => a.Selected == true).Select(a => a.Argument.Flag + (a.Argument.Sensitive ? null : " " + a.OptionString)));
 
-        public bool Default { get; set; }
+        public string CommandLine() => String.Join(" ", GetArgumentList().Where(a => a.Selected == true).Select(a => a.Argument.Flag + (!String.IsNullOrWhiteSpace(a.OptionString) ? " " + a.OptionString : null)));
 
         public void Move(int Incriment) => AccountManager.Move(this, Incriment);
 
         public Client CreateClient()
         {
-            var Client = new Client();
+            var Client = ClientManager.CreateClient();
             AccountClientManager.Add(this, Client); //Not sure this is the best place for this create/assign
             return Client;
         }
     }
-    /*[Serializable()]
-    public class AccountOld
-    {
-        [NonSerialized]
-        private ImageSource icon;
-        public ImageSource Icon
-        {
-            get
-            {
-                if (icon == null)
-                {
-                    using (MemoryStream memory = new MemoryStream())
-                    {
-                        System.Drawing.Bitmap bitmap = Gw2_Launchbuddy.Properties.Resources.user;
-                        bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Png);
-                        memory.Position = 0;
-                        BitmapImage bitmapimage = new BitmapImage();
-                        bitmapimage.BeginInit();
-                        bitmapimage.StreamSource = memory;
-                        bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmapimage.EndInit();
-
-                        return bitmapimage;
-                    }
-                }
-                return icon;
-            }
-            set
-            {
-                icon = value;
-            }
-        }
-        public string Iconpath
-        {
-            get
-            {
-                return iconpath;
-            }
-            set
-            {
-                if (System.IO.File.Exists(value))
-                {
-                    //Icon = LoadImage(value);
-                }
-                iconpath = value;
-            }
-        }
-        private string iconpath { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public DateTime Time { get; set; }
-        public string Nick { get; set; }
-
-        public string Configpath
-        {
-            set
-            {
-                configpath = value;
-                Configname = Path.GetFileNameWithoutExtension(value);
-            }
-            get
-            {
-                if (configpath != "" && configpath != null)
-                    return configpath;
-                return "Default";
-            }
-        }
-
-        private string configpath { set; get; }
-        public string Configname { set; get; }
-    }*/
 }

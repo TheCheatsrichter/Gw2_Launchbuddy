@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Windows;
-using System.IO;
-using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Xml.Serialization;
-
 
 namespace Gw2_Launchbuddy
 {
@@ -32,10 +31,13 @@ namespace Gw2_Launchbuddy
 
         [System.Xml.Serialization.XmlElement("Multilaunch")]
         public bool IsMultilaunch { set; get; }
+
         [System.Xml.Serialization.XmlElement("LbAddon")]
         public bool IsLbAddon { set; get; }
+
         [System.Xml.Serialization.XmlElement("Arguments")]
         public string args { set; get; }
+
         [System.Xml.Serialization.XmlElement("Path")]
         public string Path { set; get; }
 
@@ -52,7 +54,9 @@ namespace Gw2_Launchbuddy
             Path = Info.FileName;
         }
 
-        public AddOn() { }
+        public AddOn()
+        {
+        }
     }
 
     [XmlRootAttribute("AddonList")]
@@ -60,7 +64,7 @@ namespace Gw2_Launchbuddy
     {
         public ObservableCollection<AddOn> Addonlist { set; get; }
 
-        AddonList(ObservableCollection<AddOn> list)
+        private AddonList(ObservableCollection<AddOn> list)
         {
             Addonlist = list;
         }

@@ -1,20 +1,16 @@
-﻿using System;
+﻿using Gw2_Launchbuddy.ObjectManagers;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows;
-using System.Security.Cryptography;
-using System.Collections.Generic;
-using System.Threading;
-using Gw2_Launchbuddy.ObjectManagers;
 
 namespace Gw2_Launchbuddy
 {
-    static class LaunchManager
+    internal static class LaunchManager
     {
         private static List<int> nomutexpros = new List<int>();
+
         public static void Launch()
         {
             //Checking for existing Gw2 instances. Do not continue until closed.
@@ -41,9 +37,9 @@ namespace Gw2_Launchbuddy
             }
 
             //Launching the application with arguments
-            if (AccountManager.GetSelected().Count > 0)
+            if (AccountManager.SelectedAccountCollection.Count > 0)
             {
-                foreach (var Account in AccountManager.GetSelected())
+                foreach (var Account in AccountManager.SelectedAccountCollection)
                     LaunchGW2(Account);
             }
             else
@@ -64,7 +60,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        static void LaunchGW2(Account Selected)
+        private static void LaunchGW2(Account Selected)
         {
             try
             {
@@ -76,7 +72,7 @@ namespace Gw2_Launchbuddy
                 }
                 else
                 {
-                    Account undefacc = new Account ("Acc Nr" + Globals.LinkedAccs.Count, null, null);
+                    Account undefacc = new Account("Acc Nr" + Globals.LinkedAccs.Count, null, null);
                     Globals.LinkedAccs.Add(new AccountClient(undefacc, gw2Client));
                 }
 

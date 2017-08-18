@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Gw2_Launchbuddy
 {
     static public class CrashAnalyzer
     {
-        public static List<Crashlog> Crashlogs= new List<Crashlog>();
-
+        public static List<Crashlog> Crashlogs = new List<Crashlog>();
 
         static public Crashlog GetLatestCrashlog()
         {
-            return Crashlogs[Crashlogs.Count-1];
+            return Crashlogs[Crashlogs.Count - 1];
         }
 
         static public Crashlog GetCrashByIndex(int index)
@@ -23,17 +20,17 @@ namespace Gw2_Launchbuddy
             return Crashlogs[index];
         }
 
-        static public void ReadCrashLogs(string path=null)
+        static public void ReadCrashLogs(string path = null)
         {
-           if (path == null)
+            if (path == null)
             {
                 path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Guild Wars 2\\Arenanet.log";
             }
 
-           try
+            try
             {
                 string[] data = Regex.Split(File.ReadAllText(path), @"\*--> Crash <--\*");
-                for(int i=1;i< data.Length; i++)
+                for (int i = 1; i < data.Length; i++)
                 {
                     Crashlogs.Add(new Crashlog(data[i]));
                 }
@@ -45,23 +42,23 @@ namespace Gw2_Launchbuddy
                     {
                         string logs = "";
 
-                        for (int i=2;i<data.Length;i++)
+                        for (int i = 2; i < data.Length; i++)
                         {
                             logs += @"*--> Crash <--*" + data[i];
                         }
 
                         File.Delete(path);
-                        File.WriteAllText(path,logs);
-                    }catch (Exception e)
+                        File.WriteAllText(path, logs);
+                    }
+                    catch (Exception e)
                     {
                         System.Windows.Forms.MessageBox.Show(e.Message);
                     }
-                    
                 }
             }
             catch (Exception e)
             {
-                System.Windows.Forms.MessageBox.Show("Could not find Crashlog!\n"+ e.Message);
+                System.Windows.Forms.MessageBox.Show("Could not find Crashlog!\n" + e.Message);
             }
         }
     }
@@ -69,33 +66,38 @@ namespace Gw2_Launchbuddy
     public class Crashlog
     {
         // Crashinfos
-        string Assertion;
-        string Filename;
-        string Exename;
-        uint Pid;
-        string[] Arguments;
-        string BaseAddr;
-        string ProgramID;
-        uint Build;
-        string crashtime;
-        string CrashTime
+        private string Assertion;
+
+        private string Filename;
+        private string Exename;
+        private uint Pid;
+        private string[] Arguments;
+        private string BaseAddr;
+        private string ProgramID;
+        private uint Build;
+        private string crashtime;
+
+        private string CrashTime
         {
-            get { return crashtime ; }
-            set {
+            get { return crashtime; }
+            set
+            {
                 Match match = Regex.Match(value, @"(?<Date>\d{4}-\d\d-\d\d)T(?<Time>\d\d:\d\d:\d\d)\+");
                 crashtime = match.Groups["Date"].Value + " " + match.Groups["Time"].Value;
             }
         }
-        string UpTime;
+
+        private string UpTime;
 
         //System
-        string Username;
-        string IPAdress;
-        string Processors;
-        string OS;
+        private string Username;
+
+        private string IPAdress;
+        private string Processors;
+        private string OS;
 
         //DLLS
-        string[] DllList;
+        private string[] DllList;
 
         public Crashlog(string crashdata)
         {
@@ -111,9 +113,9 @@ namespace Gw2_Launchbuddy
             CrashTime = Regex.Match(crashdata, @"When: ?(?<data>.*)").Groups["data"].Value;
             UpTime = Regex.Match(crashdata, @"Uptime: ?(?<data>.*)").Groups["data"].Value;
 
-            Username= Regex.Match(crashdata, @"Name: ?(?<data>.*)").Groups["data"].Value;
-            IPAdress= Regex.Match(crashdata, @"IpAddr: ?(?<data>.*)").Groups["data"].Value;
-            Processors= Regex.Match(crashdata, @"Processors: ?(?<data>.*)").Groups["data"].Value;
+            Username = Regex.Match(crashdata, @"Name: ?(?<data>.*)").Groups["data"].Value;
+            IPAdress = Regex.Match(crashdata, @"IpAddr: ?(?<data>.*)").Groups["data"].Value;
+            Processors = Regex.Match(crashdata, @"Processors: ?(?<data>.*)").Groups["data"].Value;
             OS = Regex.Match(crashdata, @"OSVersion: ?(?<data>.*)").Groups["data"].Value;
 
             DllList = Regex.Matches(crashdata, @"\w:\\.*.dll").Cast<Match>().Select(m => m.Value).ToArray();

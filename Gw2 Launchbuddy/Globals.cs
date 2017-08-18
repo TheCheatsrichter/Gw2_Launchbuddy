@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using static Gw2_Launchbuddy.MainWindow;
-using System;
-using CommandLine;
+﻿using CommandLine;
 using Gw2_Launchbuddy.ObjectManagers;
+using System;
+using System.Collections.ObjectModel;
 
 namespace Gw2_Launchbuddy
 {
-    static class Globals
+    internal static class Globals
     {
         public static GUI_ApplicationManager Appmanager = new GUI_ApplicationManager(); //Should not be created here/should have its own controller.
 
         public static ObservableCollection<AccountClient> LinkedAccs = new ObservableCollection<AccountClient>(); //Should nto be needed?
+
         //public static List<Account> selected_accs = new List<Account>();
         public static string unlockerpath, version_api; //Should be split out into respective managers
 
@@ -21,11 +20,12 @@ namespace Gw2_Launchbuddy
         public static GFXConfig SelectedGFX = new GFXConfig(); //Should be removed/Unneeded with Manager
         public static string ClientXmlpath; //Should be part of Client
 
-        public static string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
+        public static string AppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
         public static Version LBVersion = new Version("1.4.2");
 
         public static Options options;
     }
+
     public class Options
     {
         [Option('s', "silent", HelpText = "Run Launchbuddy silently.")]

@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Data;
-using System.Security.Cryptography;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 
 public class AES
@@ -20,14 +19,14 @@ public class AES
         encoder = new UTF8Encoding();
     }
 
-    static byte[] GetBytes(string str)
+    private static byte[] GetBytes(string str)
     {
         byte[] bytes = new byte[str.Length * sizeof(char)];
         System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
         return bytes;
     }
 
-    static string GetString(byte[] bytes)
+    private static string GetString(byte[] bytes)
     {
         char[] chars = new char[bytes.Length / sizeof(char)];
         System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);

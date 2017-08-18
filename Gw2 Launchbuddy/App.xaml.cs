@@ -1,12 +1,6 @@
 ﻿using CommandLine;
-using CommandLine.Text;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Gw2_Launchbuddy
@@ -29,6 +23,7 @@ namespace Gw2_Launchbuddy
             AttachConsole(-1);
             var result = Parser.Default.ParseArguments<Options>(args).WithParsed(options => RunParsed(options));
         }
+
         public static void RunParsed(Options options)
         {
             Globals.options = options;

@@ -4,6 +4,5 @@
              xmlns:local="clr-namespace:Gw2_Launchbuddy"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-
     </Application.Resources>
 </Application>

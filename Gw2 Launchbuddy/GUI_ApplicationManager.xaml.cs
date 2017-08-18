@@ -1,14 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using Gw2_Launchbuddy.ObjectManagers;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Diagnostics;
-using System.Threading;
-using System.Data;
-using System.Runtime.InteropServices;
-using System.Collections.ObjectModel;
-using Gw2_Launchbuddy.ObjectManagers;
-
 
 namespace Gw2_Launchbuddy
 {
@@ -19,7 +12,6 @@ namespace Gw2_Launchbuddy
     {
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
-
 
         public GUI_ApplicationManager()
         {
@@ -35,12 +27,12 @@ namespace Gw2_Launchbuddy
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            lv_instances.ItemsSource = AccountClientManager.AccountClientCollection;//Globals.LinkedAccs.Where(a => a.Client.Arguments == "");
+            lv_instances.ItemsSource = AccountClientManager.AccountClientCollection;
         }
 
         private void lv_gfx_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(lv_instances.SelectedIndex >=0)
+            if (lv_instances.SelectedIndex >= 0)
             {
                 AccountClient selinstance = lv_instances.SelectedItem as AccountClient;
                 IntPtr hwndMain = selinstance.Client.Process.MainWindowHandle;
@@ -73,7 +65,6 @@ namespace Gw2_Launchbuddy
 
         private void Window_Initialized(object sender, EventArgs e)
         {
-
         }
     }
 }

@@ -6,37 +6,36 @@ namespace Gw2_Launchbuddy.ObjectManagers
 {
     public static class AccountClientManager
     {
-        //public static List<AccountClient> AccountClientList { get; private set; }
-
-        public static ObservableCollection<AccountClient> AccountClientCollection { get; private set; }
+        private static ObservableCollection<AccountClient> accountClientCollection { get; set; }
+        public static ReadOnlyObservableCollection<AccountClient> AccountClientCollection { get; set; }
 
         static AccountClientManager()
         {
-            AccountClientCollection = new ObservableCollection<AccountClient>();
-            //AccountClientList = new List<AccountClient>();
+            accountClientCollection = new ObservableCollection<AccountClient>();
+            AccountClientCollection = new ReadOnlyObservableCollection<AccountClient>(accountClientCollection);
         }
 
         public static AccountClient Add(Account Account, Client Client) => Add(new AccountClient(Account, Client));
+
         public static AccountClient Add(AccountClient AccountClient)
         {
-            //AccountClientList.Add(AccountClient);
-            AccountClientCollection.Add(AccountClient);
+            accountClientCollection.Add(AccountClient);
             return AccountClient;
         }
 
-        public static void Remove(Account Account, Client Client) => Remove(AccountClientCollection.Where(a => a.Account == Account && a.Client == Client).Single());
+        public static void Remove(Account Account, Client Client) => Remove(accountClientCollection.Where(a => a.Account == Account && a.Client == Client).Single());
+
         public static void Remove(AccountClient AccountClient)
         {
-            //AccountClientList.Remove(AccountClient);
-            AccountClientCollection.Remove(AccountClient);
+            accountClientCollection.Remove(AccountClient);
         }
+
         public static void Remove(Client Client)
         {
-            AccountClientCollection.Remove(AccountClientCollection.Where(a => a.Client == Client).SingleOrDefault());
+            accountClientCollection.Remove(accountClientCollection.Where(a => a.Client == Client).SingleOrDefault());
         }
 
-        public static List<AccountClient> ToList() => AccountClientCollection.ToList();
-
+        public static List<AccountClient> ToList() => accountClientCollection.ToList();
     }
 
     public class AccountClient

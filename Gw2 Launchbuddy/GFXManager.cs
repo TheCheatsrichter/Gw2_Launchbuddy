@@ -1,24 +1,20 @@
-﻿using System;
+﻿using Gw2_Launchbuddy.ObjectManagers;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.IO;
-using System.Xml;
+using System.Linq;
 using System.Text.RegularExpressions;
-using Gw2_Launchbuddy.ObjectManagers;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace Gw2_Launchbuddy
 {
-
     public static class GFXManager
     {
-        static GFXConfig CurrentConfig = new GFXConfig();
+        private static GFXConfig CurrentConfig = new GFXConfig();
 
         //Options to skip
-        static List<string> SkippedOptions = new List<string>
+        private static List<string> SkippedOptions = new List<string>
         {
             "gamma",
         };
@@ -93,17 +89,17 @@ namespace Gw2_Launchbuddy
                 path = "Default";
             }
 
-            if (path == "Default" && File.Exists(Globals.AppdataPath + "GFX_tmp.xml"))
+            if (path == "Default" && File.Exists(Globals.AppDataPath + "GFX_tmp.xml"))
             {
                 if (File.Exists(Globals.ClientXmlpath)) File.Delete(Globals.ClientXmlpath);
-                File.Move(Globals.AppdataPath + "GFX_tmp.xml", Globals.ClientXmlpath);
+                File.Move(Globals.AppDataPath + "GFX_tmp.xml", Globals.ClientXmlpath);
             }
 
             if (File.Exists(path) && Path.GetExtension(path) == ".xml")
             {
-                if (!File.Exists(Globals.AppdataPath + "GFX_tmp.xml"))
+                if (!File.Exists(Globals.AppDataPath + "GFX_tmp.xml"))
                 {
-                    File.Move(Globals.ClientXmlpath, Globals.AppdataPath + "GFX_tmp.xml");
+                    File.Move(Globals.ClientXmlpath, Globals.AppDataPath + "GFX_tmp.xml");
                 }
                 if (File.Exists(Globals.ClientXmlpath))
                 {
@@ -115,10 +111,10 @@ namespace Gw2_Launchbuddy
 
         public static void RestoreDefault()
         {
-            if (File.Exists(Globals.AppdataPath + "GFX_tmp.xml"))
+            if (File.Exists(Globals.AppDataPath + "GFX_tmp.xml"))
             {
                 if (File.Exists(Globals.ClientXmlpath)) File.Delete(Globals.ClientXmlpath);
-                File.Move(Globals.AppdataPath + "GFX_tmp.xml", Globals.ClientXmlpath);
+                File.Move(Globals.AppDataPath + "GFX_tmp.xml", Globals.ClientXmlpath);
             }
         }
 
@@ -216,6 +212,7 @@ namespace Gw2_Launchbuddy
         public string Value { set; get; }
         public string OldValue { set; get; }
         public List<string> Options = new List<string>();
+
         public IEnumerable<string> IEOptions
         {
             set { IEOptions = value; }
