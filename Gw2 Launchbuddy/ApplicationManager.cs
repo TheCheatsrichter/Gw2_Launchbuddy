@@ -116,17 +116,18 @@ namespace Gw2_Launchbuddy
                 ProcessStartInfo gw2proinfo = new ProcessStartInfo();
                 gw2proinfo.FileName = Globals.exepath + Globals.exename;
                 gw2proinfo.Arguments = Globals.args.Print(accnr);
-                gw2proinfo.WorkingDirectory = Globals.exepath;
                 Process gw2pro = new Process { StartInfo = gw2proinfo };
                 if (accnr != null)
                 {
                     Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, Globals.selected_accs[(int)accnr]));
                     GFXManager.UseGFX(Globals.selected_accs[(int)accnr].Configpath);
+                    gw2proinfo.WorkingDirectory = Globals.exepath + "bin64";
                 }
                 else
                 {
                     MainWindow.Account undefacc = new MainWindow.Account { Email = "-", Nick = "Acc Nr" + Globals.LinkedAccs.Count };
                     Globals.LinkedAccs.Add(new ProAccBinding(gw2pro, undefacc));
+                    gw2proinfo.WorkingDirectory = Globals.exepath;
                 }
 
                 try
