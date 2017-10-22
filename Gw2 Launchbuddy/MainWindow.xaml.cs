@@ -1466,6 +1466,12 @@ namespace Gw2_Launchbuddy
         {
             if (e.Source is TabControl)
             {
+                if (tab_clientfix.IsSelected)
+                {
+                    CrashAnalyzer.ReadCrashLogs();
+                    lv_crashlogs.ItemsSource = CrashAnalyzer.Crashlogs;
+                    lb_lastcrashes.Content = "Last Crashes (" + CrashAnalyzer.Crashlogs.Count() + " Crashes found)";
+                }
                 RefreshUI();
             }
         }
@@ -2149,6 +2155,8 @@ namespace Gw2_Launchbuddy
             }
         }
 
+
+
         private void bt_selecticon_Click(object sender, RoutedEventArgs e)
         {
             Account acc = (sender as Button).DataContext as Account;
@@ -2230,6 +2238,22 @@ namespace Gw2_Launchbuddy
         {
             Properties.Settings.Default.useinstancegui = (bool)cb_useinstancegui.IsChecked;
             Properties.Settings.Default.Save();
+        }
+
+        private void lv_crashlogs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Crashlog log= (sender as ListView).SelectedItem as Crashlog;
+            if (log!=null)
+            {
+                tblock_crashinfo.Text = log.Quickinfo;
+                tblock_crashsolutioninfo.Text = log.Solutioninfo;
+                bt_fixcrash.IsEnabled = log.IsSolveable;
+            }
+        }
+
+        private void bt_fixcrash_Click(object sender, RoutedEventArgs e)
+        {
+            (lv_crashlogs.SelectedItem as Crashlog).Solve();
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

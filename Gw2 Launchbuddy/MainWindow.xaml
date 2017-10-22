@@ -167,7 +167,7 @@
             <RowDefinition x:Name="CinemaHeight" Height="100*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" HorizontalAlignment="Left">
-            <Label Content="Gw2 Launchbuddy V1.4.2 BETA" FontSize="16" FontWeight="Bold" Foreground="White" >
+            <Label Content="Gw2 Launchbuddy V1.5 BETA" FontSize="16" FontWeight="Bold" Foreground="White" >
                 <Label.Background>
                     <ImageBrush ImageSource="Resources/opacitymask.png"/>
                 </Label.Background>
@@ -337,9 +337,11 @@
                             </Grid.RowDefinitions>
                             <Button x:Name="bt_installpath" Content="Set Directory" Click="bt_installpath_Click" Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0,80,6" BorderThickness="1"/>
                             <Label x:Name="lab_about" Content="Gw2 Launchbuddy by TheCheatsrichter" Grid.Row="0" Grid.Column="1" FontWeight="Bold" Height="29" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+                            <!--
                             <Button x:Name="bt_quaggan"  Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Height="75" Click="bt_quaggan_Click" Margin="0,26,0,4" Grid.RowSpan="2">
                                 <Image Source="Resources/quaggan.png"/>
                             </Button>
+                            -->
                             <Label x:Name="label" Content="Gw2 Client Details:" HorizontalAlignment="Left" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
                             <StackPanel Grid.Column="0" Grid.Row="1">
                                 <Label x:Name="lab_version" Content="Build Version:" />
@@ -785,7 +787,7 @@
                     </StackPanel>
 
                 </TabItem>
-                <TabItem Header="Crash Fixes">
+                <TabItem Header="Crash Fixes" x:Name="tab_clientfix">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50*"/>
@@ -801,11 +803,19 @@
                                 <RowDefinition Height="100*"/>
                                 <RowDefinition Height="30"/>
                             </Grid.RowDefinitions>
-                            <Button Content="Fix" Grid.Column="1" Grid.Row="2" IsEnabled="False"/>
-                            <Label Content="Latest Crashes"/>
-                            <Label Content="Info" Grid.Column="1"/>
-                            <ListView Grid.Row="1" Grid.RowSpan="2"/>
-                            <TextBlock Grid.Column="1" Grid.Row="1" Margin="5"/>
+                            <Button Content="Fix" Grid.Column="1" Grid.Row="2" IsEnabled="False" x:Name="bt_fixcrash" Click="bt_fixcrash_Click"/>
+                            <Label Content="Latest Crashes" x:Name="lb_lastcrashes" FontWeight="Bold"/>
+                            <Label Content="Info" Grid.Column="1" FontWeight="Bold"/>
+                            <ListView x:Name="lv_crashlogs" DisplayMemberPath="{Binding Crashlog}" Grid.Row="1" Grid.RowSpan="2" SelectionChanged="lv_crashlogs_SelectionChanged" FontWeight="Bold">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="CrashType" Width="100" DisplayMemberBinding="{Binding Solutionkey}"/>
+                                        <GridViewColumn Header="CrashTime" Width="130" DisplayMemberBinding="{Binding CrashTime}"/>
+                                        <GridViewColumn Header="Build" Width="100" DisplayMemberBinding="{Binding Build}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <TextBlock Grid.Column="1" Grid.Row="1" Margin="5" x:Name="tblock_crashinfo"/>
                         </Grid>
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
@@ -815,8 +825,11 @@
                             <Label Content="Clientifix the Quaggan" FontSize="16" FontWeight="Bold"/>
                             <Image Source="Resources/opacitymask.png"/>
                             <Image Source="Resources/quaggan.jpg"/>
-                            <Image Grid.Column="1" Source="Resources/opacitymask.png" Stretch="Fill"/>
-                            <TextBlock Grid.Column="1" Text="This is an example text" Foreground="White" Margin="10"/>
+                            <Grid Grid.Column="1" Margin="20">
+                                <Image  Source="Resources/opacitymask.png" Stretch="Fill"/>
+                                <TextBlock  Text="Coooo! Quaggan will do the best to help you!" Foreground="White" Margin="15" x:Name="tblock_crashsolutioninfo" TextWrapping="Wrap" FontSize="14"/>
+                            </Grid>
+
                         </Grid>
                     </Grid>
                 </TabItem>
