@@ -274,5 +274,17 @@ namespace Gw2_Launchbuddy.Properties {
                 this["useinstancegui"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ui_selectedtab {
+            get {
+                return ((int)(this["ui_selectedtab"]));
+            }
+            set {
+                this["ui_selectedtab"] = value;
+            }
+        }
     }
 }

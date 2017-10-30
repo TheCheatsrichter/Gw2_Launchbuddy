@@ -231,6 +231,13 @@ namespace Gw2_Launchbuddy
 
         void SettingsTabSetup()
         {
+            try {
+                tab_options.SelectedIndex = Gw2_Launchbuddy.Properties.Settings.Default.ui_selectedtab;
+            }
+            catch
+            {
+                tab_options.SelectedIndex = 0;
+            }
             cb_lbupdatescheck.IsChecked = Properties.Settings.Default.notifylbupdate;
             cb_useinstancegui.IsChecked = Properties.Settings.Default.useinstancegui;
         }
@@ -1466,6 +1473,7 @@ namespace Gw2_Launchbuddy
         {
             if (e.Source is TabControl)
             {
+                Gw2_Launchbuddy.Properties.Settings.Default.ui_selectedtab = (e.Source as TabControl).SelectedIndex;
                 if (tab_clientfix.IsSelected)
                 {
                     CrashAnalyzer.ReadCrashLogs();
@@ -2254,6 +2262,11 @@ namespace Gw2_Launchbuddy
         private void bt_fixcrash_Click(object sender, RoutedEventArgs e)
         {
             (lv_crashlogs.SelectedItem as Crashlog).Solve();
+        }
+
+        private void bt_patreon_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Process.Start("https://www.patreon.com/gw2launchbuddy");
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

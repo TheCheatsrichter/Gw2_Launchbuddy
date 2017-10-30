@@ -45,5 +45,10 @@ namespace Gw2_Launchbuddy
 
             System.Diagnostics.Process.Start(url);
         }
+
+        private void bt_patreon_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.patreon.com/gw2launchbuddy");
+        }
     }
 }

@@ -328,31 +328,31 @@
                     <StackPanel>
                         <Grid Margin="0,-3,0,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="100*"/>
-                                <ColumnDefinition Width="60*"/>
+                                <ColumnDefinition Width="7*"/>
+                                <ColumnDefinition Width="424*"/>
+                                <ColumnDefinition Width="259*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30*"/>
                                 <RowDefinition Height="80*"/>
                             </Grid.RowDefinitions>
-                            <Button x:Name="bt_installpath" Content="Set Directory" Click="bt_installpath_Click" Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom" Margin="5,0,80,6" BorderThickness="1"/>
-                            <Label x:Name="lab_about" Content="Gw2 Launchbuddy by TheCheatsrichter" Grid.Row="0" Grid.Column="1" FontWeight="Bold" Height="29" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+
+                            <Label x:Name="lab_about" Content="Gw2 Launchbuddy by TheCheatsrichter" Grid.Row="0" Grid.Column="2" FontWeight="Bold" Height="29" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
                             <!--
                             <Button x:Name="bt_quaggan"  Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Height="75" Click="bt_quaggan_Click" Margin="0,26,0,4" Grid.RowSpan="2">
                                 <Image Source="Resources/quaggan.png"/>
                             </Button>
                             -->
-                            <Label x:Name="label" Content="Gw2 Client Details:" HorizontalAlignment="Left" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                            <StackPanel Grid.Column="0" Grid.Row="1">
+
+                            <Label x:Name="label" Content="Gw2 Client Details:" HorizontalAlignment="Left" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+                            <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
                                 <Label x:Name="lab_version" Content="Build Version:" />
                                 <Label x:Name="lab_para" Content="Latest Startparameters:" Grid.Column="1" Grid.Row="1" />
                                 <Label x:Name="lab_path" Content="Install Path:" Grid.Column="1" Grid.Row="1" />
                             </StackPanel>
-                            <Button x:Name="bt_donate" Background="Gray" FontWeight="Bold" Foreground="#FFF50000" Content="Donate" Grid.Column="1" Grid.Row="1"  VerticalAlignment="Top" Click="bt_donate_Click" Margin="5,0,80,0" Height="27" FontSize="16" >
-                                <Button.OpacityMask>
-                                    <ImageBrush ImageSource="Resources/opacitymask.png"/>
-                                </Button.OpacityMask>
-                            </Button>
+                            <Image x:Name="bt_patreon" Source="Resources/patreon_button.png" Grid.Column="2" Grid.Row="1" VerticalAlignment="Bottom" Height="40" MouseDown="bt_patreon_MouseDown"/>
+                            <Image Source="Resources/donate.png" Grid.Column="2" Grid.Row="1" VerticalAlignment="Top" Height="40" MouseDown="bt_donate_Click" />
+                            <Button x:Name="bt_installpath" Content="Set Directory" Click="bt_installpath_Click" Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom"  BorderThickness="1" Width="80" HorizontalAlignment="Right"/>
                         </Grid>
 
                         <Grid Grid.Row="1" Margin="5,0,0,0">
@@ -873,7 +873,7 @@
                                 <Button x:Name="bt_fetchlbversions" Margin="3" Content="Check for Updates" DockPanel.Dock="Left" Click="bt_fetchlbversions_Click"/>
                                 <Button x:Name="bt_downloadrelease" Margin="3" Content="Download" Click="bt_downloadrelease_Click" IsEnabled="False" DockPanel.Dock="Right"/>
                             </DockPanel>
-                           
+
                         </Grid>
                         <Separator Margin="-3,100,0,0"/>
                         <Button x:Name="bt_bugreport" Content="Report a Bug" Margin="5" Click="bt_bugreport_Click"/>

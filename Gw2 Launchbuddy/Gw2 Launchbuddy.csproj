@@ -344,6 +344,7 @@
     <Resource Include="Resources\Icons\close.png" />
     <Resource Include="Resources\Icons\focus.png" />
     <Resource Include="Resources\donate.png" />
+    <Resource Include="Resources\patreon_button.png" />
     <Content Include="Resources\Update Helper.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
