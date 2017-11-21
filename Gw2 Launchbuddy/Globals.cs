@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using static Gw2_Launchbuddy.MainWindow;
 using System;
 using CommandLine;
+using System.Windows.Controls;
+
 
 namespace Gw2_Launchbuddy
 {
@@ -26,6 +28,9 @@ namespace Gw2_Launchbuddy
 
         public static string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
         public static Version LBVersion = new Version("1.4.2");
+
+        //Arguments
+        public static ObservableCollection<CheckBox> arg_checkboxlist = new ObservableCollection<CheckBox>();
 
         //Serverlists
         public static ObservableCollection<Server> authlist = new ObservableCollection<Server>();

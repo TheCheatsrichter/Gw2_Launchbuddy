@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
+using System.Windows;
+using System.Diagnostics;
+using System.Xml.Serialization;
 
 namespace Gw2_Launchbuddy
 {
@@ -33,12 +36,16 @@ namespace Gw2_Launchbuddy
     {
         public static List<CrashFilter> CrashFilters = new List<CrashFilter> {
             new CrashFilter(new string[] { "c0000005", "Memory at address","could not be read" }, "mem_read"),
-            new CrashFilter(new string[] { "c0000005", "Memory at address","could not be written" }, "mem_write")
+            new CrashFilter(new string[] { "c0000005", "Memory at address","could not be written" }, "mem_write"),
+            new CrashFilter(new string[] { "Coherent", "host", "crashed" }, "host_crash"),
+            new CrashFilter(new string[] { "Model", "leaks","detected" }, "model_leaks")
         };
 
         public static Dictionary<string, string> SolutionInfo = new Dictionary<string, string>
         {
             { "unknown","Cooooo...\nQuaggan doesn't know what to do with this crash. :(" },
+            { "host_crash","Cooo!\nQuaggan sees that your launcher crashed. You should download a new version from the Arenanet website!" },
+            { "model_leaks","Cooo!\nQuaggan remembers that his crash happened very often when the old 32 Bit Client of Guild Wars 2 was used! You should NOT run the client with the -32 parameter if possible!" },
             { "mem_read","Cooo!\nSeems like a memory read error happended to you!\nQuaggan knows that this sometimes happens when your Gw2.dat file gets corrupted.\nSometimes using the -repair argument will help youuuu!" },
             { "mem_write","Cooo!\nSeems like a memory write error happended to you!\nQuaggan knows that this sometimes happens when your Gw2.dat file gets corrupted.\nSometimes using the -repair argument will help youuuu!" },
         };
@@ -71,17 +78,45 @@ namespace Gw2_Launchbuddy
                 case "mem_write":
                     mem_write();
                     break;
+                case "host_crash":
+                    host_crash();
+                    break;
+                case "model_leaks":
+                    model_leaks();
+                    break;
             }
         }
 
         //Solutions
         private static void mem_read()
         {
-            System.Windows.Forms.MessageBox.Show("Placeholder mem_read");
+            ProcessStartInfo pro = new ProcessStartInfo
+            {
+                FileName = Globals.exepath+Globals.exename,
+                Arguments = "-repair"
+            };
+            Process.Start(pro);
+            System.Windows.Forms.MessageBox.Show("The Gw2 Launcher is trying to fix the mem_read error!\nPlease wait for completion before you continue.");
         }
         private static void mem_write()
         {
-            System.Windows.Forms.MessageBox.Show("Placeholder mem_write");
+            ProcessStartInfo pro = new ProcessStartInfo
+            {
+                FileName = Globals.exepath + Globals.exename,
+                Arguments="-repair"
+            };
+            Process.Start(pro);
+            System.Windows.Forms.MessageBox.Show("The Gw2 Launcher is trying to fix the mem_write error!\nPlease wait for completion before you continue.");
+        }
+        private static void model_leaks()
+        {
+            Globals.arg_checkboxlist.First(x => x.Content == "-32").IsChecked=false;
+            System.Windows.Forms.MessageBox.Show("Launch argument \"-32\" successfully unselected!");
+        }
+
+        private static void host_crash()
+        {
+            Process.Start("https://account.arena.net/login");
         }
     }
 

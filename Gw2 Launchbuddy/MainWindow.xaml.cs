@@ -232,7 +232,7 @@ namespace Gw2_Launchbuddy
 
         void donatepopup()
         {
-            if ((Properties.Settings.Default.counter_launches % 100) == 5)
+            if ((Properties.Settings.Default.counter_launches % 75) == 5)
             {
                 Popup popup = new Popup();
                 popup.Show();
@@ -257,7 +257,7 @@ namespace Gw2_Launchbuddy
         private void fillargs()
         {
             arglistbox.Items.Clear();
-            List<CheckBox> tmp = new List<CheckBox>();
+            ObservableCollection<CheckBox> tmp = new ObservableCollection<CheckBox>();
             try
             {
                 foreach (var item in Globals.args.ToDictionary(false))
@@ -273,8 +273,8 @@ namespace Gw2_Launchbuddy
             {
                 CrashReporter.ReportCrashToAll(e);
             }
-
-            arglistbox.ItemsSource = tmp;
+            Globals.arg_checkboxlist = tmp;
+            arglistbox.ItemsSource = Globals.arg_checkboxlist;
         }
 
         static void UnhandledExceptionReport(object sender, UnhandledExceptionEventArgs args)
@@ -674,6 +674,7 @@ namespace Gw2_Launchbuddy
                 CollectionView sview = (CollectionView)CollectionViewSource.GetDefaultView(listview_assets.ItemsSource);
                 sview.SortDescriptions.Add(new SortDescription("Ping", ListSortDirection.Descending));
                 sview.Refresh();
+                bt_checkservers.IsEnabled = true;
             }));
         }
 

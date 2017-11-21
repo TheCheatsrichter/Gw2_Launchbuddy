@@ -12,7 +12,7 @@
 
     
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
-        Title="Gw2 Launchbuddy V 1.4" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1">
+        Title="Gw2 Launchbuddy V 1.5" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="NoResize">
     <Window.Resources>
         <Storyboard x:Key="anim_imgfadeout">
             <DoubleAnimation 
@@ -190,6 +190,9 @@
         <MediaElement x:Name="Cinema_MediaPlayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual" Volume="{Binding Value, ElementName=sl_volumecontrol}" MediaEnded="Cinema_MediaPlayer_MediaEnded"/>
 
         <StackPanel x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="1" Background="#4CFFFFFF">
+            <StackPanel.OpacityMask>
+                <ImageBrush ImageSource="Resources/opacitymask_tile.png"/>
+            </StackPanel.OpacityMask>
             <StackPanel.Triggers>
                 <EventTrigger RoutedEvent="UIElement.MouseEnter">
                     <BeginStoryboard>
@@ -296,7 +299,7 @@
                 <Label Content="Used Addons:" x:Name="lab_usedaddons"/>
             </StackPanel>
 
-            <Grid Margin="5,5" Grid.Row="2" Background="Black">
+            <Grid Margin="20,5" Grid.Row="2" Background="Black">
                 <Grid.OpacityMask>
                     <ImageBrush ImageSource="Resources/opacitymask.png"/>
                 </Grid.OpacityMask>
@@ -803,7 +806,7 @@
                                 <RowDefinition Height="100*"/>
                                 <RowDefinition Height="30"/>
                             </Grid.RowDefinitions>
-                            <Button Content="Fix" Grid.Column="1" Grid.Row="2" IsEnabled="False" x:Name="bt_fixcrash" Click="bt_fixcrash_Click"/>
+                            <Button Content="Fix" Grid.Column="1" Grid.Row="2" IsEnabled="False" x:Name="bt_fixcrash" Click="bt_fixcrash_Click" FontSize="14" FontWeight="Bold"/>
                             <Label Content="Latest Crashes" x:Name="lb_lastcrashes" FontWeight="Bold"/>
                             <Label Content="Info" Grid.Column="1" FontWeight="Bold"/>
                             <ListView x:Name="lv_crashlogs" DisplayMemberPath="{Binding Crashlog}" Grid.Row="1" Grid.RowSpan="2" SelectionChanged="lv_crashlogs_SelectionChanged" FontWeight="Bold">

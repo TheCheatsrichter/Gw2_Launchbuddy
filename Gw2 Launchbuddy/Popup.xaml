@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gw2_Launchbuddy"
         mc:Ignorable="d"
-        Title="Gw2 Launchbuddy" Height="300" Width="500" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="CenterScreen" Icon="launchbuddy.ico">
+        Title="Gw2 Launchbuddy" Height="334" Width="500" ResizeMode="NoResize" Topmost="True" WindowStartupLocation="CenterScreen" Icon="launchbuddy.ico">
     <StackPanel Margin="5">
         <StackPanel.Background>
             <ImageBrush ImageSource="Resources/launchbuddyback.png" Stretch="Uniform" Opacity="0.15" AlignmentX="Right" AlignmentY="Top"/>
