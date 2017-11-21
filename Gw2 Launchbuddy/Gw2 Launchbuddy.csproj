@@ -198,6 +198,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Serverselector.cs" />
     <Compile Include="SetupInfo.xaml.cs">
       <DependentUpon>SetupInfo.xaml</DependentUpon>
     </Compile>
