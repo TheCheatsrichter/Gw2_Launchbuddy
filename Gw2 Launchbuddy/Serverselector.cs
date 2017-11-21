@@ -51,13 +51,19 @@ namespace Gw2_Launchbuddy
 
                 foreach (IPAddress ip in auth1ips)
                 {
-                    tmp_authlist.Add(new Server { IP = ip.ToString(), Port = default_auth1port, Type = "auth1", Ping = tcpping(ip,default_auth1port).ToString() });
+                    tmp_authlist.Add(new Server { IP = ip.ToString(), Port = default_auth1port, Type = "auth1", Ping = tcpping(ip.ToString(), default_auth1port).ToString() });
                 }
 
                 foreach (IPAddress ip in auth2ips)
                 {
-                    tmp_authlist.Add(new Server { IP = ip.ToString(), Port = default_auth2port, Type = "auth2", Ping = tcpping(ip, default_auth2port).ToString() });
+                    tmp_authlist.Add(new Server { IP = ip.ToString(), Port = default_auth2port, Type = "auth2", Ping = tcpping(ip.ToString(), default_auth2port).ToString() });
                 }
+
+                foreach (Server Server in Globals.manual_authlist)
+                {
+                    tmp_authlist.Add(new Server { IP = Server.IP, Port = default_auth2port, Type = "Manual", Ping = tcpping(Server.IP,default_auth2port).ToString() });
+                }
+
                 return tmp_authlist;
             }
             catch
@@ -80,6 +86,11 @@ namespace Gw2_Launchbuddy
                     tmp_assetlist.Add(new Server { IP = ip.ToString(), Port = default_assetport, Type = "asset", Ping = getping(ip.ToString()).ToString(), Location = getlocation(ip.ToString()) });
                 }
 
+                foreach (Server Server in Globals.manual_assetlist)
+                {
+                    tmp_assetlist.Add(new Server { IP = Server.IP, Port = default_assetport, Type = "Manual", Ping = tcpping(Server.IP, default_assetport).ToString() });
+                }
+
                 return tmp_assetlist;
             }
             catch
@@ -95,13 +106,21 @@ namespace Gw2_Launchbuddy
             return (int)pingsender.Send(ip).RoundtripTime;
         }
 
-        public static double tcpping(IPAddress ip, string port)
+        public static double tcpping(string ip, string port)
         {
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             sock.Blocking = true;
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            sock.Connect(ip,Int32.Parse(port));
+            try
+            {
+                sock.Connect(ip, Int32.Parse(port));
+            }
+            catch
+            {
+                return 9999;
+            }
+
             stopwatch.Stop();
             double t = stopwatch.Elapsed.TotalMilliseconds;
             sock.Close();

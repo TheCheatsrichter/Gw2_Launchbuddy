@@ -35,6 +35,9 @@ namespace Gw2_Launchbuddy
         //Serverlists
         public static ObservableCollection<Server> authlist = new ObservableCollection<Server>();
         public static ObservableCollection<Server> assetlist = new ObservableCollection<Server>();
+        public static ObservableCollection<Server> manual_authlist = new ObservableCollection<Server>();
+        public static ObservableCollection<Server> manual_assetlist = new ObservableCollection<Server>();
+
 
     }
     public class Options

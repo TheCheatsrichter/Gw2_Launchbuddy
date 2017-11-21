@@ -202,6 +202,8 @@ namespace Gw2_Launchbuddy
             fillargs(); //create arglist
             loadconfig(); // loading the gw2 xml config file from appdata and loading user settings
             loadaccounts(); // loading saved accounts from launchbuddy
+            listview_auth.ItemsSource = Globals.authlist;
+            listview_assets.ItemsSource = Globals.assetlist;
             Thread checkver = new Thread(checkversion);
             checkver.IsBackground = true;
             checkver.Start();
@@ -654,18 +656,18 @@ namespace Gw2_Launchbuddy
         {
             Application.Current.Dispatcher.Invoke(new Action(() => {
                 bt_checkservers.IsEnabled = false;
+                Globals.authlist.Clear();
+                Globals.assetlist.Clear();
             }));
 
-            Globals.authlist.Clear();
-            Globals.assetlist.Clear();
             Globals.authlist = Serverselector.fetch_authserverlist();
             Globals.assetlist = Serverselector.fetch_assetserverlist();
 
             Application.Current.Dispatcher.Invoke(new Action(() => {
                 listview_auth.ItemsSource = Globals.authlist;
                 listview_assets.ItemsSource = Globals.assetlist;
-                lab_authserverlist.Content = "Authentication Servers (" + Globals.authlist.Count + " servers found):";
-                lab_assetserverlist.Content = "Asset Servers (" + Globals.assetlist.Count + " servers found):";
+                lab_authserverlist.Content = "Authentication Servers (" + (Globals.authlist.Count+Globals.manual_authlist.Count) + " servers found):";
+                lab_assetserverlist.Content = "Asset Servers (" + (Globals.assetlist.Count + Globals.manual_assetlist.Count) + " servers found):";
                 bt_checkservers.Content = "Check Servers (Last update: " + DateTime.Now.ToString("h:mm:ss tt") + ")";
 
                 // Sorting  servers (ping).
@@ -674,6 +676,7 @@ namespace Gw2_Launchbuddy
                 CollectionView sview = (CollectionView)CollectionViewSource.GetDefaultView(listview_assets.ItemsSource);
                 sview.SortDescriptions.Add(new SortDescription("Ping", ListSortDirection.Descending));
                 sview.Refresh();
+                
                 bt_checkservers.IsEnabled = true;
             }));
         }
@@ -2181,6 +2184,33 @@ namespace Gw2_Launchbuddy
         private void bt_patreon_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Process.Start("https://www.patreon.com/gw2launchbuddy");
+        }
+
+        private void bt_manualauthserver_Click(object sender, RoutedEventArgs e)
+        {
+            var result = Regex.Match(tb_manualauthserver.Text, @"\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}(.\d{1,3}.\d{1,3})?");
+            if (result.Length != 0)
+            {
+                Globals.authlist.Add(new Server { IP = tb_manualauthserver.Text, Port = "6112", Ping = Serverselector.tcpping(tb_manualauthserver.Text, "6112").ToString(), Type = "Manual" });
+                Globals.manual_authlist.Add(new Server { IP = tb_manualauthserver.Text, Port = "6112", Ping = "-", Type = "Manual" });
+            }
+            else
+            {
+                MessageBox.Show("Invalid Ip Adress!");
+            }
+        }
+
+        private void bt_manualassetserver_Click(object sender, RoutedEventArgs e)
+        {
+            var result = Regex.Match(tb_manualassetserver.Text, @"\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}(.\d{1,3}.\d{1,3})?");
+            if(result.Length != 0)
+            {
+                Globals.assetlist.Add(new Server { IP = tb_manualassetserver.Text, Port = "80", Ping = Serverselector.tcpping(tb_manualassetserver.Text, "80").ToString(), Type = "Manual" });
+                Globals.manual_assetlist.Add(new Server { IP = tb_manualassetserver.Text, Port = "80", Ping = "-", Type = "Manual" });
+            } else
+            {
+                MessageBox.Show("Invalid Ip Adress!");
+            }
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

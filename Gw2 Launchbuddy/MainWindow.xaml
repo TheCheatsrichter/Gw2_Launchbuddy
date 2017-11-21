@@ -517,24 +517,35 @@
                             <ColumnDefinition Width="120*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-
                             <RowDefinition Height="30"/>
                             <RowDefinition/>
+                            <RowDefinition Height="30"/>
                             <RowDefinition Height="40"/>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
-                        <TextBox x:Name="tb_authport" IsEnabled="False" Grid.Column="2" Grid.Row="3" LostKeyboardFocus="tb_authport_LostKeyboardFocus" VerticalAlignment="Center" FontWeight="Normal"/>
-                        <TextBox x:Name="tb_assetsport" IsEnabled="False" Grid.Row="4" Grid.Column="2" LostKeyboardFocus="tb_assetsport_LostKeyboardFocus" VerticalAlignment="Center" FontWeight="Normal"/>
-
-                        <Label x:Name="lab_port_assets" Content="Port (optional):" IsEnabled="False" Grid.Column="1" Grid.Row="4" FontSize="16" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal" />
-                        <Label x:Name="lab_port_client" Content="Port :" IsEnabled="False" Grid.Column="1" Grid.Row="5" FontSize="16" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal"/>
-                        <CheckBox x:Name="checkb_clientport" Content="Use Clientport: " FontSize="16" Checked="checkb_clientport_Checked" Unchecked="checkb_clientport_Unchecked" FontWeight="Bold" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <CheckBox x:Name="checkb_auth" Grid.ColumnSpan="2" Content="Use Authentication Server : (Select Server)" VerticalAlignment="Center" FontSize="16" IsEnabled="False" Checked="checkb_auth_Checked" Unchecked="checkb_auth_Unchecked" FontWeight="Bold" HorizontalAlignment="Left" Grid.Row="3" Margin="0,4.36"/>
-                        <CheckBox x:Name="checkb_assets" Grid.ColumnSpan="2" Content="Use Assets Server : (Select Server)" VerticalAlignment="Center" FontSize="16" IsEnabled="False" Checked="checkb_assets_Checked" Unchecked="checkb_assets_Unchecked" FontWeight="Bold" Grid.Row="4" HorizontalAlignment="Left" Margin="0,4.36"/>
-                        <Label x:Name="lab_port_auth" Content="Port (optional):" VerticalAlignment="Bottom" IsEnabled="False" Grid.Column="1" FontSize="16" Grid.Row="3" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal"/>
-                        <Button x:Name="bt_checkservers" Content="Check Servers" Click="bt_checkservers_Click" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,5" FontWeight="Normal"  />
+                        <TextBox x:Name="tb_authport" IsEnabled="False" Grid.Column="2" Grid.Row="4" LostKeyboardFocus="tb_authport_LostKeyboardFocus" VerticalAlignment="Center" FontWeight="Normal"/>
+                        <TextBox x:Name="tb_assetsport" IsEnabled="False" Grid.Row="5" Grid.Column="4" LostKeyboardFocus="tb_assetsport_LostKeyboardFocus" VerticalAlignment="Center" FontWeight="Normal"/>
+                        <Grid Grid.Row="2" Grid.ColumnSpan="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="tb_manualauthserver" Text="Manual Authentication IP"/>
+                            <TextBox x:Name="tb_manualassetserver" Text="Manual Assetserver IP" Grid.Column="2" Margin="5,0,0,0"/>
+                            <Button x:Name="bt_manualauthserver" Content="Add Authserver"  Grid.Column="1" Click="bt_manualauthserver_Click" Margin="0,0,5,0"/>
+                            <Button x:Name="bt_manualassetserver" Content="Add Assetserver" Grid.Column="3" Click="bt_manualassetserver_Click"/>
+                        </Grid>
+                        <Label x:Name="lab_port_assets" Content="Port (optional):" IsEnabled="False" Grid.Column="1" Grid.Row="5" FontSize="16" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal" />
+                        <Label x:Name="lab_port_client" Content="Port :" IsEnabled="False" Grid.Column="1" Grid.Row="6" FontSize="16" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal"/>
+                        <CheckBox x:Name="checkb_clientport" Content="Use Clientport: " FontSize="16" Checked="checkb_clientport_Checked" Unchecked="checkb_clientport_Unchecked" FontWeight="Bold" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <CheckBox x:Name="checkb_auth" Grid.ColumnSpan="2" Content="Use Authentication Server : (Select Server)" VerticalAlignment="Center" FontSize="16" IsEnabled="False" Checked="checkb_auth_Checked" Unchecked="checkb_auth_Unchecked" FontWeight="Bold" HorizontalAlignment="Left" Grid.Row="4" Margin="0,4.36"/>
+                        <CheckBox x:Name="checkb_assets" Grid.ColumnSpan="2" Content="Use Assets Server : (Select Server)" VerticalAlignment="Center" FontSize="16" IsEnabled="False" Checked="checkb_assets_Checked" Unchecked="checkb_assets_Unchecked" FontWeight="Bold" Grid.Row="5" HorizontalAlignment="Left" Margin="0,4.36"/>
+                        <Label x:Name="lab_port_auth" Content="Port (optional):" VerticalAlignment="Bottom" IsEnabled="False" Grid.Column="1" FontSize="16" Grid.Row="4" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal"/>
+                        <Button x:Name="bt_checkservers" Content="Check Servers" Click="bt_checkservers_Click" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,5" FontWeight="Normal"  />
                         <ListView x:Name="listview_assets" SelectionChanged="listview_assets_SelectionChanged" Grid.Row="1" Grid.Column="1" d:LayoutOverrides="Height, LeftMargin, RightMargin, TopMargin, BottomMargin" Margin="5,0,0,0" Grid.ColumnSpan="2" FontWeight="Normal" FontSize="12">
                             <ListView.View>
                                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
