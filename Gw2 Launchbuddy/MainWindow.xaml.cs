@@ -216,7 +216,6 @@ namespace Gw2_Launchbuddy
                 Thread checklbver = new Thread(checklbversion);
                 checklbver.Start();
             }
-            CrashAnalyzer.ReadCrashLogs();
         }
 
         void SettingsTabSetup()
