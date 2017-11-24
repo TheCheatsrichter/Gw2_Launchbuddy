@@ -38,6 +38,7 @@ namespace Gw2_Launchbuddy
             new CrashFilter(new string[] { "c0000005", "Memory at address","could not be read" }, "mem_read"),
             new CrashFilter(new string[] { "c0000005", "Memory at address","could not be written" }, "mem_write"),
             new CrashFilter(new string[] { "Coherent", "host", "crashed" }, "host_crash"),
+            new CrashFilter(new string[] { "Client needs to be patched", "shareArchive", "or noPatch" }, "outdated_client"),
             new CrashFilter(new string[] { "Model", "leaks","detected" }, "model_leaks")
         };
 
@@ -47,6 +48,7 @@ namespace Gw2_Launchbuddy
             { "host_crash","Cooo!\nQuaggan sees that your launcher crashed. You should download a new version from the Arenanet website!" },
             { "model_leaks","Cooo!\nQuaggan remembers that his crash happened very often when the old 32 Bit Client of Guild Wars 2 was used! You should NOT run the client with the -32 parameter if possible!" },
             { "mem_read","Cooo!\nSeems like a memory read error happended to you!\nQuaggan knows that this sometimes happens when your Gw2.dat file gets corrupted.\nSometimes using the -repair argument will help youuuu!" },
+            { "outdated_client","Cooo!\nYour client seems to be outdated and you tried to launch the game with autologin!\n Quaggan would update your client for youu!" },
             { "mem_write","Cooo!\nSeems like a memory write error happended to you!\nQuaggan knows that this sometimes happens when your Gw2.dat file gets corrupted.\nSometimes using the -repair argument will help youuuu!" },
         };
 
@@ -84,6 +86,9 @@ namespace Gw2_Launchbuddy
                 case "model_leaks":
                     model_leaks();
                     break;
+                case "outdated_client":
+                    outdated_client();
+                    break;
             }
         }
 
@@ -118,6 +123,17 @@ namespace Gw2_Launchbuddy
         {
             Process.Start("https://account.arena.net/login");
         }
+
+        private static void outdated_client()
+        {
+            ProcessStartInfo pro = new ProcessStartInfo
+            {
+                FileName = Globals.exepath + Globals.exename,
+                Arguments = "-image"
+            };
+            Process.Start(pro);
+            System.Windows.Forms.MessageBox.Show("The Gw2 Launcher is trying to update!\nPlease wait for completion before you continue.");
+        }
     }
 
     static public class CrashAnalyzer
@@ -147,6 +163,20 @@ namespace Gw2_Launchbuddy
 
            try
             {
+                long crashlogs_size = new FileInfo(path).Length / 1000000;
+
+                if (crashlogs_size > 10)
+                {
+                    //Average crashlog size = 12.288 kb
+                    MessageBoxResult win = MessageBox.Show("Your crashlog file has an overall size of " + crashlogs_size+ " Mb! (est. " + Math.Round((crashlogs_size*1000/12.288),0) + " Crashlogs!)\nUsing crashlogs this big could decrease performance drastically!\n Should launchbuddy reduce its size?", "Crashlog File too big", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (win.ToString() == "Yes")
+                    {
+                        string[] lines =File.ReadLines(path).Take(50000).ToArray();
+                        File.Delete(path);
+                        File.WriteAllLines(path,lines);
+                    }
+                }
+
                 string[] data = Regex.Split(File.ReadAllText(path), @"\*--> Crash <--\*");
                 for(int i=1;i< data.Length; i++)
                 {
@@ -181,7 +211,7 @@ namespace Gw2_Launchbuddy
             }
             catch (Exception e)
             {
-                System.Windows.Forms.MessageBox.Show("Could not find Crashlog!\n"+ e.Message);
+                System.Windows.Forms.MessageBox.Show("Could not open Crashlog!\n"+ e.Message);
             }
         }
     }

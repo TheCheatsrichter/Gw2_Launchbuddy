@@ -27,7 +27,7 @@ namespace Gw2_Launchbuddy
         public static string ClientXmlpath;
 
         public static string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
-        public static Version LBVersion = new Version("1.4.2");
+        public static Version LBVersion = new Version("1.5.1");
 
         //Arguments
         public static ObservableCollection<CheckBox> arg_checkboxlist = new ObservableCollection<CheckBox>();
