@@ -24,7 +24,7 @@ namespace Gw2_Launchbuddy
 
         private void VerifyGame()
         {
-            fixClient.Process.StartInfo.Arguments = " -verify";
+            fixClient.StartInfo.Arguments = " -verify";
 
             try
             {

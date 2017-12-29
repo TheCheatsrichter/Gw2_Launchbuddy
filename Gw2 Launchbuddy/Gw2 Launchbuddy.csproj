@@ -177,7 +177,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\Builders.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Helpers\FileDialog.cs" />
+    <Compile Include="Interfaces\IProcessWrapper.cs" />
     <Compile Include="ObjectManagers\AccountArgumentManager.cs" />
     <Compile Include="ObjectManagers\AccountManager.cs" />
     <Compile Include="AddOnManager.cs" />
@@ -194,6 +197,8 @@
       <DependentUpon>GUI_ApplicationManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="HandleManager.cs" />
+    <Compile Include="ObjectManagers\PluginManager.cs" />
+    <Compile Include="Wrappers\ProcessWrapper.cs" />
     <Compile Include="ObjectManagers\ServerManager.cs" />
     <Compile Include="Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>

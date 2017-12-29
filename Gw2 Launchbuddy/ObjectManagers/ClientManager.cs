@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+﻿using Gw2_Launchbuddy.Interfaces;
+using Gw2_Launchbuddy.Wrappers;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,6 +10,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
+using Gw2_Launchbuddy.Helpers;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -27,20 +30,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
             var createdClient = new Client();
             clientCollection.Add(createdClient);
             return createdClient;
-        }
-
-        public static string CalculateProcessMD5(Process Process)
-        {
-            var md5 = MD5.Create();
-            var inputBytes = Encoding.ASCII.GetBytes(Process.StartTime.ToString() + Process.Id.ToString());
-            var hash = md5.ComputeHash(inputBytes);
-
-            var sb = new StringBuilder();
-
-            for (int i = 0; i < hash.Length; i++)
-                sb.Append(hash[i].ToString("X2"));
-
-            return sb.ToString();
         }
 
         public static class ClientInfo
@@ -65,18 +54,18 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             private static RegistryKey key { get { return Microsoft.Win32.Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("LaunchBuddy"); } }
 
-            public static void UpdateRegClients()
+            public static void UpdateRegClients()                            
             {
                 try
                 {
                     List<string> listClients = getClientListFromReg();
 
-                    var gw2Proc = Process.GetProcesses().ToList().Where(a => a.ProcessName == ClientInfo.ProcessName).ToList(); //Bad, but processes named same as client executable
-                    var md5Gw2Proc = gw2Proc.ConvertAll(new Converter<Process, string>(CalculateProcessMD5));
+                    var gw2Proc = Client.GetClients();// Process.GetProcesses().ToList().Where(a => a.ProcessName == ClientInfo.ProcessName).ToList(); //Bad, but processes named same as client executable
+                    var md5Gw2Proc = gw2Proc.ToList().Select(a => a.CalculateProcessMD5());
                     foreach (var t in listClients.Where(a => !md5Gw2Proc.Contains(a)).ToList()) listClients.Remove(t);
                     key.SetValue("Clients", listClients.ToArray(), Microsoft.Win32.RegistryValueKind.MultiString);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw;
                 }
@@ -93,11 +82,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     UpdateRegClients();
                     List<string> listClients = getClientListFromReg();
 
-                    var currentProcesses = Process.GetProcesses().ToList().Where(a => a.ProcessName == ClientInfo.ProcessName).ToList();
-                    var gw2Procs = currentProcesses.ConvertAll(new Converter<Process, string>(CalculateProcessMD5));
+                    var currentProcesses = Client.GetClients();
+                    var gw2Procs = currentProcesses.ToList().Select(a => a.CalculateProcessMD5());
                     return gw2Procs.Count() == listClients.Count();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw;
                 }
@@ -113,10 +102,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 {
                     List<string> listClients = getClientListFromReg();
 
-                    listClients.Add(Client.md5);
+                    listClients.Add(Client.MD5);
                     key.SetValue("Clients", listClients.ToArray(), Microsoft.Win32.RegistryValueKind.MultiString);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw;
                 }
@@ -143,6 +132,40 @@ namespace Gw2_Launchbuddy.ObjectManagers
         }
     }
 
+    public class Client : ProcessWrapper, IProcessWrapper<Client>
+    {
+        public Client()
+        {
+            StartInfo = new ProcessStartInfo(ClientManager.ClientInfo.FullPath);
+            Started += Client_Started;
+        }
+
+        private void Client_Started(object sender, EventArgs e)
+        {
+            ClientManager.ClientReg.RegClient(this);
+        }
+
+        new public bool Start()
+
+        {
+            EnableRaisingEvents = true;
+            Exited += Client_Exited;
+            return base.Start();
+        }
+
+        private void Client_Exited(object sender, EventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(delegate { AccountClientManager.Remove(this); });
+            Dispose();
+        }
+
+        public static Process[] GetClients()
+        {
+            return GetProcessesByName(ClientManager.ClientInfo.ProcessName);
+            //return temp.Select(a => ToDerivedHelper.ToDerived<Process, Client>(a)).ToArray();
+        }
+    }
+    /*
     public class Client
     {
         public Process Process;
@@ -188,5 +211,5 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             catch { }
         }
-    }
+    }*/
 }

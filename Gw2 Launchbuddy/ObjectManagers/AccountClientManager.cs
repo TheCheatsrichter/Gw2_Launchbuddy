@@ -47,7 +47,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             this.Client = Client;
             this.Account = Account;
-            Client.Process.StartInfo.Arguments = Account.CommandLine();
+            Client.StartInfo.Arguments = Account.CommandLine();
         }
     }
 }

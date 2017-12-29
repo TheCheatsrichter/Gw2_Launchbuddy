@@ -19,18 +19,9 @@ namespace Gw2_Launchbuddy
             "gamma",
         };
 
-        static public GFXConfig LoadFile()
+        static public GFXConfig LoadFile(string path)
         {
-            OpenFileDialog filediag = new OpenFileDialog { Multiselect = false, DefaultExt = "xml" };
-            CurrentConfig.ConfigPath = "";
-
-            filediag.DefaultExt = ".xml";
-            filediag.Filter = "Xml Files(*.xml) | *.xml";
-            filediag.InitialDirectory = ClientManager.ClientInfo.InstallPath;
-            filediag.ShowDialog();
-
-            CurrentConfig.ConfigPath = filediag.FileName;
-            if (!IsValidGFX(CurrentConfig.ConfigPath)) return null;
+            CurrentConfig.ConfigPath = path;
             return ReadFile(CurrentConfig.ConfigPath);
         }
 
@@ -47,7 +38,7 @@ namespace Gw2_Launchbuddy
         {
             SaveFileDialog savediag = new System.Windows.Forms.SaveFileDialog();
             savediag.DefaultExt = ".xml";
-            savediag.Filter = "Xml Files(*.xml) | *.xml";
+            savediag.Filter = "XML Files(*.xml)|*.xml";
             savediag.Title = "Saving GFX Settings";
             savediag.AddExtension = true;
             savediag.FileName = "GW2 Custom GFX";

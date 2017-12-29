@@ -26,6 +26,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             AccountCollection = new ReadOnlyObservableCollection<Account>(accountCollection);
 
             DefaultAccount = new ObjectManagers.Account(null, null, null);
+            AccountArgumentManager.StopGap.IsSelected("-shareArchive", true);
         }
 
         public static Account Account(string Nickname) => accountCollection.Where(a => a.Nickname == Nickname).Single();

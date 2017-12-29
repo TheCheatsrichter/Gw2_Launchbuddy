@@ -35,7 +35,7 @@ namespace Gw2_Launchbuddy
             if (lv_instances.SelectedIndex >= 0)
             {
                 AccountClient selinstance = lv_instances.SelectedItem as AccountClient;
-                IntPtr hwndMain = selinstance.Client.Process.MainWindowHandle;
+                IntPtr hwndMain = selinstance.Client.MainWindowHandle;
                 SetForegroundWindow(hwndMain);
             }
         }
@@ -54,7 +54,7 @@ namespace Gw2_Launchbuddy
         private void bt_maxmin_Click(object sender, RoutedEventArgs e)
         {
             AccountClient selinstance = (sender as Button).DataContext as AccountClient;
-            IntPtr hwndMain = selinstance.Client.Process.MainWindowHandle;
+            IntPtr hwndMain = selinstance.Client.MainWindowHandle;
             SetForegroundWindow(hwndMain);
         }
 
