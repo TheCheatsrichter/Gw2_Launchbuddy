@@ -11,6 +11,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using Gw2_Launchbuddy.Helpers;
+using System.IO;
+using System.Xml;
+using Gw2_Launchbuddy.Extensions;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -43,6 +46,89 @@ namespace Gw2_Launchbuddy.ObjectManagers
             public static string FullPath { get { return InstallPath + Executable; } }
             public static string ProcessName { get; private set; }
             public static string Version { get; set; }
+
+            public static void LoadClientInfo()
+            {
+                //Find the newest XML file in APPDATA (the XML files share the same name as their XML files -> multiple .xml files possible!)
+                string[] configfiles = new string[] { };
+                try
+                {
+                    configfiles = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\", "*.exe.xml");
+                }
+                catch (Exception e)
+                {
+                    //TODO: Handle corrupt/missing Guild Wars install
+                    MessageBox.Show("Guild Wars may not be installed. \n " + e.Message);
+                    return;
+                }
+                Globals.ClientXmlpath = "";
+                long max = 0;
+
+                foreach (string config in configfiles)
+                {
+                    if (System.IO.File.GetLastWriteTime(config).Ticks > max)
+                    {
+                        max = System.IO.File.GetLastWriteTime(config).Ticks;
+                        Globals.ClientXmlpath = config;
+                    }
+                }
+
+                //Read the GFX Settings
+                Globals.SelectedGFX = GFXManager.ReadFile(Globals.ClientXmlpath);
+                //lv_gfx.ItemsSource = Globals.SelectedGFX.Config;
+                //lv_gfx.Items.Refresh();
+
+                // Read the XML file
+                try
+                {
+                    //if (Properties.Settings.Default.use_reshade) cb_reshade.IsChecked = true;
+
+                    StreamReader stream = new System.IO.StreamReader(Globals.ClientXmlpath);
+                    XmlTextReader reader = null;
+                    reader = new XmlTextReader(stream);
+
+                    while (reader.Read())
+                    {
+                        switch (reader.Name)
+                        {
+                            case "VERSIONNAME":
+                                Regex filter = new Regex(@"\d*\d");
+                                Version = filter.Match(reader.GetValue()).Value;
+                                //lab_version.Content = "Client Version: " + ClientManager.ClientInfo.Version;
+                                break;
+
+                            case "INSTALLPATH":
+                                InstallPath = reader.GetValue();
+                                //lab_path.Content = "Install Path: " + ClientManager.ClientInfo.InstallPath;
+                                break;
+
+                            case "EXECUTABLE":
+                                Executable = reader.GetValue();
+                                //lab_path.Content += ClientManager.ClientInfo.Executable;
+                                break;
+
+                            case "EXECCMD":
+                                //Filter arguments from path
+                                //lab_para.Content = "Latest Start Parameters: ";
+                                Regex regex = new Regex(@"(?<=^|\s)-(umbra.(\w)*|\w*)");
+                                string input = reader.GetValue();
+                                MatchCollection matchList = regex.Matches(input);
+
+                                foreach (Argument argument in ArgumentManager.ArgumentCollection)
+                                    foreach (Match parameter in matchList)
+                                        if (argument.Flag == parameter.Value && !argument.Blocker)
+                                            AccountArgumentManager.StopGap.IsSelected(parameter.Value, true);
+
+                                //RefreshUI();
+                                break;
+                        }
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Gw2 info file not found! Please choose the Directory manually!");
+                }
+            }
         }
 
         public static class ClientReg
@@ -54,7 +140,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             private static RegistryKey key { get { return Microsoft.Win32.Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("LaunchBuddy"); } }
 
-            public static void UpdateRegClients()                            
+            public static void UpdateRegClients()
             {
                 try
                 {

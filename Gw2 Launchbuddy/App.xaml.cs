@@ -28,6 +28,11 @@ namespace Gw2_Launchbuddy
         public static void RunParsed(Options options)
         {
             Globals.options = options;
+
+            // Load things before MainWindow
+            AccountManager.ImportExport.LoadAccountInfo();
+            ClientManager.ClientInfo.LoadClientInfo();
+
             if (!options.Silent)
             {
                 var app = new App();
@@ -38,8 +43,6 @@ namespace Gw2_Launchbuddy
             }
             else
             {
-                AccountManager.ImportExport.LoadAccountInfo();
-                Config.LoadConfig();
             }
             if(!String.IsNullOrWhiteSpace(options.Launch))
             {

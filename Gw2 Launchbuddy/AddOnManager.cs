@@ -199,11 +199,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
             set { }
             get
             {
-                ProcessStartInfo tmp = new ProcessStartInfo();
-                tmp.Arguments = args;
-                tmp.FileName = Path;
-                tmp.WorkingDirectory = new FileInfo(tmp.FileName).Directory.FullName;
-                return tmp;
+                return new ProcessStartInfo
+                {
+                    Arguments = Args,
+                    FileName = Path,
+                    WorkingDirectory = new FileInfo(Path).Directory.FullName
+                };
             }
         }
 
@@ -214,7 +215,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public bool IsLbAddon { set; get; }
 
         [XmlElement("Arguments")]
-        public string args { set; get; }
+        public string Args { set; get; }
 
         [XmlElement("Path")]
         public string Path { set; get; }
@@ -228,7 +229,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             this.Info = Info;
             this.IsMultilaunch = IsMultilaunch;
             this.IsLbAddon = IsLbAddon;
-            args = Info.Arguments;
+            Args = Info.Arguments;
             Path = Info.FileName;
         }
 

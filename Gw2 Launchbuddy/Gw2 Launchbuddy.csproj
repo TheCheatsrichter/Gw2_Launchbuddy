@@ -177,6 +177,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Extensions\ProcessExtensions.cs" />
+    <Compile Include="Extensions\XmlTextReaderExtensions.cs" />
     <Compile Include="Helpers\Builders.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\FileDialog.cs" />
@@ -363,6 +365,7 @@
     <Resource Include="Resources\donate.png" />
     <Content Include="Resources\Update Helper.exe" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
     <ItemGroup>

@@ -98,8 +98,8 @@ namespace Gw2_Launchbuddy
             //Setup
             donatepopup();
 
-            AccountManager.ImportExport.LoadAccountInfo(); // Load saved accounts from XML
-            Config.LoadConfig(); // loading the gw2 XML config file from AppData and loading user settings
+            //AccountManager.ImportExport.LoadAccountInfo(); // Load saved accounts from XML
+            LoadConfig(); // loading the gw2 XML config file from AppData and loading user settings
 
             Cinema_Accountlist.ItemsSource = listview_acc.ItemsSource = AccountManager.AccountCollection;
             arglistbox.ItemsSource = AccountArgumentManager.AccountArgumentCollection.Where(a => a.Argument.Active && a.Account == AccountManager.DefaultAccount);
@@ -442,7 +442,7 @@ namespace Gw2_Launchbuddy
                         if (win.ToString() == "Yes")
                         {
                             updateclient();
-                            Config.LoadConfig();
+                            LoadConfig();
                             checkversion();
                         }
                     }));
@@ -624,6 +624,22 @@ namespace Gw2_Launchbuddy
             sview.Refresh();
         }
 
+        private void LoadConfig()
+        {
+            cb_reshade.IsEnabled = true;
+            if (Properties.Settings.Default.use_reshade && cb_reshade.IsEnabled == true) cb_reshade.IsChecked = true;
+            if (Properties.Settings.Default.use_autologin == true) cb_login.IsChecked = true;
+
+            //Read the GFX Settings
+            lv_gfx.ItemsSource = Globals.SelectedGFX.Config;
+            lv_gfx.Items.Refresh();
+            
+            lab_version.Content = "Client Version: " + ClientManager.ClientInfo.Version;
+            lab_path.Content = "Install Path: " + ClientManager.ClientInfo.InstallPath;
+            lab_path.Content += ClientManager.ClientInfo.Executable;
+            lab_para.Content = "Latest Start Parameters: ";
+            RefreshUI();
+        }
 
         private string getlocation(string ip)
         {

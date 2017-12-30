@@ -7,6 +7,9 @@ using System.Diagnostics;
 using Gw2_Launchbuddy.Interfaces;
 using System.Windows;
 using System.Collections.ObjectModel;
+using Gw2_Launchbuddy.ObjectManagers;
+using System.Reflection;
+using Gw2_Launchbuddy.Extensions;
 
 namespace Gw2_Launchbuddy.Wrappers
 {
@@ -27,22 +30,6 @@ namespace Gw2_Launchbuddy.Wrappers
         }
     }
 
-    public static class ProcessExtensions
-    {
-        public static string CalculateProcessMD5(this Process Process)
-        {
-            var md5 = System.Security.Cryptography.MD5.Create();
-            var inputBytes = Encoding.ASCII.GetBytes(Process.StartTime.ToString() + Process.Id.ToString());
-            var hash = md5.ComputeHash(inputBytes);
-
-            var sb = new StringBuilder();
-
-            for (int i = 0; i < hash.Length; i++)
-                sb.Append(hash[i].ToString("X2"));
-
-            return sb.ToString();
-        }
-    }
     public class ProcessWrapper : Process, IProcessWrapper<ProcessWrapper>
     {
         public string MD5 { get => ProcessManager<ProcessWrapper>.CalculateProcessMD5(this); }
