@@ -60,7 +60,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        private static void LaunchGW2(Account Selected)
+        public static void LaunchGW2(Account Selected)
         {
             try
             {

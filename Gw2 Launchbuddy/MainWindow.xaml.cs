@@ -80,7 +80,10 @@ namespace Gw2_Launchbuddy
             {
                 Properties.Settings.Default.Reset();
             }
-
+            Init();
+        }
+        public void Init()
+        {
 #if !DEBUG
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionReport);
 
@@ -96,7 +99,7 @@ namespace Gw2_Launchbuddy
             donatepopup();
 
             AccountManager.ImportExport.LoadAccountInfo(); // Load saved accounts from XML
-            LoadConfig(); // loading the gw2 XML config file from AppData and loading user settings
+            Config.LoadConfig(); // loading the gw2 XML config file from AppData and loading user settings
 
             Cinema_Accountlist.ItemsSource = listview_acc.ItemsSource = AccountManager.AccountCollection;
             arglistbox.ItemsSource = AccountArgumentManager.AccountArgumentCollection.Where(a => a.Argument.Active && a.Account == AccountManager.DefaultAccount);
@@ -439,7 +442,7 @@ namespace Gw2_Launchbuddy
                         if (win.ToString() == "Yes")
                         {
                             updateclient();
-                            LoadConfig();
+                            Config.LoadConfig();
                             checkversion();
                         }
                     }));
@@ -621,126 +624,6 @@ namespace Gw2_Launchbuddy
             sview.Refresh();
         }
 
-        private void LoadConfig()
-        {
-            //Checking if path for ReShade Unlocker is saved
-
-            if (Properties.Settings.Default.reshadepath != "")
-            {
-                try
-                {
-                    Globals.unlockerpath = Properties.Settings.Default.reshadepath;
-                }
-                catch { }
-                cb_reshade.IsEnabled = true;
-            }
-
-            try
-            {
-                if (Properties.Settings.Default.use_reshade && cb_reshade.IsEnabled == true) cb_reshade.IsChecked = true;
-                if (Properties.Settings.Default.use_autologin == true) cb_login.IsChecked = true;
-
-                //if (Properties.Settings.Default.selected_acc != 0) listview_acc.SelectedIndex = Cinema_Accountlist.SelectedIndex = Properties.Settings.Default.selected_acc;
-            }
-            catch (Exception err)
-            {
-                MessageBox.Show("Error in UI setup. \n " + err.Message);
-            }
-
-            // Importing the XML file at AppData\Roaming\Guild Wars 2\
-            // This file also contains infos about the graphic settings
-
-            //Find the newest XML file in APPDATA (the XML files share the same name as their XML files -> multiple .xml files possible!)
-            string[] configfiles = new string[] { };
-            try
-            {
-                configfiles = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\", "*.exe.xml");
-            }
-            catch (Exception e)
-            {
-                //TODO: Handle corrupt/missing Guild Wars install
-                MessageBox.Show("Guild Wars may not be installed. \n " + e.Message);
-                return;
-            }
-            Globals.ClientXmlpath = "";
-            long max = 0;
-
-            foreach (string config in configfiles)
-            {
-                if (System.IO.File.GetLastWriteTime(config).Ticks > max)
-                {
-                    max = System.IO.File.GetLastWriteTime(config).Ticks;
-                    Globals.ClientXmlpath = config;
-                }
-            }
-
-            //Read the GFX Settings
-            Globals.SelectedGFX = GFXManager.ReadFile(Globals.ClientXmlpath);
-            lv_gfx.ItemsSource = Globals.SelectedGFX.Config;
-            lv_gfx.Items.Refresh();
-
-            // Read the XML file
-            try
-            {
-                if (Properties.Settings.Default.use_reshade) cb_reshade.IsChecked = true;
-
-                StreamReader stream = new System.IO.StreamReader(Globals.ClientXmlpath);
-                XmlTextReader reader = null;
-                reader = new XmlTextReader(stream);
-
-                while (reader.Read())
-                {
-                    switch (reader.Name)
-                    {
-                        case "VERSIONNAME":
-                            Regex filter = new Regex(@"\d*\d");
-                            ClientManager.ClientInfo.Version = filter.Match(getvalue(reader)).Value;
-                            lab_version.Content = "Client Version: " + ClientManager.ClientInfo.Version;
-                            break;
-
-                        case "INSTALLPATH":
-
-                            ClientManager.ClientInfo.InstallPath = getvalue(reader);
-                            lab_path.Content = "Install Path: " + ClientManager.ClientInfo.InstallPath;
-                            break;
-
-                        case "EXECUTABLE":
-
-                            ClientManager.ClientInfo.Executable = getvalue(reader);
-                            lab_path.Content += ClientManager.ClientInfo.Executable;
-                            break;
-
-                        case "EXECCMD":
-                            //Filter arguments from path
-                            lab_para.Content = "Latest Start Parameters: ";
-                            Regex regex = new Regex(@"(?<=^|\s)-(umbra.(\w)*|\w*)");
-                            string input = getvalue(reader);
-                            MatchCollection matchList = regex.Matches(input);
-
-                            foreach (Argument argument in ArgumentManager.ArgumentCollection)
-                                foreach (Match parameter in matchList)
-                                    if (argument.Flag == parameter.Value && !argument.Blocker)
-                                        AccountArgumentManager.StopGap.IsSelected(parameter.Value, true);
-
-                            RefreshUI();
-                            break;
-                    }
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Gw2 info file not found! Please choose the Directory manually!");
-            }
-        }
-
-        private string getvalue(XmlTextReader reader)
-        {
-            while (reader.MoveToNextAttribute())
-            {
-                return reader.Value;
-            }
-            return null;
-        }
 
         private string getlocation(string ip)
         {

@@ -2,6 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Windows;
+using Gw2_Launchbuddy.ObjectManagers;
 
 namespace Gw2_Launchbuddy
 {
@@ -34,6 +35,15 @@ namespace Gw2_Launchbuddy
 #if DEBUG
                 app.Run();
 #endif
+            }
+            else
+            {
+                AccountManager.ImportExport.LoadAccountInfo();
+                Config.LoadConfig();
+            }
+            if(!String.IsNullOrWhiteSpace(options.Launch))
+            {
+                LaunchManager.LaunchGW2(AccountManager.Account(options.Launch));
             }
         }
     }
