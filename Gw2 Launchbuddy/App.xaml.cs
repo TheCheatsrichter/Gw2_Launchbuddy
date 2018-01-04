@@ -33,20 +33,16 @@ namespace Gw2_Launchbuddy
             AccountManager.ImportExport.LoadAccountInfo();
             ClientManager.ClientInfo.LoadClientInfo();
 
+            if(!String.IsNullOrWhiteSpace(options.Launch))
+            {
+                LaunchManager.LaunchGW2(AccountManager.Account(options.Launch));
+            }
+
             if (!options.Silent)
             {
                 var app = new App();
                 app.InitializeComponent();
-#if DEBUG
                 app.Run();
-#endif
-            }
-            else
-            {
-            }
-            if(!String.IsNullOrWhiteSpace(options.Launch))
-            {
-                LaunchManager.LaunchGW2(AccountManager.Account(options.Launch));
             }
         }
     }

@@ -96,13 +96,13 @@ namespace Gw2_Launchbuddy
 #endif
 
             //Setup
-            donatepopup();
+            DonatePopup();
 
             //AccountManager.ImportExport.LoadAccountInfo(); // Load saved accounts from XML
             LoadConfig(); // loading the gw2 XML config file from AppData and loading user settings
 
             Cinema_Accountlist.ItemsSource = listview_acc.ItemsSource = AccountManager.AccountCollection;
-            arglistbox.ItemsSource = AccountArgumentManager.AccountArgumentCollection.Where(a => a.Argument.Active && a.Account == AccountManager.DefaultAccount);
+            argListBox.ItemsSource = AccountArgumentManager.AccountArgumentCollection.Where(a => a.Argument.Active && a.Account == AccountManager.DefaultAccount);
 
             Thread checkver = new Thread(checkversion);
             checkver.IsBackground = true;
@@ -125,7 +125,7 @@ namespace Gw2_Launchbuddy
             cb_useinstancegui.IsChecked = Properties.Settings.Default.useinstancegui;
         }
 
-        private void donatepopup()
+        private void DonatePopup()
         {
             if ((Properties.Settings.Default.counter_launches % 100) == 5)
             {
@@ -434,78 +434,49 @@ namespace Gw2_Launchbuddy
         {
             try
             {
-                if (!isclientuptodate() && Globals.version_api != null)
+                string versioninfo = "Build Version: " + ClientManager.ClientInfo.Version;
+
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    lab_version.Foreground = new SolidColorBrush(Colors.Red);
+                    if (Api.Online)
+                    {
+                        if (ClientManager.ClientInfo.IsUpToDate)
+                        {
+                            versioninfo += "\tStatus: Up to date!";
+                            lab_version.Foreground = new SolidColorBrush(Colors.Green);
+                        }
+                        else
+                        {
+                            versioninfo += "\tStatus: Outdated!";
+                        }
+                    }
+                    else
+                    {
+                        versioninfo += "\tStatus: Unknown! (API down?)";
+                    }
+
+                    lab_version.Content = versioninfo;
+                }));
+
+                if (Api.Online && !ClientManager.ClientInfo.IsUpToDate)
                 {
                     Dispatcher.Invoke(new Action(() =>
                     {
                         MessageBoxResult win = MessageBox.Show("A new Build of Gw2 is available! Not updating can cause Gw2 Launchbuddy to not work! Update now?", "Client Build Info", MessageBoxButton.YesNo, MessageBoxImage.Question);
                         if (win.ToString() == "Yes")
                         {
-                            updateclient();
+                            ClientManager.UpdateClient();
                             LoadConfig();
                             checkversion();
                         }
                     }));
                 }
-                string versioninfo = "Build Version: " + ClientManager.ClientInfo.Version;
-
-                Dispatcher.Invoke(new Action(() =>
-                {
-                    if (Globals.version_api == ClientManager.ClientInfo.Version)
-                    {
-                        ClientManager.ClientInfo.IsUpToDate = true;
-                        versioninfo += "\tStatus: up to date!";
-                        lab_version.Foreground = new SolidColorBrush(Colors.Green);
-                    }
-                    else
-                    {
-                        if (Globals.version_api != null)
-                        {
-                            versioninfo += "\tStatus: outdated!";
-                            lab_version.Foreground = new SolidColorBrush(Colors.Red);
-                        }
-                        else
-                        {
-                            ClientManager.ClientInfo.IsUpToDate = true;
-                            versioninfo += "\tStatus: unknown!(API down)";
-                            lab_version.Foreground = new SolidColorBrush(Colors.Red);
-                        }
-                    }
-
-                    lab_version.Content = versioninfo;
-                }));
             }
             catch (Exception err)
             {
                 MessageBox.Show(err.Message);
             }
-        }
-
-        private bool isclientuptodate()
-        {
-            WebClient downloader = new WebClient();
-            Regex filter = new Regex(@"\d*\d");
-            try
-            {
-                Globals.version_api = filter.Match(downloader.DownloadString("https://api.guildwars2.com/v2/build")).Value;
-            }
-            catch
-            {
-                ClientManager.ClientInfo.IsUpToDate = true;
-                MessageBox.Show("The official Gw2 API is not reachable / down! Launchbuddy can't make sure that your game client is up to date.\nPlease keep your game manually up to date to avoid crashes!");
-            }
-
-            if (Globals.version_api == ClientManager.ClientInfo.Version) return true;
-            return false;
-        }
-
-        private void updateclient()
-        {
-            Process progw2 = new Process();
-            ProcessStartInfo infoprogw2 = new ProcessStartInfo { FileName = ClientManager.ClientInfo.InstallPath + ClientManager.ClientInfo.Executable, Arguments = "-image" };
-            progw2.StartInfo = infoprogw2;
-            progw2.Start();
-            progw2.WaitForExit();
         }
 
         private void setupend()
@@ -633,7 +604,7 @@ namespace Gw2_Launchbuddy
             //Read the GFX Settings
             lv_gfx.ItemsSource = Globals.SelectedGFX.Config;
             lv_gfx.Items.Refresh();
-            
+
             lab_version.Content = "Client Version: " + ClientManager.ClientInfo.Version;
             lab_path.Content = "Install Path: " + ClientManager.ClientInfo.InstallPath;
             lab_path.Content += ClientManager.ClientInfo.Executable;
@@ -840,9 +811,9 @@ namespace Gw2_Launchbuddy
 
         private void arglistbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (arglistbox.SelectedItem != null)
+            if (argListBox.SelectedItem != null)
             {
-                var item = (Gw2_Launchbuddy.ObjectManagers.AccountArgument)arglistbox.SelectedItem;
+                var item = (Gw2_Launchbuddy.ObjectManagers.AccountArgument)argListBox.SelectedItem;
                 lab_descr.Content = "Description (" + item.Argument.Flag + "):";
 
                 textblock_descr.Text = ArgumentManager.ArgumentCollection.Where(a => a.Flag == item.Argument.Flag).Select(a => a.Description).FirstOrDefault() ?? "Description missing! (PLEASE REPORT)";

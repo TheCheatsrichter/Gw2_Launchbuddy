@@ -14,6 +14,7 @@ using Gw2_Launchbuddy.Helpers;
 using System.IO;
 using System.Xml;
 using Gw2_Launchbuddy.Extensions;
+using System.Net;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -40,12 +41,23 @@ namespace Gw2_Launchbuddy.ObjectManagers
             //Info about the client
             private static string executable;
 
-            public static bool IsUpToDate { get; set; }
+            private static bool? _IsUpToDate;
+            public static bool IsUpToDate
+            {
+                get
+                {
+                    if (!_IsUpToDate.HasValue && Api.Online)
+                    {
+                        _IsUpToDate = Api.ClientBuild == Version;
+                    }
+                    return _IsUpToDate.Value;
+                }
+            }
             public static string InstallPath { get; set; }
             public static string Executable { get { return executable; } set { executable = value; ProcessName = Regex.Replace(value, @"\.exe(?=$)", "", RegexOptions.IgnoreCase); } }
             public static string FullPath { get { return InstallPath + Executable; } }
             public static string ProcessName { get; private set; }
-            public static string Version { get; set; }
+            public static string Version { get; private set; }
 
             public static void LoadClientInfo()
             {
@@ -126,7 +138,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 }
                 catch
                 {
-                    MessageBox.Show("Gw2 info file not found! Please choose the Directory manually!");
+                    MessageBox.Show("Gw2 info file not found! Please choose the directory manually!");
                 }
             }
         }
@@ -211,10 +223,23 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 {
 #if DEBUG
                     System.Diagnostics.Debug.WriteLine("Reg key likely does not exist: " + e.Message);
-                    return new List<string>();
 #endif
+                    return new List<string>();
                 }
             }
+        }
+        
+        public static void UpdateClient()
+        {
+            // Needs much more:
+            //   - Check for other clients running
+            //   - Close other clients after prompt
+            //   - After first exit wait for new client to start
+            //   - Force close new client
+            //   - Run -image again so we can wait for update to end
+            var client = new Client();
+            client.Arguments = "-image";
+            client.StartAndWait();
         }
     }
 

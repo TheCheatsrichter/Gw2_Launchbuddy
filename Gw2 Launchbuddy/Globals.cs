@@ -40,5 +40,8 @@ namespace Gw2_Launchbuddy
 
         [Option('l', "launch", HelpText = "Launch with Nickname of saved account.")]
         public string Launch { get; set; }
+
+        [Option('m', "minimized", HelpText = "Run Launchbuddy but open minimized.")]
+        public string Minimized { get; set; }
     }
 }
