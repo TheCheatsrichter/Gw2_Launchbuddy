@@ -1094,6 +1094,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_close_Click(object sender, RoutedEventArgs e)
         {
+            foreach (var plugin in PluginManager.PluginCollection) plugin.Exit();
             Properties.Settings.Default.Save();
             Application.Current.Shutdown();
         }

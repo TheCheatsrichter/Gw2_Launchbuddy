@@ -254,6 +254,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         private void Client_Started(object sender, EventArgs e)
         {
             ClientManager.ClientReg.RegClient(this);
+            foreach (var plugin in PluginManager.PluginCollection) plugin.Client_PostLaunch();
         }
 
         new public bool Start()
@@ -261,12 +262,15 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             EnableRaisingEvents = true;
             Exited += Client_Exited;
+
+            foreach (var plugin in PluginManager.PluginCollection) plugin.Client_PreLaunch();
             return base.Start();
         }
 
         private void Client_Exited(object sender, EventArgs e)
         {
             Application.Current.Dispatcher.Invoke(delegate { AccountClientManager.Remove(this); });
+            foreach (var plugin in PluginManager.PluginCollection) plugin.Client_Exit();
             Dispose();
         }
 

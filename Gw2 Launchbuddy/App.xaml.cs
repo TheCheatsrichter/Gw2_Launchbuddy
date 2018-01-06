@@ -32,6 +32,7 @@ namespace Gw2_Launchbuddy
             // Load things before MainWindow
             AccountManager.ImportExport.LoadAccountInfo();
             ClientManager.ClientInfo.LoadClientInfo();
+            PluginManager.DoInits();
 
             if(!String.IsNullOrWhiteSpace(options.Launch))
             {

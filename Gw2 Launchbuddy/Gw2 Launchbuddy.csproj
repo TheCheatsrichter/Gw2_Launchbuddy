@@ -182,6 +182,12 @@
     <Compile Include="Helpers\Builders.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\FileDialog.cs" />
+    <Content Include="..\TestPlugin\bin\Debug\TestPlugin.dll">
+      <Link>Plugins\TestPlugin.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Interfaces\IPlugin.cs" />
+    <Content Include="Interfaces\IPlugin.vb" />
     <Compile Include="Interfaces\IProcessWrapper.cs" />
     <Compile Include="ObjectManagers\AccountArgumentManager.cs" />
     <Compile Include="ObjectManagers\AccountManager.cs" />
@@ -366,7 +372,12 @@
     <Resource Include="Resources\donate.png" />
     <Content Include="Resources\Update Helper.exe" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\PluginContract\PluginContract.csproj">
+      <Project>{fb87d35e-72c7-4fff-9584-ca3ec177d188}</Project>
+      <Name>PluginContract</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
     <ItemGroup>

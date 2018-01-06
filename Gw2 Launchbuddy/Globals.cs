@@ -32,7 +32,7 @@ namespace Gw2_Launchbuddy
 
     public class Options
     {
-        [Option('s', "silent", HelpText = "Run Launchbuddy silently.")]
+        [Option('q', "silent", HelpText = "Run Launchbuddy silently.")]
         public bool Silent { get; set; }
 
         [Option("settings", HelpText = "Use Settings.json instead of command line Arguments.")]
@@ -43,5 +43,8 @@ namespace Gw2_Launchbuddy
 
         [Option('m', "minimized", HelpText = "Run Launchbuddy but open minimized.")]
         public string Minimized { get; set; }
+
+        [Option('s', "safe", HelpText = "Do not load plugins.")]
+        public bool Safe { get; set; }
     }
 }
