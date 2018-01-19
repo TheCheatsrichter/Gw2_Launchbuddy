@@ -39,7 +39,7 @@ namespace Gw2_Launchbuddy
         [Option("settings", HelpText = "Use Settings.json instead of command line Arguments.")]
         public bool Settings { get; set; }
 
-        [Option('l', "launch", Separator = ':', HelpText = "Launch with Nicknames of saved accounts. Use | as a separator.")]
+        [Option('l', "launch", Separator = ':', HelpText = "Launch with Nicknames of saved accounts. Use : as a separator.")]
         public IEnumerable<string> Launch { get; set; }
 
         [Option('m', "minimized", HelpText = "Run Launchbuddy but open minimized.")]
