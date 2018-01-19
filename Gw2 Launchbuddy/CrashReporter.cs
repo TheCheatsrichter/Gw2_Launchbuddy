@@ -39,17 +39,14 @@ namespace Gw2_Launchbuddy
 
         public static void ReportCrashToSingle(Exception err, string targetname)
         {
-            ReportCrash reportCrash = new ReportCrash
-            {
-                ToEmail = emails.FirstOrDefault(a => a.DisplayName == targetname).Address
-            };
+            ReportCrash reportCrash = new ReportCrash(emails.FirstOrDefault(a => a.DisplayName == targetname).Address);
 
             reportCrash.Send(err);
         }
 
         public static void ReportCrashToAll(Exception err)
         {
-            ReportCrash reportCrash = new ReportCrash();
+            ReportCrash reportCrash = new ReportCrash(null);
 
             foreach (MailAddress email in emails)
             {

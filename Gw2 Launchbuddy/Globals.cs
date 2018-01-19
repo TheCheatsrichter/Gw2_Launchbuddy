@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using Gw2_Launchbuddy.ObjectManagers;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -13,7 +14,7 @@ namespace Gw2_Launchbuddy
     {
         public static GUI_ApplicationManager Appmanager = new GUI_ApplicationManager(); //Should not be created here/should have its own controller.
 
-        public static ObservableCollection<AccountClient> LinkedAccs = new ObservableCollection<AccountClient>(); //Should nto be needed?
+        public static ObservableCollection<AccountClient> LinkedAccs = new ObservableCollection<AccountClient>(); //Should not be needed?
 
         //public static List<Account> selected_accs = new List<Account>();
         public static string unlockerpath, version_api; //Should be split out into respective managers
@@ -38,13 +39,16 @@ namespace Gw2_Launchbuddy
         [Option("settings", HelpText = "Use Settings.json instead of command line Arguments.")]
         public bool Settings { get; set; }
 
-        [Option('l', "launch", HelpText = "Launch with Nickname of saved account.")]
-        public string Launch { get; set; }
+        [Option('l', "launch", Separator = ':', HelpText = "Launch with Nicknames of saved accounts. Use | as a separator.")]
+        public IEnumerable<string> Launch { get; set; }
 
         [Option('m', "minimized", HelpText = "Run Launchbuddy but open minimized.")]
         public string Minimized { get; set; }
 
         [Option('s', "safe", HelpText = "Do not load plugins.")]
         public bool Safe { get; set; }
+
+        [Option('a', "args", Separator = ':', HelpText = "Arguments to use when launching with -launch. Use : as a separator, no arguments with input.")]
+        public IEnumerable<string> Args { get; set; }
     }
 }

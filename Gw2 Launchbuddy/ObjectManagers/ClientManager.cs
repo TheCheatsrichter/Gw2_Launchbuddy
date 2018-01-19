@@ -228,7 +228,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 }
             }
         }
-        
+
         public static void UpdateClient()
         {
             // Needs much more:
@@ -251,25 +251,77 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Started += Client_Started;
         }
 
+        public bool Launch()
+        {
+            if (EnableRaisingEvents == true) return false;
+
+            var AccountClient = AccountClientManager.AccountClientCollection.Where(a => a.Client == this).Single();
+
+            if (AccountClient.Account != AccountManager.DefaultAccount)
+                AccountClient.Account = new Account("Acc Nr" + Globals.LinkedAccs.Count, null, null);
+
+            Globals.LinkedAccs.Add(AccountClient);
+            GFXManager.UseGFX(AccountClient.Account.ConfigurationPath);
+
+            return Start();
+        }
+
         private void Client_Started(object sender, EventArgs e)
         {
             ClientManager.ClientReg.RegClient(this);
+#if DEBUG
+            System.Diagnostics.Debug.Print("Mutex Kill Attempt");
+#endif
+            for (var i = 0; i < 10; i++)
+            {
+                try
+                {
+                    //if (HandleManager.ClearMutex(ClientManager.ClientInfo.ProcessName, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros)) i = 10;
+                    if (HandleManager.KillHandle(this, "AN-Mutex-Window-Guild Wars 2", false)) i = 10;
+                }
+                catch (Exception err)
+                {
+                    // Attempt to allow true broken states to fail.
+                    if (err is InvalidOperationException) i = 10;
+#if DEBUG
+                    // Attempt to allow race conditions in DEBUG mode.
+                    System.Diagnostics.Debug.Print(err.Message);
+#else
+                    // Tell the user what happened... Maybe?
+                    if (i = 10) MessageBox.Show("Mutex release failed, will try again. Please provide the following if you want to help fix this problem: \r\n" + err.GetType().ToString() + "\r\n" + err.Message + "\r\n" + err.StackTrace);
+#endif
+                }
+
+            }
+
+            EnableRaisingEvents = true;
+            Exited += Client_Exited;
             foreach (var plugin in PluginManager.PluginCollection) plugin.Client_PostLaunch();
         }
 
         new public bool Start()
-
         {
-            EnableRaisingEvents = true;
-            Exited += Client_Exited;
-
             foreach (var plugin in PluginManager.PluginCollection) plugin.Client_PreLaunch();
-            return base.Start();
+
+            try
+            {
+                return base.Start();
+            }
+            catch (Exception err)
+            {
+                System.Windows.MessageBox.Show("Could not launch Gw2. Invalid path?\n" + err.Message);
+                Application.Current.Dispatcher.Invoke(delegate { AccountClientManager.Remove(this); });
+                return false;
+            }
         }
 
         private void Client_Exited(object sender, EventArgs e)
         {
-            Application.Current.Dispatcher.Invoke(delegate { AccountClientManager.Remove(this); });
+            try
+            {
+                Application.Current.Dispatcher.Invoke(delegate { AccountClientManager.Remove(this); });
+            }
+            catch (Exception err) { }
             foreach (var plugin in PluginManager.PluginCollection) plugin.Client_Exit();
             Dispose();
         }

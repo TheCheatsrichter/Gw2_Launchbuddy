@@ -64,46 +64,11 @@ namespace Gw2_Launchbuddy
         {
             try
             {
-                var gw2Client = Selected.CreateClient();
-                if (Selected != AccountManager.DefaultAccount)
-                {
-                    Globals.LinkedAccs.Add(new AccountClient(Selected, gw2Client));
-                    GFXManager.UseGFX(Selected.ConfigurationPath);
-                }
-                else
-                {
-                    Account undefacc = new Account("Acc Nr" + Globals.LinkedAccs.Count, null, null);
-                    Globals.LinkedAccs.Add(new AccountClient(undefacc, gw2Client));
-                }
-
-                try
-                {
-                    gw2Client.Start();
-                }
-                catch (Exception err)
-                {
-                    System.Windows.MessageBox.Show("Could not launch Gw2. Invalid path?\n" + err.Message);
-                }
-                for (int i = 0; i < 10; i++)
-                {
-                    try
-                    {
-                        if (HandleManager.ClearMutex(ClientManager.ClientInfo.ProcessName, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros)) i = 10;
-                        //gw2Client.Process.WaitForInputIdle(10000);
-                        //Thread.Sleep(1000);
-                        //Register the new client to prevent problems.
-                        //UpdateRegClients();
-                        //Thread.Sleep(3000);
-                    }
-                    catch (Exception err)
-                    {
-                        MessageBox.Show(err.Message);
-                    }
-                }
+                Selected.CreateClient().Launch();
             }
             catch (Exception err)
             {
-                MessageBox.Show(err.Message);
+                MessageBox.Show("Launch failure. If you want to help, please provide the following:\r\n" + err.GetType().ToString() + "\r\n" + err.Message + "\r\n" + err.StackTrace);
             }
         }
     }
