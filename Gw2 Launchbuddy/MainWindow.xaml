@@ -7,12 +7,11 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" x:Class="Gw2_Launchbuddy.MainWindow"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         x:Name="myWindow"
-        WindowStyle="None"
         ShowInTaskbar="true"
 
     
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
-        Title="Gw2 Launchbuddy V 1.5.1" Height="900" Width="1600" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="NoResize">
+        Title="Gw2 Launchbuddy V 1.5.1" MinHeight="700" MinWidth="800" Height="700" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None">
     <Window.Resources>
         <Storyboard x:Key="anim_imgfadeout">
             <DoubleAnimation 
@@ -88,7 +87,6 @@
         <SolidColorBrush x:Key="ListBorder" Color="#828790"/>
 
 
-
         <Style x:Key="Style_lvacc" TargetType="{x:Type ListView}">
 
             <Setter Property="Background" Value="#4CFFFFFF"/>
@@ -158,21 +156,18 @@
 
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="OptionsWidth" Width="700"/>
-            <ColumnDefinition x:Name="CinemaWidth" Width="100*"/>
+            <ColumnDefinition x:Name="OptionsWidth" Width="700*"/>
+            <ColumnDefinition x:Name="CinemaWidth" Width="200*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition x:Name="WindowOptionsHeight" Height="30"/>
             <RowDefinition x:Name="OptionsHeight" Height="650"/>
             <RowDefinition x:Name="CinemaHeight" Height="100*"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" HorizontalAlignment="Left">
-            <Label Content="Gw2 Launchbuddy V1.5.1 BETA" FontSize="16" FontWeight="Bold" Foreground="White" >
-                <Label.Background>
-                    <ImageBrush ImageSource="Resources/opacitymask.png"/>
-                </Label.Background>
-            </Label>
-        </StackPanel>
+
+
+        <MediaElement x:Name="Cinema_MediaPlayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual" Volume="{Binding Value, ElementName=sl_volumecontrol}" MediaEnded="Cinema_MediaPlayer_MediaEnded"/>
+
 
         <Image x:Name="img_slideshow" Source="Resources/loginwindow.png" Grid.ColumnSpan="2" Grid.RowSpan="3" RenderTransformOrigin="0.5,0.5">
             <Image.OpacityMask>
@@ -187,55 +182,6 @@
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
-        <MediaElement x:Name="Cinema_MediaPlayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual" Volume="{Binding Value, ElementName=sl_volumecontrol}" MediaEnded="Cinema_MediaPlayer_MediaEnded"/>
-
-        <StackPanel x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="1" Background="#4CFFFFFF">
-            <StackPanel.OpacityMask>
-                <ImageBrush ImageSource="Resources/opacitymask_tile.png"/>
-            </StackPanel.OpacityMask>
-            <StackPanel.Triggers>
-                <EventTrigger RoutedEvent="UIElement.MouseEnter">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ColorAnimation
-								Storyboard.TargetName="WindowOptionsColum" 
-								Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
-								To="#4CFFFFFF" Duration="0:0:1"
-                        />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-                <EventTrigger RoutedEvent="UIElement.MouseLeave">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ColorAnimation
-								Storyboard.TargetName="WindowOptionsColum" 
-								Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
-								To="Transparent" Duration="0:0:1"  
-                        />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </StackPanel.Triggers>
-            <WrapPanel x:Name="VolumeControl" MouseLeave="WrapPanel_MouseLeave">
-                <Button x:Name="bt_mute" Width="40"   BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="bt_mute_Click" MouseEnter="bt_mute_MouseEnter" >
-                    <Image x:Name="img_mutebutton" Source="Resources/Icons/speaker_loud.png"/>
-                </Button>
-                <Slider x:Name="sl_volumecontrol" Width="150" Orientation="Horizontal" Visibility="Collapsed" LargeChange="0.1" Maximum="1" ValueChanged="sl_volumecontrol_ValueChanged" SmallChange="0.05" Value="0.9"/>
-            </WrapPanel>
-            <Button x:Name="bt_ShowSettings" Width="30" Click="bt_ShowSettings_Click" Height="30" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
-                <Image Source="Resources/Icons/settings.png"/>
-            </Button>
-            <Button x:Name="bt_cinema" Width="40" Click="bt_cinema_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
-                <Image Source="Resources/Icons/film.png"/>
-            </Button>
-            <Button x:Name="bt_minimize" Width="40" Click="bt_minimize_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
-                <Image Source="Resources/Icons/minimize.png"/>
-            </Button>
-            <Button x:Name="bt_close" Width="40"  Click="bt_close_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
-                <Image Source="Resources/Icons/error.png"/>
-            </Button>
-        </StackPanel>
 
         <Canvas x:Name="Canvas_Custom_UI">
             <Canvas x:Name="Canvas_login" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0">
@@ -285,11 +231,63 @@
                 </StackPanel>
             </Canvas>
         </Canvas>
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" Opacity="0.75">
+            <Image Source="Resources/opacitymask.png" Stretch="Fill"></Image>
+            <Label Grid.Row="0" Content="Gw2 Launchbuddy V1.5.3 BETA" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+        </Grid>
+
+        <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#4CFFFFFF">
+            <StackPanel.OpacityMask>
+                <ImageBrush ImageSource="Resources/opacitymask_tile.png"/>
+            </StackPanel.OpacityMask>
+            <StackPanel.Triggers>
+                <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+								Storyboard.TargetName="WindowOptionsColum" 
+								Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+								To="#4CFFFFFF" Duration="0:0:1"
+                        />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+								Storyboard.TargetName="WindowOptionsColum" 
+								Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)"
+								To="Transparent" Duration="0:0:1"  
+                        />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </StackPanel.Triggers>
+            <WrapPanel x:Name="VolumeControl" MouseLeave="WrapPanel_MouseLeave">
+                <Button x:Name="bt_mute" Width="40"   BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="bt_mute_Click" MouseEnter="bt_mute_MouseEnter" >
+                    <Image x:Name="img_mutebutton" Source="Resources/Icons/speaker_loud.png"/>
+                </Button>
+                <Slider x:Name="sl_volumecontrol" Width="150" Orientation="Horizontal" Visibility="Collapsed" LargeChange="0.1" Maximum="1" ValueChanged="sl_volumecontrol_ValueChanged" SmallChange="0.05" Value="0.9"/>
+            </WrapPanel>
+            <Button x:Name="bt_ShowSettings" Width="30" Click="bt_ShowSettings_Click" Height="30" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
+                <Image Source="Resources/Icons/settings.png"/>
+            </Button>
+            <Button x:Name="bt_cinema" Width="40" Click="bt_cinema_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
+                <Image Source="Resources/Icons/film.png"/>
+            </Button>
+            <Button x:Name="bt_minimize" Width="40" Click="bt_minimize_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
+                <Image Source="Resources/Icons/minimize.png"/>
+            </Button>
+            <Button x:Name="bt_close" Width="40"  Click="bt_close_Click" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" >
+                <Image Source="Resources/Icons/error.png"/>
+            </Button>
+        </StackPanel>
 
 
-        <Grid  x:Name="SettingsGrid" Grid.Row="1" Background="White" Width="700" Height="650" Grid.RowSpan="3" Grid.ColumnSpan="3">
+        <Grid  x:Name="SettingsGrid" Grid.Row="1" Background="White"  Grid.RowSpan="3" Grid.ColumnSpan="3">
             <Grid.RowDefinitions>
-                <RowDefinition Height="100*" MinHeight="550"/>
+                <RowDefinition Height="100*"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
@@ -299,37 +297,26 @@
                 <Label Content="Used Addons:" x:Name="lab_usedaddons"/>
             </StackPanel>
 
-            <Grid Margin="20,5" Grid.Row="2" Background="Black">
-                <Grid.OpacityMask>
-                    <ImageBrush ImageSource="Resources/opacitymask.png"/>
-                </Grid.OpacityMask>
+            <Grid Margin="20,5" Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50*"/>
                     <ColumnDefinition Width="50*"/>
                 </Grid.ColumnDefinitions>
-
-                <Button x:Name="bt_launch" Grid.ColumnSpan="2"  Click="bt_launch_Click" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0" BorderBrush="Black" Background="#CC000000">
-                    <Label Content="Launch Guild Wars 2" Background="Black" Foreground="White" FontSize="18" FontStyle="Italic"/>
+                <Button x:Name="bt_launch" Grid.ColumnSpan="2"  Click="bt_launch_Click" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0" BorderThickness="0">
+                    <Label Content="Launch Guild Wars 2" Foreground="White" FontSize="19" FontStyle="Italic"/>
                 </Button>
                 <!--<Button x:Name="bt_shortcut" Content="Create Shortcut (Coming back soon)" Grid.Column="1" Grid.Row="1"  Click="bt_shortcut_Click" BorderThickness="1" Margin="5,0,0,0" IsEnabled="false"/>-->
             </Grid>
 
-            <TabControl x:Name="tab_options" Grid.Row="0" SelectionChanged="tab_options_SelectionChanged" MouseLeave="tab_options_MouseLeave">
+            <TabControl x:Name="tab_options" Grid.Row="0" SelectionChanged="tab_options_SelectionChanged" MouseLeave="tab_options_MouseLeave" TabStripPlacement="Left" BorderBrush="White">
                 <TabControl.Background>
-                    <ImageBrush ImageSource="/Resources/launchbuddyback.png" Stretch="Uniform" AlignmentX="Right" Opacity="0.15" >
-                        <ImageBrush.Transform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform/>
-                                <TranslateTransform X="125"/>
-                            </TransformGroup>
-                        </ImageBrush.Transform>
-                    </ImageBrush>
+                    <ImageBrush/>
                 </TabControl.Background>
                 <TabItem Header="General">
+
                     <StackPanel>
-                        <Grid Margin="0,-3,0,0">
+                        <Button Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"  FontWeight="Bold" Margin="0,0,0,-20" ToolTip="Overview your general gw2 client details and choose basic command line arguments by checking the corresponding checkbox next to it"/>
+                            <Grid Margin="0,-3,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="7*"/>
                                 <ColumnDefinition Width="424*"/>
@@ -337,28 +324,34 @@
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30*"/>
-                                <RowDefinition Height="80*"/>
+                                <RowDefinition Height="80"/>
                             </Grid.RowDefinitions>
 
-                            <Label x:Name="lab_about" Content="Gw2 Launchbuddy by TheCheatsrichter" Grid.Row="0" Grid.Column="2" FontWeight="Bold" Height="29" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
                             <!--
                             <Button x:Name="bt_quaggan"  Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Height="75" Click="bt_quaggan_Click" Margin="0,26,0,4" Grid.RowSpan="2">
                                 <Image Source="Resources/quaggan.png"/>
                             </Button>
                             -->
 
-                            <Label x:Name="label" Content="Gw2 Client Details:" HorizontalAlignment="Left" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+                            <Label x:Name="label" Content="Gw2 Client Details:" HorizontalAlignment="Left" Grid.ColumnSpan="2" Style="{StaticResource H1}"/>
                             <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
                                 <Label x:Name="lab_version" Content="Build Version:" />
                                 <Label x:Name="lab_para" Content="Latest Startparameters:" Grid.Column="1" Grid.Row="1" />
                                 <Label x:Name="lab_path" Content="Install Path:" Grid.Column="1" Grid.Row="1" />
                             </StackPanel>
-                            <Image x:Name="bt_patreon" Source="Resources/patreon_button.png" Grid.Column="2" Grid.Row="1" VerticalAlignment="Bottom" Height="40" MouseDown="bt_patreon_MouseDown"/>
-                            <Image Source="Resources/donate.png" Grid.Column="2" Grid.Row="1" VerticalAlignment="Top" Height="40" MouseDown="bt_donate_Click" />
-                            <Button x:Name="bt_installpath" Content="Set Directory" Click="bt_installpath_Click" Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom"  BorderThickness="1" Width="80" HorizontalAlignment="Right"/>
-                        </Grid>
+                            <Grid Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="50*"/>
+                                    <RowDefinition Height="50*"/>
+                                </Grid.RowDefinitions>
+                                <Image x:Name="bt_patreon" Source="Resources/patreon_button.png" Grid.Row="1" VerticalAlignment="Bottom" MouseDown="bt_patreon_MouseDown"/>
+                                <Image Source="Resources/donate.png"  VerticalAlignment="Top" Height="40" MouseDown="bt_donate_Click" />
+                            </Grid>
 
-                        <Grid Grid.Row="1" Margin="5,0,0,0">
+                            <Button x:Name="bt_installpath" Content="Set Directory" Click="bt_installpath_Click" Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom"  BorderThickness="1" Width="100" HorizontalAlignment="Right" Margin="0,0,0,5"/>
+                        </Grid>
+                        <Separator Margin="5"/>
+                        <Grid Grid.Row="1" Margin="5,0,5,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"/>
                                 <RowDefinition Height="100*"/>
@@ -398,16 +391,16 @@
                                 <CheckBox Content="-umbra gpu" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
                                 <CheckBox Content="-windowed" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
                             </ListBox>
-                            <Label x:Name="lab_descr" Content="Description (Wiki):"  FontSize="16" FontWeight="Bold"  Grid.Column="1"/>
+                            <Label x:Name="lab_descr" Content="Description (Wiki):" Grid.Column="1" Style="{StaticResource H2}"/>
                             <TextBlock x:Name="textblock_descr" TextWrapping="Wrap" FontSize="13.333" Grid.Row="1" Grid.Column="1" Margin="5,0"/>
-                            <Label x:Name="lab_arglist" Content="Arguments:" FontSize="16" FontWeight="Bold" Grid.Row="0"/>
+                            <Label x:Name="lab_arglist" Content="Arguments:" Grid.Row="0" Style="{StaticResource H2}"/>
 
                         </Grid>
                     </StackPanel>
                 </TabItem>
 
                 <TabItem Header="Account Manager">
-                    <Grid Grid.Row="3" Margin="5,0"  >
+                    <Grid Grid.Row="3" Margin="0,0"  >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="190*"/>
                             <ColumnDefinition Width="190*"/>
@@ -421,21 +414,23 @@
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
-                        <StackPanel Grid.ColumnSpan="5" Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Right">
-                            <Button x:Name="bt_addacc" Content="Add" Click="bt_addacc_Click" IsEnabled="False" Width="100"  Margin="5,3"/>
-                            <Button x:Name="bt_accedit" Content="Edit" Margin="3" IsEnabled="False" Width="100" Click="bt_accedit_Click"/>
-                            <Button x:Name="bt_remacc" Content="Remove" IsEnabled="False" Click="bt_remacc_Click" Width="100" Margin="5,3" />
-                            <Button x:Name="bt_accsortup" Content="↑" IsEnabled="False" Margin="3" Width="30" Click="bt_accsortup_Click"/>
-                            <Button x:Name="bt_accsortdown" Content="↓" IsEnabled="False" Margin="3" Width="30" Click="bt_accsortdown_Click"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5">
-                            <Label x:Name="lab_nick" Content="Nickname:" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            <TextBox x:Name="tb_nick" Height="23" Width="150"  IsEnabled="False"/>
-                            <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left"  VerticalAlignment="Center"  IsEnabled="False" Height="26" Width="62" Grid.Row="2" Grid.Column="1" />
-                            <PasswordBox x:Name="tb_passw" Height="23" Width="150" IsEnabled="False" />
-                            <Label x:Name="lab_email" Content="Email:"  d:LayoutOverrides="Width" VerticalAlignment="Center"/>
-                            <TextBox x:Name="tb_email" Height="23" Width="150" IsEnabled="False" />
-                        </StackPanel>
+                        <WrapPanel Grid.ColumnSpan="5" Grid.Row="2" Grid.RowSpan="2">
+                            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" Margin="0,0,15,0" >
+                                <Label x:Name="lab_nick" Content="Nickname:" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBox x:Name="tb_nick" Height="23" MinWidth="150"  IsEnabled="False"/>
+                                <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left"  VerticalAlignment="Center"  IsEnabled="False" Height="26" Width="62" Grid.Row="2" Grid.Column="1" />
+                                <PasswordBox x:Name="tb_passw" Height="23" MinWidth="150" IsEnabled="False" />
+                                <Label x:Name="lab_email" Content="Email:"  d:LayoutOverrides="Width" VerticalAlignment="Center"/>
+                                <TextBox x:Name="tb_email" Height="23" MinWidth="150" IsEnabled="False" />
+                            </StackPanel>
+                            <StackPanel Grid.ColumnSpan="5" Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Right">
+                                <Button x:Name="bt_addacc" Content="Add" Click="bt_addacc_Click" IsEnabled="False" Width="100"  Margin="5,3"/>
+                                <Button x:Name="bt_accedit" Content="Edit" Margin="3" IsEnabled="False" Width="100" Click="bt_accedit_Click"/>
+                                <Button x:Name="bt_remacc" Content="Remove" IsEnabled="False" Click="bt_remacc_Click" Width="100" Margin="5,3" />
+                                <Button x:Name="bt_accsortup" Content="↑" IsEnabled="False" Margin="3" Width="30" Click="bt_accsortup_Click"/>
+                                <Button x:Name="bt_accsortdown" Content="↓" IsEnabled="False" Margin="3" Width="30" Click="bt_accsortdown_Click"/>
+                            </StackPanel>
+                        </WrapPanel>
                         <CheckBox x:Name="cb_login" Content="Use Autologin" FontSize="16" Checked="cb_login_Checked" Unchecked="cb_login_Unchecked" FontWeight="Bold" Grid.Row="0" Grid.ColumnSpan="4" />
                         <ListView ItemsSource="{Binding}" SelectionMode="Multiple" x:Name="listview_acc"  IsEnabled="False" SelectionChanged="listview_acc_SelectionChanged" Grid.Row="1" Grid.ColumnSpan="5">
                             <ListView.View>
@@ -466,6 +461,7 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
+                        <Button Grid.Row="0" ToolTip="Manage all of your accounts in this section by entering their data. Then choose which accounts should be started by selecting them in the list" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
                     </Grid>
 
                 </TabItem>
@@ -482,7 +478,7 @@
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
 
-                        <Label Content="GFX Configurator" FontSize="16" FontWeight="Bold"/>
+                        <Label Content="GFX Configurator" Style="{StaticResource H1}"/>
                         <DockPanel Grid.Row="2" Margin="0,5,0,0" Grid.ColumnSpan="2" LastChildFill="False">
                             <Button x:Name="bt_applygfx" DockPanel.Dock="Right" Width="200" Content="Apply Permanent" Click="bt_applygfx_Click"/>
                             <Button x:Name="bt_loadgfx"  DockPanel.Dock="Left" Content="Load Config"  Width="100" Click="bt_loadgfx_Click" Margin="0,0,5,0"/>
@@ -505,11 +501,11 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
+                        <Button ToolTip="Configure your ingame graphic settings or create a graphic configuration file for a specific account" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
                     </Grid>
                 </TabItem>
 
                 <TabItem Header="Serverselection">
-
                     <Grid >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="350*"/>
@@ -534,10 +530,10 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <TextBox x:Name="tb_manualauthserver" Text="Manual Authentication IP"/>
-                            <TextBox x:Name="tb_manualassetserver" Text="Manual Assetserver IP" Grid.Column="2" Margin="5,0,0,0"/>
-                            <Button x:Name="bt_manualauthserver" Content="Add Authserver"  Grid.Column="1" Click="bt_manualauthserver_Click" Margin="0,0,5,0"/>
-                            <Button x:Name="bt_manualassetserver" Content="Add Assetserver" Grid.Column="3" Click="bt_manualassetserver_Click"/>
+                            <TextBox x:Name="tb_manualauthserver" Text="Manual Authentication IP" Height="23"/>
+                            <TextBox x:Name="tb_manualassetserver" Text="Manual Assetserver IP" Grid.Column="2" Margin="5,0,0,0" Height="23"/>
+                            <Button x:Name="bt_manualauthserver" Content="Add Authserver"  Grid.Column="1" Click="bt_manualauthserver_Click" Margin="2,2,5,2"/>
+                            <Button x:Name="bt_manualassetserver" Content="Add Assetserver" Grid.Column="3" Click="bt_manualassetserver_Click" Margin="2,2,0,2"/>
                         </Grid>
                         <Label x:Name="lab_port_assets" Content="Port (optional):" IsEnabled="False" Grid.Column="1" Grid.Row="5" FontSize="16" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal" />
                         <Label x:Name="lab_port_client" Content="Port :" IsEnabled="False" Grid.Column="1" Grid.Row="6" FontSize="16" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal"/>
@@ -545,7 +541,7 @@
                         <CheckBox x:Name="checkb_auth" Grid.ColumnSpan="2" Content="Use Authentication Server : (Select Server)" VerticalAlignment="Center" FontSize="16" IsEnabled="False" Checked="checkb_auth_Checked" Unchecked="checkb_auth_Unchecked" FontWeight="Bold" HorizontalAlignment="Left" Grid.Row="4" Margin="0,4.36"/>
                         <CheckBox x:Name="checkb_assets" Grid.ColumnSpan="2" Content="Use Assets Server : (Select Server)" VerticalAlignment="Center" FontSize="16" IsEnabled="False" Checked="checkb_assets_Checked" Unchecked="checkb_assets_Unchecked" FontWeight="Bold" Grid.Row="5" HorizontalAlignment="Left" Margin="0,4.36"/>
                         <Label x:Name="lab_port_auth" Content="Port (optional):" VerticalAlignment="Bottom" IsEnabled="False" Grid.Column="1" FontSize="16" Grid.Row="4" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal"/>
-                        <Button x:Name="bt_checkservers" Content="Check Servers" Click="bt_checkservers_Click" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,5" FontWeight="Normal"  />
+                        <Button x:Name="bt_checkservers" Content="Refresh Serverlist" Click="bt_checkservers_Click" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,5" FontWeight="Normal"  />
                         <ListView x:Name="listview_assets" SelectionChanged="listview_assets_SelectionChanged" Grid.Row="1" Grid.Column="1" d:LayoutOverrides="Height, LeftMargin, RightMargin, TopMargin, BottomMargin" Margin="5,0,0,0" Grid.ColumnSpan="2" FontWeight="Normal" FontSize="12">
                             <ListView.View>
                                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
@@ -564,7 +560,7 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                        <Label x:Name="lab_assetserverlist" Content="Asset Servers:" RenderTransformOrigin="0.322,-0.072" Grid.Column="1" Margin="0,0,0,0.996" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin" Grid.ColumnSpan="2" FontWeight="Bold" FontSize="16"/>
+                        <Label x:Name="lab_assetserverlist" Content="Asset Servers:" RenderTransformOrigin="0.322,-0.072" Grid.Column="1" Style="{StaticResource H1}"/>
                         <ListView x:Name="listview_auth" SelectionChanged="listview_auth_SelectionChanged" Grid.Row="1" Margin="0,0,5,0" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin" FontWeight="Normal" FontSize="12">
                             <ListView.View>
                                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
@@ -583,26 +579,29 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                        <Label x:Name="lab_authserverlist" Content="Authentication Servers:" RenderTransformOrigin="0.322,-0.072" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin" FontWeight="Bold" FontSize="16"/>
+                        <Label x:Name="lab_authserverlist" Content="Authentication Servers:"  Style="{StaticResource H1}"/>
                         <TextBox x:Name="tb_clientport"  IsEnabled="False" Text="443" Grid.Column="2" Grid.Row="5" VerticalAlignment="Center" FontWeight="Normal"/>
+                        <Button ToolTip="Select which authentication/asset server should be used by your gw2 client. First press Refresh serverlist and then choose your wished server" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Addon Manager">
-                    <Grid Grid.Row="4" >
+                    <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="150*"/>
                             <RowDefinition Height="40"/>
-                            <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
-
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="50*"/>
                             <ColumnDefinition Width="50*"/>
                         </Grid.ColumnDefinitions>
-                        <CheckBox x:Name="cb_reshade" Content="Use Reshade Unlocker" Checked="cb_reshade_Checked" Unchecked="cb_reshade_Unchecked" FontSize="16" FontWeight="Bold" IsEnabled="False"  VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="3" Margin="5,0,0,0"/>
-                        <Button x:Name="bt_reshadepath" Content="Set ReshadeUnlocker Path" Click="bt_reshadepath_Click" Grid.Column="1" Grid.Row="3" Margin="5,0,0,0"/>
-                        <Label x:Name="lab_AddOnManager" Content="AddOn Manager:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" FontWeight="Bold"/>
+                        <Button ToolTip="Manage third party software addons/plugins which should be started with the gw2 client" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
+                        <Label x:Name="lab_AddOnManager" Content="AddOn Manager:" Style="{StaticResource H1}"/>
+                        <StackPanel Orientation="Horizontal" Grid.Row="3" Visibility="Hidden">
+                            <CheckBox x:Name="cb_reshade" Content="Use Reshade Unlocker" Checked="cb_reshade_Checked" Unchecked="cb_reshade_Unchecked" FontSize="16" FontWeight="Bold" IsEnabled="False"  VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="3" Margin="5,0,0,0"/>
+                            <Button x:Name="bt_reshadepath" Content="Set ReshadeUnlocker Path" Click="bt_reshadepath_Click" Grid.Column="1"  Margin="5,0,0,0"/>
+                        </StackPanel>
+
 
                         <ListView x:Name="lv_AddOns" Grid.Row="1" Grid.ColumnSpan="2" >
                             <ListView.View>
@@ -627,11 +626,13 @@
                         </ListView>
                         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2" Margin="0,5">
                             <Label Content="Name:"/>
-                            <TextBox x:Name="tb_AddonName" Width="100"/>
+                            <TextBox x:Name="tb_AddonName" Width="100" Height="23"/>
                             <Label Content="Parameters"/>
-                            <TextBox x:Name="tb_AddonArgs" Width="100"/>
+                            <TextBox x:Name="tb_AddonArgs" Width="100" Height="23"/>
                             <CheckBox x:Name="cb_AddonMultilaunch" Content="Multilaunch"  VerticalAlignment="Center" Margin="5,0" />
                             <CheckBox x:Name="cb_AddonOnLB" Content="Start with LB" VerticalAlignment="Center" Margin="5,0" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right">
                             <Button x:Name="bt_AddAddon" Content="Add" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_AddAddon_Click"/>
                             <Button x:Name="bt_RemAddon" Content="Remove" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_RemAddon_Click"/>
                         </StackPanel>
@@ -640,15 +641,22 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Cinema Mode">
-
-                    <StackPanel>
-                        <Label Content="Cinema Mode (Changes may require restart): " FontSize="16" FontWeight="Bold" />
-                        <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
-                            <RadioButton x:Name="rb_cinemaslideshowmode" Content="Slideshow Mode" Grid.Column="0" Checked="rb_slideshowmode" IsChecked="True"/>
-                            <RadioButton x:Name="rb_cinemavideomode" Content="Video Mode" Grid.Column="1" Checked="rb_videomode" Margin="5,0,0,0"/>
-                        </StackPanel>
-                        <StackPanel>
-                            <Label Content="General Settings:" FontSize="14.667" FontWeight="Bold"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="120"/>
+                            <RowDefinition Height="24"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="30*"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Cinema Mode (Changes may require restart): " Grid.Row="0" Style="{StaticResource H1}"/>
+                        <Button ToolTip="Create a custom launcher UI with an animated slideshow or video background" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0" Grid.Row="2">
+                            <RadioButton x:Name="rb_cinemaslideshowmode" Content="Slideshow Mode" Grid.Column="0" Checked="rb_slideshowmode" IsChecked="True" FontWeight="Bold" FontSize="14" />
+                            <RadioButton x:Name="rb_cinemavideomode" Content="Video Mode" Grid.Column="1" Checked="rb_videomode" Margin="5,0,0,0" FontSize="14" FontWeight="Bold"/>
+                        </StackPanel >
+                        <StackPanel Grid.Row="1" Margin="0,10">
+                            <Label Content="General Settings:" Style="{StaticResource H2}"/>
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="30"/>
@@ -660,7 +668,6 @@
                                 <Button Content="Set Loginwindow Image" x:Name="bt_setloginwindow" Click="bt_setloginwindow_Click" />
                                 <Label x:Name="lab_loginwindowpath"  Grid.Column="1" Content="Current Loginwindow: Default" FontWeight="Bold"/>
                             </Grid>
-                            <Separator Margin="0,5,0,0"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="50*"/>
@@ -672,17 +679,18 @@
                                 <Label Content="Background Color:" FontWeight="Bold"/>
                                 <xctk:ColorPicker Name="ClrPcker_Background" SelectedColorChanged="ClrPcker_Background_SelectedColorChanged" Grid.Column="1" Margin="5"/>
                             </Grid>
+                            <Separator Margin="0,5,0,0"/>
                         </StackPanel>
-                        <Separator Margin="0,10"/>
-                        <StackPanel x:Name="Videomode" Visibility="Collapsed">
+
+                        <StackPanel x:Name="Videomode" Visibility="Collapsed" Grid.Row="4" Margin="5">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="50*"/>
                                     <ColumnDefinition Width="50*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="200"/>
-                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="200*"/>
+                                    <RowDefinition Height="30"/>
                                 </Grid.RowDefinitions>
 
                                 <StackPanel>
@@ -700,18 +708,15 @@
                                         <ColumnDefinition Width="50*"/>
                                         <ColumnDefinition Width="50*"/>
                                     </Grid.ColumnDefinitions>
-                                    <Button x:Name="bt_cinema_videoplay" Content="&gt;" Grid.Row="0" Grid.Column="0" Margin="5" Click="bt_cinema_videoplay_Click"/>
-                                    <Button x:Name="bt_cinema_videostop" Content="Stop" Grid.Row="0" Grid.Column="1" BorderThickness="5" Margin="5" Click="bt_cinema_videostop_Click"/>
+                                    <Button x:Name="bt_cinema_videoplay" Content="&gt;" Grid.Row="0" Grid.Column="0"  Margin="5,0"  Click="bt_cinema_videoplay_Click"/>
+                                    <Button x:Name="bt_cinema_videostop" Content="Stop" Grid.Row="0" Grid.Column="1"  Margin="5,0" BorderThickness="5" Click="bt_cinema_videostop_Click"/>
                                 </Grid>
-                                <Button x:Name="bt_cinema_setvideo" Content="Set Video" Grid.Row="1" Margin="5" Click="bt_cinema_setvideo_Click"/>
+                                <Button x:Name="bt_cinema_setvideo" Content="Set Video" Grid.Row="1" Margin="5,0" Click="bt_cinema_setvideo_Click"/>
                             </Grid>
 
                         </StackPanel>
-
-
-
-                        <ScrollViewer Height="350" Background="#19000000" >
-                            <StackPanel x:Name="Slideshow">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Background="#19707070" Grid.Row="4" Margin="5">
+                            <StackPanel x:Name="Slideshow" >
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="50*"/>
@@ -719,14 +724,14 @@
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="30"/>
-                                        <RowDefinition Height="110"/>
+                                        <RowDefinition Height="50*" MaxHeight="300"/>
                                         <RowDefinition Height="30"/>
                                     </Grid.RowDefinitions>
-                                    <Label Content="Slideshow Info:" FontSize="16" FontWeight="Bold"/>
+                                    <Label Content="Slideshow Settings:" Style="{StaticResource H2}"/>
 
-                                    <Image x:Name="img_imagepreview" Grid.Row="1" Grid.Column="1" Source="Resources/noimg.png"/>
+                                    <Image x:Name="img_imagepreview" Grid.Row="1" Grid.Column="1" Source="Resources/noimg.png" MaxHeight="300"/>
                                     <Grid Margin="0,5" Grid.Row="1">
-                                        <ListView x:Name="lv_cinema_images" Grid.Row="1" SelectionChanged="lv_cinema_images_SelectionChanged">
+                                        <ListView x:Name="lv_cinema_images" Grid.Row="1" MaxHeight="300"  SelectionChanged="lv_cinema_images_SelectionChanged">
                                             <ListView.View>
                                                 <GridView>
                                                     <GridViewColumn HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
@@ -743,22 +748,26 @@
 
                                     <Label x:Name="lab_imagepreview" Content="Current Image: -" Grid.Row="2" Grid.Column="1" FontWeight="Bold"/>
                                 </Grid>
-                                <Separator Margin="0,5,0,0"/>
+                                <Separator Margin="0,20,0,20"/>
                                 <Grid Margin="0,5">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="50*"/>
                                         <ColumnDefinition Width="50*"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="100"/>
+                                        <RowDefinition Height="100*"/>
                                         <RowDefinition Height="30"/>
                                     </Grid.RowDefinitions>
-                                    <TextBlock Grid.Row="0" Grid.Column="0" x:Name="tb_maskinfo" TextWrapping="Wrap" Text="Instructions:                                                                Set the Maskimage by using a png image with transparent background. Draw the logo/ image with any choosen color, the alpha channel however determines which part of the mask will be visible! Press Set MaskImage and check in the Preview if the mask is imported correctly" FontSize="14.667"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="0" x:Name="tb_maskinfo" TextWrapping="Wrap" FontSize="14.667">
+                                        Instructions:
+                                        <LineBreak />
+                                        Set the Maskimage by using a png image with transparent background. Draw the logo/ image with any choosen color, the alpha channel however determines which part of the mask will be visible! Press Set MaskImage and check in the Preview if the mask is imported correctly
+                                    </TextBlock>
                                     <Button Content="Set Maskimage" x:Name="bt_cinema_setmask" Grid.Row="1" Click="bt_cinema_setmask_Click"/>
                                     <Label x:Name="lab_maskpreview" Content="Current Mask: Default" Grid.Row="1" Grid.Column="1" FontWeight="Bold"/>
-                                    <Image x:Name="img_maskpreview" Grid.Row="0" Grid.Column="1" Source="Resources/logo_hq_mask.png"/>
+                                    <Image x:Name="img_maskpreview" Grid.Row="0" Grid.Column="1" Source="Resources/logo_hq_mask.png" MaxHeight="400"/>
                                 </Grid>
-                                <Separator Margin="0,5"/>
+                                <Separator Margin="0,20,0,20"/>
                                 <Grid >
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="50*"/>
@@ -779,7 +788,7 @@
                                         <Button x:Name="bt_musicstop" Content="Stop Music" Grid.Column="1" Click="bt_musicstop_Click" Margin="5,0"/>
                                     </Grid>
                                 </Grid>
-                                <Separator Margin="0,5"/>
+                                <Separator Margin="0,20,0,20"/>
                                 <Label Content="Animation Settings:" FontSize="14.667" FontWeight="Bold"/>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -798,14 +807,14 @@
                                 </Grid>
                             </StackPanel>
                         </ScrollViewer>
-                    </StackPanel>
+                    </Grid>
 
                 </TabItem>
                 <TabItem Header="Crash Fixes" x:Name="tab_clientfix">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50*"/>
-                            <RowDefinition Height="50*"/>
+                            <RowDefinition Height="25*"/>
                         </Grid.RowDefinitions>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -818,8 +827,8 @@
                                 <RowDefinition Height="30"/>
                             </Grid.RowDefinitions>
                             <Button Content="Fix" Grid.Column="1" Grid.Row="2" IsEnabled="False" x:Name="bt_fixcrash" Click="bt_fixcrash_Click" FontSize="14" FontWeight="Bold"/>
-                            <Label Content="Latest Crashes" x:Name="lb_lastcrashes" FontWeight="Bold"/>
-                            <Label Content="Info" Grid.Column="1" FontWeight="Bold"/>
+                            <Label Content="Latest Crashes" x:Name="lb_lastcrashes" Style="{StaticResource H2}"/>
+                            <Label Content="Info" Grid.Column="1" Style="{StaticResource H2}"/>
                             <ListView x:Name="lv_crashlogs" DisplayMemberPath="{Binding Crashlog}" Grid.Row="1" Grid.RowSpan="2" SelectionChanged="lv_crashlogs_SelectionChanged" FontWeight="Bold">
                                 <ListView.View>
                                     <GridView>
@@ -836,20 +845,24 @@
                                 <ColumnDefinition Width="30*"/>
                                 <ColumnDefinition Width="70*"/>
                             </Grid.ColumnDefinitions>
-                            <Label Content="Clientifix the Quaggan" FontSize="16" FontWeight="Bold"/>
-                            <Image Source="Resources/opacitymask.png"/>
-                            <Image Source="Resources/quaggan.jpg"/>
+                            <Label Content="Clientifix the Quaggan" Style="{StaticResource H2}"/>
+                            <Image Source="Resources/quaggan.png" MaxHeight="500"/>
                             <Grid Grid.Column="1" Margin="20">
                                 <Image  Source="Resources/opacitymask.png" Stretch="Fill"/>
                                 <TextBlock  Text="Coooo! Quaggan will do the best to help you!" Foreground="White" Margin="15" x:Name="tblock_crashsolutioninfo" TextWrapping="Wrap" FontSize="14"/>
                             </Grid>
 
                         </Grid>
+                        <Button ToolTip="Fix and observe your latest game crashes by selecting them in the list" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
                     </Grid>
+                    
                 </TabItem>
                 <TabItem Header="LB Settings">
                     <StackPanel>
-                        <Label Content="Launchbuddy Settings" FontWeight="Bold" FontSize="16"/>
+                        
+                        <Label Content="Launchbuddy Settings" Style="{StaticResource H1}"/>
+                        <Button ToolTip="All non gw2 client relative settings for Launchbuddy only" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"  FontWeight="Bold" Margin="-20,-30,0,0"></Button>
+                        
                         <!-- Content="Settings" FontWeight="Bold" FontSize="14"/>
                         <StackPanel Margin="5">
                             <CheckBox Content="Use Graphical Gameinstance Manager" />
@@ -861,7 +874,7 @@
                         <Separator Margin="3"/>
                         <CheckBox x:Name="cb_lbupdatescheck" Content="Automatically Check for Launchbuddy Updates" Margin="5" Click="cb_lbupdatescheck_Click"/>
                         <CheckBox x:Name="cb_useinstancegui" Content="Use Game Instance GUI" Margin="5" Click="cb_useinstancegui_Click"/>
-                        <Label Content="Launchbuddy Releases" FontSize="14" FontWeight="Bold"/>
+                        <Label Content="Launchbuddy Releases" Style="{StaticResource H2}"/>
                         <Grid Height="250" Margin="3">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="60*"/>
@@ -872,7 +885,7 @@
                                 <RowDefinition Height="150*"/>
                                 <RowDefinition Height="30"/>
                             </Grid.RowDefinitions>
-                            <Label Content="Description:" Grid.Row="0" Grid.Column="1" FontSize="14" FontWeight="Bold"/>
+                            <Label Content="Description:" Grid.Row="0" Grid.Column="1" Style="{StaticResource H2}"/>
                             <ListView x:Name="lv_lbversions" Grid.Row="0" Grid.RowSpan="2" SelectionChanged="ListView_SelectionChanged" IsSynchronizedWithCurrentItem="True">
                                 <ListView.View>
                                     <GridView>
@@ -889,14 +902,14 @@
                             </DockPanel>
 
                         </Grid>
-                        <Separator Margin="-3,100,0,0"/>
-                        <Button x:Name="bt_bugreport" Content="Report a Bug" Margin="5" Click="bt_bugreport_Click"/>
-                        <Separator/>
+                        <Separator Margin="-3,15,0,10"/>
+                        <Label Content="Bug Report:" Style="{StaticResource H2}"></Label>
+
+                        <Button x:Name="bt_bugreport" Content="Report a Bug"  Click="bt_bugreport_Click" Height="30"/>
                     </StackPanel>
                 </TabItem>
 
             </TabControl>
-
 
 
         </Grid>

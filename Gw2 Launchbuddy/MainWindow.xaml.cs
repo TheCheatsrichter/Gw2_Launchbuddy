@@ -552,7 +552,7 @@ namespace Gw2_Launchbuddy
                 SettingsGrid.Visibility = Visibility.Visible;
                 myWindow.WindowState = WindowState.Normal;
                 myWindow.Height = 680;
-                myWindow.Width = 700;
+                myWindow.Width = 800;
                 bt_ShowSettings.Visibility = Visibility.Collapsed;
                 Grid.SetColumnSpan(WindowOptionsColum, 1);
                 Canvas_Custom_UI.Visibility = Visibility.Collapsed;
