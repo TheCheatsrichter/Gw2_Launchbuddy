@@ -169,7 +169,7 @@ namespace Gw2_Launchbuddy.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("#FFE6E6E6")]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FF000000")]
         public global::System.Windows.Media.Color cinema_backgroundcolor {
             get {
                 return ((global::System.Windows.Media.Color)(this["cinema_backgroundcolor"]));

@@ -39,7 +39,7 @@
       <Value Profile="(Default)">90</Value>
     </Setting>
     <Setting Name="cinema_backgroundcolor" Type="System.Windows.Media.Color" Scope="User">
-      <Value Profile="(Default)">#FFE6E6E6</Value>
+      <Value Profile="(Default)">#FF000000</Value>
     </Setting>
     <Setting Name="cinema_loginwindowpath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

@@ -21,6 +21,7 @@ using System.Windows.Media.Imaging;
 using System.IO.Compression;
 using System.Windows.Media.Animation;
 using System.Xml.Serialization;
+using System.Threading.Tasks;
 
 namespace Gw2_Launchbuddy
 {
@@ -38,6 +39,7 @@ namespace Gw2_Launchbuddy
         /// 
         ///##########################################
         /// 
+
 
         bool cinemamode = false;
         bool slideshowthread_isrunning = false;
@@ -197,6 +199,9 @@ namespace Gw2_Launchbuddy
 #endif
 
             //Setup
+            LoadingWindow.Start("STARTING LB");
+            Thread.Sleep(4000);
+
             donatepopup();
             accountlist.Clear(); //clearing accountlist
             fillargs(); //create arglist
@@ -216,6 +221,9 @@ namespace Gw2_Launchbuddy
                 Thread checklbver = new Thread(checklbversion);
                 checklbver.Start();
             }
+            LoadingWindow.Stop();
+            Focus();
+            //screen.Close();
         }
 
         void SettingsTabSetup()
@@ -1861,12 +1869,11 @@ namespace Gw2_Launchbuddy
             if (Cinema_MediaPlayer.IsMuted)
             {
                 Cinema_MediaPlayer.IsMuted = false;
-                img_mutebutton.Source = new BitmapImage(new Uri("/Resources/Icons/speaker_loud.png", UriKind.Relative));
+                img_mutebutton = new ImageBrush(new BitmapImage(new Uri("/Resources/Icons/speaker_loud.png", UriKind.Relative)));
             }
             else
             {
-                Cinema_MediaPlayer.IsMuted = true;
-                img_mutebutton.Source = new BitmapImage(new Uri("/Resources/Icons/speaker_mute.png", UriKind.Relative));
+                img_mutebutton = new ImageBrush(new BitmapImage(new Uri("/Resources/Icons/speaker_mute.png", UriKind.Relative)));
             }
         }
 

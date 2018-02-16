@@ -82,7 +82,7 @@ namespace Gw2_Launchbuddy
                     return;
                 }
             }
-            Regex filter = new Regex(@"<div class=""release-body commit open"">(\s|\S)+?<\/div><!-- \/.release -->");
+            Regex filter = new Regex(@"<div class=""release-body commit open float-left"">(\s|\S)+?<\/div><!-- \/.release -->");
             MatchCollection releases_raw = filter.Matches(HTML_Raw);
 
             ObservableCollection<Release> releases = new ObservableCollection<Release>();
@@ -91,7 +91,7 @@ namespace Gw2_Launchbuddy
             //Filters
             //string example = @"@"<h1 class=""release-title"">\s.*"">(?<Name>.*)<\/a>"";
             string datefilter = @"<relative-time datetime=""(.*)"">(?<Date>\w* ?\d\d?,? \d{4})<\/relative-time>";
-            string namefilter = @"<h1 class=""release-title"">\s.*"">(?<Name>.*)<\/a>";
+            string namefilter = @"<a href=""\/TheCheatsrichter\/Gw2_Launchbuddy\/releases\/tag\/(.*)"">(?<Name>.*)<\/a>";
             string versionfilter = @"<a href=""" + repoprefix + @"\/releases\/tag\/(?<Version>\d+.\d+.*)"">";
             versionfilter = @"<a href=""" + repoprefix + @"\/releases\/tag\/(?<Version>\d+.\d+.*)"">";
             string downloadurlfilter = @"<a href=""" + repoprefix + @"\/releases\/download\/(?<Exename>.*\.exe)"" rel=""nofollow"">";

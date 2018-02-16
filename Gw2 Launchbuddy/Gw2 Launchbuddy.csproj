@@ -65,7 +65,7 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>launchbuddy.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\launchbuddy.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>2C78140AAB9F79CE05AC3C3F8E85F71DB9D28DA9</ManifestCertificateThumbprint>
@@ -185,6 +185,9 @@
       <DependentUpon>GUI_ApplicationManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="HandleManager.cs" />
+    <Compile Include="LoadingScreen.xaml.cs">
+      <DependentUpon>LoadingScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
     </Compile>
@@ -215,6 +218,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Launchbuddy_default_theme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LoadingScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -351,6 +358,11 @@
     <Resource Include="Resources\donate.png" />
     <Resource Include="Resources\patreon_button.png" />
     <Resource Include="Resources\opacitymask_tile.png" />
+    <Resource Include="Resources\header_background.png" />
+    <Resource Include="Resources\header_dragonhead.png" />
+    <Resource Include="Resources\shortdragonhead.png" />
+    <Resource Include="Resources\Launchbuddy_logo_loading.png" />
+    <Resource Include="Resources\Launchbuddy_logo.png" />
     <Content Include="Resources\Update Helper.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

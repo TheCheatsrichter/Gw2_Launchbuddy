@@ -39,6 +39,41 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
+    <ControlTemplate x:Key="launchbutton_template" TargetType="{x:Type Button}">
+        <Border Name="Border" BorderBrush="DarkGreen" BorderThickness="2" CornerRadius="8,0,8,0"  Background="White">
+            <ContentPresenter Name="contenido" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Path=Content,RelativeSource={RelativeSource TemplatedParent}}">
+            </ContentPresenter>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="White" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="DarkGreen" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="Black" />
+                <Setter Property="Foreground" Value="White"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="windowbutton_template" TargetType="{x:Type Button}">
+        <Border Name="Border" BorderBrush="DarkGray" BorderThickness="2" CornerRadius="8,0,8,0"  Background="Transparent">
+            <ContentPresenter Name="contenido" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Path=Content,RelativeSource={RelativeSource TemplatedParent}}">
+            </ContentPresenter>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="Gray" />
+                <Setter Property="Foreground" Value="White"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Border" Property="Background" Value="White" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="LightGray" />
+                <Setter Property="Foreground" Value="Gray"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
     <ControlTemplate x:Key="tabitem_template" TargetType="{x:Type TabItem}">
         <Border Name="Border" BorderThickness="1,1,1,1" BorderBrush="LightGray" CornerRadius="5,0,0,5" Margin="0,1">
             <ContentPresenter x:Name="ContentSite"
@@ -60,7 +95,7 @@
 
     <ControlTemplate x:Key="tooltip_template" TargetType="{x:Type ToolTip}">
         <Border Name="Border"
-                BorderThickness="1"
+                BorderThickness="2"
                 Width="{TemplateBinding Width}"
                 Height="{TemplateBinding Height}"
                 BorderBrush="{StaticResource LightBackground}"
@@ -91,6 +126,17 @@
         <Setter Property="Foreground" Value="{StaticResource MainText_Foreground}"></Setter>
     </Style>
 
+    <Style x:Key="WindowButton" TargetType="{x:Type Button}">
+        <Setter Property="Template" Value="{StaticResource windowbutton_template}"/>
+        <Setter Property="Foreground" Value="{StaticResource MainText_Foreground}"></Setter>
+    </Style>
+
+    <Style x:Key="LaunchButton" TargetType="{x:Type Button}">
+        <Setter Property="Template" Value="{StaticResource launchbutton_template}"/>
+        <Setter Property="Foreground" Value="{StaticResource MainText_Foreground}"></Setter>
+        <Setter Property="Background" Value="White"/>
+    </Style>
+
     <Style x:Key="H1" TargetType="{x:Type Label}">
         <Setter Property="Foreground" Value="{StaticResource H1_Foreground}"/>
         <Setter Property="FontWeight" Value="Bold"/>
@@ -113,7 +159,9 @@
         <Setter Property="Background" Value="{StaticResource ButtonBackground}"/>
         <Setter Property="Template" Value="{StaticResource tooltip_template}"/>
         <Setter Property="Foreground" Value="{StaticResource MainText_Foreground}"/>
-        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Opacity" Value="0.85"/>
     </Style>
 
 </ResourceDictionary>
