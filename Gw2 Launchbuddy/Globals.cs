@@ -1,49 +1,54 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using static Gw2_Launchbuddy.MainWindow;
+﻿using CommandLine;
+using Gw2_Launchbuddy.ObjectManagers;
 using System;
-using CommandLine;
-using System.Windows.Controls;
-
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Xml;
 
 namespace Gw2_Launchbuddy
 {
-    static class Globals
+    internal static class Globals
     {
-        public static GUI_ApplicationManager Appmanager = new GUI_ApplicationManager();
+        public static GUI_ApplicationManager Appmanager = new GUI_ApplicationManager(); //Should not be created here/should have its own controller.
 
-        public static Microsoft.Win32.RegistryKey LBRegKey { get { return Microsoft.Win32.Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("LaunchBuddy"); } set { } }
+        public static ObservableCollection<AccountClient> LinkedAccs = new ObservableCollection<AccountClient>(); //Should not be needed?
 
-        public static ObservableCollection<ProAccBinding> LinkedAccs = new ObservableCollection<ProAccBinding>();
-        public static List<Account> selected_accs = new List<Account>();
-        public static string exepath, exename, unlockerpath, version_client, version_api;
+        //public static List<Account> selected_accs = new List<Account>();
+        public static string unlockerpath, version_api; //Should be split out into respective managers
 
-        public static bool ClientIsUptodate = false;
-        public static Server selected_authsv = new Server();
-        public static Server selected_assetsv = new Server();
-        public static Arguments args = new Arguments();
+        public static Server selected_authsv = new Server(); //Should be removed/Unneeded with Manager
+        public static Server selected_assetsv = new Server(); //Should be removed/Unneeded with Manager
 
-        public static GFXConfig SelectedGFX = new GFXConfig();
-        public static string ClientXmlpath;
+        public static GFXConfig SelectedGFX = new GFXConfig(); //Should be removed/Unneeded with Manager
+        public static string ClientXmlpath; //Should be part of Client
 
-        public static string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
-        public static Version LBVersion = new Version("1.5.1");
+        public static string AppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
+        public static Version LBVersion = new Version("1.4.2");
 
-        //Arguments
-        public static ObservableCollection<CheckBox> arg_checkboxlist = new ObservableCollection<CheckBox>();
-
-        //Serverlists
-        public static ObservableCollection<Server> authlist = new ObservableCollection<Server>();
-        public static ObservableCollection<Server> assetlist = new ObservableCollection<Server>();
-        public static ObservableCollection<Server> manual_authlist = new ObservableCollection<Server>();
-        public static ObservableCollection<Server> manual_assetlist = new ObservableCollection<Server>();
-
-
+        public static Options options;
     }
+
     public class Options
     {
-        [Option('s', "silent", HelpText = "Run Launchbuddy silently.")]
+        [Option('q', "silent", HelpText = "Run Launchbuddy silently.")]
         public bool Silent { get; set; }
-    }
 
+        [Option("settings", HelpText = "Use Settings.json instead of command line Arguments.")]
+        public bool Settings { get; set; }
+
+        [Option('l', "launch", Separator = ':', HelpText = "Launch with Nicknames of saved accounts. Use : as a separator.")]
+        public IEnumerable<string> Launch { get; set; }
+
+        [Option('m', "minimized", HelpText = "Run Launchbuddy but open minimized.")]
+        public string Minimized { get; set; }
+
+        [Option('s', "safe", HelpText = "Do not load plugins.")]
+        public bool Safe { get; set; }
+
+        [Option('a', "args", Separator = ':', HelpText = "Arguments to use when launching with -launch. Use : as a separator, no arguments with input.")]
+        public IEnumerable<string> Args { get; set; }
+    }
 }

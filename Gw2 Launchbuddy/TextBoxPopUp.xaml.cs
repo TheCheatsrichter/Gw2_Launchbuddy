@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace Gw2_Launchbuddy
 {
@@ -22,7 +10,7 @@ namespace Gw2_Launchbuddy
         public bool securemode = false;
         public string Output = null;
 
-        public TextBoxPopUp(string message,string title, bool ispassword=false)
+        public TextBoxPopUp(string message, string title, bool ispassword = false)
         {
             InitializeComponent();
             Title = title;
@@ -34,12 +22,11 @@ namespace Gw2_Launchbuddy
                 tb_input.Visibility = Visibility.Hidden;
                 pwbox_input.Visibility = Visibility.Visible;
                 pwbox_input.Focus();
-            }else
+            }
+            else
             {
                 tb_input.Focus();
             }
-
-            
         }
 
         private void bt_ok_Click(object sender, RoutedEventArgs e)
@@ -53,7 +40,8 @@ namespace Gw2_Launchbuddy
             if (securemode)
             {
                 return pwbox_input.Password;
-            } else
+            }
+            else
             {
                 return tb_input.Text;
             }

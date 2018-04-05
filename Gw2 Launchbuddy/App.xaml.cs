@@ -1,13 +1,8 @@
 ﻿using CommandLine;
-using CommandLine.Text;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using System.Windows;
+using Gw2_Launchbuddy.ObjectManagers;
 
 namespace Gw2_Launchbuddy
 {
@@ -29,14 +24,28 @@ namespace Gw2_Launchbuddy
             AttachConsole(-1);
             var result = Parser.Default.ParseArguments<Options>(args).WithParsed(options => RunParsed(options));
         }
+
         public static void RunParsed(Options options)
         {
+            Globals.options = options;
+
+            // Load things before MainWindow
+            AccountManager.ImportExport.LoadAccountInfo();
+            ClientManager.ClientInfo.LoadClientInfo();
+            PluginManager.DoInits();
+
+            foreach (var account in options.Launch)
+                AccountManager.Account(account).IsSelected();
+            foreach(var arg in options.Args)
+                AccountArgumentManager.StopGap.IsSelected("-" + arg, true);
+            LaunchManager.Launch();
+
             if (!options.Silent)
             {
                 var app = new App();
                 app.InitializeComponent();
                 app.Run();
-            }   
+            }
         }
     }
 }

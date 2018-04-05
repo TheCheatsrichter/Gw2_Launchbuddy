@@ -9,17 +9,17 @@
 
     <Grid Background="#FF706E6E">
         <Grid.OpacityMask>
-            <ImageBrush ImageSource="Resources/opacitymask.png"/>
+            <ImageBrush ImageSource="Resources/opacitymask.png" />
         </Grid.OpacityMask>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="100*"/>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="100*" />
         </Grid.RowDefinitions>
-        <Label Content="Game Instances" FontSize="16" FontStyle="Italic"/>
+        <Label Content="Game Instances" FontSize="16" FontStyle="Italic" />
         <Button x:Name="bt_close" Width="30" Height="30" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" HorizontalAlignment="Right" VerticalAlignment="Top" Click="bt_close_Click">
-            <Image Source="Resources/Icons/error.png"/>
+            <Image Source="Resources/Icons/error.png" />
         </Button>
-        <StackPanel Grid.Row="2" >
+        <StackPanel Grid.Row="2">
             <Grid>
                 <ListView x:Name="lv_instances" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2" Grid.Row="1" SelectionChanged="lv_gfx_SelectionChanged" Width="160" Background="Transparent" BorderThickness="0" Height="270">
                     <ListView.Resources>
@@ -32,16 +32,16 @@
                             <GridViewColumn>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <DockPanel Height="50" >
-                                            <Image DataContext="{Binding Path=acc}" Width="45" Height="45" Source="{Binding Path=Icon}"></Image>
+                                        <DockPanel Height="50">
+                                            <Image DataContext="{Binding Path=Account}" Width="45" Height="45" Source="{Binding Path=Icon}"></Image>
                                             <DockPanel>
-                                                <Label DataContext="{Binding Path=acc}" Content="{Binding Path=Nick}" Width="100" FontWeight="Bold" Margin="0,-5,0,0" DockPanel.Dock="Top"/>
+                                                <Label DataContext="{Binding Path=Account}" Content="{Binding Path=Nickname}" Width="100" FontWeight="Bold" Margin="0,-5,0,0" DockPanel.Dock="Top" />
                                                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                                                     <Button x:Name="bt_maxmin" Click="bt_maxmin_Click" Width="25">
-                                                        <Image Source="Resources/Icons/focus.png"/>
+                                                        <Image Source="Resources/Icons/focus.png" />
                                                     </Button>
                                                     <Button x:Name="bt_closeinstance" Click="bt_closeinstance_Click" Width="25">
-                                                        <Image Source="Resources/Icons/close.png"/>
+                                                        <Image Source="Resources/Icons/close.png" />
                                                     </Button>
                                                 </StackPanel>
                                             </DockPanel>

@@ -21,16 +21,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
-using System.IO;
-using System.Text.RegularExpressions;
+using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Gw2_Launchbuddy
 {
@@ -65,7 +59,7 @@ namespace Gw2_Launchbuddy
         private static extern NTSTATUS NtQuerySystemInformation(SYSTEM_INFORMATION_CLASS SystemInformationClass,
             IntPtr SystemInformation, int SystemInformationLength, out int ReturnLength);
 
-        #endregion
+        #endregion Native Method Signatures
 
         #region Structures
 
@@ -105,7 +99,7 @@ namespace Gw2_Launchbuddy
             public UInt64 Information;
         }
 
-        #endregion
+        #endregion Structures
 
         #region Enumerations
 
@@ -166,42 +160,43 @@ namespace Gw2_Launchbuddy
             FileNameInformation = 9
         } //partial enum, actual set is huge, google SYSTEM_INFORMATION_CLASS
 
-        #endregion
+        #endregion Enumerations
 
         #region Functions
+
         /// <summary>
-        /// Clears file locks on the specified dat file, from specified process.
+        /// Clears file locks on the specified file, from specified process.
         /// </summary>
         /// <param name="Proc">Full path to process file to unlock from</param>
-        /// <param name="Dat">Full path to dat file to be unlocked</param>
+        /// <param name="File">Full path to file to be unlocked</param>
         /// <returns></returns>
-        public static bool ClearDatLock(string Proc, string Dat)
+        public static bool ClearFileLock(string Proc, string File)
         {
             var temp = new List<int>();
-            return ClearDatLock(Proc, Dat, ref temp);
+            return ClearFileLock(Proc, File, ref temp);
         }
+
         /// <summary>
-        /// Clears file locks on the specified dat file, from specified process.
+        /// Clears file locks on the specified file, from specified process.
         /// </summary>
         /// <param name="Proc">Full path to process file to unlock from</param>
-        /// <param name="Dat">Full path to dat file to be unlocked</param>
+        /// <param name="File">Full path to file to be unlocked</param>
         /// <param name="excProcIDs">Process ID's to exclude</param>
         /// <returns></returns>
-        public static bool ClearDatLock(string Proc, string Dat, ref List<int> excProcIDs)
+        public static bool ClearFileLock(string ProcName, string File, ref List<int> excProcIDs)
         {
             bool success = false;
             var excList = excProcIDs == null ? new List<int>() : excProcIDs.ToList();
 
             //take off the drive portion due to limitation in how killhandle works for file name
-            Dat = Dat.Substring(2);
+            File = File.Substring(2);
 
             //get list of currently running system processes
             Process[] processList = Process.GetProcesses();
 
-            foreach (Process i in processList.Where(a => !excList.Contains(a.Id)).Where(a => a.ProcessName.Equals(Regex.Replace(Proc, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase), StringComparison.OrdinalIgnoreCase)))
+            foreach (Process i in processList.Where(a => !excList.Contains(a.Id)).Where(a => a.ProcessName.Equals(ProcName, StringComparison.OrdinalIgnoreCase)))
             {
-
-                if (HandleManager.KillHandle(i, Dat, true))
+                if (HandleManager.KillHandle(i, File, true))
                 {
                     success = true;
                     excProcIDs.Add(i.Id);
@@ -231,7 +226,7 @@ namespace Gw2_Launchbuddy
         /// <param name="MutexName">Full name of mutex to be removed</param>
         /// <param name="excProcIDs">Process ID's to exclude</param>
         /// <returns></returns>
-        public static bool ClearMutex(string Proc, string MutexName, ref List<int> excProcIDs)
+        public static bool ClearMutex(string ProcName, string MutexName, ref List<int> excProcIDs)
         {
             bool success = false;
             var excList = excProcIDs == null ? new List<int>() : excProcIDs.ToList();
@@ -239,7 +234,7 @@ namespace Gw2_Launchbuddy
             //get list of currently running system processes
             Process[] processList = Process.GetProcesses();
 
-            foreach (Process i in processList.Where(a => !excList.Contains(a.Id)).Where(a => a.ProcessName.Equals(Regex.Replace(Proc, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase), StringComparison.OrdinalIgnoreCase)))
+            foreach (Process i in processList.Where(a => !excList.Contains(a.Id)).Where(a => a.ProcessName.Equals(ProcName, StringComparison.OrdinalIgnoreCase)))
             {
                 if (HandleManager.KillHandle(i, MutexName, false))
                 {
@@ -502,7 +497,7 @@ namespace Gw2_Launchbuddy
             // Allocate unmanaged memory to store name
             IntPtr pStringBuffer = Marshal.AllocHGlobal(bufferSize);
 
-            // Query to fill string buffer with name 
+            // Query to fill string buffer with name
             NtQueryObject(handle, OBJECT_INFORMATION_CLASS.ObjectNameInformation, pStringBuffer, bufferSize, out bufferSize);
 
             // Close this handle
@@ -547,6 +542,6 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        #endregion
+        #endregion Functions
     }
 }

@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Windows;
 using System.IO;
+using System.Linq;
+using System.Net;
 
 namespace Update_Helper
 {
-    class Program
+    internal class Program
     {
         /* Args:
          *       0: pid of old LB
@@ -20,7 +14,8 @@ namespace Update_Helper
          *       2: URL to download
          *       3: old LB name
          */
-        static void Main(string[] args)
+
+        private static void Main(string[] args)
         {
             try
             {

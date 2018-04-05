@@ -1,13 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using Gw2_Launchbuddy.ObjectManagers;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Diagnostics;
-using System.Threading;
-using System.Data;
-using System.Runtime.InteropServices;
-using System.Collections.ObjectModel;
-
 
 namespace Gw2_Launchbuddy
 {
@@ -19,15 +13,11 @@ namespace Gw2_Launchbuddy
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
 
-
         public GUI_ApplicationManager()
         {
             InitializeComponent();
             this.Left = Properties.Settings.Default.instance_win_X;
             this.Top = Properties.Settings.Default.instance_win_Y;
-            Thread updatelist = new Thread(UpdateProAccs);
-            updatelist.IsBackground = true;
-            updatelist.Start();
         }
 
         private void bt_close_Click(object sender, RoutedEventArgs e)
@@ -37,72 +27,34 @@ namespace Gw2_Launchbuddy
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            lv_instances.ItemsSource = Globals.LinkedAccs;
+            lv_instances.ItemsSource = AccountClientManager.AccountClientCollection;
         }
 
         private void lv_gfx_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(lv_instances.SelectedIndex >=0)
+            if (lv_instances.SelectedIndex >= 0)
             {
-                CheckPros();
-                ProAccBinding selinstance = lv_instances.SelectedItem as ProAccBinding;
-                IntPtr hwndMain = selinstance.pro.MainWindowHandle;
+                AccountClient selinstance = lv_instances.SelectedItem as AccountClient;
+                IntPtr hwndMain = ((Client)selinstance.Client).MainWindowHandle;
                 SetForegroundWindow(hwndMain);
-            }
-        }
-
-        public void UpdateProAccs()
-        {
-            while (true)
-            {
-                Dispatcher.Invoke(new Action(() =>
-                {
-                   CheckPros();
-                }));
-                Thread.Sleep(1000);
-            }
-        }
-
-        public void CheckPros()
-        {
-            ObservableCollection<ProAccBinding> ToRemove = new ObservableCollection<Gw2_Launchbuddy.ProAccBinding>();
-            foreach(ProAccBinding proacc in Globals.LinkedAccs)
-            {
-                try
-                {
-                    Process.GetProcessById(proacc.pro.Id);   
-                }
-                catch
-                {
-                    ToRemove.Add(proacc);
-                }
-            }
-            foreach (ProAccBinding proacc in ToRemove)
-            {
-                Globals.LinkedAccs.Remove(proacc);
             }
         }
 
         private void bt_closeinstance_Click(object sender, RoutedEventArgs e)
         {
-            CheckPros();
-            ProAccBinding selinstance = (sender as Button).DataContext as ProAccBinding;
+            AccountClient selinstance = (sender as Button).DataContext as AccountClient;
             try
             {
-                if(!selinstance.pro.CloseMainWindow())
-                    selinstance.pro.Kill();
-                if (!selinstance.pro.WaitForExit(1000))
-                    selinstance.pro.Kill();
+                ((Client)selinstance.Client).Stop();
             }
             catch { }
-            Globals.LinkedAccs.Remove(selinstance);
+            //Globals.LinkedAccs.Remove(selinstance);
         }
 
         private void bt_maxmin_Click(object sender, RoutedEventArgs e)
         {
-            CheckPros();
-            ProAccBinding selinstance = (sender as Button).DataContext as ProAccBinding;
-            IntPtr hwndMain = selinstance.pro.MainWindowHandle;
+            AccountClient selinstance = (sender as Button).DataContext as AccountClient;
+            IntPtr hwndMain = ((Client)selinstance.Client).MainWindowHandle;
             SetForegroundWindow(hwndMain);
         }
 
@@ -113,7 +65,6 @@ namespace Gw2_Launchbuddy
 
         private void Window_Initialized(object sender, EventArgs e)
         {
-
         }
     }
 }

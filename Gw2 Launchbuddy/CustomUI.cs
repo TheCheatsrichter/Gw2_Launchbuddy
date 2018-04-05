@@ -1,26 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Controls;
-using System.Net.NetworkInformation;
-using System.Xml;
-using System.IO;
-using System.Diagnostics;
-using IWshRuntimeLibrary;
-using System.Reflection;
-using System.ComponentModel;
-using System.Collections.ObjectModel;
-using System.Net;
-using System.Windows.Data;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.IO.Compression;
 using System.Windows.Input;
 
 namespace Gw2_Launchbuddy
@@ -74,7 +54,6 @@ namespace Gw2_Launchbuddy
         public static void S(object sender)
         {
             var UIControl = sender as UserControl;
-
         }
     }
 }

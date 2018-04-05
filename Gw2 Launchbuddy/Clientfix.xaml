@@ -1,4 +1,4 @@
-﻿<Window x:Class="Gw2_Launchbuddy.Clientfix"
+﻿<Window x:Class="Gw2_Launchbuddy.ClientFix"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -10,61 +10,54 @@
 
         <Storyboard x:Key="anim_quaggan">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="img_glasses">
-                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:5" Value="112.056"/>
+                <EasingDoubleKeyFrame KeyTime="0" Value="0" />
+                <EasingDoubleKeyFrame KeyTime="0:0:5" Value="112.056" />
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="img_glasses">
-                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:5" Value="-1.334"/>
+                <EasingDoubleKeyFrame KeyTime="0" Value="0" />
+                <EasingDoubleKeyFrame KeyTime="0:0:5" Value="-1.334" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
-
     </Window.Resources>
     <Window.Triggers>
-
     </Window.Triggers>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="200*"/>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="200*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="2">
-            <Button x:Name="bt_auto" Content="Fix Client Wizard" Width="272" Click="bt_auto_Click" Margin="0,5,0,0"/>
-            <Button x:Name="bt_appdata" Content="Clean Appdata" Width="272" Click="bt_appdata_Click" Margin="0,5,0,0" />
+            <Button x:Name="bt_auto" Content="Fix Client Wizard" Width="272" Click="bt_auto_Click" Margin="0,5,0,0" />
+            <Button x:Name="bt_appdata" Content="Clean AppAata" Width="272" Click="bt_appdata_Click" Margin="0,5,0,0" />
             <Button x:Name="bt_resetup" Content="Refresh Launchbuddy Setup" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="272" Click="bt_resetup_Click" Margin="0,5,0,0" />
             <Button x:Name="bt_bin" Content="Clean Bin folders" Width="272" Click="bt_bin_Click" Margin="0,5,0,0" />
-            <Button x:Name="bt_repair" Content="Launch game in repairmode" Width="272" Click="bt_repair_Click" Margin="0,5,0,0"/>
+            <Button x:Name="bt_repair" Content="Launch game in repair mode" Width="272" Click="bt_repair_Click" Margin="0,5,0,0" />
             <Button x:Name="bt_patch" Content="Patch game" Width="272" Click="bt_patch_Click" Margin="0,5,0,0" />
-            
-            
-            
         </StackPanel>
 
         <Image x:Name="image" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="100" Source="Resources/quaggan.jpg" RenderTransformOrigin="0.5,0.5" Margin="0,-0.502,0,0">
             <Image.RenderTransform>
                 <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform/>
+                    <ScaleTransform />
+                    <SkewTransform />
+                    <RotateTransform />
+                    <TranslateTransform />
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
 
-        <TextBlock x:Name="tbl_quaggan" HorizontalAlignment="Left" Margin="100,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="59" Width="182" FontSize="13.333" FontFamily="Comic Sans MS"><Run Text="C"/><Run Text="ooo"/><Run Text="! Quaggan will fix your Client for youuu. Choose what q"/><Run Text="uagg"/><Run Text="an can do for you."/></TextBlock>
-        <TextBlock x:Name="tbl_warning" Grid.Row="1" HorizontalAlignment="Center"  TextWrapping="Wrap" Text="ATTENTION: This section does delete/modify files!" VerticalAlignment="Top" Foreground="#FFFF0505"/>
+        <TextBlock x:Name="tbl_quaggan" HorizontalAlignment="Left" Margin="100,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="59" Width="182" FontSize="13.333" FontFamily="Comic Sans MS"><Run Text="C" /><Run Text="ooo" /><Run Text="! Quaggan will fix your Client for youuu. Choose what q" /><Run Text="uagg" /><Run Text="an can do for you." /></TextBlock>
+        <TextBlock x:Name="tbl_warning" Grid.Row="1" HorizontalAlignment="Center"  TextWrapping="Wrap" Text="ATTENTION: This section does delete/modify files!" VerticalAlignment="Top" Foreground="#FFFF0505" />
         <Image x:Name="img_glasses" HorizontalAlignment="Left" Height="9" Margin="-83,35.333,0,0" VerticalAlignment="Top" Width="58" Source="Resources/glasses.png" RenderTransformOrigin="0.5,0.5">
             <Image.RenderTransform>
                 <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform/>
+                    <ScaleTransform />
+                    <SkewTransform />
+                    <RotateTransform />
+                    <TranslateTransform />
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
-
-
     </Grid>
 </Window>

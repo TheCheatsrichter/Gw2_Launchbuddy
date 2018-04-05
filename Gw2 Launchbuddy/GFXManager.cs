@@ -1,39 +1,27 @@
-﻿using System;
+﻿using Gw2_Launchbuddy.ObjectManagers;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.IO;
-using System.Xml;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace Gw2_Launchbuddy
 {
-
     public static class GFXManager
     {
-        static GFXConfig CurrentConfig = new GFXConfig();
+        private static GFXConfig CurrentConfig = new GFXConfig();
 
         //Options to skip
-        static List<string> SkippedOptions = new List<string>
+        private static List<string> SkippedOptions = new List<string>
         {
             "gamma",
         };
 
-        static public GFXConfig LoadFile()
+        static public GFXConfig LoadFile(string path)
         {
-            OpenFileDialog filediag = new OpenFileDialog { Multiselect = false, DefaultExt = "xml" };
-            CurrentConfig.ConfigPath = "";
-
-            filediag.DefaultExt = ".xml";
-            filediag.Filter = "Xml Files(*.xml) | *.xml";
-            filediag.InitialDirectory = Globals.exepath;
-            filediag.ShowDialog();
-
-            CurrentConfig.ConfigPath = filediag.FileName;
-            if (!IsValidGFX(CurrentConfig.ConfigPath)) return null;
+            CurrentConfig.ConfigPath = path;
             return ReadFile(CurrentConfig.ConfigPath);
         }
 
@@ -50,11 +38,11 @@ namespace Gw2_Launchbuddy
         {
             SaveFileDialog savediag = new System.Windows.Forms.SaveFileDialog();
             savediag.DefaultExt = ".xml";
-            savediag.Filter = "Xml Files(*.xml) | *.xml";
+            savediag.Filter = "XML Files(*.xml)|*.xml";
             savediag.Title = "Saving GFX Settings";
             savediag.AddExtension = true;
             savediag.FileName = "GW2 Custom GFX";
-            savediag.InitialDirectory = Globals.exepath;
+            savediag.InitialDirectory = ClientManager.ClientInfo.InstallPath;
             savediag.ShowDialog();
 
             if (savediag.FileName != "") ToXml(savediag.FileName);
@@ -92,17 +80,17 @@ namespace Gw2_Launchbuddy
                 path = "Default";
             }
 
-            if (path == "Default" && File.Exists(Globals.AppdataPath + "GFX_tmp.xml"))
+            if (path == "Default" && File.Exists(Globals.AppDataPath + "GFX_tmp.xml"))
             {
                 if (File.Exists(Globals.ClientXmlpath)) File.Delete(Globals.ClientXmlpath);
-                File.Move(Globals.AppdataPath + "GFX_tmp.xml", Globals.ClientXmlpath);
+                File.Move(Globals.AppDataPath + "GFX_tmp.xml", Globals.ClientXmlpath);
             }
 
             if (File.Exists(path) && Path.GetExtension(path) == ".xml")
             {
-                if (!File.Exists(Globals.AppdataPath + "GFX_tmp.xml"))
+                if (!File.Exists(Globals.AppDataPath + "GFX_tmp.xml"))
                 {
-                    File.Move(Globals.ClientXmlpath, Globals.AppdataPath + "GFX_tmp.xml");
+                    File.Move(Globals.ClientXmlpath, Globals.AppDataPath + "GFX_tmp.xml");
                 }
                 if (File.Exists(Globals.ClientXmlpath))
                 {
@@ -114,10 +102,10 @@ namespace Gw2_Launchbuddy
 
         public static void RestoreDefault()
         {
-            if (File.Exists(Globals.AppdataPath + "GFX_tmp.xml"))
+            if (File.Exists(Globals.AppDataPath + "GFX_tmp.xml"))
             {
                 if (File.Exists(Globals.ClientXmlpath)) File.Delete(Globals.ClientXmlpath);
-                File.Move(Globals.AppdataPath + "GFX_tmp.xml", Globals.ClientXmlpath);
+                File.Move(Globals.AppDataPath + "GFX_tmp.xml", Globals.ClientXmlpath);
             }
         }
 
@@ -215,6 +203,7 @@ namespace Gw2_Launchbuddy
         public string Value { set; get; }
         public string OldValue { set; get; }
         public List<string> Options = new List<string>();
+
         public IEnumerable<string> IEOptions
         {
             set { IEOptions = value; }

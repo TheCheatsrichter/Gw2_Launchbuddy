@@ -1,37 +1,34 @@
-﻿using System;
-using System.Windows;
-using System.IO;
+﻿using Gw2_Launchbuddy.ObjectManagers;
+using System;
 using System.Diagnostics;
-using System.Threading;
+using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Windows;
 using System.Windows.Media.Animation;
-
 
 namespace Gw2_Launchbuddy
 {
     /// <summary>
-    /// Interaction logic for Clientfix.xaml
+    /// Interaction logic for ClientFix.xaml
     /// </summary>
-    public partial class Clientfix : Window
+    public partial class ClientFix : Window
     {
-        public string exepath { get; set; }
-        public string exename { get; set; }
-        bool glasses = false;
+        private static Client fixClient = new Client();
+        private bool glasses = false;
 
-        public Clientfix()
+        public ClientFix()
         {
             InitializeComponent();
         }
 
-        void verifygame()
+        private void VerifyGame()
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.FileName = exepath + exename;
-            startInfo.Arguments = " -verify";
+            fixClient.StartInfo.Arguments = " -verify";
 
             try
             {
-                Process.Start(startInfo);
+                fixClient.Start();
             }
             catch (Exception err)
             {
@@ -39,29 +36,28 @@ namespace Gw2_Launchbuddy
             }
         }
 
-
         private void bt_repair_Click(object sender, RoutedEventArgs e)
         {
             setbusy(true);
-            verifygame();
+            VerifyGame();
             setbusy(false);
         }
 
         private void bt_patch_Click(object sender, RoutedEventArgs e)
         {
             setbusy(true);
-            patchgame();
+            PatchGame();
             setbusy(false);
         }
 
-        void waitforlauncher()
+        private void waitforlauncher()
         {
             setbusy(true);
             Process[] processlist = Process.GetProcesses();
             Process Gw2Process = null;
             int i = 0;
             bool islaunched = false;
-            int id=0;
+            int id = 0;
             while (Gw2Process == null && ++i <= 10)
             {
                 foreach (Process theprocess in processlist)
@@ -72,7 +68,6 @@ namespace Gw2_Launchbuddy
                         id = Gw2Process.Id;
                         islaunched = true;
                     }
-
                 }
                 Thread.Sleep(1000);
             }
@@ -82,7 +77,7 @@ namespace Gw2_Launchbuddy
             processlist = Process.GetProcesses();
             while (islaunched && id != 0)
             {
-                if(!Process.GetProcesses().Any(x => x.Id == id))
+                if (!Process.GetProcesses().Any(x => x.Id == id))
                 {
                     islaunched = false;
                     setbusy(false);
@@ -91,19 +86,13 @@ namespace Gw2_Launchbuddy
             }
         }
 
-
-        void patchgame()
+        private void PatchGame()
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.FileName = exepath + exename;
-            startInfo.Arguments = " -image";
-            Process gw2pro = new Process { StartInfo = startInfo };
+            fixClient.Arguments = " -image";
 
             try
             {
-                gw2pro.Start();
-                gw2pro.WaitForExit();
-
+                fixClient.StartAndWait();
 
                 //Not needed waiting time
                 /*
@@ -115,7 +104,6 @@ namespace Gw2_Launchbuddy
             {
                 MessageBox.Show(err.Message);
             }
-
         }
 
         private void bt_appdata_Click(object sender, RoutedEventArgs e)
@@ -125,9 +113,9 @@ namespace Gw2_Launchbuddy
             setbusy(false);
         }
 
-        void cleanappdata()
+        private void cleanappdata()
         {
-            MessageBoxResult win = MessageBox.Show("When quaggan cleans the Appdata some gamesettings will get deleted!\nDeleting these files can however increase the overall fps of the game in some cases!\n\nClean Appdata?", "Clean Appdata Info", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            MessageBoxResult win = MessageBox.Show("When quaggan cleans the AppData some game settings will get deleted!\nDeleting these files can however increase the overall fps of the game in some cases!\n\nClean AppData?", "Clean AppData Info", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             try
             {
@@ -141,61 +129,51 @@ namespace Gw2_Launchbuddy
                         File.Delete(file);
                     }
 
-                    MessageBox.Show("Quaggan cleaned " + datfiles.Length + " file(s) from Appdata");
+                    MessageBox.Show("Quaggan cleaned " + datfiles.Length + " file(s) from AppData");
                 }
             }
             catch (Exception err) { MessageBox.Show(err.Message); }
-
         }
 
-        void deletebinfolder()
+        private void DeleteBinFolder()
         {
-            MessageBoxResult win = MessageBox.Show("When quaggan updates the bin folder 3rd party shaders like Reshade,GemFX and SweetFX will get removed!\n\nThis can solve problems with non functioning 3rd party shaders and launcher crashes.\n\nUpdate bin folder?", "Update Bin folder Info", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            MessageBoxResult win = MessageBox.Show("When quaggan updates the bin folder 3rd party shaders like ReShade, GemFX and SweetFX will get removed!\n\nThis can solve problems with non functioning 3rd party shaders and launcher crashes.\n\nUpdate bin folder?", "Update Bin Folder Info", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             try
             {
                 if (win.ToString() == "Yes")
                 {
-                    if (Directory.Exists(exepath + "bin"))
-                    {
-                        Directory.Delete(exepath + "bin", true);
-                    }
-                    if (Directory.Exists(exepath + "bin64"))
-                    {
-                        Directory.Delete(exepath + "bin64", true);
-                    }
+                    Directory.Delete(ClientManager.ClientInfo.InstallPath + "\\bin", true);
+                    Directory.Delete(ClientManager.ClientInfo.InstallPath + "\\bin64", true);
                 }
             }
             catch (Exception err) { MessageBox.Show(err.Message); }
-            
-
         }
 
         private void bt_auto_Click(object sender, RoutedEventArgs e)
         {
             setbusy(true);
-            deletebinfolder();
+            DeleteBinFolder();
             cleanappdata();
 
             MessageBoxResult win = MessageBox.Show("Should quaggan now search for errors in the Gw2 file? (can take up to 30 mins!)", "Update Bin folder Info", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (win.ToString() == "Yes")
             {
-                verifygame();
+                VerifyGame();
             }
-            patchgame();
+            PatchGame();
             setbusy(false);
-
         }
 
         private void bt_bin_Click(object sender, RoutedEventArgs e)
         {
             setbusy(true);
-            deletebinfolder();
+            DeleteBinFolder();
             setbusy(false);
         }
 
-        void setbusy(bool busy)
+        private void setbusy(bool busy)
         {
             bt_appdata.IsEnabled = !busy;
             bt_auto.IsEnabled = !busy;
@@ -205,23 +183,23 @@ namespace Gw2_Launchbuddy
 
             if (busy) tbl_quaggan.Text = "Quaggan is busy please wait";
             if (!busy)
-            { tbl_quaggan.Text = "What else can quaggan do for youuu?";
+            {
+                tbl_quaggan.Text = "What else can quaggan do for youuu?";
                 getglasses();
             }
-
         }
 
-        void getglasses ()
+        private void getglasses()
         {
-            if (!glasses)BeginStoryboard(this.FindResource("anim_quaggan") as Storyboard);
+            if (!glasses) BeginStoryboard(this.FindResource("anim_quaggan") as Storyboard);
             glasses = true;
         }
 
         private void bt_resetup_Click(object sender, RoutedEventArgs e)
         {
-            string AppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
-            File.Delete(AppdataPath + "handle.exe");
-            File.Delete(AppdataPath + "handle64.exe");
+            string AppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
+            File.Delete(AppDataPath + "handle.exe");
+            File.Delete(AppDataPath + "handle64.exe");
             System.Windows.Forms.Application.Restart();
             Application.Current.Shutdown();
         }

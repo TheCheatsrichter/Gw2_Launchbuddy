@@ -9,35 +9,34 @@
     <Window.Resources>
         <Storyboard x:Key="quaggan_anim" RepeatBehavior="1">
             <DoubleAnimationUsingKeyFrames x:Name="doubleAnimationUsingKeyFrames" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="image">
-                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="12"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:3" Value="-12"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:4" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0" Value="0" />
+                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="12" />
+                <EasingDoubleKeyFrame KeyTime="0:0:3" Value="-12" />
+                <EasingDoubleKeyFrame KeyTime="0:0:4" Value="0" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
     </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-            <BeginStoryboard Storyboard="{StaticResource quaggan_anim}"/>
+            <BeginStoryboard Storyboard="{StaticResource quaggan_anim}" />
         </EventTrigger>
     </Window.Triggers>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="150*"/>
-            <RowDefinition Height="100*"/>
+            <RowDefinition Height="150*" />
+            <RowDefinition Height="100*" />
         </Grid.RowDefinitions>
 
         <Image x:Name="image" Source="Resources/quaggan.jpg" Grid.Row="0" RenderTransformOrigin="0.5,0.5">
             <Image.RenderTransform>
                 <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform/>
+                    <ScaleTransform />
+                    <SkewTransform />
+                    <RotateTransform />
+                    <TranslateTransform />
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
-        <TextBlock x:Name="textBlock" Grid.Row="1" TextWrapping="Wrap" Text="Quaggans are setting up Gw2 Launchbuddy! So sit back and grab some cookies!" TextAlignment="Center" FontWeight="Bold" FontSize="16"/>
-
+        <TextBlock x:Name="textBlock" Grid.Row="1" TextWrapping="Wrap" Text="Quaggans are setting up Gw2 Launchbuddy! So sit back and grab some cookies!" TextAlignment="Center" FontWeight="Bold" FontSize="16" />
     </Grid>
 </Window>

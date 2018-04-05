@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CrashReporterDotNET;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CrashReporterDotNET;
 using System.Net.Mail;
 
 namespace Gw2_Launchbuddy
@@ -24,7 +21,7 @@ namespace Gw2_Launchbuddy
             }
             catch (Exception err)
             {
-                ReportCrashToSingle(err,name);
+                ReportCrashToSingle(err, name);
             }
         }
 
@@ -40,19 +37,16 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        public static void ReportCrashToSingle(Exception err,string targetname)
+        public static void ReportCrashToSingle(Exception err, string targetname)
         {
-            ReportCrash reportCrash = new ReportCrash
-            {
-                ToEmail = emails.FirstOrDefault(a => a.DisplayName == targetname).Address
-            };
+            ReportCrash reportCrash = new ReportCrash(emails.FirstOrDefault(a => a.DisplayName == targetname).Address);
 
             reportCrash.Send(err);
         }
 
         public static void ReportCrashToAll(Exception err)
         {
-            ReportCrash reportCrash = new ReportCrash();
+            ReportCrash reportCrash = new ReportCrash(null);
 
             foreach (MailAddress email in emails)
             {

@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net;
-using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Net;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace Gw2_Launchbuddy
 {
     public static class VersionSwitcher
     {
-        static string URL_Releases = @"https://github.com/TheCheatsrichter/Gw2_Launchbuddy/releases";
-        static List<string> URL_Versions = new List<string>();
-        static string Repo_User, Repo_Name;
+        private static string URL_Releases = @"https://github.com/TheCheatsrichter/Gw2_Launchbuddy/releases";
+        private static List<string> URL_Versions = new List<string>();
+        private static string Repo_User, Repo_Name;
         public static ObservableCollection<Release> Releaselist = new ObservableCollection<Release>();
 
         public static void CheckForUpdate()
