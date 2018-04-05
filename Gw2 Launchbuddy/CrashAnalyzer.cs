@@ -11,7 +11,7 @@ using System.Diagnostics;
 using System.Xml.Serialization;
 
 namespace Gw2_Launchbuddy
-{
+{/*
     public class CrashFilter
     {
         public string[] keywords;
@@ -207,7 +207,7 @@ namespace Gw2_Launchbuddy
                     }
                     
                 }
-                */
+                
             }
             catch (Exception e)
             {
@@ -293,4 +293,6 @@ namespace Gw2_Launchbuddy
             Solutioninfo = CrashLibrary.SolutionInfo[Solutionkey];
         }
     }
+*/
+
 }

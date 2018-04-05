@@ -237,6 +237,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Launchbuddy_default_theme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -314,31 +318,13 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Resources\launchbuddy.ico" />
+    <Resource Include="Resources\launchbuddy.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="launchbuddy.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\quaggan.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\quaggan.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\launchbuddyback.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\glasses.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\loginwindow.png" />
-  </ItemGroup>
-  <ItemGroup>
     <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\logo_hq_mask.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\error.png" />
@@ -355,19 +341,29 @@
     <Resource Include="Resources\Icons\popcorn.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\noimg.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\launchbutton.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="FodyWeavers.xml" />
-    <Resource Include="Resources\opacitymask.png" />
     <Resource Include="Resources\Icons\film.png" />
     <Resource Include="Resources\Icons\user.png" />
     <Resource Include="Resources\Icons\close.png" />
     <Resource Include="Resources\Icons\focus.png" />
     <Resource Include="Resources\donate.png" />
+    <Resource Include="Resources\glasses.png" />
+    <Resource Include="Resources\header_background.png" />
+    <Resource Include="Resources\header_dragonhead.png" />
+    <Resource Include="Resources\launchbuddy_header.png" />
+    <Resource Include="Resources\Launchbuddy_logo.png" />
+    <Resource Include="Resources\Launchbuddy_logo_loading.png" />
+    <Resource Include="Resources\launchbuddyback.png" />
+    <Resource Include="Resources\launchbutton.png" />
+    <Resource Include="Resources\loginwindow.png" />
+    <Resource Include="Resources\logo_hq_mask.png" />
+    <Resource Include="Resources\noimg.png" />
+    <Resource Include="Resources\opacitymask.png" />
+    <Resource Include="Resources\opacitymask_tile.png" />
+    <Resource Include="Resources\patreon_button.png" />
+    <Resource Include="Resources\quaggan.jpg" />
+    <Resource Include="Resources\quaggan.png" />
+    <Resource Include="Resources\shortdragonhead.png" />
     <Content Include="Resources\Update Helper.exe" />
   </ItemGroup>
   <ItemGroup>
@@ -376,6 +372,7 @@
       <Name>PluginContract</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
     <ItemGroup>

@@ -104,7 +104,7 @@
             <ContentPresenter Margin="4"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top" />
-            </Border>
+        </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="HasDropShadow"
                    Value="true">

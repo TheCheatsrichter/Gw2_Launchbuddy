@@ -367,7 +367,7 @@
                                     <RowDefinition Height="50*"/>
                                     <RowDefinition Height="50*"/>
                                 </Grid.RowDefinitions>
-                                <Image x:Name="bt_patreon" Source="Resources/patreon_button.png" Grid.Row="1" VerticalAlignment="Bottom" MouseDown="bt_patreon_MouseDown"/>
+                                <Image x:Name="bt_patreon" Source="Resources/patreon_button.png" Grid.Row="1" VerticalAlignment="Bottom" />
                                 <Image Source="Resources/donate.png"  VerticalAlignment="Top" Height="40" MouseDown="bt_donate_Click" />
                             </Grid>
 
@@ -383,7 +383,7 @@
                                 <ColumnDefinition Width="50*"/>
                                 <ColumnDefinition Width="50*"/>
                             </Grid.ColumnDefinitions>
-                            <ListBox x:Name="arglistbox" ItemsSource="{Binding}"   SelectionChanged="arglistbox_SelectionChanged" Grid.Row="1" Grid.Column="0" Margin="0,0,5,0" >
+                            <ListBox x:Name="argListBox" ItemsSource="{Binding}"   SelectionChanged="arglistbox_SelectionChanged" Grid.Row="1" Grid.Column="0" Margin="0,0,5,0" >
                                 <ListBox.Resources>
                                     <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                         <Style.Triggers>
@@ -555,8 +555,8 @@
                             </Grid.ColumnDefinitions>
                             <TextBox x:Name="tb_manualauthserver" Text="Manual Authentication IP" Height="23" ToolTip="Manually add an server IP to the authentication servers."/>
                             <TextBox x:Name="tb_manualassetserver" Text="Manual Assetserver IP" Grid.Column="2" Margin="5,0,0,0" Height="23" ToolTip="Manually add an server IP to the asset servers."/>
-                            <Button x:Name="bt_manualauthserver" Content="Add Authserver"  Grid.Column="1" Click="bt_manualauthserver_Click" Margin="2,2,5,2" ToolTip="Manually add an server IP to the authentication servers."/>
-                            <Button x:Name="bt_manualassetserver" Content="Add Assetserver" Grid.Column="3" Click="bt_manualassetserver_Click" Margin="2,2,0,2" ToolTip="Manually add an server IP to the asset servers."/>
+                            <Button x:Name="bt_manualauthserver" Content="Add Authserver"  Grid.Column="1"  Margin="2,2,5,2" ToolTip="Manually add an server IP to the authentication servers."/>
+                            <Button x:Name="bt_manualassetserver" Content="Add Assetserver" Grid.Column="3"  Margin="2,2,0,2" ToolTip="Manually add an server IP to the asset servers."/>
                         </Grid>
                         <Label x:Name="lab_port_assets" Content="Port (optional):" IsEnabled="False" Grid.Column="1" Grid.Row="5" FontSize="16" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal" />
                         <Label x:Name="lab_port_client" Content="Port :" IsEnabled="False" Grid.Column="1" Grid.Row="6" FontSize="16" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal"/>
@@ -565,7 +565,7 @@
                         <CheckBox x:Name="checkb_assets" Grid.ColumnSpan="2" Content="Use Assets Server : (Select Server)" VerticalAlignment="Center" FontSize="16" IsEnabled="False" Checked="checkb_assets_Checked" Unchecked="checkb_assets_Unchecked" FontWeight="Bold" Grid.Row="5" HorizontalAlignment="Left" Margin="0,4.36"/>
                         <Label x:Name="lab_port_auth" Content="Port (optional):" VerticalAlignment="Bottom" IsEnabled="False" Grid.Column="1" FontSize="16" Grid.Row="4" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal"/>
                         <Button x:Name="bt_checkservers" Content="Refresh Serverlist" Click="bt_checkservers_Click" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,5" FontWeight="Normal" ToolTip="Update the available servers."  />
-                        <ListView x:Name="listview_assets" SelectionChanged="listview_assets_SelectionChanged" Grid.Row="1" Grid.Column="1" d:LayoutOverrides="Height, LeftMargin, RightMargin, TopMargin, BottomMargin" Margin="5,0,0,0" Grid.ColumnSpan="2" FontWeight="Normal" FontSize="12">
+                        <ListView x:Name="listview_assets" SelectionChanged="listview_assets_SelectionChanged" Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" Grid.ColumnSpan="2" FontWeight="Normal" FontSize="12">
                             <ListView.View>
                                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
                                     <GridViewColumn  HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding IP}">
@@ -584,7 +584,7 @@
                             </ListView.View>
                         </ListView>
                         <Label x:Name="lab_assetserverlist" Content="Asset Servers:" RenderTransformOrigin="0.322,-0.072" Grid.Column="1" Style="{StaticResource H1}" ToolTip="Asset servers are used to download game content and updates. &#x0a;If you suffer from slow download speeds try to switch the server here!"/>
-                        <ListView x:Name="listview_auth" SelectionChanged="listview_auth_SelectionChanged" Grid.Row="1" Margin="0,0,5,0" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin" FontWeight="Normal" FontSize="12">
+                        <ListView x:Name="listview_auth" SelectionChanged="listview_auth_SelectionChanged" Grid.Row="1" Margin="0,0,5,0" FontWeight="Normal" FontSize="12">
                             <ListView.View>
                                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
                                     <GridViewColumn  HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding IP}">
@@ -832,6 +832,7 @@
                     </Grid>
 
                 </TabItem>
+                <!---
                 <TabItem Header="Crash Fixes" x:Name="tab_clientfix">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -848,7 +849,7 @@
                                 <RowDefinition Height="100*"/>
                                 <RowDefinition Height="30"/>
                             </Grid.RowDefinitions>
-                            <Button Content="Fix" Grid.Column="1" Grid.Row="2" IsEnabled="False" x:Name="bt_fixcrash" Click="bt_fixcrash_Click" FontSize="14" FontWeight="Bold" ToolTip="Try to fix the currently selected crash."/>
+                            <Button Content="Fix" Grid.Column="1" Grid.Row="2" IsEnabled="False" x:Name="bt_fixcrash" FontSize="14" FontWeight="Bold" ToolTip="Try to fix the currently selected crash."/>
                             <Label Content="Latest Crashes" x:Name="lb_lastcrashes" Style="{StaticResource H2}"/>
                             <Label Content="Info" Grid.Column="1" Style="{StaticResource H2}"/>
                             <ListView x:Name="lv_crashlogs" DisplayMemberPath="{Binding Crashlog}" Grid.Row="1" Grid.RowSpan="2" SelectionChanged="lv_crashlogs_SelectionChanged" FontWeight="Bold">
@@ -879,6 +880,7 @@
                     </Grid>
 
                 </TabItem>
+                -->
                 <TabItem Header="LB Settings">
                     <StackPanel>
 
@@ -917,7 +919,7 @@
                                     </GridView>
                                 </ListView.View>
                             </ListView>
-                            <WebBrowser x:Name="wb_releasedescr" Grid.Row="1" Grid.Column="1" Margin="3,0,0,0"/>
+                            <WebBrowser x:Name="wb_releasedescr" Grid.Row="1" Grid.Column="1" Margin="3,0,0,0" />
                             <DockPanel  Grid.Row="2" Grid.ColumnSpan="2">
                                 <Button x:Name="bt_fetchlbversions" Margin="3" Content="Check for Updates" DockPanel.Dock="Left" Click="bt_fetchlbversions_Click" ToolTip="Check for Gw2 Launchbuddy updates."/>
                                 <Button x:Name="bt_downloadrelease" Margin="3" Content="Download" Click="bt_downloadrelease_Click" IsEnabled="False" DockPanel.Dock="Right" ToolTip="Download the selected Launchbuddy version."/>

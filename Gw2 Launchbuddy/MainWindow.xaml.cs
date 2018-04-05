@@ -102,7 +102,8 @@ namespace Gw2_Launchbuddy
             LoadConfig(); // loading the gw2 XML config file from AppData and loading user settings
 
             Cinema_Accountlist.ItemsSource = listview_acc.ItemsSource = AccountManager.AccountCollection;
-            argListBox.ItemsSource = AccountArgumentManager.AccountArgumentCollection.Where(a => a.Argument.Active && a.Account == AccountManager.DefaultAccount);
+            argListBox.ItemsSource = null;
+            //argListBox.ItemsSource = AccountArgumentManager.AccountArgumentCollection.Where(a => a.Argument.Active && a.Account == AccountManager.DefaultAccount);
 
             Thread checkver = new Thread(checkversion);
             checkver.IsBackground = true;
@@ -116,7 +117,7 @@ namespace Gw2_Launchbuddy
                 Thread checklbver = new Thread(checklbversion);
                 checklbver.Start();
             }
-            CrashAnalyzer.ReadCrashLogs();
+            //CrashAnalyzer.ReadCrashLogs();
         }
 
         private void SettingsTabSetup()
@@ -813,10 +814,16 @@ namespace Gw2_Launchbuddy
         {
             if (argListBox.SelectedItem != null)
             {
-                var item = (Gw2_Launchbuddy.ObjectManagers.AccountArgument)argListBox.SelectedItem;
-                lab_descr.Content = "Description (" + item.Argument.Flag + "):";
-
-                textblock_descr.Text = ArgumentManager.ArgumentCollection.Where(a => a.Flag == item.Argument.Flag).Select(a => a.Description).FirstOrDefault() ?? "Description missing! (PLEASE REPORT)";
+                Argument item = ArgumentManager.ArgumentCollection.FirstOrDefault(x => x.Flag == (argListBox.SelectedItem as System.Windows.Controls.CheckBox).Content.ToString());
+                if (item != null)
+                {
+                    lab_descr.Content = "Description (" + item.Flag + "):";
+                    textblock_descr.Text = item.Description;
+                } else
+                {
+                    lab_descr.Content = "Description (NaN):";
+                    textblock_descr.Text = "Missing Description please report!";
+                }
             }
         }
 
@@ -1484,12 +1491,13 @@ namespace Gw2_Launchbuddy
             if (Cinema_MediaPlayer.IsMuted)
             {
                 Cinema_MediaPlayer.IsMuted = false;
-                img_mutebutton.Source = new BitmapImage(new Uri("/Resources/Icons/speaker_loud.png", UriKind.Relative));
+                img_mutebutton = new ImageBrush(new BitmapImage(new Uri("/Resources/Icons/speaker_loud.png", UriKind.Relative)));
             }
             else
             {
                 Cinema_MediaPlayer.IsMuted = true;
-                img_mutebutton.Source = new BitmapImage(new Uri("/Resources/Icons/speaker_mute.png", UriKind.Relative));
+                img_mutebutton = new ImageBrush(new BitmapImage(new Uri("/Resources/Icons/speaker_mute.png", UriKind.Relative)));
+
             }
         }
 
