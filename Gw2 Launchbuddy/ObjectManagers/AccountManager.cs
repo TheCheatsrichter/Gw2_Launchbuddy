@@ -161,6 +161,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
+        public string ObscuredEmail
+        {
+            get
+            {
+                return email.Split('@')[0].Substring(0,2) + "***" + email.Split('@')[1];
+            }
+        }
+
         public string Password
         {
             get => password;

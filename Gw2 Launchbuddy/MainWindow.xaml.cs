@@ -493,99 +493,14 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        private void createlist()
-        {
-            ObservableCollection<Server> tmp_authlist = new ObservableCollection<Server>();
-            ObservableCollection<Server> tmp_assetlist = new ObservableCollection<Server>();
-
-            string default_auth1port = "6112";
-            string default_auth2port = "6112";
-            string default_assetport = "80";
-
-            try
-            {
-                IPAddress[] auth1ips = Dns.GetHostAddresses("auth1.101.ArenaNetworks.com");
-                IPAddress[] auth2ips = Dns.GetHostAddresses("auth2.101.ArenaNetworks.com");
-                IPAddress[] assetips = Dns.GetHostAddresses("assetcdn.101.ArenaNetworks.com");
-
-                foreach (IPAddress ip in auth1ips)
-                {
-                    tmp_authlist.Add(new Server { IP = ip.ToString(), Port = default_auth1port, Type = "auth1", Ping = getping(ip.ToString()).ToString() });
-                }
-
-                foreach (IPAddress ip in auth2ips)
-                {
-                    tmp_authlist.Add(new Server { IP = ip.ToString(), Port = default_auth1port, Type = "auth2", Ping = getping(ip.ToString()).ToString() });
-                }
-
-                foreach (IPAddress ip in assetips)
-                {
-                    tmp_assetlist.Add(new Server { IP = ip.ToString(), Port = default_assetport, Type = "asset", Ping = getping(ip.ToString()).ToString(), Location = getlocation(ip.ToString()) });
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Could not fetch server list. Using hard coded server list!");
-
-                try
-                {
-                    //(OLD VERSION) Hard coded server lists. Will only be used if DNS query could not be resolved
-
-                    // Listed as auth1 servers (NA?)
-                    tmp_authlist.Add(new Server { IP = "64.25.38.51", Port = default_auth1port, Ping = getping("64.25.38.51").ToString() });
-                    tmp_authlist.Add(new Server { IP = "64.25.38.54", Port = default_auth1port, Ping = getping("64.25.38.54").ToString() });
-                    tmp_authlist.Add(new Server { IP = "64.25.38.205", Port = default_auth1port, Ping = getping("64.25.38.205").ToString() });
-                    tmp_authlist.Add(new Server { IP = "64.25.38.171", Port = default_auth1port, Ping = getping("64.25.38.171").ToString() });
-                    tmp_authlist.Add(new Server { IP = "64.25.38.172", Port = default_auth1port, Ping = getping("64.25.38.172").ToString() });
-
-                    // Listed as auth2 servers (EU?)
-                    tmp_authlist.Add(new Server { IP = "206.127.146.73", Port = default_auth2port, Ping = getping("206.127.146.73").ToString() });
-                    tmp_authlist.Add(new Server { IP = "206.127.159.107", Port = default_auth2port, Ping = getping("206.127.159.107").ToString() });
-                    tmp_authlist.Add(new Server { IP = "206.127.146.74", Port = default_auth2port, Ping = getping("206.127.146.74").ToString() });
-                    tmp_authlist.Add(new Server { IP = "206.127.159.109", Port = default_auth2port, Ping = getping("206.127.159.109").ToString() });
-                    tmp_authlist.Add(new Server { IP = "206.127.159.108", Port = default_auth2port, Ping = getping("206.127.159.108").ToString() });
-                    tmp_authlist.Add(new Server { IP = "206.127.159.77", Port = default_auth2port, Ping = getping("206.127.159.77").ToString() });
-
-                    // Assets servers
-                    tmp_assetlist.Add(new Server { IP = "54.192.201.89", Port = default_assetport, Ping = getping("54.192.201.89").ToString() });
-                    tmp_assetlist.Add(new Server { IP = "54.192.201.14", Port = default_assetport, Ping = getping("54.192.201.14").ToString() });
-                    tmp_assetlist.Add(new Server { IP = "54.192.201.65", Port = default_assetport, Ping = getping("54.192.201.65").ToString() });
-                    tmp_assetlist.Add(new Server { IP = "54.192.201.68", Port = default_assetport, Ping = getping("54.192.201.68").ToString() });
-                    tmp_assetlist.Add(new Server { IP = "54.192.201.41", Port = default_assetport, Ping = getping("54.192.201.41").ToString() });
-                    tmp_assetlist.Add(new Server { IP = "54.192.201.155", Port = default_assetport, Ping = getping("54.192.201.155").ToString() });
-                    tmp_assetlist.Add(new Server { IP = "54.192.201.83", Port = default_assetport, Ping = getping("54.192.201.83").ToString() });
-                    tmp_assetlist.Add(new Server { IP = "54.192.201.5", Port = default_assetport, Ping = getping("54.192.201.5").ToString() });
-                }
-                catch (Exception err)
-                {
-                    MessageBox.Show("Could not create server lists with hard coded IPs.\n" + err.Message);
-                }
-            }
-
-            try
-            {
-                Application.Current.Dispatcher.BeginInvoke(
-                System.Windows.Threading.DispatcherPriority.Background,
-                new Action(() => updateserverlist(tmp_authlist, tmp_assetlist)));
-            }
-            catch (Exception err)
-            {
-                MessageBox.Show(err.Message);
-            }
-        }
-
-        private void updateserverlist(ObservableCollection<Server> newauthlist, ObservableCollection<Server> newassetlist)
+        private void UpdateServerUI()
         {
             bt_checkservers.IsEnabled = true;
 
-            authlist.Clear();
-            assetlist.Clear();
-            authlist = newauthlist;
-            assetlist = newassetlist;
-            listview_auth.ItemsSource = authlist;
-            listview_assets.ItemsSource = assetlist;
-            lab_authserverlist.Content = "Authentication Servers (" + authlist.Count + " servers found):";
-            lab_assetserverlist.Content = "Asset Servers (" + assetlist.Count + " servers found):";
+            listview_auth.ItemsSource = ServerManager.authservers;
+            listview_assets.ItemsSource = ServerManager.assetservers;
+            lab_authserverlist.Content = "Authentication Servers (" + ServerManager.authservers.Count + " servers found):";
+            lab_assetserverlist.Content = "Asset Servers (" + ServerManager.assetservers.Count + " servers found):";
             bt_checkservers.Content = "Check Servers (Last update: " + $"{DateTime.Now:HH:mm:ss tt}" + ")";
 
             // Sorting  servers (ping).
@@ -613,44 +528,31 @@ namespace Gw2_Launchbuddy
             RefreshUI();
         }
 
-        private string getlocation(string ip)
-        {
-            //Getting the geolocation of the asset CDN servers
-            //This might be the origin of AV flagging the EXE!
-            try
-            {
-                using (var objClient = new System.Net.WebClient())
-                {
-                    var strFile = objClient.DownloadString("http://freegeoip.net/xml/" + ip); // limited to 100 requests / hour !
-
-                    using (XmlReader reader = XmlReader.Create(new StringReader(strFile)))
-                    {
-                        reader.ReadToFollowing("RegionName");
-                        return reader.ReadInnerXml();
-                    }
-                }
-            }
-            catch
-            {
-                return "-";
-            }
-        }
-
-        private long getping(string ip)
-        {
-            // Get Ping in ms
-            Ping pingsender = new Ping();
-            return (int)pingsender.Send(ip).RoundtripTime;
-        }
-
         private void bt_checkservers_Click(object sender, RoutedEventArgs e)
         {
             //Starting server check thread
             bt_checkservers.Content = "Loading Server List";
             bt_checkservers.IsEnabled = false;
-            Thread serverthread = new Thread(createlist);
+
+            Thread serverthread = new Thread(UpdateServerList);
             serverthread.IsBackground = true;
             serverthread.Start();
+
+        }
+
+        private void UpdateServerList()
+        {
+            ServerManager.UpdateServerlists();
+            try
+            {
+                Application.Current.Dispatcher.BeginInvoke(
+                System.Windows.Threading.DispatcherPriority.Background,
+                new Action(() => UpdateServerUI()));
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message);
+            }
         }
 
         private void listview_assets_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1794,6 +1696,16 @@ namespace Gw2_Launchbuddy
         {
             Properties.Settings.Default.useinstancegui = (bool)cb_useinstancegui.IsChecked;
             Properties.Settings.Default.Save();
+        }
+
+        private void bt_manualauthserver_Click(object sender, RoutedEventArgs e)
+        {
+            ServerManager.AddAuthServer(tb_manualauthserver.Text);
+        }
+
+        private void bt_manualassetserver_Click(object sender, RoutedEventArgs e)
+        {
+            ServerManager.AddAssetServer(tb_manualassetserver.Text);
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

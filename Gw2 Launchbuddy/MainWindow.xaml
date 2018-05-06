@@ -458,9 +458,9 @@
                         <ListView ItemsSource="{Binding}" SelectionMode="Multiple" x:Name="listview_acc"  IsEnabled="False" SelectionChanged="listview_acc_SelectionChanged" Grid.Row="1" Grid.ColumnSpan="5">
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Header="Nickname" Width="150" DisplayMemberBinding="{Binding Nick}" />
-                                    <GridViewColumn Header="Email" Width="150" DisplayMemberBinding="{Binding DisplayEmail}" />
-                                    <GridViewColumn Header="Created at" Width="150" DisplayMemberBinding="{Binding Time}" />
+                                    <GridViewColumn Header="Nickname" Width="150" DisplayMemberBinding="{Binding Nickname}" />
+                                    <GridViewColumn Header="Email" Width="150" DisplayMemberBinding="{Binding ObscuredEmail}" />
+                                    <GridViewColumn Header="Created at" Width="150" DisplayMemberBinding="{Binding CreateDate}" />
                                     <GridViewColumn Header="Icon" Width="64">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -476,7 +476,7 @@
                                     <GridViewColumn Header="Graphic Config" Width="100">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Button Content="{Binding Configname}" Height="32" x:Name="bt_selectaccgfx" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="bt_selectaccgfx_Click" />
+                                                <Button Content="{Binding ConfigurationName}" Height="32" x:Name="bt_selectaccgfx" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="bt_selectaccgfx_Click" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
@@ -555,8 +555,8 @@
                             </Grid.ColumnDefinitions>
                             <TextBox x:Name="tb_manualauthserver" Text="Manual Authentication IP" Height="23" ToolTip="Manually add an server IP to the authentication servers."/>
                             <TextBox x:Name="tb_manualassetserver" Text="Manual Assetserver IP" Grid.Column="2" Margin="5,0,0,0" Height="23" ToolTip="Manually add an server IP to the asset servers."/>
-                            <Button x:Name="bt_manualauthserver" Content="Add Authserver"  Grid.Column="1"  Margin="2,2,5,2" ToolTip="Manually add an server IP to the authentication servers."/>
-                            <Button x:Name="bt_manualassetserver" Content="Add Assetserver" Grid.Column="3"  Margin="2,2,0,2" ToolTip="Manually add an server IP to the asset servers."/>
+                            <Button x:Name="bt_manualauthserver" Content="Add Authserver"  Grid.Column="1"  Margin="2,2,5,2" ToolTip="Manually add an server IP to the authentication servers." Click="bt_manualauthserver_Click"/>
+                            <Button x:Name="bt_manualassetserver" Content="Add Assetserver" Grid.Column="3"  Margin="2,2,0,2" ToolTip="Manually add an server IP to the asset servers." Click="bt_manualassetserver_Click"/>
                         </Grid>
                         <Label x:Name="lab_port_assets" Content="Port (optional):" IsEnabled="False" Grid.Column="1" Grid.Row="5" FontSize="16" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal" />
                         <Label x:Name="lab_port_client" Content="Port :" IsEnabled="False" Grid.Column="1" Grid.Row="6" FontSize="16" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal"/>
