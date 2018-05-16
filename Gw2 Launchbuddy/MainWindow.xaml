@@ -305,7 +305,7 @@
                     <ColumnDefinition Width="50*"/>
                     <ColumnDefinition Width="50*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="bt_launch" Grid.ColumnSpan="2" Style="{StaticResource LaunchButton}"  Click="bt_launch_Click" Grid.Row="0" Grid.Column="0" BorderThickness="0" BorderBrush="{x:Null}" Foreground="{x:Null}" HorizontalAlignment="Left" Width="747">
+                <Button x:Name="bt_launch" Grid.ColumnSpan="2" Style="{StaticResource LaunchButton}"  Click="bt_launch_Click" Grid.Row="0" Grid.Column="0" BorderThickness="0" BorderBrush="{x:Null}" Foreground="{x:Null}" >
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150"/>
