@@ -15,6 +15,7 @@ using System.IO;
 using System.Xml;
 using Gw2_Launchbuddy.Extensions;
 using System.Net;
+using System.Threading;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -253,12 +254,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public bool Launch()
         {
-            if (EnableRaisingEvents == true) return false;
+            //if (EnableRaisingEvents == true) return false;
+            EnableRaisingEvents = true;
 
             var AccountClient = AccountClientManager.AccountClientCollection.Where(a => a.Client == this).Single();
 
             if (AccountClient.Account != AccountManager.DefaultAccount)
-                AccountClient.Account = new Account("Acc Nr" + Globals.LinkedAccs.Count, null, null);
+                AccountClient.Account = new Account(AccountClient.Account.Nickname, null, null);
 
             Globals.LinkedAccs.Add(AccountClient);
             GFXManager.UseGFX(AccountClient.Account.ConfigurationPath);
@@ -269,11 +271,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
         private void Client_Started(object sender, EventArgs e)
         {
             ClientManager.ClientReg.RegClient(this);
-#if DEBUG
-            System.Diagnostics.Debug.Print("Mutex Kill Attempt");
-#endif
+
             for (var i = 0; i < 10; i++)
             {
+#if DEBUG
+                System.Diagnostics.Debug.Print("Mutex Kill Attempt Nr" + i);
+#endif
                 try
                 {
                     //if (HandleManager.ClearMutex(ClientManager.ClientInfo.ProcessName, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros)) i = 10;
@@ -291,6 +294,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     if (i = 10) MessageBox.Show("Mutex release failed, will try again. Please provide the following if you want to help fix this problem: \r\n" + err.GetType().ToString() + "\r\n" + err.Message + "\r\n" + err.StackTrace);
 #endif
                 }
+
+                //Maxtime 10 secs
+                Thread.Sleep((int)(Math.Pow(i, 2) * 25 + 50));
 
             }
 

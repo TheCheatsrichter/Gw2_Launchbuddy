@@ -15,12 +15,15 @@ namespace Gw2_Launchbuddy
         {
             //Checking for existing Gw2 instances. Do not continue until closed.
             //if (Process.GetProcesses().ToList().Where(a => !nomutexpros.Contains(a.Id) && a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).Any())
+
+            
             if (!ClientManager.ClientReg.CheckRegClients())
             {
                 MessageBox.Show("At least one instance of Guild Wars is running that was not opened by LaunchBuddy. That instance needs to be closed.");
                 return;
                 //HandleManager.ClearMutex(exename, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros);
             }
+            
 
             if (Gw2_Launchbuddy.Properties.Settings.Default.useinstancegui)
             {

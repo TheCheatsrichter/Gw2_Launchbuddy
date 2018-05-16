@@ -35,13 +35,13 @@ namespace Gw2_Launchbuddy
             // Load things before MainWindow
             AccountManager.ImportExport.LoadAccountInfo();
             ClientManager.ClientInfo.LoadClientInfo();
-            PluginManager.DoInits();
+            //PluginManager.DoInits();
 
             foreach (var account in options.Launch)
                 AccountManager.Account(account).IsSelected();
             foreach(var arg in options.Args)
                 AccountArgumentManager.StopGap.IsSelected("-" + arg, true);
-            LaunchManager.Launch();
+            //LaunchManager.Launch();
 
             if (!options.Silent)
             {

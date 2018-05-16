@@ -9,6 +9,8 @@ namespace TestPlugin
         public string Name { get { return "Test Plugin"; } }
 
         public string Version { get { return "0.0.1"; } }
+
+        /*
         public void Init()
         {
             MessageBox.Show("Plugin \"Initialized\"!");
@@ -33,6 +35,32 @@ namespace TestPlugin
         {
             MessageBox.Show("Client Pre Launch!");
         }
+        */
+        public void Init()
+        {
+
+        }
+
+        public void Exit()
+        {
+
+        }
+
+        public void Client_Exit()
+        {
+
+        }
+
+        public void Client_PostLaunch()
+        {
+
+        }
+
+        public void Client_PreLaunch()
+        {
+
+        }
+
 
     }
 }

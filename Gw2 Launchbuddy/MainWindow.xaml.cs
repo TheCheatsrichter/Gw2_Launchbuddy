@@ -649,6 +649,7 @@ namespace Gw2_Launchbuddy
         {
             GFXManager.OverwriteGFX();
             //UpdateServerArgs();
+
             LaunchManager.Launch();
         }
 
@@ -834,11 +835,11 @@ namespace Gw2_Launchbuddy
             bt_accedit.IsEnabled = true;
             bt_remacc.IsEnabled = true;
 
-            var selectedAccounts = ((ListView)sender).Items.Cast<Account>();
+            var selectedAccounts = ((ListView)sender).SelectedItems.Cast<Account>();
             AccountManager.SetSelected(selectedAccounts);
 
-            cb_login.Content = "Use -autologin: " + (AccountManager.SelectedAccountCollection.Count == 1 ? AccountManager.SelectedAccountCollection[0].Nickname : AccountManager.SelectedAccountCollection.Count + " Accounts Total");
-
+            //cb_login.Content = "Use -autologin: " + (AccountManager.SelectedAccountCollection.Count == 1 ? AccountManager.SelectedAccountCollection[0].Nickname : AccountManager.SelectedAccountCollection.Count + " Accounts Total");
+            cb_login.Content = "Use -autologin: " + ( AccountManager.SelectedAccountCollection.Count + " Accounts Total");
             CheckAutoLogin();
         }
 
@@ -999,6 +1000,11 @@ namespace Gw2_Launchbuddy
                 "&bn=" + "PP%2dDonationsBF";
 
             System.Diagnostics.Process.Start(url);
+        }
+
+        private void bt_patreon_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(@"www.patreon.com/gw2launchbuddy");
         }
 
         private void bt_close_Click(object sender, RoutedEventArgs e)

@@ -18,7 +18,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static Account DefaultAccount { get; private set; }
 
-        public static ReadOnlyObservableCollection<Account> SelectedAccountCollection { get => new ReadOnlyObservableCollection<ObjectManagers.Account>(new ObservableCollection<ObjectManagers.Account>(accountCollection.Where(a => a.Selected))); }
+        public static ObservableCollection<Account> SelectedAccountCollection { get => new ObservableCollection<Account>(accountCollection.Where(a => a.Selected==true)); }
 
         static AccountManager()
         {
@@ -62,8 +62,15 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void SetSelected(IEnumerable<Account> accounts)
         {
+            foreach (var account in accountCollection)
+            {
+                account.Selected = false;
+            }
+
             foreach (var account in accounts)
-                accountCollection.Where(a => a == account).SingleOrDefault().IsSelected(account.Selected);
+            {
+                account.Selected = true;
+            }             
         }
 
         public static bool IsValidEmail(string email)
@@ -244,7 +251,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
-        [NonSerialized]
+
         private ImageSource icon;
 
         public ImageSource Icon
