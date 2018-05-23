@@ -291,7 +291,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     System.Diagnostics.Debug.Print(err.Message);
 #else
                     // Tell the user what happened... Maybe?
-                    if (i = 10) MessageBox.Show("Mutex release failed, will try again. Please provide the following if you want to help fix this problem: \r\n" + err.GetType().ToString() + "\r\n" + err.Message + "\r\n" + err.StackTrace);
+                    if (i == 10) MessageBox.Show("Mutex release failed, will try again. Please provide the following if you want to help fix this problem: \r\n" + err.GetType().ToString() + "\r\n" + err.Message + "\r\n" + err.StackTrace);
 #endif
                 }
 

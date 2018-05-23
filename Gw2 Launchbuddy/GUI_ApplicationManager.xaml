@@ -7,21 +7,39 @@
         mc:Ignorable="d"
         Title="Game Instances" Height="300" Width="160" ResizeMode="CanResize" WindowStartupLocation="Manual" Topmost="True" WindowStyle="None" Loaded="Window_Loaded" AllowsTransparency="True" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown" Initialized="Window_Initialized" Icon="launchbuddy.ico">
 
-    <Grid Background="#FF706E6E">
+    <Grid Background="Black">
         <Grid.OpacityMask>
-            <ImageBrush ImageSource="Resources/opacitymask.png" />
+            <ImageBrush ImageSource="Resources/loginwindow.png" Opacity="0.85" >
+                <ImageBrush.RelativeTransform>
+                    <TransformGroup>
+                        <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                        <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                        <RotateTransform CenterY="0.5" CenterX="0.5"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </ImageBrush.RelativeTransform>
+                <ImageBrush.Transform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="1.15" ScaleY="1.4"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform X="-12" Y="-85"/>
+                    </TransformGroup>
+                </ImageBrush.Transform>
+            </ImageBrush>
         </Grid.OpacityMask>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
+            <RowDefinition Height="20" />
             <RowDefinition Height="100*" />
         </Grid.RowDefinitions>
-        <Label Content="Game Instances" FontSize="16" FontStyle="Italic" />
-        <Button x:Name="bt_close" Width="30" Height="30" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" HorizontalAlignment="Right" VerticalAlignment="Top" Click="bt_close_Click">
-            <Image Source="Resources/Icons/error.png" />
+        <Label Content="Game Instances" FontSize="16" FontStyle="Italic" Foreground="White"/>
+        <Button x:Name="bt_close" Grid.Row="1" BorderThickness="0" Width="50" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="bt_close_Click"  Foreground="White" HorizontalAlignment="Right">
+            Close
         </Button>
         <StackPanel Grid.Row="2">
             <Grid>
-                <ListView x:Name="lv_instances" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2" Grid.Row="1" SelectionChanged="lv_gfx_SelectionChanged" Width="160" Background="Transparent" BorderThickness="0" Height="270">
+                <ListView x:Name="lv_instances" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2" Grid.Row="1" SelectionChanged="lv_gfx_SelectionChanged" Width="160" Background="Transparent" BorderThickness="0" Height="230">
                     <ListView.Resources>
                         <Style TargetType="GridViewColumnHeader">
                             <Setter Property="Visibility" Value="Collapsed" />
@@ -35,7 +53,7 @@
                                         <DockPanel Height="50">
                                             <Image DataContext="{Binding Path=Account}" Width="45" Height="45" Source="{Binding Path=Icon}"></Image>
                                             <DockPanel>
-                                                <Label DataContext="{Binding Path=Account}" Content="{Binding Path=Nickname}" Width="100" FontWeight="Bold" Margin="0,-5,0,0" DockPanel.Dock="Top" />
+                                                <Label DataContext="{Binding Path=Account}" Content="{Binding Path=Nickname}" Width="100" FontWeight="Bold" Margin="0,-5,0,0" DockPanel.Dock="Top"/>
                                                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                                                     <Button x:Name="bt_maxmin" Click="bt_maxmin_Click" Width="25">
                                                         <Image Source="Resources/Icons/focus.png" />

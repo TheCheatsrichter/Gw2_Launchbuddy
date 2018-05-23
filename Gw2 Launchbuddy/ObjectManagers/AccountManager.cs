@@ -251,7 +251,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
-
+        [NonSerialized]
         private ImageSource icon;
 
         public ImageSource Icon

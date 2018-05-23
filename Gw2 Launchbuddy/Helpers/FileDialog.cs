@@ -54,8 +54,10 @@ namespace Gw2_Launchbuddy.Helpers
                 throw new Exception("Media can only be checked once.");
             events |= ExistingEvents.Media;
 
+            /*
             if (events.HasFlag(MediaTypes.Video) || events.HasFlag(MediaTypes.Audio))
                 throw new Exception("Wrong overload used. MediaElement required for Video or Audio.");
+                */
 
             fileDialog.FileOk += delegate (object sender, CancelEventArgs e)
             {

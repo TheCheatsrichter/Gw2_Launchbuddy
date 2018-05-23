@@ -37,5 +37,10 @@ namespace Gw2_Launchbuddy
         {
             System.Diagnostics.Process.Start("https://www.patreon.com/gw2launchbuddy");
         }
+
+        private void Image_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Process.Start("www.patreon.com/gw2launchbuddy");
+        }
     }
 }

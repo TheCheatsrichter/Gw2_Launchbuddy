@@ -16,6 +16,7 @@ namespace Gw2_Launchbuddy
             //Checking for existing Gw2 instances. Do not continue until closed.
             //if (Process.GetProcesses().ToList().Where(a => !nomutexpros.Contains(a.Id) && a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).Any())
 
+            LoadingWindow.Start("Launching Game");
             
             if (!ClientManager.ClientReg.CheckRegClients())
             {
@@ -61,6 +62,8 @@ namespace Gw2_Launchbuddy
             {
                 MessageBox.Show("One or more AddOns could not be launched.\n" + err.Message);
             }
+
+            LoadingWindow.Stop();
         }
 
         public static void LaunchGW2(Account Selected)

@@ -41,7 +41,6 @@ namespace Gw2_Launchbuddy
 
         private int reso_x, reso_y;
 
-        private SetupInfo winsetupinfo = new SetupInfo();
         private SortAdorner listViewSortAdorner = null;
         private GridViewColumnHeader listViewSortCol = null;
 
@@ -69,7 +68,7 @@ namespace Gw2_Launchbuddy
         public MainWindow()
         {
             try
-            {
+            {             
                 InitializeComponent();
                 if (!Directory.Exists(Globals.AppDataPath))
                 {
@@ -312,6 +311,7 @@ namespace Gw2_Launchbuddy
             {
                 //Cinema Mode
 
+                WindowHeaderGrid.Visibility = Visibility.Hidden;
                 reso_x = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
                 reso_y = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
                 myWindow.WindowState = WindowState.Maximized;
@@ -367,6 +367,7 @@ namespace Gw2_Launchbuddy
                 {
                     try
                     {
+                        img_slideshow.Visibility = Visibility.Hidden;
                         //Load background video
                         Cinema_MediaPlayer.Visibility = Visibility.Visible;
                         Cinema_MediaPlayer.Source = new Uri(Properties.Settings.Default.cinema_videopath, UriKind.Relative);
@@ -384,6 +385,7 @@ namespace Gw2_Launchbuddy
                 {
                     try
                     {
+                        img_slideshow.Visibility = Visibility.Visible;
                         Storyboard anim_slideshow = (Storyboard)FindResource("anim_slideshow_start");
                         anim_slideshow.Begin();
 
@@ -418,6 +420,7 @@ namespace Gw2_Launchbuddy
             else
             {
                 //Normal Mode
+                WindowHeaderGrid.Visibility = Visibility.Visible;
                 VolumeControl.Visibility = Visibility.Collapsed;
                 Cinema_MediaPlayer.Stop();
                 Cinema_MediaPlayer.Visibility = Visibility.Hidden;
@@ -485,7 +488,6 @@ namespace Gw2_Launchbuddy
             try
             {
                 myWindow.Visibility = Visibility.Visible;
-                winsetupinfo.Close();
             }
             catch (Exception err)
             {
@@ -558,7 +560,7 @@ namespace Gw2_Launchbuddy
         private void listview_assets_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // UI Handling for selected Asset Server
-            if (listview_assets.Items.Count != 0)
+            if (listview_assets.SelectedItem!=null)
             {
                 Globals.selected_assetsv = (Server)listview_assets.SelectedItem;
                 tb_assetsport.Text = Globals.selected_assetsv.Port;
@@ -574,7 +576,7 @@ namespace Gw2_Launchbuddy
         private void listview_auth_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // UI Handling for selected Authentication Server
-            if (listview_auth.Items.Count != 0)
+            if (listview_auth.SelectedItem!=null)
             {
                 Globals.selected_authsv = (Server)listview_auth.SelectedItem;
 
@@ -647,10 +649,10 @@ namespace Gw2_Launchbuddy
 
         private void bt_launch_Click(object sender, RoutedEventArgs e)
         {
+            myWindow.WindowState = WindowState.Minimized;
             GFXManager.OverwriteGFX();
             //UpdateServerArgs();
-
-            LaunchManager.Launch();
+            LaunchManager.Launch();         
         }
 
         private void bt_installpath_Click(object sender, RoutedEventArgs e)
@@ -1029,6 +1031,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_minimize_Click(object sender, RoutedEventArgs e)
         {
+            myWindow.WindowState = WindowState.Normal;
             myWindow.WindowState = WindowState.Minimized;
             myWindow.Opacity = 0;
         }
@@ -1565,10 +1568,10 @@ namespace Gw2_Launchbuddy
 
         private void bt_accsortup_Click(object sender, RoutedEventArgs e)
         {
-            if (listview_acc.SelectedItem != null)
-            {
-                int index = listview_acc.SelectedIndex;
-                Account selectedacc = AccountManager.SelectedAccountCollection[index];
+            int index = listview_acc.SelectedIndex;
+            if (listview_acc.SelectedItem != null && index >0)
+            {              
+                Account selectedacc = AccountManager.SelectedAccountCollection[index-1];
                 if (index - 1 >= 0)
                 {
                     selectedacc.Move(-1);

@@ -12,12 +12,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
     public static class AddOnManager
     {
         private static ObservableCollection<AddOn> addOnCollection { get; set; }
-        public static ReadOnlyObservableCollection<AddOn> AddOnCollection { get; set; }
+        public static ObservableCollection<AddOn> AddOnCollection { get; set; }
 
         static AddOnManager()
         {
             addOnCollection = new ObservableCollection<AddOn>();
-            AddOnCollection = new ReadOnlyObservableCollection<AddOn>(addOnCollection);
+            AddOnCollection = new ObservableCollection<AddOn>(addOnCollection);
         }
 
         public static void Add(string name, string[] args, bool IsMultilaunch, bool IsLbAddon)

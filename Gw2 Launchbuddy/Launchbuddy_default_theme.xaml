@@ -84,7 +84,7 @@
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsSelected" Value="True">
-                <Setter TargetName="Border" Property="Background" Value="LightGray" />
+                <Setter TargetName="Border" Property="Background" Value="LightGray"/>
             </Trigger>
             <Trigger Property="IsSelected" Value="False">
                 <Setter TargetName="Border" Property="Background" Value="GhostWhite" />
@@ -135,6 +135,11 @@
         <Setter Property="Template" Value="{StaticResource launchbutton_template}"/>
         <Setter Property="Foreground" Value="{StaticResource MainText_Foreground}"></Setter>
         <Setter Property="Background" Value="White"/>
+    </Style>
+
+    <Style x:Key="OptionTab" TargetType="{x:Type TabItem}">
+        <Setter Property="Template" Value="{StaticResource tabitem_template}"/>
+        <Setter Property="Foreground" Value="Black"></Setter>
     </Style>
 
     <Style x:Key="H1" TargetType="{x:Type Label}">

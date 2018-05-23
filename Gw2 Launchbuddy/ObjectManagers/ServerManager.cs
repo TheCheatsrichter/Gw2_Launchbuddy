@@ -21,8 +21,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class ServerManager
     {
-        public static ObservableCollection<Server> authservers;
-        public static ObservableCollection<Server> assetservers;
+        public static ObservableCollection<Server> authservers= new ObservableCollection<Server>();
+        public static ObservableCollection<Server> assetservers= new ObservableCollection<Server>();
 
         private static string default_auth1port = "6112";
         private static string default_auth2port = "6112";

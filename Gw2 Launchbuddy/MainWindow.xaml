@@ -186,25 +186,28 @@
         <Canvas x:Name="Canvas_Custom_UI">
             <Canvas x:Name="Canvas_login" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0">
                 <Image x:Name="img_loginwindow" Source="/Resources/loginwindow.png" Height="300" />
-                <ListView x:Name="Cinema_Accountlist" BorderThickness="0" Canvas.Left="100" Canvas.Top="80" Width="280" Height="135" SelectionChanged="listview_acc_SelectionChanged" Style="{DynamicResource Style_lvacc}" BorderBrush="#FF5F5F5F">
+                <ListView x:Name="Cinema_Accountlist" BorderThickness="0" Canvas.Left="100" Canvas.Top="80" Width="280" Height="135" SelectionChanged="listview_acc_SelectionChanged" Style="{DynamicResource Style_lvacc}" BorderBrush="#FF5F5F5F" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <ListView.OpacityMask>
                         <ImageBrush ImageSource="Resources/opacitymask.png"/>
                     </ListView.OpacityMask>
                     <ListView.View>
-                        <GridView >
+                        <GridView>
                             <GridViewColumn Width="280">
-                                <GridViewColumnHeader Tag="Name" Click="listview_auth_Click" Content="Name" Background="Transparent" Foreground="White" Focusable="False"/>
+                                <GridViewColumnHeader Click="listview_auth_Click" Visibility="Collapsed"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock x:Name="Txt" Text="{Binding Nick}" FontSize="14.667" FontWeight="Bold" Background="{x:Null}">
-                                            <TextBlock.Foreground>
-                                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                                    <GradientStop Color="Black" Offset="0"/>
-                                                    <GradientStop Color="White" Offset="1"/>
-                                                    <GradientStop Color="Black" Offset="0.979"/>
-                                                </LinearGradientBrush>
-                                            </TextBlock.Foreground>
-                                        </TextBlock>
+                                        <StackPanel>
+                                            <Image Source="{Binding Icon}" Height="64"/>
+                                            <TextBlock x:Name="Txt" Text="{Binding Nickname}" FontSize="14.667" FontWeight="Bold" Background="{x:Null}">
+                                                <TextBlock.Foreground>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="Black" Offset="0"/>
+                                                        <GradientStop Color="White" Offset="1"/>
+                                                        <GradientStop Color="Black" Offset="0.979"/>
+                                                    </LinearGradientBrush>
+                                                </TextBlock.Foreground>
+                                            </TextBlock>
+                                        </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -212,26 +215,25 @@
                     </ListView.View>
                 </ListView>
                 <StackPanel Orientation="Horizontal" Canvas.Left="100" Canvas.Top="220">
-                    <Button x:Name="Cinema_Launchaccount"  Width="100" Height="30" Click="Cinema_Launchaccount_Click" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0" BorderBrush="Black"  Background="#CCFFFFFF">
-                        <Button.OpacityMask>
-                            <ImageBrush ImageSource="Resources/opacitymask.png"/>
-                        </Button.OpacityMask>
-                        <Image Source="Resources/launchbutton.png">
-                            <Image.OpacityMask>
-                                <ImageBrush ImageSource="Resources/opacitymask.png"/>
-                            </Image.OpacityMask>
-                        </Image>
+                    <Button x:Name="Cinema_Launchaccount" Height="30" Click="Cinema_Launchaccount_Click"  BorderThickness="0" BorderBrush="Black" >
+                        <Grid>
+                            <Border Background="Black" MinWidth="150">
+                                <Label Grid.ColumnSpan="3" Grid.Column="1" Content="Launch" Foreground="#FFF9F9F9" HorizontalAlignment="Center" FontSize="12" Background="{x:Null}" BorderBrush="Black" FontWeight="Bold"/>
+                            </Border>
+                        </Grid>
                     </Button>
-                    <Button x:Name="Settings" Width="100" Height="30" Margin="10,0,0,0" Click="Settings_Click" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0" BorderBrush="Black"  Background="#CCFFFFFF">
+                    <!--
+                    <Button x:Name="Settings" Width="100" Height="30" Margin="10,0,0,0" Click="Settings_Click" BorderThickness="0" BorderBrush="Black"  Background="#CCFFFFFF">
                         <Button.OpacityMask>
                             <ImageBrush ImageSource="Resources/opacitymask.png"/>
                         </Button.OpacityMask>
                         <Image Source="Resources/Icons/settings.png" />
                     </Button>
+                    -->
                 </StackPanel>
             </Canvas>
         </Canvas>
-        <Grid Grid.Row="0" Grid.ColumnSpan="2">
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" x:Name="WindowHeaderGrid">
             <Image Source="Resources/header_background.png" Opacity="0.7" Stretch="UniformToFill"/>
             <Image Source="Resources/header_dragonhead.png" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5">
                 <Image.RenderTransform>
@@ -243,7 +245,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label Grid.Row="0" Content="Gw2 Launchbuddy V1.5.3 BETA" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Label Grid.Row="0" Content="Gw2 Launchbuddy V1.6 ALPHA" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
@@ -335,8 +337,13 @@
                 <TabControl.Background>
                     <ImageBrush/>
                 </TabControl.Background>
-                <TabItem Header="General">
-
+                <TabItem >
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Image Height="20" Source="Resources/Icons/home.png"/>
+                            <Label FontSize="10" Margin="0,-5,0,-7">General</Label>
+                        </StackPanel>
+                    </TabItem.Header>
                     <StackPanel>
                         <Button Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"  FontWeight="Bold" Margin="0,0,0,-20" ToolTip="Overview your general gw2 client details and choose basic command line &#x0a;arguments by checking the corresponding checkbox next to it"/>
                         <Grid Margin="0,-3,0,0">
@@ -422,7 +429,13 @@
                     </StackPanel>
                 </TabItem>
 
-                <TabItem Header="Account Manager">
+                <TabItem >
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Image Height="20" Source="Resources/Icons/accounts.png"/>
+                            <Label FontSize="10" Margin="0,-5,0,-7">Account Manager</Label>
+                        </StackPanel>
+                    </TabItem.Header>
                     <Grid Grid.Row="3" Margin="0,0"  >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="190*"/>
@@ -486,10 +499,14 @@
                         </ListView>
                         <Button Grid.Row="0" ToolTip="Manage all of your accounts in this section by entering their data. Then choose which accounts should be started by selecting them in the list" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
                     </Grid>
-
                 </TabItem>
-
-                <TabItem Header="Graphic Settings">
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Image Height="20" Source="Resources/Icons/gpu.png"/>
+                            <Label FontSize="10" Margin="0,-5,0,-7">Graphic Settings</Label>
+                        </StackPanel>
+                    </TabItem.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="50*"/>
@@ -528,7 +545,13 @@
                     </Grid>
                 </TabItem>
 
-                <TabItem Header="Serverselection">
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Image Height="20" Source="Resources/Icons/server.png"/>
+                            <Label FontSize="10" Margin="0,-5,0,-7">Serverselection</Label>
+                        </StackPanel>
+                    </TabItem.Header>
                     <Grid >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="350*"/>
@@ -607,7 +630,13 @@
                         <Button ToolTip="Select which authentication/asset server should be used by your gw2 client. First press Refresh serverlist and then choose your wished server" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Addon Manager">
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Image Height="20" Source="Resources/Icons/addon.png"/>
+                            <Label FontSize="10" Margin="0,-5,0,-7">AddOns</Label>
+                        </StackPanel>
+                    </TabItem.Header>
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
@@ -632,8 +661,8 @@
                                     <GridViewColumn  HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
                                         <GridViewColumnHeader Tag="Name" Click="listview_auth_Click" Content="Name"/>
                                     </GridViewColumn>
-                                    <GridViewColumn HeaderStringFormat="" Width="200" DisplayMemberBinding="{Binding args}">
-                                        <GridViewColumnHeader Tag="args" Click="listview_auth_Click" Content="Parameters"/>
+                                    <GridViewColumn HeaderStringFormat="" Width="200" DisplayMemberBinding="{Binding Args}">
+                                        <GridViewColumnHeader Tag="Args" Click="listview_auth_Click" Content="Parameters"/>
                                     </GridViewColumn>
                                     <GridViewColumn HeaderStringFormat="" Width="70" DisplayMemberBinding="{Binding IsMultilaunch}">
                                         <GridViewColumnHeader Tag="IsMultilaunch" Click="listview_auth_Click" Content="Multilaunch"/>
@@ -663,7 +692,13 @@
 
                     </Grid>
                 </TabItem>
-                <TabItem Header="Cinema Mode">
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Image Height="20" Source="Resources/Icons/film.png"/>
+                            <Label FontSize="10" Margin="0,-5,0,-7">Cinema Mode</Label>
+                        </StackPanel>
+                    </TabItem.Header>
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
@@ -881,7 +916,13 @@
 
                 </TabItem>
                 -->
-                <TabItem Header="LB Settings">
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Image Height="20" Source="Resources/Icons/tools.png"/>
+                            <Label FontSize="10" Margin="0,-5,0,-7">LB Settings</Label>
+                        </StackPanel>
+                    </TabItem.Header>
                     <StackPanel>
 
                         <Label Content="Launchbuddy Settings" Style="{StaticResource H1}"/>

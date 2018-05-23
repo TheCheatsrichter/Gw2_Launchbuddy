@@ -17,7 +17,7 @@
             <Image Source="Resources/donate.png" />
         </Button>
         <Button x:Name="bt_patreon" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"  VerticalAlignment="Top" Width="474" Height="45" Click="bt_patreon_Click">
-            <Image Source="Resources/patreon_button.png" />
+            <Image Source="Resources/patreon_button.png" MouseDown="Image_MouseDown" />
         </Button>
     </StackPanel>
 </Window>

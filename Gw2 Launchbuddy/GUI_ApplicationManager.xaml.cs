@@ -53,9 +53,17 @@ namespace Gw2_Launchbuddy
 
         private void bt_maxmin_Click(object sender, RoutedEventArgs e)
         {
-            AccountClient selinstance = (sender as Button).DataContext as AccountClient;
-            IntPtr hwndMain = ((Client)selinstance.Client).MainWindowHandle;
-            SetForegroundWindow(hwndMain);
+            try
+            {
+                AccountClient selinstance = (sender as Button).DataContext as AccountClient;
+                IntPtr hwndMain = ((Client)selinstance.Client).MainWindowHandle;
+                SetForegroundWindow(hwndMain);
+            }
+            catch
+            {
+
+            }
+
         }
 
         private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
