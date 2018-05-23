@@ -19,6 +19,8 @@ namespace Update_Helper
         {
             try
             {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
                 //Find and kill old LB
                 Process oldLB = null;
                 if (Process.GetProcesses().Any(x => x.Id == Int32.Parse(args[0])))
