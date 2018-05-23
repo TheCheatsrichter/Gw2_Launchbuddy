@@ -1040,7 +1040,7 @@ namespace Gw2_Launchbuddy
         {
             string[] args = Regex.Matches(tb_AddonArgs.Text, "-\\w* ?(\".*\")?").Cast<Match>().Select(m => m.Value).ToArray();
             AddOnManager.Add(tb_AddonName.Text, args, (bool)cb_AddonMultilaunch.IsChecked, (bool)cb_AddonOnLB.IsChecked);
-            lv_AddOns.ItemsSource = AddOnManager.AddOnCollection;
+            lv_AddOns.ItemsSource = AddOnManager.addOnCollection;
         }
 
         private void bt_RemAddon_Click(object sender, RoutedEventArgs e)

@@ -245,7 +245,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label Grid.Row="0" Content="Gw2 Launchbuddy V1.6 ALPHA" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Label Grid.Row="0" Content="Gw2 Launchbuddy V1.6.1 ALPHA" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">

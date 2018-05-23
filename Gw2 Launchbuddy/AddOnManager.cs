@@ -11,7 +11,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 {
     public static class AddOnManager
     {
-        private static ObservableCollection<AddOn> addOnCollection { get; set; }
+        public static ObservableCollection<AddOn> addOnCollection { get; set; }
         public static ObservableCollection<AddOn> AddOnCollection { get; set; }
 
         static AddOnManager()
