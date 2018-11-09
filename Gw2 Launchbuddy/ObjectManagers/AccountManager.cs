@@ -98,11 +98,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     {
                         using (Stream stream = File.Open(path, FileMode.Open))
                         {
+                            AES aes = new AES();
                             var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                             ObservableCollection<Account> aes_accountlist = (ObservableCollection<Account>)bformatter.Deserialize(stream);
 
                             foreach (Account acc in aes_accountlist)
                             {
+                                acc.Email = aes.Decrypt(acc.Email);
+                                acc.Password = aes.Decrypt(acc.Password);
                                 Add(acc);
                             }
                         }
@@ -119,9 +122,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 ObservableCollection<Account> aes_accountlist = new ObservableCollection<Account>();
                 try
                 {
+                    AES aes = new AES();
                     aes_accountlist.Clear();
                     foreach (Account acc in AccountManager.AccountCollection)
                     {
+                        acc.Email = aes.Encrypt(acc.Email);
+                        acc.Password = aes.Encrypt(acc.Password);
                         aes_accountlist.Add(acc);
                     }
                 }
