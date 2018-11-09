@@ -53,7 +53,14 @@ namespace Gw2_Launchbuddy
 
         public static void Stop ()
         {
-            loadingui.Abort();
+            try
+            {
+                loadingui.Abort();
+            }
+            catch
+            {
+
+            }
         }
 
     }
@@ -61,10 +68,17 @@ namespace Gw2_Launchbuddy
 
     public partial class LoadingScreen : Window
     {
-        public LoadingScreen(string msg=null)
+        
+
+        public LoadingScreen(string msg = null)
         {
-            InitializeComponent();
-            lb_msg.Content = msg;
+            try
+            {
+                InitializeComponent();
+                lb_msg.Content = msg;
+            }
+            catch { }
         }
+
     }
 }
