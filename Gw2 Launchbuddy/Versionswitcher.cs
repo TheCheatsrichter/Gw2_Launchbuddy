@@ -79,7 +79,7 @@ namespace Gw2_Launchbuddy
                     return;
                 }
             }
-            Regex filter = new Regex(@"<div class=""release-body commit open float-left"">(\s|\S)+?<\/div><!-- \/.release -->");
+            Regex filter = new Regex(@"<div class=""release-entry"">(\s|\S)+?<\/div><!-- \/.release -->");
             MatchCollection releases_raw = filter.Matches(HTML_Raw);
 
             ObservableCollection<Release> releases = new ObservableCollection<Release>();
@@ -87,7 +87,7 @@ namespace Gw2_Launchbuddy
             string repoprefix = @"\/" + Repo_User + @"\/" + Repo_Name;
             //Filters
             //string example = @"@"<h1 class=""release-title"">\s.*"">(?<Name>.*)<\/a>"";
-            string datefilter = @"<relative-time datetime=""(.*)"">(?<Date>\w* ?\d\d?,? \d{4})<\/relative-time>";
+            string datefilter = @"<relative-time datetime=""((?<Date>\d+-\d+-\d+).*)"">.*<\/relative-time>";
             string namefilter = @"<a href=""\/TheCheatsrichter\/Gw2_Launchbuddy\/releases\/tag\/(.*)"">(?<Name>.*)<\/a>";
             string versionfilter = @"<a href=""" + repoprefix + @"\/releases\/tag\/(?<Version>\d+.\d+.*)"">";
             versionfilter = @"<a href=""" + repoprefix + @"\/releases\/tag\/(?<Version>\d+.\d+.*)"">";
@@ -96,16 +96,24 @@ namespace Gw2_Launchbuddy
 
             foreach (Match version in releases_raw)
             {
-                Release release = new Release
+                try
                 {
-                    HTML_raw = version.Value,
-                    Date = Regex.Match(version.Value, datefilter).Groups["Date"].Value,
-                    Name = Regex.Match(version.Value, namefilter).Groups["Name"].Value,
-                    Version = new Version(Regex.Match(version.Value, versionfilter).Groups["Version"].Value),
-                    Description = "<html>\n" + Regex.Match(version.Value, descriptionfilter).Value + "\n</html>",
-                    DownloadURL = URL_Releases + "/download/" + Regex.Match(version.Value, downloadurlfilter).Groups["Exename"].Value,
-                };
-                releases.Add(release);
+                    Release release = new Release
+                    {
+                        HTML_raw = version.Value,
+                        Date = Regex.Match(version.Value, datefilter).Groups["Date"].Value,
+                        Name = Regex.Match(version.Value, namefilter).Groups["Name"].Value,
+                        Version = new Version(Regex.Match(version.Value, versionfilter).Groups["Version"].Value),
+                        Description = "<html>\n" + Regex.Match(version.Value, descriptionfilter).Value + "\n</html>",
+                        DownloadURL = URL_Releases + "/download/" + Regex.Match(version.Value, downloadurlfilter).Groups["Exename"].Value,
+                    };
+                    releases.Add(release);
+                }
+                catch
+                {
+                    Console.Write("Skiüpüing one release");
+                }
+                
             }
             Releaselist = releases;
         }

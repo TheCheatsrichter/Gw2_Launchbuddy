@@ -263,7 +263,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 AccountClient.Account = new Account(AccountClient.Account.Nickname, null, null);
 
             Globals.LinkedAccs.Add(AccountClient);
-            GFXManager.UseGFX(AccountClient.Account.ConfigurationPath);
+           // GFXManager.UseGFX(AccountClient.Account.ConfigurationPath);
 
             return Start();
         }

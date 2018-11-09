@@ -16,8 +16,10 @@ namespace Gw2_Launchbuddy
             //Checking for existing Gw2 instances. Do not continue until closed.
             //if (Process.GetProcesses().ToList().Where(a => !nomutexpros.Contains(a.Id) && a.ProcessName == Regex.Replace(exename, @"\.exe(?=[^.]*$)", "", RegexOptions.IgnoreCase)).Any())
 
-            LoadingWindow.Start("Launching Game");
-            
+            if (Properties.Settings.Default.useloadingui) LoadingWindow.Start("Launching Game");
+
+
+
             if (!ClientManager.ClientReg.CheckRegClients())
             {
                 MessageBox.Show("At least one instance of Guild Wars is running that was not opened by LaunchBuddy. That instance needs to be closed.");
@@ -43,7 +45,7 @@ namespace Gw2_Launchbuddy
             //Launching the application with arguments
             if (AccountManager.SelectedAccountCollection.Count > 0)
             {
-                foreach (var Account in AccountManager.SelectedAccountCollection)
+                foreach (Account Account in AccountManager.SelectedAccountCollection)
                     LaunchGW2(Account);
             }
             else
@@ -63,11 +65,24 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show("One or more AddOns could not be launched.\n" + err.Message);
             }
 
-            LoadingWindow.Stop();
+            if (Properties.Settings.Default.useloadingui) LoadingWindow.Stop();
         }
 
         public static void LaunchGW2(Account Selected)
         {
+            try
+            {
+                if (Selected.ConfigurationPath != "Default")
+                {
+                    GFXManager.UseGFX(Selected.ConfigurationPath);
+                }else
+                {
+                    GFXManager.RestoreDefault();
+                }
+            
+            }
+            catch { }
+
             try
             {
                 Selected.CreateClient().Launch();

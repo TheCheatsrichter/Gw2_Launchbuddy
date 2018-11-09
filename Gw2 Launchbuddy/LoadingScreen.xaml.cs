@@ -27,19 +27,28 @@ namespace Gw2_Launchbuddy
 
         public static void Start(string msg="")
         {
-            if (loadingui != null) loadingui.Abort();
-            if (msg != "") message = msg;
-
-            loadingui= new Thread(new ParameterizedThreadStart((message) =>
+            try
             {
-                LoadingScreen tmpWindow = new LoadingScreen();
-                tmpWindow.lb_msg.Content = message;
-                tmpWindow.ShowDialog();
-                System.Windows.Threading.Dispatcher.Run();
-            }));
-            loadingui.SetApartmentState(ApartmentState.STA);
-            loadingui.IsBackground = true;
-            loadingui.Start(message);
+
+
+                if (loadingui != null) loadingui.Abort();
+                if (msg != "") message = msg;
+
+                loadingui = new Thread(new ParameterizedThreadStart((message) =>
+                 {
+                     LoadingScreen tmpWindow = new LoadingScreen();
+                     tmpWindow.lb_msg.Content = message;
+                     tmpWindow.ShowDialog();
+                     System.Windows.Threading.Dispatcher.Run();
+                 }));
+                loadingui.SetApartmentState(ApartmentState.STA);
+                loadingui.IsBackground = true;
+                loadingui.Start(message);
+            }
+            catch
+            {
+
+            }
         }
 
         public static void Stop ()

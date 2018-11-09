@@ -123,6 +123,7 @@ namespace Gw2_Launchbuddy
         {
             cb_lbupdatescheck.IsChecked = Properties.Settings.Default.notifylbupdate;
             cb_useinstancegui.IsChecked = Properties.Settings.Default.useinstancegui;
+            cb_useloadingui.IsChecked = Properties.Settings.Default.useloadingui;
         }
 
         private void DonatePopup()
@@ -652,7 +653,8 @@ namespace Gw2_Launchbuddy
             myWindow.WindowState = WindowState.Minimized;
             GFXManager.OverwriteGFX();
             //UpdateServerArgs();
-            LaunchManager.Launch();         
+            LaunchManager.Launch();
+            GFXManager.RestoreDefault();
         }
 
         private void bt_installpath_Click(object sender, RoutedEventArgs e)
@@ -1571,7 +1573,7 @@ namespace Gw2_Launchbuddy
             int index = listview_acc.SelectedIndex;
             if (listview_acc.SelectedItem != null && index >0)
             {              
-                Account selectedacc = AccountManager.SelectedAccountCollection[index-1];
+                Account selectedacc = listview_acc.SelectedItem as Account;
                 if (index - 1 >= 0)
                 {
                     selectedacc.Move(-1);
@@ -1585,7 +1587,7 @@ namespace Gw2_Launchbuddy
             if (listview_acc.SelectedItem != null)
             {
                 int index = listview_acc.SelectedIndex;
-                Account selectedacc = AccountManager.AccountCollection[index];
+                Account selectedacc = listview_acc.SelectedItem as Account;
                 if (index + 1 < AccountManager.AccountCollection.Count)
                 {
                     selectedacc.Move(+1);
@@ -1715,6 +1717,12 @@ namespace Gw2_Launchbuddy
         private void bt_manualassetserver_Click(object sender, RoutedEventArgs e)
         {
             ServerManager.AddAssetServer(tb_manualassetserver.Text);
+        }
+
+        private void cb_useloadingui_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.useloadingui = (bool)cb_useloadingui.IsChecked;
+            Properties.Settings.Default.Save();
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

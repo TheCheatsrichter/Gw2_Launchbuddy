@@ -32,12 +32,21 @@ namespace Gw2_Launchbuddy
 
         private void lv_gfx_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (lv_instances.SelectedIndex >= 0)
+            try
+            {
+                if (lv_instances.SelectedIndex >= 0)
+                {
+                    AccountClient selinstance = lv_instances.SelectedItem as AccountClient;
+                    IntPtr hwndMain = ((Client)selinstance.Client).MainWindowHandle;
+                    SetForegroundWindow(hwndMain);
+                }
+            }
+            catch
             {
                 AccountClient selinstance = lv_instances.SelectedItem as AccountClient;
-                IntPtr hwndMain = ((Client)selinstance.Client).MainWindowHandle;
-                SetForegroundWindow(hwndMain);
+                AccountClientManager.Remove(selinstance);
             }
+
         }
 
         private void bt_closeinstance_Click(object sender, RoutedEventArgs e)

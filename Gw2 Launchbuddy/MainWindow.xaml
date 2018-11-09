@@ -245,7 +245,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label Grid.Row="0" Content="Gw2 Launchbuddy V1.6.1 ALPHA" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Label Grid.Row="0" Content="Gw2 Launchbuddy V1.6.2 ALPHA" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
@@ -307,7 +307,7 @@
                     <ColumnDefinition Width="50*"/>
                     <ColumnDefinition Width="50*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="bt_launch" Grid.ColumnSpan="2" Style="{StaticResource LaunchButton}"  Click="bt_launch_Click" Grid.Row="0" Grid.Column="0" BorderThickness="0" BorderBrush="{x:Null}" Foreground="{x:Null}" >
+                <Button x:Name="bt_launch" Grid.ColumnSpan="2" Style="{StaticResource LaunchButton}"  Click="bt_launch_Click" Grid.Row="0" Grid.Column="0" BorderThickness="0" BorderBrush="{x:Null}" Foreground="{x:Null}" HorizontalAlignment="Left" Width="752" >
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150"/>
@@ -939,6 +939,7 @@
                         <Separator Margin="3"/>
                         <CheckBox x:Name="cb_lbupdatescheck" Content="Automatically Check for Launchbuddy Updates" Margin="5" Click="cb_lbupdatescheck_Click" ToolTip="Choose if Launchbuddy should automatically search for updates on startup."/>
                         <CheckBox x:Name="cb_useinstancegui" Content="Use Game Instance GUI" Margin="5" Click="cb_useinstancegui_Click" ToolTip="Choose if the instance manager should be launched whenever you launch gw2."/>
+                        <CheckBox x:Name="cb_useloadingui" Content="Show Loading Circle" Margin="5"  ToolTip="Choose if the Loading UI should show up on startup." Click="cb_useloadingui_Click"/>
                         <Label Content="Launchbuddy Releases" Style="{StaticResource H2}"/>
                         <Grid Height="250" Margin="3">
                             <Grid.ColumnDefinitions>

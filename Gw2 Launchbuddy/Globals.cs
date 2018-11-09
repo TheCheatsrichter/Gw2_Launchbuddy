@@ -26,7 +26,7 @@ namespace Gw2_Launchbuddy
         public static string ClientXmlpath; //Should be part of Client
 
         public static string AppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Gw2 Launchbuddy\\";
-        public static Version LBVersion = new Version("1.6.1");
+        public static Version LBVersion = new Version("1.6.2");
 
         public static Options options;
     }

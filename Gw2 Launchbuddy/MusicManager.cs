@@ -9,7 +9,6 @@ using System.Windows.Forms;
 
 namespace Gw2_Launchbuddy
 {
-
     public class MusicConfig
     {
         private ObservableCollection<Playlist> Playlists
@@ -56,7 +55,6 @@ namespace Gw2_Launchbuddy
 
     public class Playlist
     {
-        //public musictype type = musictype.none;
         public ObservableCollection<string> songs;
         musictype type = musictype.none;
 
