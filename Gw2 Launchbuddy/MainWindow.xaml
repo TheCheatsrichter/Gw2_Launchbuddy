@@ -196,9 +196,9 @@
                                 <GridViewColumnHeader Click="listview_auth_Click" Visibility="Collapsed"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <StackPanel>
-                                            <Image Source="{Binding Icon}" Height="64"/>
-                                            <TextBlock x:Name="Txt" Text="{Binding Nickname}" FontSize="14.667" FontWeight="Bold" Background="{x:Null}">
+                                        <WrapPanel>
+                                            <Image Source="{Binding Icon}" Height="26"/>
+                                            <TextBlock x:Name="Txt" Text="{Binding Nickname}" FontSize="14.667" FontWeight="Bold" Background="{x:Null}" VerticalAlignment="Center">
                                                 <TextBlock.Foreground>
                                                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                         <GradientStop Color="Black" Offset="0"/>
@@ -207,7 +207,7 @@
                                                     </LinearGradientBrush>
                                                 </TextBlock.Foreground>
                                             </TextBlock>
-                                        </StackPanel>
+                                        </WrapPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
