@@ -465,6 +465,7 @@
                                 <Button x:Name="bt_remacc" Content="Remove" IsEnabled="False" Click="bt_remacc_Click" Width="100" Margin="5,3" />
                                 <Button x:Name="bt_accsortup" Content="↑" IsEnabled="False" Margin="3" Width="30" Click="bt_accsortup_Click"/>
                                 <Button x:Name="bt_accsortdown" Content="↓" IsEnabled="False" Margin="3" Width="30" Click="bt_accsortdown_Click"/>
+                                <Button x:Name="bt_accsave" Content="Save" IsEnabled="False" Margin="3" Width="30" Click="bt_accsave_Click"/>
                             </StackPanel>
                         </WrapPanel>
                         <CheckBox x:Name="cb_login" Content="Use Autologin" FontSize="16" Checked="cb_login_Checked" Unchecked="cb_login_Unchecked" FontWeight="Bold" Grid.Row="0" Grid.ColumnSpan="4" ToolTip="Check this box if you want to use the account manager to automatically start selected accounts.&#x0a;If you want the normal manual login keep this unchecked." />

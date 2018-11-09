@@ -773,6 +773,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_addacc_Click(object sender, RoutedEventArgs e)
         {
+            bt_accsave.IsEnabled = true;
             if (ObjectManagers.AccountManager.IsValidEmail(tb_email.Text))
             {
                 if (tb_passw.Password.Length > 4)
@@ -870,13 +871,14 @@ namespace Gw2_Launchbuddy
             Properties.Settings.Default.instance_win_Y = Globals.Appmanager.Top;
             Properties.Settings.Default.use_reshade = (bool)cb_reshade.IsChecked;
             Properties.Settings.Default.Save();
-            AccountManager.ImportExport.SaveAccountInfo();
+            if (bt_accsave.IsEnabled==true) AccountManager.ImportExport.SaveAccountInfo();
             SaveAddons();
             Environment.Exit(Environment.ExitCode);
         }
 
         private void bt_remacc_Click(object sender, RoutedEventArgs e)
         {
+            bt_accsave.IsEnabled = true;
             if (listview_acc.SelectedItem != null)
             {
                 AccountManager.Remove(listview_acc.SelectedItem as Account);
@@ -1570,6 +1572,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_accsortup_Click(object sender, RoutedEventArgs e)
         {
+            bt_accsave.IsEnabled = true;
             int index = listview_acc.SelectedIndex;
             if (listview_acc.SelectedItem != null && index >0)
             {              
@@ -1584,6 +1587,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_accsortdown_Click(object sender, RoutedEventArgs e)
         {
+            bt_accsave.IsEnabled = true;
             if (listview_acc.SelectedItem != null)
             {
                 int index = listview_acc.SelectedIndex;
@@ -1598,6 +1602,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_accedit_Click(object sender, RoutedEventArgs e)
         {
+            bt_accsave.IsEnabled = true;
             Account selectedacc = listview_acc.SelectedItem as Account;
             if (selectedacc != null)
             {
@@ -1723,6 +1728,12 @@ namespace Gw2_Launchbuddy
         {
             Properties.Settings.Default.useloadingui = (bool)cb_useloadingui.IsChecked;
             Properties.Settings.Default.Save();
+        }
+
+        private void bt_accsave_Click(object sender, RoutedEventArgs e)
+        {
+            AccountManager.ImportExport.SaveAccountInfo();
+            bt_accsave.IsEnabled = false;
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
