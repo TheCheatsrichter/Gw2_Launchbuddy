@@ -245,7 +245,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label Grid.Row="0" Content="Gw2 Launchbuddy V1.6.2 ALPHA" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Label Grid.Row="0" Content="Gw2 Launchbuddy V1.6.3 ALPHA" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
@@ -868,8 +868,14 @@
                     </Grid>
 
                 </TabItem>
-                <!---
-                <TabItem Header="Crash Fixes" x:Name="tab_clientfix">
+                
+                <TabItem x:Name="tab_clientfix">
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Image Height="20" Source="Resources/Icons/crashfix.png"/>
+                            <Label FontSize="10" Margin="0,-5,0,-7">Crashes</Label>
+                        </StackPanel>
+                    </TabItem.Header>
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50*"/>
@@ -885,10 +891,10 @@
                                 <RowDefinition Height="100*"/>
                                 <RowDefinition Height="30"/>
                             </Grid.RowDefinitions>
-                            <Button Content="Fix" Grid.Column="1" Grid.Row="2" IsEnabled="False" x:Name="bt_fixcrash" FontSize="14" FontWeight="Bold" ToolTip="Try to fix the currently selected crash."/>
+                            <Button Content="Fix" Grid.Column="1" Grid.Row="2" IsEnabled="False" x:Name="bt_fixcrash" FontSize="14" FontWeight="Bold" ToolTip="Try to fix the currently selected crash." Click="bt_fixcrash_Click"/>
                             <Label Content="Latest Crashes" x:Name="lb_lastcrashes" Style="{StaticResource H2}"/>
                             <Label Content="Info" Grid.Column="1" Style="{StaticResource H2}"/>
-                            <ListView x:Name="lv_crashlogs" DisplayMemberPath="{Binding Crashlog}" Grid.Row="1" Grid.RowSpan="2" SelectionChanged="lv_crashlogs_SelectionChanged" FontWeight="Bold">
+                            <ListView x:Name="lv_crashlogs" DisplayMemberPath="{Binding Crashlog}" Grid.Row="1" Grid.RowSpan="2" FontWeight="Bold" SelectionChanged="lv_crashlogs_SelectionChanged">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="CrashType" Width="100" DisplayMemberBinding="{Binding Solutionkey}"/>
@@ -897,7 +903,10 @@
                                     </GridView>
                                 </ListView.View>
                             </ListView>
-                            <TextBlock Grid.Column="1" Grid.Row="1" Margin="5" x:Name="tblock_crashinfo"/>
+                            <ScrollViewer Grid.Column="1" Grid.Row="1">
+                                <TextBlock  Margin="5" x:Name="tblock_crashinfo" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"/>
+                            </ScrollViewer>
+                            
                         </Grid>
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
@@ -905,7 +914,7 @@
                                 <ColumnDefinition Width="70*"/>
                             </Grid.ColumnDefinitions>
                             <Label Content="Clientifix the Quaggan" Style="{StaticResource H2}"/>
-                            <Image Source="Resources/quaggan.png" MaxHeight="500" ToolTip="A quaggan who wants to help youuuuu."/>
+                            <Image  MaxHeight="150" Source="Resources/clientifix.png" ToolTip="A quaggan who wants to help youuuuu."/>
                             <Grid Grid.Column="1" Margin="20">
                                 <Image  Source="Resources/opacitymask.png" Stretch="Fill"/>
                                 <TextBlock  Text="Coooo! Quaggan will do the best to help you!" Foreground="White" Margin="15" x:Name="tblock_crashsolutioninfo" TextWrapping="Wrap" FontSize="14"/>
@@ -916,7 +925,7 @@
                     </Grid>
 
                 </TabItem>
-                -->
+                
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel>

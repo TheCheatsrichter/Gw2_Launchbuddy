@@ -116,7 +116,8 @@ namespace Gw2_Launchbuddy
                 Thread checklbver = new Thread(checklbversion);
                 checklbver.Start();
             }
-            //CrashAnalyzer.ReadCrashLogs();
+            CrashAnalyzer.ReadCrashLogs();
+            lv_crashlogs.ItemsSource = CrashAnalyzer.Crashlogs;
         }
 
         private void SettingsTabSetup()
@@ -1734,6 +1735,21 @@ namespace Gw2_Launchbuddy
         {
             AccountManager.ImportExport.SaveAccountInfo();
             bt_accsave.IsEnabled = false;
+        }
+
+        private void lv_crashlogs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Crashlog crashlog = lv_crashlogs.SelectedItem as Crashlog;
+            tblock_crashinfo.Text =  crashlog.Quickinfo;
+            tblock_crashsolutioninfo.Text = crashlog.Solutioninfo;
+            bt_fixcrash.IsEnabled = crashlog.IsSolveable;
+        }
+
+        private void bt_fixcrash_Click(object sender, RoutedEventArgs e)
+        {
+            Crashlog crashlog = lv_crashlogs.SelectedItem as Crashlog;
+            crashlog.Solve();
+            bt_fixcrash.IsEnabled = false;
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

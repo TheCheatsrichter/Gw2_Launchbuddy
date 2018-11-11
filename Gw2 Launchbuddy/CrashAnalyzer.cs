@@ -9,9 +9,10 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Diagnostics;
 using System.Xml.Serialization;
+using Gw2_Launchbuddy.ObjectManagers;
 
 namespace Gw2_Launchbuddy
-{/*
+{
     public class CrashFilter
     {
         public string[] keywords;
@@ -95,28 +96,20 @@ namespace Gw2_Launchbuddy
         //Solutions
         private static void mem_read()
         {
-            ProcessStartInfo pro = new ProcessStartInfo
-            {
-                FileName = Globals.exepath+Globals.exename,
-                Arguments = "-repair"
-            };
-            Process.Start(pro);
+            AccountManager.DefaultAccount.Argument("-repair");
+            LaunchManager.LaunchGW2(AccountManager.DefaultAccount);
             System.Windows.Forms.MessageBox.Show("The Gw2 Launcher is trying to fix the mem_read error!\nPlease wait for completion before you continue.");
         }
         private static void mem_write()
         {
-            ProcessStartInfo pro = new ProcessStartInfo
-            {
-                FileName = Globals.exepath + Globals.exename,
-                Arguments="-repair"
-            };
-            Process.Start(pro);
+            AccountManager.DefaultAccount.Argument("-repair");
+            LaunchManager.LaunchGW2(AccountManager.DefaultAccount);
             System.Windows.Forms.MessageBox.Show("The Gw2 Launcher is trying to fix the mem_write error!\nPlease wait for completion before you continue.");
         }
         private static void model_leaks()
         {
-            Globals.arg_checkboxlist.First(x => x.Content == "-32").IsChecked=false;
-            System.Windows.Forms.MessageBox.Show("Launch argument \"-32\" successfully unselected!");
+            AccountManager.DefaultAccount.Argument("-32");
+            System.Windows.Forms.MessageBox.Show("Argument -32 deactivated!");
         }
 
         private static void host_crash()
@@ -126,12 +119,8 @@ namespace Gw2_Launchbuddy
 
         private static void outdated_client()
         {
-            ProcessStartInfo pro = new ProcessStartInfo
-            {
-                FileName = Globals.exepath + Globals.exename,
-                Arguments = "-image"
-            };
-            Process.Start(pro);
+            AccountManager.DefaultAccount.Argument("-image");
+            LaunchManager.LaunchGW2(AccountManager.DefaultAccount);
             System.Windows.Forms.MessageBox.Show("The Gw2 Launcher is trying to update!\nPlease wait for completion before you continue.");
         }
     }
@@ -187,7 +176,7 @@ namespace Gw2_Launchbuddy
                 Crashlogs = new ObservableCollection<Crashlog>(Crashlogs.Reverse());
 
                 //Clean up Crashlog   
-                /*          
+                /*      
                  if (Crashlogs.Count >= 25)
                 {
                     try
@@ -207,6 +196,7 @@ namespace Gw2_Launchbuddy
                     }
                     
                 }
+                */
                 
             }
             catch (Exception e)
@@ -219,7 +209,7 @@ namespace Gw2_Launchbuddy
     public class Crashlog
     {
         // Crashinfos
-        public string Assertion;
+        public string Assertion { set; get; }
         string Filename;
         string Exename;
         uint Pid;
@@ -228,6 +218,7 @@ namespace Gw2_Launchbuddy
         string ProgramID;
         public string Build { set; get; }
         string crashtime;
+        string rawdata;
         public string CrashTime
         {
             get { return crashtime ; }
@@ -254,6 +245,8 @@ namespace Gw2_Launchbuddy
                 string tmp = "Crashtime: " + CrashTime;
                 tmp += "\nBuild: " + Build;
                 tmp += "\nAssertion: " + Assertion;
+                tmp += "Used Arguments:" + String.Join(",", Arguments);
+                tmp += "\n\nFull report:" + rawdata;
                 return tmp;
             }
         }
@@ -270,6 +263,8 @@ namespace Gw2_Launchbuddy
         public Crashlog(string crashdata)
         {
             //Only use splitted Crash data!
+            rawdata = crashdata;
+
             Assertion = Regex.Match(crashdata, @"Assertion: ?(?<data>.*)").Groups["data"].Value;
             if (Assertion=="") Assertion= Regex.Match(crashdata, @"Exception: ?(?<data>.*\n.*)").Groups["data"].Value;
 
@@ -293,6 +288,6 @@ namespace Gw2_Launchbuddy
             Solutioninfo = CrashLibrary.SolutionInfo[Solutionkey];
         }
     }
-*/
+
 
 }
