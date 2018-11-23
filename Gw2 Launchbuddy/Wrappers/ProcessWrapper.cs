@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using Gw2_Launchbuddy.ObjectManagers;
 using System.Reflection;
 using Gw2_Launchbuddy.Extensions;
+using System.IO;
 
 namespace Gw2_Launchbuddy.Wrappers
 {
@@ -57,9 +58,16 @@ namespace Gw2_Launchbuddy.Wrappers
         new public bool Start()
         {
             bool success = base.Start();
+            DllInjector Injector =DllInjector.GetInstance;
+            if(File.Exists(ClientManager.ClientInfo.InstallPath + @"\bin64\d3d9.dll"))
+            {
+                Injector.Inject((uint)base.Id, ClientManager.ClientInfo.InstallPath + @"\bin64\d3d9.dll");
+            }
+            //InjectionManager.CreateInjectedProcess(ClientManager.ClientInfo.FullPath, StartInfo.Arguments, ClientManager.ClientInfo.InstallPath + @"\bin64\d3d9.dll");
             if (EnableRaisingEvents == true) Started?.Invoke(this, new EventArgs());
-            return success;
+            return true;
         }
+
 
         public dynamic SetStartInfo(ProcessStartInfo value)
         {

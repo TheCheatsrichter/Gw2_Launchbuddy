@@ -175,6 +175,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DLLInjector.cs" />
     <Compile Include="Extensions\ProcessExtensions.cs" />
     <Compile Include="Extensions\XmlTextReaderExtensions.cs" />
     <Compile Include="Helpers\Builders.cs" />
@@ -209,6 +210,7 @@
     </Compile>
     <Compile Include="HandleManager.cs" />
     <Compile Include="ObjectManagers\PluginManager.cs" />
+    <Compile Include="InjectionManager.cs" />
     <Compile Include="Wrappers\ProcessWrapper.cs" />
     <Compile Include="ObjectManagers\ServerManager.cs" />
     <Compile Include="Popup.xaml.cs">

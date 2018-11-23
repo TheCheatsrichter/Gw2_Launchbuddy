@@ -18,8 +18,6 @@ namespace Gw2_Launchbuddy
 
             if (Properties.Settings.Default.useloadingui) LoadingWindow.Start("Launching Game");
 
-
-
             if (!ClientManager.ClientReg.CheckRegClients())
             {
                 MessageBox.Show("At least one instance of Guild Wars is running that was not opened by LaunchBuddy. That instance needs to be closed.");

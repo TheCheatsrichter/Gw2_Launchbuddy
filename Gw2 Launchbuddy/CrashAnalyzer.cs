@@ -96,19 +96,17 @@ namespace Gw2_Launchbuddy
         //Solutions
         private static void mem_read()
         {
-            AccountManager.DefaultAccount.Argument("-repair");
-            LaunchManager.LaunchGW2(AccountManager.DefaultAccount);
+            Unhandled_Launch("-repair");
             System.Windows.Forms.MessageBox.Show("The Gw2 Launcher is trying to fix the mem_read error!\nPlease wait for completion before you continue.");
         }
         private static void mem_write()
         {
-            AccountManager.DefaultAccount.Argument("-repair");
-            LaunchManager.LaunchGW2(AccountManager.DefaultAccount);
+            Unhandled_Launch("-repair");
             System.Windows.Forms.MessageBox.Show("The Gw2 Launcher is trying to fix the mem_write error!\nPlease wait for completion before you continue.");
         }
         private static void model_leaks()
         {
-            AccountManager.DefaultAccount.Argument("-32");
+            
             System.Windows.Forms.MessageBox.Show("Argument -32 deactivated!");
         }
 
@@ -122,6 +120,13 @@ namespace Gw2_Launchbuddy
             AccountManager.DefaultAccount.Argument("-image");
             LaunchManager.LaunchGW2(AccountManager.DefaultAccount);
             System.Windows.Forms.MessageBox.Show("The Gw2 Launcher is trying to update!\nPlease wait for completion before you continue.");
+        }
+
+        private static void Unhandled_Launch(string argus)
+        {
+            Process pro = new Process();
+            pro.StartInfo = new ProcessStartInfo(ClientManager.ClientInfo.FullPath, argus);
+            pro.Start();
         }
     }
 
