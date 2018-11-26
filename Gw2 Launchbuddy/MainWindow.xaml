@@ -307,7 +307,7 @@
                     <ColumnDefinition Width="50*"/>
                     <ColumnDefinition Width="50*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="bt_launch" Grid.ColumnSpan="2" Style="{StaticResource LaunchButton}"  Click="bt_launch_Click" Grid.Row="0" Grid.Column="0" BorderThickness="0" BorderBrush="{x:Null}" Foreground="{x:Null}" HorizontalAlignment="Left" Width="752" >
+                <Button x:Name="bt_launch" Grid.ColumnSpan="5" Style="{StaticResource LaunchButton}"  Click="bt_launch_Click" Grid.Row="0" Grid.Column="0" BorderThickness="0" BorderBrush="{x:Null}" Foreground="{x:Null}" HorizontalAlignment="Stretch">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150"/>
@@ -640,58 +640,79 @@
                     </TabItem.Header>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="150*"/>
-                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="50*"/>
+                            <RowDefinition Height="50*"/>
                         </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50*"/>
-                            <ColumnDefinition Width="50*"/>
-                        </Grid.ColumnDefinitions>
-                        <Button ToolTip="Manage third party software addons/plugins which should be started with the gw2 client" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
-                        <Label x:Name="lab_AddOnManager" Content="AddOn Manager:" Style="{StaticResource H1}"/>
-                        <StackPanel Orientation="Horizontal" Grid.Row="3" Visibility="Hidden">
-                            <CheckBox x:Name="cb_reshade" Content="Use Reshade Unlocker" Checked="cb_reshade_Checked" Unchecked="cb_reshade_Unchecked" FontSize="16" FontWeight="Bold" IsEnabled="False"  VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="3" Margin="5,0,0,0"/>
-                            <Button x:Name="bt_reshadepath" Content="Set ReshadeUnlocker Path" Click="bt_reshadepath_Click" Grid.Column="1"  Margin="5,0,0,0"/>
-                        </StackPanel>
-
-
-                        <ListView x:Name="lv_AddOns" Grid.Row="1" Grid.ColumnSpan="2" >
-                            <ListView.View>
-                                <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
-                                    <GridViewColumn  HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
-                                        <GridViewColumnHeader Tag="Name" Click="listview_auth_Click" Content="Name"/>
-                                    </GridViewColumn>
-                                    <GridViewColumn HeaderStringFormat="" Width="200" DisplayMemberBinding="{Binding Args}">
-                                        <GridViewColumnHeader Tag="Args" Click="listview_auth_Click" Content="Parameters"/>
-                                    </GridViewColumn>
-                                    <GridViewColumn HeaderStringFormat="" Width="70" DisplayMemberBinding="{Binding IsMultilaunch}">
-                                        <GridViewColumnHeader Tag="IsMultilaunch" Click="listview_auth_Click" Content="Multilaunch"/>
-                                    </GridViewColumn>
-                                    <GridViewColumn Width="80" DisplayMemberBinding="{Binding IsLbAddon}">
-                                        <GridViewColumnHeader Tag="IsLbAddon" Click="listview_auth_Click" Content="Start with LB"/>
-                                    </GridViewColumn>
-                                    <GridViewColumn  DisplayMemberBinding="{Binding Path}">
-                                        <GridViewColumnHeader Tag="Path" Click="listview_auth_Click" Content="Path"/>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2" Margin="0,5">
-                            <Label Content="Name:"/>
-                            <TextBox x:Name="tb_AddonName" Width="100" Height="23"/>
-                            <Label Content="Parameters"/>
-                            <TextBox x:Name="tb_AddonArgs" Width="100" Height="23"/>
-                            <CheckBox x:Name="cb_AddonMultilaunch" Content="Multilaunch"  VerticalAlignment="Center" Margin="5,0" />
-                            <CheckBox x:Name="cb_AddonOnLB" Content="Start with LB" VerticalAlignment="Center" Margin="5,0" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right">
-                            <Button x:Name="bt_AddAddon" Content="Add" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_AddAddon_Click"/>
-                            <Button x:Name="bt_RemAddon" Content="Remove" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_RemAddon_Click"/>
-                        </StackPanel>
-
-
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="150*"/>
+                                <RowDefinition Height="40"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50*"/>
+                                <ColumnDefinition Width="50*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button ToolTip="Manage third party software addons/plugins which should be started with the gw2 client" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
+                            <Label x:Name="lab_AddOnManager" Content="External Software:" Style="{StaticResource H1}"/>
+                            <StackPanel Orientation="Horizontal" Grid.Row="3" Visibility="Hidden">
+                                <CheckBox x:Name="cb_reshade" Content="Use Reshade Unlocker" Checked="cb_reshade_Checked" Unchecked="cb_reshade_Unchecked" FontSize="16" FontWeight="Bold" IsEnabled="False"  VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="3" Margin="5,0,0,0"/>
+                                <Button x:Name="bt_reshadepath" Content="Set ReshadeUnlocker Path" Click="bt_reshadepath_Click" Grid.Column="1"  Margin="5,0,0,0"/>
+                            </StackPanel>
+                            <ListView x:Name="lv_AddOns" Grid.Row="1" Grid.ColumnSpan="2" >
+                                <ListView.View>
+                                    <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
+                                        <GridViewColumn  HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
+                                            <GridViewColumnHeader Tag="Name" Click="listview_auth_Click" Content="Name"/>
+                                        </GridViewColumn>
+                                        <GridViewColumn HeaderStringFormat="" Width="200" DisplayMemberBinding="{Binding Args}">
+                                            <GridViewColumnHeader Tag="Args" Click="listview_auth_Click" Content="Parameters"/>
+                                        </GridViewColumn>
+                                        <GridViewColumn HeaderStringFormat="" Width="70" DisplayMemberBinding="{Binding IsMultilaunch}">
+                                            <GridViewColumnHeader Tag="IsMultilaunch" Click="listview_auth_Click" Content="Multilaunch"/>
+                                        </GridViewColumn>
+                                        <GridViewColumn Width="80" DisplayMemberBinding="{Binding IsLbAddon}">
+                                            <GridViewColumnHeader Tag="IsLbAddon" Click="listview_auth_Click" Content="Start with LB"/>
+                                        </GridViewColumn>
+                                        <GridViewColumn  DisplayMemberBinding="{Binding Path}">
+                                            <GridViewColumnHeader Tag="Path" Click="listview_auth_Click" Content="Path"/>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2" Margin="0,5">
+                                <Label Content="Name:"/>
+                                <TextBox x:Name="tb_AddonName" Width="100" Height="23"/>
+                                <Label Content="Parameters"/>
+                                <TextBox x:Name="tb_AddonArgs" Width="100" Height="23"/>
+                                <CheckBox x:Name="cb_AddonMultilaunch" Content="Multilaunch"  VerticalAlignment="Center" Margin="5,0" />
+                                <CheckBox x:Name="cb_AddonOnLB" Content="Start with LB" VerticalAlignment="Center" Margin="5,0" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right">
+                                <Button x:Name="bt_AddAddon" Content="Add" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_AddAddon_Click"/>
+                                <Button x:Name="bt_RemAddon" Content="Remove" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_RemAddon_Click"/>
+                            </StackPanel>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="150*"/>
+                                <RowDefinition Height="40"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50*"/>
+                                <ColumnDefinition Width="50*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Content="Injected Software:" Style="{StaticResource H1}"/>
+                            <ListView x:Name="lv_InjectDlls" Grid.Row="1" Grid.ColumnSpan="2" >
+                            </ListView>
+                            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right">
+                                <Button x:Name="bt_AddDll" Content="Add DLL" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_AddDll_Click"/>
+                                <Button x:Name="bt_RemDll" Content="Remove DLL" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_RemDll_Click"/>
+                            </StackPanel>
+                        </Grid>
                     </Grid>
+                    
                 </TabItem>
                 <TabItem>
                     <TabItem.Header>

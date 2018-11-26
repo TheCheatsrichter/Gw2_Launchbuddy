@@ -103,6 +103,7 @@ namespace Gw2_Launchbuddy
             checkver.Start();
             cinema_setup();
             Mainwin_LoadSetup(); //do this after cinema setup!
+            LoadDlls();
 
             //AccountManager.ImportExport.LoadAccountInfo(); // Load saved accounts from XML
             LoadConfig(); // loading the gw2 XML config file from AppData and loading user settings
@@ -122,6 +123,11 @@ namespace Gw2_Launchbuddy
             }
             CrashAnalyzer.ReadCrashLogs();
             lv_crashlogs.ItemsSource = CrashAnalyzer.Crashlogs;
+        }
+
+        private void LoadDlls()
+        {
+            lv_InjectDlls.ItemsSource= DllInjector.LoadDlls();
         }
 
         private void Mainwin_LoadSetup()
@@ -1045,6 +1051,7 @@ namespace Gw2_Launchbuddy
         {
             foreach (var plugin in PluginManager.PluginCollection) plugin.Exit();
             Mainwin_SaveSetup();
+            DllInjector.SaveDlls();
             Properties.Settings.Default.Save();
             Application.Current.Shutdown();
         }
@@ -1778,6 +1785,16 @@ namespace Gw2_Launchbuddy
             Crashlog crashlog = lv_crashlogs.SelectedItem as Crashlog;
             crashlog.Solve();
             bt_fixcrash.IsEnabled = false;
+        }
+
+        private void bt_AddDll_Click(object sender, RoutedEventArgs e)
+        {
+            DllInjector.AddDLL();
+        }
+
+        private void bt_RemDll_Click(object sender, RoutedEventArgs e)
+        {
+            DllInjector.RemDLL(lv_InjectDlls.SelectedItem as string);
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

@@ -59,10 +59,7 @@ namespace Gw2_Launchbuddy.Wrappers
         {
             bool success = base.Start();
             DllInjector Injector =DllInjector.GetInstance;
-            if(File.Exists(ClientManager.ClientInfo.InstallPath + @"\bin64\d3d9.dll"))
-            {
-                Injector.Inject((uint)base.Id, ClientManager.ClientInfo.InstallPath + @"\bin64\d3d9.dll");
-            }
+            Injector.InjectAll((uint)base.Id);
             //InjectionManager.CreateInjectedProcess(ClientManager.ClientInfo.FullPath, StartInfo.Arguments, ClientManager.ClientInfo.InstallPath + @"\bin64\d3d9.dll");
             if (EnableRaisingEvents == true) Started?.Invoke(this, new EventArgs());
             return true;
