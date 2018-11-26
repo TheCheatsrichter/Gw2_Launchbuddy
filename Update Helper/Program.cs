@@ -54,12 +54,6 @@ namespace Update_Helper
 
                 Process pro_dir = new Process { StartInfo = new ProcessStartInfo(dir) };
                 pro_dir.Start();
-
-                //Start new LB
-                /*
-                Process newLB = new Process { StartInfo = new ProcessStartInfo(dest) };
-                newLB.Start();
-                */
             }
             catch { }
 
