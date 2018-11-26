@@ -47,19 +47,30 @@ namespace Update_Helper
                 //Rename new LB to old LB name
                 File.Move(tempdest, dest);
 
+                //Cleanup
+                File.Delete(bakdest);
+
+                //Open Directory
+
+                Process pro_dir = new Process { StartInfo = new ProcessStartInfo(dir) };
+                pro_dir.Start();
+
                 //Start new LB
+                /*
                 Process newLB = new Process { StartInfo = new ProcessStartInfo(dest) };
                 newLB.Start();
+                */
             }
             catch { }
 
             //Kill and delete updater (Self)
             ProcessStartInfo Info = new ProcessStartInfo();
-            Info.Arguments = "/C ping 1.1.1.1 -n 1 -w 3000 > Nul & Del \"" + new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath + "\"";
+            Info.Arguments = "/C timeout /T 3 & Del \"" + new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath + "\"";
             Info.WindowStyle = ProcessWindowStyle.Hidden;
             Info.CreateNoWindow = true;
             Info.FileName = "cmd.exe";
             Process.Start(Info);
+            
         }
     }
 }

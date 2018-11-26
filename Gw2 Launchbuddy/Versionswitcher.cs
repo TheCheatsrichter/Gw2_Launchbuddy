@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.IO;
 
 namespace Gw2_Launchbuddy
 {
@@ -47,7 +48,7 @@ namespace Gw2_Launchbuddy
         public static void ApplyRelease(Release rel)
         {
             //Create Update Helper
-            string pathToUH = System.IO.Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath) + "\\Update Helper.exe";
+            string pathToUH = System.IO.Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath) + "\\Updater.exe";
             if (!System.IO.File.Exists(pathToUH)) System.IO.File.WriteAllBytes(pathToUH, Properties.Resources.Update_Helper);
 
             //Execute Update Helper
@@ -57,6 +58,11 @@ namespace Gw2_Launchbuddy
             Info.CreateNoWindow = true;
             Info.FileName = pathToUH;
             Process.Start(Info);
+        }
+
+        public static void DeleteUpdater()
+        {
+            if (File.Exists("Updater.exe")) File.Delete("Updater.exe");
         }
 
         public static void GetReleaseList()
@@ -91,7 +97,7 @@ namespace Gw2_Launchbuddy
             string namefilter = @"<a href=""\/TheCheatsrichter\/Gw2_Launchbuddy\/releases\/tag\/(.*)"">(?<Name>.*)<\/a>";
             string versionfilter = @"<a href=""" + repoprefix + @"\/releases\/tag\/(?<Version>\d+.\d+.*)"">";
             versionfilter = @"<a href=""" + repoprefix + @"\/releases\/tag\/(?<Version>\d+.\d+.*)"">";
-            string downloadurlfilter = @"<a href=""" + repoprefix + @"\/releases\/download\/(?<Exename>.*\.exe)"" rel=""nofollow"">";
+            string downloadurlfilter = @"<a href="".*\/releases\/download\/.+\/(?<Exename>.*\.exe).*rel=""nofollow""";
             string descriptionfilter = @"<div class=""markdown-body"">\s*?(?<Description>\s|\S)+?<\/div>";
 
             foreach (Match version in releases_raw)
@@ -105,13 +111,13 @@ namespace Gw2_Launchbuddy
                         Name = Regex.Match(version.Value, namefilter).Groups["Name"].Value,
                         Version = new Version(Regex.Match(version.Value, versionfilter).Groups["Version"].Value),
                         Description = "<html>\n" + Regex.Match(version.Value, descriptionfilter).Value + "\n</html>",
-                        DownloadURL = URL_Releases + "/download/" + Regex.Match(version.Value, downloadurlfilter).Groups["Exename"].Value,
+                        DownloadURL = URL_Releases + "/download/" + Regex.Match(version.Value, versionfilter).Groups["Version"].Value+ "/" + Regex.Match(version.Value, downloadurlfilter).Groups["Exename"].Value,
                     };
                     releases.Add(release);
                 }
                 catch
                 {
-                    Console.Write("Skiüpüing one release");
+                    Console.Write("Skipping one release");
                 }
                 
             }

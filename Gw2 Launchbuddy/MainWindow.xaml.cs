@@ -96,6 +96,7 @@ namespace Gw2_Launchbuddy
 
             //Setup
             DonatePopup();
+            VersionSwitcher.DeleteUpdater();
 
             //AccountManager.ImportExport.LoadAccountInfo(); // Load saved accounts from XML
             LoadConfig(); // loading the gw2 XML config file from AppData and loading user settings
