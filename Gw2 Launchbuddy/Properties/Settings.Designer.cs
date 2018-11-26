@@ -298,5 +298,53 @@ namespace Gw2_Launchbuddy.Properties {
                 this["useloadingui"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        public double mainwin_pos_x {
+            get {
+                return ((double)(this["mainwin_pos_x"]));
+            }
+            set {
+                this["mainwin_pos_x"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        public double mainwin_pos_y {
+            get {
+                return ((double)(this["mainwin_pos_y"]));
+            }
+            set {
+                this["mainwin_pos_y"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        public double mainwin_size_x {
+            get {
+                return ((double)(this["mainwin_size_x"]));
+            }
+            set {
+                this["mainwin_size_x"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        public double mainwin_size_y {
+            get {
+                return ((double)(this["mainwin_size_y"]));
+            }
+            set {
+                this["mainwin_size_y"] = value;
+            }
+        }
     }
 }

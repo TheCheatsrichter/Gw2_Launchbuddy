@@ -94,9 +94,15 @@ namespace Gw2_Launchbuddy
             Properties.Settings.Default.counter_launches = 1;
 #endif
 
+
             //Setup
             DonatePopup();
             VersionSwitcher.DeleteUpdater();
+            Thread checkver = new Thread(checkversion);
+            checkver.IsBackground = true;
+            checkver.Start();
+            cinema_setup();
+            Mainwin_LoadSetup(); //do this after cinema setup!
 
             //AccountManager.ImportExport.LoadAccountInfo(); // Load saved accounts from XML
             LoadConfig(); // loading the gw2 XML config file from AppData and loading user settings
@@ -105,10 +111,7 @@ namespace Gw2_Launchbuddy
             argListBox.ItemsSource = null;
             //argListBox.ItemsSource = AccountArgumentManager.AccountArgumentCollection.Where(a => a.Argument.Active && a.Account == AccountManager.DefaultAccount);
 
-            Thread checkver = new Thread(checkversion);
-            checkver.IsBackground = true;
-            checkver.Start();
-            cinema_setup();
+            
             LoadAddons();
             SettingsTabSetup();
             AddOnManager.LaunchLbAddons();
@@ -119,6 +122,29 @@ namespace Gw2_Launchbuddy
             }
             CrashAnalyzer.ReadCrashLogs();
             lv_crashlogs.ItemsSource = CrashAnalyzer.Crashlogs;
+        }
+
+        private void Mainwin_LoadSetup()
+        {
+            if (Properties.Settings.Default.mainwin_pos_x >=0 && Properties.Settings.Default.mainwin_pos_y >= 0)
+            {
+                this.Top = Properties.Settings.Default.mainwin_pos_x;
+                this.Left = Properties.Settings.Default.mainwin_pos_y;
+            }
+
+            if (Properties.Settings.Default.mainwin_size_x >= 100 && Properties.Settings.Default.mainwin_size_y >= 100)
+            {
+                this.Height = Properties.Settings.Default.mainwin_size_y;
+                this.Width = Properties.Settings.Default.mainwin_size_x;
+            }
+        }
+
+        private void Mainwin_SaveSetup()
+        {
+            Properties.Settings.Default.mainwin_pos_x = this.Left;
+            Properties.Settings.Default.mainwin_pos_y = this.Top;
+            Properties.Settings.Default.mainwin_size_y = this.Height;
+            Properties.Settings.Default.mainwin_size_x = this.Width;
         }
 
         private void SettingsTabSetup()
@@ -1018,6 +1044,7 @@ namespace Gw2_Launchbuddy
         private void bt_close_Click(object sender, RoutedEventArgs e)
         {
             foreach (var plugin in PluginManager.PluginCollection) plugin.Exit();
+            Mainwin_SaveSetup();
             Properties.Settings.Default.Save();
             Application.Current.Shutdown();
         }
