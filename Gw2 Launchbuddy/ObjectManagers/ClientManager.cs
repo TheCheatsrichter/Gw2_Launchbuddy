@@ -296,8 +296,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 }
 
                 //Maxtime 10 secs
-                Thread.Sleep((int)(Math.Pow(i, 2) * 25 + 50));
-
+                Thread.Sleep(Globals.options.Delay ?? (int)Math.Pow(i, 2) * 25 + 50);
             }
 
             EnableRaisingEvents = true;
