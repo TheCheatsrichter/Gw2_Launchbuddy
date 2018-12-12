@@ -1,16 +1,68 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System.IO;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
+
+    public static class AccountManager
+    {
+        static public ObservableCollection<Account> Accounts = new ObservableCollection<Account>();
+        static void Remove(Account Account) { Accounts.Remove(Accounts.First(a => a.Nickname == Account.Nickname)); }
+        static void Remove(string Nickname) { Accounts.Remove(Accounts.First(a => a.Nickname == Nickname)); }
+    }
+
+    public class Account
+    {
+        public string Nickname = "nickname";
+        public AccountSettings Settings = new AccountSettings();
+
+        private void CreateAccount(string nickname)
+        {
+            if (!AccountManager.Accounts.Any(a => a.Nickname == nickname))
+            {
+                Nickname = nickname;
+                AccountManager.Accounts.Add(this);
+                Client Client = new Client(this);
+            }
+            else
+            {
+                //MessageBox.Show("Account with Nickname"+nickname+"allready exists!");	
+            }
+        }
+
+        public Account(string nickname)
+        {
+            CreateAccount(nickname);
+        }
+        public Account(string nickname, Account account)
+        {
+            this.Settings = account.Settings;//inherit settings
+            CreateAccount(nickname);
+        }
+
+        public Client Client { get { return ClientManager.Clients.FirstOrDefault(c => c.account == this); } }
+    }
+
+    public class AccountSettings
+    {
+        //Missing stuff (all nullable):
+        /*
+        email;
+        password;
+        localdat;
+        Icon;
+        Arguments;
+        GFX Profile;
+        Plugins/Dlls;
+        Window Size,Startposition etc.
+        */
+    }
+
+
+    /*
     public static class AccountManager
     {
         private static ObservableCollection<Account> accountCollection { get; set; }
@@ -300,4 +352,5 @@ namespace Gw2_Launchbuddy.ObjectManagers
             return Client;
         }
     }
+    */
 }

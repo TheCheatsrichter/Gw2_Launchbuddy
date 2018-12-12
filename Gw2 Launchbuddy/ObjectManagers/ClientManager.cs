@@ -1,24 +1,199 @@
 ﻿using Gw2_Launchbuddy.Interfaces;
 using Gw2_Launchbuddy.Wrappers;
-using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Windows;
-using Gw2_Launchbuddy.Helpers;
 using System.IO;
-using System.Xml;
-using Gw2_Launchbuddy.Extensions;
-using System.Net;
-using System.Threading;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
+
+    public static class ClientManager
+    {
+        private static string filepath = "gw2lb_ac.txt"; //Change this to Appdata Lb folder
+        public static Client.ClientStatus ActiveStatus_Threshold = Client.ClientStatus.Running;
+
+        public static ObservableCollection<Client> Clients = new ObservableCollection<Client>();
+        public static readonly ObservableCollection<Client> ActiveClients = new ObservableCollection<Client>(); //initialize one instance, get{} would create a new instance every statusupdate (bad for ui)
+
+        public static void Add(Client client)
+        {
+            Clients.Add(client);
+            client.StatusChanged += UpdateActiveList;
+        }
+
+        public static void UpdateActiveList(object sender, EventArgs e)
+        {
+            Client client = sender as Client;
+            Console.WriteLine(client.account.Nickname + " status changed to: " + client.Status + " = " + ((int)client.Status).ToString());
+            if (ActiveClients.Contains(client) && !(client.Status < ActiveStatus_Threshold))
+            {
+                ActiveClients.Remove(client);
+            }
+            if (!ActiveClients.Contains(client) && (client.Status >= ActiveStatus_Threshold))
+            {
+                ActiveClients.Add(client);
+            }
+            SaveActiveClients();
+        }
+
+        private static void SaveActiveClients()
+        {
+            //Saving all active clients to a file within the Appdata Lb folder, rather than registry, to minimize errors by privileges
+            //Format:"Nickname,Client.Status,Client.Process.Id,Client.Process.StartTime
+            if (File.Exists(filepath))
+                File.Delete(filepath);
+            var filewriter = File.AppendText(filepath);
+            foreach (Client client in ActiveClients)
+            {
+                filewriter.WriteLine(client.account.Nickname + "," + (int)client.Status + "," + client.Process.Id + "," + client.Process.StartTime.ToString());
+            }
+            filewriter.Close();
+        }
+
+        public static bool LoadActiveClients()
+        {
+            if (File.Exists(filepath))
+            {
+                var lines_client = File.ReadLines(filepath);
+                foreach (string line in lines_client)
+                {
+                    Account acc = AccountManager.Accounts.First(a => a.Nickname == line.Split(',')[0]);
+                    Process pro = Process.GetProcessById(Int32.Parse(line.Split(',')[2]));
+                    if (pro != null)
+                    {
+                        if (pro.StartTime.ToString() == line.Split(',')[3])
+                        {
+                            acc.Client.Process = pro;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                        acc.Client.Status = (Client.ClientStatus)Int32.Parse(line.Split(',')[1]);
+                    }
+                }
+            }
+            return true;
+        }
+    }
+
+    public class Client
+    {
+        public readonly Account account;
+        private ClientStatus status = ClientStatus.None;
+        public Process Process = new Process();
+
+        public event EventHandler StatusChanged;
+
+        protected virtual void OnStatusChanged(EventArgs e)
+        {
+            EventHandler handler = StatusChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        [Flags]
+        public enum ClientStatus
+        {
+            None = 0x00,
+            Configured = 0x01,
+            Created = 0x01 << 1,
+            Injected = 0x01 << 2,
+            MutexClosed = 0x01 << 3,
+            Running = 0x01 << 4,
+            Closed = 0x01 << 5
+        };
+
+        public ClientStatus Status
+        {
+            set
+            {
+                status = status | value;
+                if (value == ClientStatus.None || value == ClientStatus.Closed)
+                    status = ClientStatus.None;
+                OnStatusChanged(EventArgs.Empty);
+            }
+            get { return status; }
+        }
+
+        public Client(Account acc)
+        {
+            account = acc;
+            Process.Exited += OnClientClose;
+            ClientManager.Add(this);
+        }
+
+        public void Close()
+        {
+            //Close Process gracefully here
+        }
+
+        public void Suspend()
+        {
+            //Suspend Process here
+        }
+
+        public void Resume()
+        {
+            //Resume Process here
+        }
+
+        public void Focus()
+        {
+            //Focus Process Window
+        }
+
+        protected virtual void OnClientClose(object sender, EventArgs e)
+        {
+            Process pro = sender as Process;
+            if (pro == this.Process)
+                this.Status = ClientStatus.Closed;
+        }
+
+        public void Launch()
+        {
+            while (Status < ClientStatus.Running)
+            {
+                Status = ClientStatus.MutexClosed;
+                Status = ClientStatus.Running;
+                switch (Status)
+                {
+                    case var expression when (Status < ClientStatus.Configured):
+                        Status = ClientStatus.Configured;
+                        break;
+
+                    case var expression when (Status < ClientStatus.Created):
+                        Status = ClientStatus.Created;
+                        break;
+
+                    case var expression when (Status < ClientStatus.Injected):
+                        Status = ClientStatus.Injected;
+                        break;
+
+                    case var expression when (Status < ClientStatus.MutexClosed):
+                        Status = ClientStatus.MutexClosed;
+                        break;
+
+                    case var expression when (Status < ClientStatus.Running):
+                        Status = ClientStatus.Running;
+                        break;
+
+                    default:
+                        //Undeclared Status Close Process and create new one
+                        Close();
+                        Status = ClientStatus.None;
+                        break;
+                }
+            }
+            Focus();
+        }
+    }
+
+    /*
     public static class ClientManager
     {
         private static ObservableCollection<Client> clientCollection { get; set; }
