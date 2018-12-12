@@ -29,8 +29,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             var testForExists = Get(AccountArgument.Account, AccountArgument.Argument.Flag);
             if (testForExists != null) return testForExists;
-            if (AccountArgument.Argument.Flag == "-email") AccountArgument.OptionString = AccountArgument.Account.Email;
-            if (AccountArgument.Argument.Flag == "-password") AccountArgument.OptionString = AccountArgument.Account.Password;
+            if (AccountArgument.Argument.Flag == "-email") AccountArgument.OptionString = "\"" + AccountArgument.Account.Email + "\"";
+            if (AccountArgument.Argument.Flag == "-password") AccountArgument.OptionString = "\"" + AccountArgument.Account.Password + "\"";
             accountArgumentCollection.Add(AccountArgument);
             return AccountArgument;
         }
