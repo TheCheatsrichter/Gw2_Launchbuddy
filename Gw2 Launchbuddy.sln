@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28407.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gw2 Launchbuddy", "Gw2 Launchbuddy\Gw2 Launchbuddy.csproj", "{DA3CD129-9A83-4254-AC82-274EDF63CB1A}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -10,9 +10,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gw2 Launchbuddy", "Gw2 Laun
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Update Helper", "Update Helper\Update Helper.csproj", "{5859DE14-9C64-4EF6-A16F-16DB8D6724CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPlugin", "TestPlugin\TestPlugin.csproj", "{6CD5375C-D997-4C03-989D-C71784EADFF8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPlugin", "Plugins\TestPlugin\TestPlugin.csproj", "{6CD5375C-D997-4C03-989D-C71784EADFF8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginContract", "PluginContract\PluginContract.csproj", "{FB87D35E-72C7-4FFF-9584-CA3EC177D188}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{8979A82C-64C8-4A17-B166-EFD8A72F2F07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6CD5375C-D997-4C03-989D-C71784EADFF8} = {8979A82C-64C8-4A17-B166-EFD8A72F2F07}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B3CD33ED-79D5-46F5-8AA8-F81376EE17C4}

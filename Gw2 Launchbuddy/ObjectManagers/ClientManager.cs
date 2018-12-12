@@ -327,7 +327,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 Application.Current.Dispatcher.Invoke(delegate { AccountClientManager.Remove(this); });
             }
-            catch (Exception err) { }
+            catch { }
             foreach (var plugin in PluginManager.PluginCollection) plugin.Client_Exit();
             Dispose();
         }

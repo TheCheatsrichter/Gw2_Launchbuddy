@@ -131,6 +131,9 @@
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
+    <Reference Include="PluginContract">
+      <HintPath>..\PluginContract\bin\PluginContract.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -181,7 +184,7 @@
     <Compile Include="Helpers\Builders.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\FileDialog.cs" />
-    <Content Include="..\TestPlugin\bin\Debug\TestPlugin.dll">
+    <Content Include="..\Plugins\TestPlugin\bin\TestPlugin.dll">
       <Link>Plugins\TestPlugin.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -376,12 +379,6 @@
     <Resource Include="Resources\Icons\crashfix.png" />
     <Resource Include="Resources\clientifix.png" />
     <Content Include="Resources\Update Helper.exe" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PluginContract\PluginContract.csproj">
-      <Project>{fb87d35e-72c7-4fff-9584-ca3ec177d188}</Project>
-      <Name>PluginContract</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
