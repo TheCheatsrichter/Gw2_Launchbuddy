@@ -259,8 +259,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             var AccountClient = AccountClientManager.AccountClientCollection.Where(a => a.Client == this).Single();
 
-            if (AccountClient.Account != AccountManager.DefaultAccount)
-                AccountClient.Account = new Account(AccountClient.Account.Nickname, null, null);
+            //if (AccountClient.Account != AccountManager.DefaultAccount)
+            //    AccountClient.Account = new Account(AccountClient.Account.Nickname, null, null);
 
             Globals.LinkedAccs.Add(AccountClient);
            // GFXManager.UseGFX(AccountClient.Account.ConfigurationPath);
