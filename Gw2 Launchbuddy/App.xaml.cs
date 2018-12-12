@@ -38,11 +38,12 @@ namespace Gw2_Launchbuddy
             ClientManager.ClientInfo.LoadClientInfo();
             */
             //PluginManager.DoInits();
-
+            /*
             foreach (var account in options.Launch)
                 AccountManager.Account(account).IsSelected();
             foreach(var arg in options.Args)
                 AccountArgumentManager.StopGap.IsSelected("-" + arg, true);
+            */
             //LaunchManager.Launch();
 
             if (!options.Silent)

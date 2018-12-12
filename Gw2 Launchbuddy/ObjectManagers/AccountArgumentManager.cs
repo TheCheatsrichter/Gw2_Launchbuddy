@@ -29,8 +29,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             var testForExists = Get(AccountArgument.Account, AccountArgument.Argument.Flag);
             if (testForExists != null) return testForExists;
+            /*
             if (AccountArgument.Argument.Flag == "-email") AccountArgument.OptionString = AccountArgument.Account.Email;
             if (AccountArgument.Argument.Flag == "-password") AccountArgument.OptionString = AccountArgument.Account.Password;
+            */
             accountArgumentCollection.Add(AccountArgument);
             return AccountArgument;
         }
@@ -42,6 +44,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static AccountArgument Get(this Account Account, string Flag) => accountArgumentCollection.Where(a => a.Argument.Flag == Flag && a.Account == Account).SingleOrDefault();
 
+        /*
         public static class StopGap
         {
             public static Dictionary<string, AccountArgument> ToDictionary()
@@ -77,7 +80,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 return AccountManager.DefaultAccount.PrintArguments();
             }
+            
         }
+        */
     }
 
     public class AccountArgument

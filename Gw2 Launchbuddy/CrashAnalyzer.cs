@@ -123,7 +123,7 @@ namespace Gw2_Launchbuddy
         private static void Unhandled_Launch(string argus)
         {
             Process pro = new Process();
-            pro.StartInfo = new ProcessStartInfo(ClientManager.ClientInfo.FullPath, argus);
+            pro.StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath, argus);
             pro.Start();
         }
     }

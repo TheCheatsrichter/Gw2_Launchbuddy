@@ -54,7 +54,7 @@ namespace Gw2_Launchbuddy
         ///
         ///##########################################
         ///
-        /*
+        
         private bool cinemamode = false;
         private bool slideshowthread_isrunning = false;
 
@@ -374,7 +374,7 @@ namespace Gw2_Launchbuddy
                 //Notes: Login frame = 560x300
                 //Test resolutions here!
                 //Only edit width!
-                /*
+                
                 myWindow.Width = 1600;
 
                 myWindow.Height = (int)(myWindow.Width / 16 * 9);
@@ -579,7 +579,7 @@ namespace Gw2_Launchbuddy
             lv_gfx.Items.Refresh();
 
             lab_version.Content = "Client Version: " + ClientManager.ClientInfo.Version;
-            lab_path.Content = "Install Path: " + ClientManager.ClientInfo.InstallPath;
+            lab_path.Content = "Install Path: " + EnviromentManager.GwClientPath;
             lab_path.Content += ClientManager.ClientInfo.Executable;
             lab_para.Content = "Latest Start Parameters: ";
             RefreshUI();
@@ -721,9 +721,9 @@ namespace Gw2_Launchbuddy
                 {
                     if (fileDialog.FileName != "")
                     {
-                        ClientManager.ClientInfo.InstallPath = Path.GetDirectoryName(fileDialog.FileName) + @"\";
+                        EnviromentManager.GwClientPath = Path.GetDirectoryName(fileDialog.FileName) + @"\";
                         ClientManager.ClientInfo.Executable = Path.GetFileName(fileDialog.Fi‌​leName);
-                        lab_path.Content = ClientManager.ClientInfo.InstallPath + ClientManager.ClientInfo.Executable;
+                        lab_path.Content = EnviromentManager.GwClientPath + ClientManager.ClientInfo.Executable;
                     }
                 });
         }
@@ -745,7 +745,7 @@ namespace Gw2_Launchbuddy
                 {
                     // Using command line to launch both EXE files from the link file
                     // EXAMPLE: cmd.exe /c start "" "C:\Program Files (x86)\Guild Wars 2\ReshadeUnlocker" && start "" "C:\Program Files (x86)\Guild Wars 2\Gw2"
-                    shortcut.Arguments = " /c start \"\" \"" + Globals.unlockerpath + "\" && start \"\" \"" + ClientManager.ClientInfo.InstallPath + ClientManager.ClientInfo.Executable + "\" " + arguments;
+                    shortcut.Arguments = " /c start \"\" \"" + Globals.unlockerpath + "\" && start \"\" \"" + EnviromentManager.GwClientPath + ClientManager.ClientInfo.Executable + "\" " + arguments;
                     MessageBox.Show(shortcut.Arguments);
                     shortcut.TargetPath = "cmd.exe"; // win will automatically extend this to the CMD path
                     shortcut.Save();
@@ -763,7 +763,7 @@ namespace Gw2_Launchbuddy
                     dynamicinfo += arg + "\n\t\t";
                 }
 
-                System.Windows.MessageBox.Show("Custom Launcher created at : " + ClientManager.ClientInfo.InstallPath + "\nUse ReshadeUnlocker: " + cb_reshade.IsChecked.ToString() + "\nUsed arguments:" + dynamicinfo);
+                System.Windows.MessageBox.Show("Custom Launcher created at : " + EnviromentManager.GwClientPath + "\nUse ReshadeUnlocker: " + cb_reshade.IsChecked.ToString() + "\nUsed arguments:" + dynamicinfo);
             }
             catch (Exception err)
             {
@@ -794,7 +794,7 @@ namespace Gw2_Launchbuddy
             {
                 try
                 {
-                    CreateShortcut("Gw2_Launcher_" + AccountManager.DefaultAccount.Nickname, ClientManager.ClientInfo.InstallPath, ClientManager.ClientInfo.InstallPath + ClientManager.ClientInfo.Executable);
+                    CreateShortcut("Gw2_Launcher_" + AccountManager.DefaultAccount.Nickname, EnviromentManager.GwClientPath, EnviromentManager.GwClientPath + ClientManager.ClientInfo.Executable);
                 }
                 catch (Exception err)
                 {
@@ -803,11 +803,11 @@ namespace Gw2_Launchbuddy
             }
             else
             {
-                CreateShortcut("Gw2_Custom_Launcher", ClientManager.ClientInfo.InstallPath, ClientManager.ClientInfo.InstallPath + ClientManager.ClientInfo.Executable);
+                CreateShortcut("Gw2_Custom_Launcher", EnviromentManager.GwClientPath, EnviromentManager.GwClientPath + ClientManager.ClientInfo.Executable);
             }
             try
             {
-                Process.Start(ClientManager.ClientInfo.InstallPath);
+                Process.Start(EnviromentManager.GwClientPath);
             }
             catch (Exception err)
             {
@@ -942,7 +942,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_quaggan_Click(object sender, RoutedEventArgs e)
         {
-            if (ClientManager.ClientInfo.InstallPath != "")
+            if (EnviromentManager.GwClientPath != "")
             {
                 ClientFix clientfix = new ClientFix();
                 clientfix.Show();
@@ -1018,7 +1018,7 @@ namespace Gw2_Launchbuddy
             if (!System.IO.File.Exists(Globals.unlockerpath))
             {
                 cb_reshade.IsChecked = false;
-                MessageBox.Show("ReShadeUnlocker.exe not found at :\n" + ClientManager.ClientInfo.InstallPath + "\nPlease select the ReshadeUnlocker.exe manually!");
+                MessageBox.Show("ReShadeUnlocker.exe not found at :\n" + EnviromentManager.GwClientPath + "\nPlease select the ReshadeUnlocker.exe manually!");
                 ReshadeDialog();
             }
         }
@@ -1555,7 +1555,7 @@ namespace Gw2_Launchbuddy
         {
             Builders.FileDialog.DefaultExt(".xml")
                 .Filter("XML Files(*.xml)|*.xml")
-                .InitialDirectory(ClientManager.ClientInfo.InstallPath)
+                .InitialDirectory(EnviromentManager.GwClientPath)
                 .ShowDialog((Helpers.FileDialog fileDialog) =>
                 {
                     if (GFXManager.IsValidGFX(fileDialog.FileName))
@@ -1577,14 +1577,14 @@ namespace Gw2_Launchbuddy
 
         private void bt_resetgfx_Click(object sender, RoutedEventArgs e)
         {
-            Globals.SelectedGFX = GFXManager.ReadFile(Globals.ClientXmlpath);
+            Globals.SelectedGFX = GFXManager.ReadFile(EnviromentManager.GwClientXmlPath);
             lv_gfx.ItemsSource = Globals.SelectedGFX.Config;
             lv_gfx.Items.Refresh();
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            /*
+            
             ComboBox box = sender as ComboBox;
             GFXOption option = box.DataContext as GFXOption;
 
@@ -1614,14 +1614,14 @@ namespace Gw2_Launchbuddy
             GFXManager.OverwriteGFX();
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.FileName = ClientManager.ClientInfo.InstallPath + ClientManager.ClientInfo.Executable;
+            startInfo.FileName = EnviromentManager.GwClientPath + ClientManager.ClientInfo.Executable;
             startInfo.Arguments = " -image -shareArchive";
             Process gw2pro = new Process { StartInfo = startInfo };
 
             gw2pro.Start();
             gw2pro.WaitForExit();
 
-            Globals.SelectedGFX = GFXManager.ReadFile(Globals.ClientXmlpath);
+            Globals.SelectedGFX = GFXManager.ReadFile(EnviromentManager.GwClientXmlPath);
             lv_gfx.ItemsSource = Globals.SelectedGFX.Config;
             lv_gfx.Items.Refresh();
         }
@@ -1907,7 +1907,7 @@ namespace Gw2_Launchbuddy
                 }
             }
         }
-        */
+ 
     }
     
 

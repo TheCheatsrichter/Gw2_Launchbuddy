@@ -42,7 +42,7 @@ namespace Gw2_Launchbuddy
             savediag.Title = "Saving GFX Settings";
             savediag.AddExtension = true;
             savediag.FileName = "GW2 Custom GFX";
-            savediag.InitialDirectory = ClientManager.ClientInfo.InstallPath;
+            savediag.InitialDirectory = EnviromentManager.GwClientPath;
             savediag.ShowDialog();
 
             if (savediag.FileName != "") ToXml(savediag.FileName);
@@ -51,7 +51,7 @@ namespace Gw2_Launchbuddy
         private static List<string> GetHeader()
         {
             List<string> header = new List<string>();
-            string[] lines = System.IO.File.ReadAllLines(Globals.ClientXmlpath);
+            string[] lines = System.IO.File.ReadAllLines(EnviromentManager.GwClientXmlPath);
             foreach (string line in lines)
             {
                 header.Add(line);
@@ -82,21 +82,21 @@ namespace Gw2_Launchbuddy
 
             if (path == "Default" && File.Exists(Globals.AppDataPath + "GFX_tmp.xml"))
             {
-                if (File.Exists(Globals.ClientXmlpath)) File.Delete(Globals.ClientXmlpath);
-                File.Move(Globals.AppDataPath + "GFX_tmp.xml", Globals.ClientXmlpath);
+                if (File.Exists(EnviromentManager.GwClientXmlPath)) File.Delete(EnviromentManager.GwClientXmlPath);
+                File.Move(Globals.AppDataPath + "GFX_tmp.xml", EnviromentManager.GwClientXmlPath);
             }
 
             if (File.Exists(path) && Path.GetExtension(path) == ".xml")
             {
                 if (!File.Exists(Globals.AppDataPath + "GFX_tmp.xml"))
                 {
-                    File.Move(Globals.ClientXmlpath, Globals.AppDataPath + "GFX_tmp.xml");
+                    File.Move(EnviromentManager.GwClientXmlPath, Globals.AppDataPath + "GFX_tmp.xml");
                 }
-                if (File.Exists(Globals.ClientXmlpath))
+                if (File.Exists(EnviromentManager.GwClientXmlPath))
                 {
-                    File.Delete(Globals.ClientXmlpath);
+                    File.Delete(EnviromentManager.GwClientXmlPath);
                 }
-                File.Copy(path, Globals.ClientXmlpath);
+                File.Copy(path, EnviromentManager.GwClientXmlPath);
             }
         }
 
@@ -104,8 +104,8 @@ namespace Gw2_Launchbuddy
         {
             if (File.Exists(Globals.AppDataPath + "GFX_tmp.xml"))
             {
-                if (File.Exists(Globals.ClientXmlpath)) File.Delete(Globals.ClientXmlpath);
-                File.Move(Globals.AppDataPath + "GFX_tmp.xml", Globals.ClientXmlpath);
+                if (File.Exists(EnviromentManager.GwClientXmlPath)) File.Delete(EnviromentManager.GwClientXmlPath);
+                File.Move(Globals.AppDataPath + "GFX_tmp.xml", EnviromentManager.GwClientXmlPath);
             }
         }
 
@@ -126,7 +126,7 @@ namespace Gw2_Launchbuddy
 
         public static void OverwriteGFX()
         {
-            ToXml(Globals.ClientXmlpath);
+            ToXml(EnviromentManager.GwClientXmlPath);
         }
 
         static public GFXConfig ReadFile(string path)

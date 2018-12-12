@@ -9,6 +9,7 @@ namespace Gw2_Launchbuddy
 {
     internal static class LaunchManager
     {
+        /*
         private static List<int> nomutexpros = new List<int>();
 
         public static void Launch()
@@ -93,5 +94,6 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show("Launch failure. If you want to help, please provide the following:\r\n" + err.GetType().ToString() + "\r\n" + err.Message + "\r\n" + err.StackTrace);
             }
         }
+        */
     }
 }

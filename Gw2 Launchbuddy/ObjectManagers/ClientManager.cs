@@ -268,7 +268,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     MessageBox.Show("Guild Wars may not be installed. \n " + e.Message);
                     return;
                 }
-                Globals.ClientXmlpath = "";
+                EnviromentManager.GwClientXmlPath = "";
                 long max = 0;
 
                 foreach (string config in configfiles)
@@ -276,12 +276,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     if (System.IO.File.GetLastWriteTime(config).Ticks > max)
                     {
                         max = System.IO.File.GetLastWriteTime(config).Ticks;
-                        Globals.ClientXmlpath = config;
+                        EnviromentManager.GwClientXmlPath = config;
                     }
                 }
 
                 //Read the GFX Settings
-                Globals.SelectedGFX = GFXManager.ReadFile(Globals.ClientXmlpath);
+                Globals.SelectedGFX = GFXManager.ReadFile(EnviromentManager.GwClientXmlPath);
                 //lv_gfx.ItemsSource = Globals.SelectedGFX.Config;
                 //lv_gfx.Items.Refresh();
 
@@ -290,7 +290,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 {
                     //if (Properties.Settings.Default.use_reshade) cb_reshade.IsChecked = true;
 
-                    StreamReader stream = new System.IO.StreamReader(Globals.ClientXmlpath);
+                    StreamReader stream = new System.IO.StreamReader(EnviromentManager.GwClientXmlPath);
                     XmlTextReader reader = null;
                     reader = new XmlTextReader(stream);
 
@@ -306,7 +306,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
                             case "INSTALLPATH":
                                 InstallPath = reader.GetValue();
-                                //lab_path.Content = "Install Path: " + ClientManager.ClientInfo.InstallPath;
+                                //lab_path.Content = "Install Path: " + EnviromentManager.GwClientPath;
                                 break;
 
                             case "EXECUTABLE":

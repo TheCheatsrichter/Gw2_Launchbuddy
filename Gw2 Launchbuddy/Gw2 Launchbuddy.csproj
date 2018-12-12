@@ -232,10 +232,6 @@
       <DependentUpon>TextBoxPopUp.xaml</DependentUpon>
     </Compile>
     <Compile Include="Versionswitcher.cs" />
-    <Page Include="Clientfix.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="GUI_ApplicationManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -255,9 +251,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Clientfix.xaml.cs">
-      <DependentUpon>Clientfix.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

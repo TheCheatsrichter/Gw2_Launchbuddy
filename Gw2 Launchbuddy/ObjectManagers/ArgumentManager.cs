@@ -43,19 +43,26 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private static Argument InternalAdd(string Flag, string Description = null)
         {
+            /*
             var Argument = new Argument(Flag, Description);
             AccountArgumentManager.Add(AccountManager.DefaultAccount, Argument);
             argumentCollection.Add(Argument);
             return Argument;
+            */
+            return null;
         }
+
 
         public static Argument Add(Argument Argument)
         {
+            /*
             argumentCollection.Add(Argument);
-            AccountArgumentManager.Add(AccountManager.DefaultAccount, Argument);
+            //AccountArgumentManager.Add(AccountManager.DefaultAccount, Argument);
             foreach (Account Account in AccountManager.AccountCollection)
                 AccountArgumentManager.Add(Account, Argument);
             return Argument;
+            */
+            return null;
         }
 
         public static Argument Add(string Flag, string Description = null) => Add(new Argument(Flag, Description));
@@ -114,7 +121,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public Argument IsSelected(bool Selected = true)
         {
-            AccountArgumentManager.StopGap.IsSelected(Flag, Selected);
+            //AccountArgumentManager.StopGap.IsSelected(Flag, Selected);
             return this;
         }
 
@@ -122,11 +129,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             get
             {
-                return AccountArgumentManager.StopGap.GetOptionString(Flag);
+                return null;
+                //return AccountArgumentManager.StopGap.GetOptionString(Flag);
             }
             set
             {
-                AccountArgumentManager.StopGap.SetOptionString(Flag, value);
+                //AccountArgumentManager.StopGap.SetOptionString(Flag, value);
             }
         }
 
