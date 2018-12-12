@@ -196,6 +196,7 @@
     <Compile Include="ObjectManagers\AccountManager.cs" />
     <Compile Include="AddOnManager.cs" />
     <Compile Include="LaunchManager.cs" />
+    <Compile Include="ObjectManagers\AccountManager_New.cs" />
     <Compile Include="ObjectManagers\ApiManager.cs" />
     <Compile Include="ObjectManagers\ArgumentManager.cs" />
     <Compile Include="ObjectManagers\ClientManager.cs" />

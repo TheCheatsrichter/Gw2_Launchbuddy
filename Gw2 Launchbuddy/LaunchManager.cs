@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
+using System.Threading;
 using System.Windows;
 
 namespace Gw2_Launchbuddy
@@ -44,7 +44,10 @@ namespace Gw2_Launchbuddy
             if (AccountManager.SelectedAccountCollection.Count > 0)
             {
                 foreach (Account Account in AccountManager.SelectedAccountCollection)
+                {
                     LaunchGW2(Account);
+                }
+
             }
             else
             {

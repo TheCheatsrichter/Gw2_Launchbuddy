@@ -272,34 +272,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             ClientManager.ClientReg.RegClient(this);
 
-            for (var i = 0; i < 10; i++)
-            {
-#if DEBUG
-                System.Diagnostics.Debug.Print("Mutex Kill Attempt Nr" + i);
-#endif
-                try
-                {
-                    //if (HandleManager.ClearMutex(ClientManager.ClientInfo.ProcessName, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros)) i = 10;
-                    if (HandleManager.KillHandle(this, "AN-Mutex-Window-Guild Wars 2", false)) i = 10;
-                }
-                catch (Exception err)
-                {
-                    // Attempt to allow true broken states to fail.
-                    if (err is InvalidOperationException) i = 10;
-#if DEBUG
-                    // Attempt to allow race conditions in DEBUG mode.
-                    System.Diagnostics.Debug.Print(err.Message);
-#else
-                    // Tell the user what happened... Maybe?
-                    if (i == 10) MessageBox.Show("Mutex release failed, will try again. Please provide the following if you want to help fix this problem: \r\n" + err.GetType().ToString() + "\r\n" + err.Message + "\r\n" + err.StackTrace);
-#endif
-                }
-
-                //Maxtime 10 secs
-                Thread.Sleep((int)(Math.Pow(i, 2) * 25 + 50));
-
-            }
-
             EnableRaisingEvents = true;
             Exited += Client_Exited;
             foreach (var plugin in PluginManager.PluginCollection) plugin.Client_PostLaunch();
@@ -311,7 +283,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             try
             {
-                return base.Start();
+                return base.StartAndWait();
             }
             catch (Exception err)
             {

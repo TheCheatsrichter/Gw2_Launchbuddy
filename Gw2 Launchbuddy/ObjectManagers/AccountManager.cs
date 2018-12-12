@@ -124,7 +124,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 {
                     AES aes = new AES();
                     aes_accountlist.Clear();
-                    foreach (Account acc in AccountManager.AccountCollection)
+                    foreach (Account acc in AccountManager.accountCollection)
                     {
                         acc.Email = aes.Encrypt(acc.Email);
                         acc.Password = aes.Encrypt(acc.Password);

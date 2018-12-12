@@ -24,6 +24,25 @@ namespace Gw2_Launchbuddy
 {
     public partial class MainWindow : Window
     {
+
+        public MainWindow()
+        {
+            try
+            {
+                InitializeComponent();
+                if (!Directory.Exists(Globals.AppDataPath))
+                {
+                    Directory.CreateDirectory(Globals.AppDataPath);
+                }
+            }
+            catch
+            {
+                Properties.Settings.Default.Reset();
+            }
+            //Init();
+        }
+
+
         ///Gw2 Launchbuddy by TheCheatsrichter 2016
         ///
         ///Argument generator and shortcut creator for Guild Wars 2
@@ -35,7 +54,7 @@ namespace Gw2_Launchbuddy
         ///
         ///##########################################
         ///
-
+        /*
         private bool cinemamode = false;
         private bool slideshowthread_isrunning = false;
 
@@ -81,6 +100,7 @@ namespace Gw2_Launchbuddy
             }
             Init();
         }
+
         public void Init()
         {
 #if !DEBUG
@@ -368,7 +388,7 @@ namespace Gw2_Launchbuddy
                 double windowHeight = this.Height;
                 this.Left = (screenWidth / 2) - (windowWidth / 2);
                 this.Top = (screenHeight / 2) - (windowHeight / 2);
-                */
+                
 
                 //Setting up the Login Window Location
                 Canvas.SetTop(Canvas_login, reso_y - (reso_y / 2));
@@ -1576,7 +1596,7 @@ namespace Gw2_Launchbuddy
                     (lv_gfx.SelectedItem as ListViewItem).Background = Brushes.Gray;
                 }
             }
-            */
+            
         }
 
         private void lv_gfx_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1887,5 +1907,8 @@ namespace Gw2_Launchbuddy
                 }
             }
         }
+        */
     }
+    
+
 }
