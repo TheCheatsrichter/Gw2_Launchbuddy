@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -129,22 +130,40 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void Close()
         {
-            //Close Process gracefully here
+            //May need more gracefully close function
+            if (Process.Responding)
+                Process.Close();
+            else
+            {
+                Resume();
+                Process.Close();
+            }
         }
+
+
+        [DllImport("kernel32.dll")]
+        public static extern uint SuspendThread(IntPtr hThread);
 
         public void Suspend()
         {
-            //Suspend Process here
+            SuspendThread(Process.Handle);
         }
+
+        [DllImport("kernel32.dll")]
+        public static extern uint ResumeThread(IntPtr hThread);
 
         public void Resume()
         {
-            //Resume Process here
+            ResumeThread(Process.Handle);
         }
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
 
         public void Focus()
         {
-            //Focus Process Window
+            IntPtr hwndMain = Process.MainWindowHandle;
+            SetForegroundWindow(hwndMain);
         }
 
         protected virtual void OnClientClose(object sender, EventArgs e)
