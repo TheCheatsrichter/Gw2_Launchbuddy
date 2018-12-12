@@ -33,8 +33,10 @@ namespace Gw2_Launchbuddy
             Globals.options = options;
 
             // Load things before MainWindow
+            /*
             AccountManager.ImportExport.LoadAccountInfo();
             ClientManager.ClientInfo.LoadClientInfo();
+            */
             //PluginManager.DoInits();
 
             foreach (var account in options.Launch)

@@ -209,6 +209,7 @@
       <DependentUpon>GUI_ApplicationManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="HandleManager.cs" />
+    <Compile Include="ObjectManagers\EnviromentManager.cs" />
     <Compile Include="ObjectManagers\PluginManager.cs" />
     <Compile Include="InjectionManager.cs" />
     <Compile Include="Wrappers\ProcessWrapper.cs" />
@@ -216,7 +217,6 @@
     <Compile Include="Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ObjectManagers\AccountClientManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

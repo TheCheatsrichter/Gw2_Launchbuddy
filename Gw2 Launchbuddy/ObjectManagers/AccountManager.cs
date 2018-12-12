@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.IO;
+using System.Windows;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -12,11 +13,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
         static public ObservableCollection<Account> Accounts = new ObservableCollection<Account>();
         static void Remove(Account Account) { Accounts.Remove(Accounts.First(a => a.Nickname == Account.Nickname)); }
         static void Remove(string Nickname) { Accounts.Remove(Accounts.First(a => a.Nickname == Nickname)); }
+
+        public static void ImportAccounts()
+        {
+            //Import accounts
+        }
     }
 
     public class Account
     {
-        public string Nickname = "nickname";
+        public string Nickname = "Default";
         public AccountSettings Settings = new AccountSettings();
 
         private void CreateAccount(string nickname)
@@ -29,7 +35,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             else
             {
-                //MessageBox.Show("Account with Nickname"+nickname+"allready exists!");	
+                MessageBox.Show("Account with Nickname"+nickname+"allready exists!");	
             }
         }
 

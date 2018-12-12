@@ -53,7 +53,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             filewriter.Close();
         }
 
-        public static bool LoadActiveClients()
+        public static bool ImportActiveClients()
         {
             if (File.Exists(filepath))
             {
