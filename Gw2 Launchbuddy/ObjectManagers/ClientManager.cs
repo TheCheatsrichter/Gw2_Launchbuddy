@@ -336,6 +336,18 @@ namespace Gw2_Launchbuddy.ObjectManagers
             return GetProcessesByName(ClientManager.ClientInfo.ProcessName);
             //return temp.Select(a => ToDerivedHelper.ToDerived<Process, Client>(a)).ToArray();
         }
+
+        new public void Stop()
+        {
+            try
+            {
+                if (!CloseMainWindow())
+                    Kill();
+                if (!WaitForExit(1000))
+                    Kill();
+            }
+            catch { }
+        }
     }
     /*
     public class Client
@@ -370,18 +382,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Process.Exited -= ClientProcess_Exited;
             Application.Current.Dispatcher.Invoke(delegate { AccountClientManager.Remove(this); });
             Process.Dispose();
-        }
-
-        public void Stop()
-        {
-            try
-            {
-                if (!Process.CloseMainWindow())
-                    Process.Kill();
-                if (!Process.WaitForExit(1000))
-                    Process.Kill();
-            }
-            catch { }
         }
     }*/
 }

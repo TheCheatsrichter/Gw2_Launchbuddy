@@ -40,7 +40,8 @@ namespace Gw2_Launchbuddy
             new CrashFilter(new string[] { "c0000005", "Memory at address","could not be written" }, "mem_write"),
             new CrashFilter(new string[] { "Coherent", "host", "crashed" }, "host_crash"),
             new CrashFilter(new string[] { "Client needs to be patched", "shareArchive", "or noPatch" }, "outdated_client"),
-            new CrashFilter(new string[] { "Model", "leaks","detected" }, "model_leaks")
+            new CrashFilter(new string[] { "Model", "leaks","detected" }, "model_leaks"),
+            new CrashFilter(new string[] { "Raw manifest not found.","Is your archive up to date?","shareArchive","isRelaunch"}, "readonly_write")
         };
 
         public static Dictionary<string, string> SolutionInfo = new Dictionary<string, string>
@@ -51,6 +52,7 @@ namespace Gw2_Launchbuddy
             { "mem_read","Cooo!\nSeems like a memory read error happended to you!\nQuaggan knows that this sometimes happens when your Gw2.dat file gets corrupted.\nSometimes using the -repair argument will help youuuu!" },
             { "outdated_client","Cooo!\nYour client seems to be outdated and you tried to launch the game with autologin!\n Quaggan would update your client for youu!" },
             { "mem_write","Cooo!\nSeems like a memory write error happended to you!\nQuaggan knows that this sometimes happens when your Gw2.dat file gets corrupted.\nSometimes using the -repair argument will help youuuu!" },
+            { "readonly_write","BooOOooo!\nIt looks like your client may have tried to update while in share mode!\nQuaggan needs to close all your clients and update them!" }
         };
 
 
@@ -90,6 +92,9 @@ namespace Gw2_Launchbuddy
                 case "outdated_client":
                     outdated_client();
                     break;
+                case "readonly_write":
+                    readonly_write();
+                    break;
             }
         }
 
@@ -120,6 +125,15 @@ namespace Gw2_Launchbuddy
             AccountManager.DefaultAccount.Argument("-image");
             LaunchManager.LaunchGW2(AccountManager.DefaultAccount);
             System.Windows.Forms.MessageBox.Show("The Gw2 Launcher is trying to update!\nPlease wait for completion before you continue.");
+        }
+
+        private static void readonly_write()
+        {
+            foreach(Client client in Client.GetClients())
+            {
+                client.Stop();
+            }
+            outdated_client();
         }
 
         private static void Unhandled_Launch(string argus)
