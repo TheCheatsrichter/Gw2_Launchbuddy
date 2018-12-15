@@ -1681,6 +1681,7 @@ namespace Gw2_Launchbuddy
                     if (fileDialog.Result == System.Windows.Forms.DialogResult.OK)
                     {
                         acc.SetIcon(fileDialog.FileName);
+                        bt_accsave.IsEnabled = true;
                     }
                     listview_acc.Items.Refresh();
                 });
