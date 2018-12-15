@@ -41,7 +41,7 @@ namespace Gw2_Launchbuddy
             new CrashFilter(new string[] { "Coherent", "host", "crashed" }, "host_crash"),
             new CrashFilter(new string[] { "Client needs to be patched", "shareArchive", "or noPatch" }, "outdated_client"),
             new CrashFilter(new string[] { "Model", "leaks","detected" }, "model_leaks"),
-            new CrashFilter(new string[] { "Raw manifest not found.","Is your archive up to date?","shareArchive","isRelaunch"}, "readonly_write")
+            new CrashFilter(new string[] { "Raw manifest not found.","Is your archive up to date?","shareArchive","isRelaunch"}, "readonly_write"),
         };
 
         public static Dictionary<string, string> SolutionInfo = new Dictionary<string, string>
