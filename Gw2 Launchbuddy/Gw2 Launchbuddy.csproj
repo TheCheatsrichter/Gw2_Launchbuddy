@@ -186,10 +186,6 @@
     <Compile Include="Helpers\Builders.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\FileDialog.cs" />
-    <Content Include="..\Plugins\TestPlugin\bin\TestPlugin.dll">
-      <Link>Plugins\TestPlugin.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Interfaces\IPlugin.cs" />
     <Content Include="Interfaces\IPlugin.vb" />
     <Compile Include="Interfaces\IProcessWrapper.cs" />
@@ -288,6 +284,7 @@
     </EmbeddedResource>
     <None Include="Gw2 Launchbuddy_TemporaryKey.pfx" />
     <None Include="packages.config" />
+    <None Include="BuildEvents\post-build.ps1" />
     <None Include="Properties\app.manifest">
       <SubType>Designer</SubType>
     </None>
@@ -392,8 +389,7 @@
     </ItemGroup>
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>REM del "$(ProjectDir)Resources\Update Helper.exe"
-</PostBuildEvent>
+    <PostBuildEvent>powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File "$(ProjectDir)BuildEvents\post-build.ps1" -SolutionDir "$(SolutionDir)\" -TargetDir "$(TargetDir)\" -OutDir "$(OutDir)\" -ProjectDir "$(ProjectDir)\"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\Fody.3.3.3\build\Fody.targets" Condition="Exists('..\packages\Fody.3.3.3\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -405,6 +401,10 @@
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.10.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.10.0\build\Microsoft.Net.Compilers.props'))" />
   </Target>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

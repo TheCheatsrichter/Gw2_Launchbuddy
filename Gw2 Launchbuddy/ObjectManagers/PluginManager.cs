@@ -20,7 +20,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             pluginCollection = new ObservableCollection<IPlugin>();
             PluginCollection = new ReadOnlyObservableCollection<IPlugin>(pluginCollection);
 
-            var plugins = LoadPlugins<IPlugin>("Plugins");
+            var plugins = LoadPlugins<IPlugin>("Plugins\\");
             foreach (var plugin in plugins)
             {
                 pluginCollection.Add(plugin);
