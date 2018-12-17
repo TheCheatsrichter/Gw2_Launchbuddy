@@ -37,11 +37,22 @@ namespace Gw2_Launchbuddy
             ClientManager.ClientInfo.LoadClientInfo();
             //PluginManager.DoInits();
 
+            var launchCount = 0;
             foreach (var account in options.Launch)
+            {
                 AccountManager.Account(account).IsSelected();
-            foreach(var arg in options.Args)
+                launchCount++;
+            }
+            foreach (var arg in options.Args)
                 AccountArgumentManager.StopGap.IsSelected("-" + arg, true);
-            //LaunchManager.Launch();
+            if (launchCount > 0)
+            {
+                AccountArgumentManager.StopGap.IsSelected("-email");
+                AccountArgumentManager.StopGap.IsSelected("-password");
+                AccountArgumentManager.StopGap.IsSelected("-nopatchui");
+
+                LaunchManager.Launch();
+            }
 
             if (!options.Silent)
             {

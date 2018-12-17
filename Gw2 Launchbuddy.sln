@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gw2 Launchbuddy", "Gw2 Launchbuddy\Gw2 Launchbuddy.csproj", "{DA3CD129-9A83-4254-AC82-274EDF63CB1A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{5859DE14-9C64-4EF6-A16F-16DB8D6724CD} = {5859DE14-9C64-4EF6-A16F-16DB8D6724CD}
+		{09101B58-CB2E-4B8A-ACFF-55E658EE1C4D} = {09101B58-CB2E-4B8A-ACFF-55E658EE1C4D}
 		{6CD5375C-D997-4C03-989D-C71784EADFF8} = {6CD5375C-D997-4C03-989D-C71784EADFF8}
 	EndProjectSection
 EndProject
@@ -19,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginContract", "PluginContract\PluginContract.csproj", "{FB87D35E-72C7-4FFF-9584-CA3EC177D188}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{8979A82C-64C8-4A17-B166-EFD8A72F2F07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gw2HookPlugin", "Plugins\Gw2HookPlugin\Gw2HookPlugin.csproj", "{09101B58-CB2E-4B8A-ACFF-55E658EE1C4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,12 +81,25 @@ Global
 		{FB87D35E-72C7-4FFF-9584-CA3EC177D188}.Release|x64.Build.0 = Release|Any CPU
 		{FB87D35E-72C7-4FFF-9584-CA3EC177D188}.Release|x86.ActiveCfg = Release|Any CPU
 		{FB87D35E-72C7-4FFF-9584-CA3EC177D188}.Release|x86.Build.0 = Release|Any CPU
+		{09101B58-CB2E-4B8A-ACFF-55E658EE1C4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09101B58-CB2E-4B8A-ACFF-55E658EE1C4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09101B58-CB2E-4B8A-ACFF-55E658EE1C4D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{09101B58-CB2E-4B8A-ACFF-55E658EE1C4D}.Debug|x64.Build.0 = Debug|Any CPU
+		{09101B58-CB2E-4B8A-ACFF-55E658EE1C4D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{09101B58-CB2E-4B8A-ACFF-55E658EE1C4D}.Debug|x86.Build.0 = Debug|Any CPU
+		{09101B58-CB2E-4B8A-ACFF-55E658EE1C4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09101B58-CB2E-4B8A-ACFF-55E658EE1C4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09101B58-CB2E-4B8A-ACFF-55E658EE1C4D}.Release|x64.ActiveCfg = Release|Any CPU
+		{09101B58-CB2E-4B8A-ACFF-55E658EE1C4D}.Release|x64.Build.0 = Release|Any CPU
+		{09101B58-CB2E-4B8A-ACFF-55E658EE1C4D}.Release|x86.ActiveCfg = Release|Any CPU
+		{09101B58-CB2E-4B8A-ACFF-55E658EE1C4D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6CD5375C-D997-4C03-989D-C71784EADFF8} = {8979A82C-64C8-4A17-B166-EFD8A72F2F07}
+		{09101B58-CB2E-4B8A-ACFF-55E658EE1C4D} = {8979A82C-64C8-4A17-B166-EFD8A72F2F07}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B3CD33ED-79D5-46F5-8AA8-F81376EE17C4}

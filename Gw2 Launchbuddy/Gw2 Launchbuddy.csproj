@@ -284,7 +284,10 @@
     </EmbeddedResource>
     <None Include="Gw2 Launchbuddy_TemporaryKey.pfx" />
     <None Include="packages.config" />
-    <None Include="BuildEvents\post-build.ps1" />
+    <None Include="ProjectEvents\post-build.ps1" />
+    <None Include="ProjectEvents\pre-clean.ps1" />
+    <None Include="ProjectEvents\post-clean.ps1" />
+    <None Include="ProjectEvents\pre-build.ps1" />
     <None Include="Properties\app.manifest">
       <SubType>Designer</SubType>
     </None>
@@ -389,7 +392,8 @@
     </ItemGroup>
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File "$(ProjectDir)BuildEvents\post-build.ps1" -SolutionDir "$(SolutionDir)\" -TargetDir "$(TargetDir)\" -OutDir "$(OutDir)\" -ProjectDir "$(ProjectDir)\"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\Fody.3.3.3\build\Fody.targets" Condition="Exists('..\packages\Fody.3.3.3\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -407,9 +411,17 @@
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
+  -->
   <Target Name="BeforeBuild">
+    <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File &quot;$(ProjectDir)ProjectEvents\pre-build.ps1&quot; -SolutionDir &quot;$(SolutionDir)\&quot; -TargetDir &quot;$(TargetDir)\&quot; -OutDir &quot;$(OutDir)\&quot; -ProjectDir &quot;$(ProjectDir)\&quot;" />
   </Target>
   <Target Name="AfterBuild">
+    <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File &quot;$(ProjectDir)ProjectEvents\post-build.ps1&quot; -SolutionDir &quot;$(SolutionDir)\&quot; -TargetDir &quot;$(TargetDir)\&quot; -OutDir &quot;$(OutDir)\&quot; -ProjectDir &quot;$(ProjectDir)\&quot;" />
   </Target>
-  -->
+  <Target Name="BeforeClean">
+    <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File &quot;$(ProjectDir)ProjectEvents\pre-clean.ps1&quot; -SolutionDir &quot;$(SolutionDir)\&quot; -TargetDir &quot;$(TargetDir)\&quot; -OutDir &quot;$(OutDir)\&quot; -ProjectDir &quot;$(ProjectDir)\&quot;" />
+  </Target>
+  <Target Name="AfterClean">
+    <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File &quot;$(ProjectDir)ProjectEvents\post-clean.ps1&quot; -SolutionDir &quot;$(SolutionDir)\&quot; -TargetDir &quot;$(TargetDir)\&quot; -OutDir &quot;$(OutDir)\&quot; -ProjectDir &quot;$(ProjectDir)\&quot;" />
+  </Target>
 </Project>

@@ -1049,7 +1049,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_close_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var plugin in PluginManager.PluginCollection) plugin.Exit();
+            foreach (var plugin in PluginManager.TestPluginCollection) plugin.Exit();
             Mainwin_SaveSetup();
             DllInjector.SaveDlls();
             Properties.Settings.Default.Save();

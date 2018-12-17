@@ -12,6 +12,6 @@ trap {"Error: $_"}
 #Write-Host "ProjectDir $ProjectDir"
 
 # Copy plugins to the plugin folder
-$path = "$SolutionDir\Plugins\TestPlugin\$OutDir\*.dll"
-$destination = "$TargetDir\\Plugins"
-Get-ChildItem -Path $path | Copy-Item -Destination $destination
+$path = "$SolutionDir\Plugins\*\$OutDir\*.dll"
+$destination = "$TargetDir\\Plugins\\"
+Get-ChildItem -Path $path | Copy-Item -Destination (New-Item $destination -Type container -Force)

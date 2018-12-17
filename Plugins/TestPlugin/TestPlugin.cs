@@ -1,10 +1,8 @@
 ﻿using Gw2_Launchbuddy.Interfaces;
-using System;
-using System.Windows;
 
 namespace TestPlugin
 {
-    public class TestPlugin : IPlugin
+    public class TestPlugin : ITestPlugin
     {
         public string Name { get { return "Test Plugin"; } }
 

@@ -301,12 +301,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             EnableRaisingEvents = true;
             Exited += Client_Exited;
-            foreach (var plugin in PluginManager.PluginCollection) plugin.Client_PostLaunch();
+            foreach (var plugin in PluginManager.TestPluginCollection) plugin.Client_PostLaunch();
         }
 
         new public bool Start()
         {
-            foreach (var plugin in PluginManager.PluginCollection) plugin.Client_PreLaunch();
+            foreach (var plugin in PluginManager.TestPluginCollection) plugin.Client_PreLaunch();
 
             try
             {
@@ -327,7 +327,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 Application.Current.Dispatcher.Invoke(delegate { AccountClientManager.Remove(this); });
             }
             catch { }
-            foreach (var plugin in PluginManager.PluginCollection) plugin.Client_Exit();
+            foreach (var plugin in PluginManager.TestPluginCollection) plugin.Client_Exit();
             Dispose();
         }
 
