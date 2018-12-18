@@ -110,7 +110,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             if (GwClientVersion != null)
             {
-                if (GwClientUpToDate != null && Api.Online)
+                if (GwClientUpToDate == null && Api.Online)
                 {
                     GwClientUpToDate = Api.ClientBuild == GwClientVersion;
                     if (!(bool)GwClientUpToDate)

@@ -11,6 +11,7 @@ namespace Gw2_Launchbuddy
 {
     public static class GFXManager
     {
+        public static GFXConfig SelectedGFX = new GFXConfig();
         private static GFXConfig CurrentConfig = new GFXConfig();
 
         //Options to skip

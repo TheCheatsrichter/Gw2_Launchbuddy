@@ -311,7 +311,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
                             case "EXECUTABLE":
                                 Executable = reader.GetValue();
-                                //lab_path.Content += ClientManager.ClientInfo.Executable;
+                                //lab_path.Content += EnviromentManager.GwClientExePath;
                                 break;
 
                             case "EXECCMD":

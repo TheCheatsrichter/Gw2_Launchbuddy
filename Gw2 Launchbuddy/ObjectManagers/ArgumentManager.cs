@@ -43,12 +43,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private static Argument InternalAdd(string Flag, string Description = null)
         {
-            /*
+
             var Argument = new Argument(Flag, Description);
-            AccountArgumentManager.Add(AccountManager.DefaultAccount, Argument);
             argumentCollection.Add(Argument);
             return Argument;
-            */
             return null;
         }
 
