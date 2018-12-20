@@ -1615,9 +1615,9 @@ namespace Gw2_Launchbuddy
 
         private void lv_accs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var accs = (sender as ListView).SelectedItems as Account;
+            var accs = (sender as ListView).SelectedItems;
             AccountManager.SwitchSelectionAll(false);
-            foreach(Account acc in AccountManager.Accounts)
+            foreach(Account acc in accs)
             {
                 acc.IsEnabled = true;
             }

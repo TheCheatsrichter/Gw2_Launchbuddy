@@ -368,6 +368,9 @@
     <Resource Include="Resources\Icons\tools.png" />
     <Resource Include="Resources\Icons\crashfix.png" />
     <Resource Include="Resources\clientifix.png" />
+    <Resource Include="Resources\Icons\idle.png" />
+    <Resource Include="Resources\Icons\loading.png" />
+    <Resource Include="Resources\Icons\running.png" />
     <Content Include="Resources\Update Helper.exe" />
   </ItemGroup>
   <ItemGroup>
