@@ -726,22 +726,6 @@ namespace Gw2_Launchbuddy
             */
         }
 
-        private void arglistbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (lv_args.SelectedItem != null)
-            {
-                Argument item = ArgumentManager.ArgumentCollection.FirstOrDefault(x => x.Flag == (lv_args.SelectedItem as System.Windows.Controls.CheckBox).Content.ToString());
-                if (item != null)
-                {
-                    lab_descr.Content = "Description (" + item.Flag + "):";
-                    textblock_descr.Text = item.Description;
-                } else
-                {
-                    lab_descr.Content = "Description (NaN):";
-                    textblock_descr.Text = "Missing Description please report!";
-                }
-            }
-        }
 
         private void bt_shortcut_Click(object sender, RoutedEventArgs e)
         {
@@ -1609,8 +1593,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_accadd_Click(object sender, RoutedEventArgs e)
         {
-            Account acc = new Account("Franz");
-            Account acc2 = new Account("Hans");
+            AccountManager.CreateEmptyAccount();
         }
 
         private void lv_accs_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1621,6 +1604,34 @@ namespace Gw2_Launchbuddy
             {
                 acc.IsEnabled = true;
             }
+        }
+
+        private void lv_accssettings_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var acc=(sender as ListView).SelectedItem as Account;
+            if (acc!=null )
+            {
+                AccountManager.EditAccount = acc;
+                gr_acceditor.DataContext = AccountManager.EditAccount;
+                gr_acceditor.IsEnabled = true;
+                sp_acclistbuttons.IsEnabled = true;
+            }
+            else
+            {
+                gr_acceditor.IsEnabled = false;
+                sp_acclistbuttons.IsEnabled = false;
+            }
+
+
+        }
+
+        private void bt_accrem_Click(object sender, RoutedEventArgs e)
+        {
+            AccountManager.Remove(lv_accssettings.SelectedItem as Account);
+        }
+
+        private void CheckBox_GotMouseCapture(object sender, System.Windows.Input.MouseEventArgs e)
+        {
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

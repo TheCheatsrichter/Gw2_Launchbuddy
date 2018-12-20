@@ -11,6 +11,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class AccountManager
     {
+        static public Account EditAccount = null;
         static public ObservableCollection<Account> Accounts = new ObservableCollection<Account>();
         static public void Remove(Account Account) { Accounts.Remove(Accounts.First(a => a.Nickname == Account.Nickname)); }
         static public void Remove(string Nickname) { Accounts.Remove(Accounts.First(a => a.Nickname == Nickname)); }
@@ -23,6 +24,25 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 acc.IsEnabled = active;
             }
+        }
+
+        public static void CreateEmptyAccount()
+        {
+            string name_pre = "New Account";
+            string name_suf = "";
+            bool isnew = false;
+            int i = 0;
+            while (!isnew)
+            {
+                if (i != 0)
+                {
+                    name_suf = "(" + i.ToString() + ")";
+                }
+                isnew = !AccountManager.Accounts.Any<Account>(a => a.Nickname == name_pre + name_suf);
+                i++;
+            }
+
+            Account acc = new Account(name_pre + name_suf);
         }
 
         public static void LaunchAccounts()
@@ -117,7 +137,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public class AccountSettings
     {
-
+        Arguments Arguments = new Arguments();
         public string GFXFile;
         //Missing stuff (all nullable):
         /*

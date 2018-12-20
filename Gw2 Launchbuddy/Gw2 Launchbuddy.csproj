@@ -192,12 +192,11 @@
       <DependentUpon>LoadingScreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="MusicManager.cs" />
-    <Compile Include="ObjectManagers\AccountArgumentManager.cs" />
     <Compile Include="ObjectManagers\AccountManager.cs" />
     <Compile Include="AddOnManager.cs" />
     <Compile Include="LaunchManager.cs" />
     <Compile Include="ObjectManagers\ApiManager.cs" />
-    <Compile Include="ObjectManagers\ArgumentManager.cs" />
+    <Compile Include="ObjectManagers\Arguments.cs" />
     <Compile Include="ObjectManagers\ClientManager.cs" />
     <Compile Include="CrashAnalyzer.cs" />
     <Compile Include="CrashReporter.cs" />
