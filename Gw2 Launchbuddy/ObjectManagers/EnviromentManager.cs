@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
+using System.Net;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -23,18 +24,24 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static string GwAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\";
         public static string GwClientXmlPath;
         public static string GwClientVersion;
+        public static string GwClientExeName;
         public static string GwClientPath;
-        public static string GwClientExePath;
+        public static string GwClientExePath { get { return GwClientPath + GwClientExeName; } }
         public static bool? GwClientUpToDate = null;
 
         public static void Init()
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            VersionSwitcher.DeleteUpdater();
+
             LoadGwClientInfo();
             CheckGwClientVersion();
             VersionSwitcher.CheckForUpdate();
 
             AccountManager.ImportAccounts();
             ClientManager.ImportActiveClients();
+            CrashAnalyzer.ReadCrashLogs();
         }
 
         public static void LoadGwClientInfo()
@@ -81,7 +88,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             break;
 
                         case "EXECUTABLE":
-                            GwClientExePath = reader.GetValue();
+                            GwClientExeName = reader.GetValue();
                             break;
 
                         case "EXECCMD":

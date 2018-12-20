@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows;
+using System.Threading;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -35,8 +37,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
             if (!ActiveClients.Contains(client) && (client.Status >= ActiveStatus_Threshold))
             {
                 ActiveClients.Add(client);
-            }
-            SaveActiveClients();
+                //SaveActiveClients();
+            }          
         }
 
         private static void SaveActiveClients()
@@ -90,6 +92,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         protected virtual void OnStatusChanged(EventArgs e)
         {
+#if DEBUG
+            Console.WriteLine("Account: " + account + " Status: " + Status);
+#endif
             EventHandler handler = StatusChanged;
             if (handler != null)
             {
@@ -173,19 +178,49 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 this.Status = ClientStatus.Closed;
         }
 
+        private void ConfigureProcess()
+        {
+            //Add Arguments here
+            Process.StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath, Arguments="-shareArchive" };
+        }
+
+        private void CloseMutex()
+        {
+            for (var i = 0; i < 10; i++)
+            {
+#if DEBUG
+                System.Diagnostics.Debug.Print("Mutex Kill Attempt Nr" + i);
+#endif
+                try
+                {
+                    //if (HandleManager.ClearMutex(ClientManager.ClientInfo.ProcessName, "AN-Mutex-Window-Guild Wars 2", ref nomutexpros)) i = 10;
+                    if (HandleManager.KillHandle(Process, "AN-Mutex-Window-Guild Wars 2", false)) i = 10;
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show("Mutex release failed, will try again. Please provide the following if you want to help fix this problem: \r\n" + err.GetType().ToString() + "\r\n" + err.Message + "\r\n" + err.StackTrace);
+                }
+
+                //Maxtime 10 secs
+                Thread.Sleep((int)(Math.Pow(i, 2) * 25 + 50));
+
+            }
+        }
+
         public void Launch()
         {
             while (Status < ClientStatus.Running)
             {
-                Status = ClientStatus.MutexClosed;
-                Status = ClientStatus.Running;
                 switch (Status)
                 {
                     case var expression when (Status < ClientStatus.Configured):
+                        ConfigureProcess();
                         Status = ClientStatus.Configured;
                         break;
 
                     case var expression when (Status < ClientStatus.Created):
+                        Process.Start();
+                        Suspend();
                         Status = ClientStatus.Created;
                         break;
 
@@ -194,6 +229,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                         break;
 
                     case var expression when (Status < ClientStatus.MutexClosed):
+                        CloseMutex();
                         Status = ClientStatus.MutexClosed;
                         break;
 

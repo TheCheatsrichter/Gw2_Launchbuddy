@@ -17,6 +17,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static ObservableCollection<Account> SelectedAccounts { get { return new ObservableCollection<Account>(Accounts.Where<Account>(a => a.IsEnabled == true)); } }
 
+        public static void SwitchSelectionAll(bool active)
+        {
+            foreach (Account acc in Accounts)
+            {
+                acc.IsEnabled = active;
+            }
+        }
+
         public static void LaunchAccounts()
         {
             foreach(Account acc in SelectedAccounts)
@@ -31,6 +39,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 acc.Client.Launch();
             }
         }
+
+        public static bool HasEntry => Accounts.Count == 0 ? false : true;
 
         public static void MoveAccount(Account acc,int steps)
         {
@@ -74,7 +84,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public class Account
     {
-        public string Nickname = "Default";
+        public string Nickname { get; set; }
         public bool IsEnabled = false;
         public AccountSettings Settings = new AccountSettings();
 

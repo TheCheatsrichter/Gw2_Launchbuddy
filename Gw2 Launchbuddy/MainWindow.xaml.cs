@@ -46,11 +46,6 @@ namespace Gw2_Launchbuddy
         private SortAdorner listViewSortAdorner = null;
         private GridViewColumnHeader listViewSortCol = null;
 
-        private ObservableCollection<Server> assetlist = new ObservableCollection<Server>();
-        private ObservableCollection<Server> authlist = new ObservableCollection<Server>();
-
-        private AES crypt = new AES();
-
         public class CinemaImage
         {
             public string Name
@@ -84,6 +79,16 @@ namespace Gw2_Launchbuddy
             Init();
         }
 
+        private void UIInit()
+        {
+            //Account Setups
+            lv_accs.ItemsSource = lv_accssettings.ItemsSource = AccountManager.Accounts;
+
+            //CrashAnalyser
+            lv_crashlogs.ItemsSource = CrashAnalyzer.Crashlogs;
+
+        }
+
         public void Init()
         {
 #if !DEBUG
@@ -100,7 +105,8 @@ namespace Gw2_Launchbuddy
 
             //Setup
             DonatePopup();
-            VersionSwitcher.DeleteUpdater();
+            UIInit();
+            
             /*Thread checkver = new Thread(checkversion);
             checkver.IsBackground = true;
             checkver.Start();*/
@@ -121,8 +127,7 @@ namespace Gw2_Launchbuddy
                 Thread checklbver = new Thread(checklbversion);
                 checklbver.Start();
             }
-            CrashAnalyzer.ReadCrashLogs();
-            lv_crashlogs.ItemsSource = CrashAnalyzer.Crashlogs;
+
         }
 
         private void LoadDlls()
@@ -669,7 +674,7 @@ namespace Gw2_Launchbuddy
                     if (fileDialog.FileName != "")
                     {
                         EnviromentManager.GwClientPath = Path.GetDirectoryName(fileDialog.FileName) + @"\";
-                        EnviromentManager.GwClientExePath = Path.GetFileName(fileDialog.Fi‌​leName);
+                        EnviromentManager.GwClientExeName = Path.GetFileName(fileDialog.Fi‌​leName);
                         lab_path.Content = EnviromentManager.GwClientPath + EnviromentManager.GwClientExePath;
                     }
                 });
@@ -1600,6 +1605,22 @@ namespace Gw2_Launchbuddy
         private void bt_RemDll_Click(object sender, RoutedEventArgs e)
         {
             DllInjector.RemDLL(lv_InjectDlls.SelectedItem as string);
+        }
+
+        private void bt_accadd_Click(object sender, RoutedEventArgs e)
+        {
+            Account acc = new Account("Franz");
+            Account acc2 = new Account("Hans");
+        }
+
+        private void lv_accs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var accs = (sender as ListView).SelectedItems as Account;
+            AccountManager.SwitchSelectionAll(false);
+            foreach(Account acc in AccountManager.Accounts)
+            {
+                acc.IsEnabled = true;
+            }
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

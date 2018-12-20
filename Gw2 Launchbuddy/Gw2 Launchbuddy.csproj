@@ -208,7 +208,7 @@
     <Compile Include="GUI_ApplicationManager.xaml.cs">
       <DependentUpon>GUI_ApplicationManager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HandleManager.cs" />
+    <Compile Include="ObjectManagers\HandleManager.cs" />
     <Compile Include="ObjectManagers\EnviromentManager.cs" />
     <Compile Include="ObjectManagers\PluginManager.cs" />
     <Compile Include="InjectionManager.cs" />
@@ -231,7 +231,7 @@
     <Compile Include="TextBoxPopUp.xaml.cs">
       <DependentUpon>TextBoxPopUp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Versionswitcher.cs" />
+    <Compile Include="Helpers\Versionswitcher.cs" />
     <Page Include="GUI_ApplicationManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

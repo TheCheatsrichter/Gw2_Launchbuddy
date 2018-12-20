@@ -376,17 +376,15 @@
                             
                         </Grid>
                         <Separator Margin="5"/>
-                        <ListView x:Name="lv_accs">
-                            <ListViewItem>
-                                <ListViewItem.ContentTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Label Content="{Binding Nickname}"/>
-                                            <Image Source="{Binding Icon}"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListViewItem.ContentTemplate>
-                            </ListViewItem>
+                        <ListView x:Name="lv_accs" DataContext="{Binding Path=Account}" SelectionChanged="lv_accs_SelectionChanged">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="{Binding Path=Nickname}"/>
+                                        <Image Source="{Binding Path=Icon}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
                         </ListView>
                     </StackPanel>
                 </TabItem>
@@ -399,9 +397,9 @@
                         </StackPanel>
                     </TabItem.Header>
                     <DockPanel>
-                        <DockPanel DockPanel.Dock="Left" MinWidth="80" Width="80" Background="LightGray" LastChildFill="True">
+                        <DockPanel DockPanel.Dock="Left" MinWidth="120" Width="80" Background="LightGray" LastChildFill="True">
                             <StackPanel DockPanel.Dock="Bottom">
-                                <Button x:Name="bt_accadd" Content="Add" />
+                                <Button x:Name="bt_accadd" Content="Add"  Click="bt_accadd_Click" />
                                 <Button x:Name="bt_accrem" Content="Remove" IsEnabled="False"/>
                                 <UniformGrid Height="20" Rows="1">
                                     <Button x:Name="bt_accsortup"  Content="↑"  Click="bt_accsortup_Click" DockPanel.Dock="Left"  IsEnabled="False"/>
@@ -411,18 +409,16 @@
                             </StackPanel>
 
                             <ListView x:Name="lv_accssettings">
-                                <ListViewItem>
-                                    <ListViewItem.ContentTemplate>
-                                        <DataTemplate>
-                                            <Label Content="{Binding Nickname}" Background="LightGray"/>
-                                        </DataTemplate>
-                                    </ListViewItem.ContentTemplate>
-                                </ListViewItem>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding Path=Nickname}" Background="LightGray"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
                             </ListView>
                         </DockPanel>
-                        <TextBox x:Name="tb_accnickname" Text="Account Name" DockPanel.Dock="Top" FontSize="20" FontWeight="Bold"/>
+                        <TextBox x:Name="tb_accnickname" Text="Please select a account to edit" DockPanel.Dock="Top" FontSize="20" FontWeight="Bold" IsEnabled="False"/>
                         <Separator  DockPanel.Dock="Top"/>
-                        <ScrollViewer Margin="2,2,0,2" >
+                        <ScrollViewer Margin="2,2,0,2" IsEnabled="False">
                             <StackPanel>
                                 <Expander Header="Login Credentials">
                                     <Grid Grid.Row="3" Margin="0,0" >
@@ -468,13 +464,11 @@
                                         <StackPanel>
                                             <Label Content="Argument List:"/>
                                             <ListView x:Name="lv_args">
-                                                <ListViewItem>
-                                                    <ListViewItem.ContentTemplate>
-                                                        <DataTemplate>
-                                                            <CheckBox Content="{Binding Name}" IsChecked="{Binding Active}"/>
-                                                        </DataTemplate>
-                                                    </ListViewItem.ContentTemplate>
-                                                </ListViewItem>
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <CheckBox Content="{Binding Name}" IsChecked="{Binding Active}"/>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
                                             </ListView>
                                         </StackPanel>
                                         <StackPanel Grid.Column="1">
