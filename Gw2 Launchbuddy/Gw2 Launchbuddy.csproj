@@ -286,7 +286,6 @@
       <SubType>Designer</SubType>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="VirusTotal Test.ps1" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

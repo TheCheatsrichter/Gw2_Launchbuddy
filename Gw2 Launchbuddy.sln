@@ -23,6 +23,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{8979
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gw2HookPlugin", "Plugins\Gw2HookPlugin\Gw2HookPlugin.csproj", "{09101B58-CB2E-4B8A-ACFF-55E658EE1C4D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{32978191-907B-4139-92FD-A7ADA1B15256}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildProcess", "BuildProcess", "{AA506F83-ED5F-4492-BCBD-43852ABE445C}"
+	ProjectSection(SolutionItems) = preProject
+		BuildProcess\VirusTotal.ps1 = BuildProcess\VirusTotal.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +107,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{6CD5375C-D997-4C03-989D-C71784EADFF8} = {8979A82C-64C8-4A17-B166-EFD8A72F2F07}
 		{09101B58-CB2E-4B8A-ACFF-55E658EE1C4D} = {8979A82C-64C8-4A17-B166-EFD8A72F2F07}
+		{AA506F83-ED5F-4492-BCBD-43852ABE445C} = {32978191-907B-4139-92FD-A7ADA1B15256}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B3CD33ED-79D5-46F5-8AA8-F81376EE17C4}
