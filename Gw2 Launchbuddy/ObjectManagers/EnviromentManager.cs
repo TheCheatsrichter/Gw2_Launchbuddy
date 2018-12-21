@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
 using System.Net;
+using Gw2_Launchbuddy.UI_Managers;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -42,6 +43,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
             AccountManager.ImportAccounts();
             ClientManager.ImportActiveClients();
             CrashAnalyzer.ReadCrashLogs();
+
+            AccIconManager.Init();
         }
 
         public static void LoadGwClientInfo()

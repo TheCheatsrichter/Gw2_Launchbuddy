@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
-    class Arguments:ObservableCollection<Argument>
+    public class Arguments:ObservableCollection<Argument>
     {
         public Arguments()
         {
@@ -26,18 +26,19 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Add(new Argument("-windowed", "Forces Guild Wars 2 to run in windowed mode. In game, you can switch to windowed mode by pressing Alt + Enter or clicking the window icon in the upper right corner.", false));
             Add(new Argument("-umbra gpu", "Forces the use of umbra's GPU accelerated culling. In most cases, using this results in higher cpu usage and lower gpu usage decreasing the frame-rate.", false));
             Add(new Argument("-maploadinfo", "Shows diagnostic information during map loads, including load percentages and elapsed time.", false));
-            Add(new Argument("-32", "Forces the game to run in 32 bit.", false));
         }
 
         public void SetActive(Argument arg,bool active)=>this.First<Argument>(a => a.Flag == arg.Flag).IsActive=active;
         public void SetActive(string arg, bool active) => this.First<Argument>(a => a.Flag == arg).IsActive = active;
+
+        public ObservableCollection<Argument> GetActive() => new ObservableCollection<Argument>(this.Where<Argument>(a => a.IsActive));
     }
 
-    class Argument
+    public class Argument
     {
-        public string Flag;
-        public bool IsActive;
-        public string Description;
+        public string Flag { get; set; }
+        public bool IsActive { get; set; }
+        public string Description { get; }
 
         public Argument(string flag,string description,bool active)
         {

@@ -437,10 +437,19 @@
                                     </Expander>
                                     <Expander Header="Icon">
                                         <StackPanel>
-                                            <Image MinHeight="120" MinWidth="120"/>
+                                            <ListView DataContext="{Binding Path=Icons}">
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Image Height="64" Width="64"></Image>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
                                             <StackPanel Orientation="Horizontal">
                                                 <Button Content="Select" Width="100"/>
-                                                <Button Content="Delete" Width="100"/>
+                                                <StackPanel Orientation="Horizontal" Margin="30,0,0,0" >
+                                                    <Button Content="Add Custom" Width="100"/>
+                                                    <Button Content="Delete Custom" Width="100"/>
+                                                </StackPanel>
                                             </StackPanel>
                                         </StackPanel>
                                     </Expander>
@@ -452,17 +461,17 @@
                                             </Grid.ColumnDefinitions>
                                             <StackPanel>
                                                 <Label Content="Argument List:"/>
-                                                <ListView x:Name="lv_args" ItemsSource="{Binding Path=Settings.Arguments}">
+                                                <ListView x:Name="lv_args" ItemsSource="{Binding Path=Arguments}">
                                                     <ListView.ItemTemplate>
                                                         <DataTemplate>
-                                                            <CheckBox Content="{Binding Flag}" IsChecked="{Binding IsActive}" GotMouseCapture="CheckBox_GotMouseCapture"/>
+                                                            <CheckBox Name="cb_argument" Content="{Binding Flag}" IsChecked="{Binding IsActive}" MouseEnter="cb_argument_MouseEnter" />
                                                         </DataTemplate>
                                                     </ListView.ItemTemplate>
                                                 </ListView>
                                             </StackPanel>
                                             <StackPanel Grid.Column="1">
                                                 <Label x:Name="lab_descr" Content="Description:"/>
-                                                <TextBlock x:Name="textblock_descr"/>
+                                                <TextBlock x:Name="textblock_descr" TextWrapping="Wrap" Margin="2,0,0,0"/>
                                             </StackPanel>
                                         </Grid>
                                     </Expander>

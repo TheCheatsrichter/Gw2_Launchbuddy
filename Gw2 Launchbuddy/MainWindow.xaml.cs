@@ -1630,8 +1630,9 @@ namespace Gw2_Launchbuddy
             AccountManager.Remove(lv_accssettings.SelectedItem as Account);
         }
 
-        private void CheckBox_GotMouseCapture(object sender, System.Windows.Input.MouseEventArgs e)
+        private void cb_argument_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            textblock_descr.Text = ((sender as CheckBox).DataContext as Argument).Description;
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

@@ -183,8 +183,15 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             Process.EnableRaisingEvents = true;
             Process.Exited += OnClientClose;
-            //Add Arguments here
-            Process.StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath, Arguments="-shareArchive" };
+            string args = "";
+            foreach (Argument arg in account.Settings.Arguments.GetActive())
+            {
+                args += arg.ToString() + " ";
+            }
+            args += "-shareArchive";
+            //Add Login Credentials
+            //Add Server Options
+            Process.StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath, Arguments=args };
         }
 
         private void CloseMutex()

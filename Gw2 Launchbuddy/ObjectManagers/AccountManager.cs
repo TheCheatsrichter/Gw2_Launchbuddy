@@ -5,6 +5,8 @@ using System.Linq;
 using System.IO;
 using System.Windows;
 using System.Collections;
+using System.Windows.Media.Imaging;
+using System.Drawing;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -106,7 +108,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
     {
         public string Nickname { get; set; }
         public bool IsEnabled = false;
-        public AccountSettings Settings = new AccountSettings();
+        public AccountSettings Settings { get; set; }
 
         private void CreateAccount(string nickname)
         {
@@ -115,6 +117,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 Nickname = nickname;
                 AccountManager.Accounts.Add(this);
                 Client Client = new Client(this);
+                Settings = new AccountSettings();
+                Settings.Arguments = new Arguments();
             }
             else
             {
@@ -137,8 +141,28 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public class AccountSettings
     {
-        Arguments Arguments = new Arguments();
+        public Arguments Arguments { get; set; }
         public string GFXFile;
+
+        public ObservableCollection<Bitmap> Icons { get { return UI_Managers.AccIconManager.Icons; } }
+
+        public Bitmap Icon
+        {
+            get
+            {
+                if (iconpath == null)
+                {
+                    return null;
+                }
+                return new Bitmap(iconpath);
+            }
+            set
+            {
+                iconpath = value.ToString();
+            }
+        }
+
+        public string iconpath;
         //Missing stuff (all nullable):
         /*
         email;
