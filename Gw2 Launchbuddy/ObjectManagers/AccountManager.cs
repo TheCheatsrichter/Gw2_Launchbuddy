@@ -1,16 +1,183 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.IO;
 using System.Windows;
-using System.Windows.Media;
+using System.Collections;
 using System.Windows.Media.Imaging;
+using System.Drawing;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
+
+    public static class AccountManager
+    {
+        static public Account EditAccount = null;
+        static public ObservableCollection<Account> Accounts = new ObservableCollection<Account>();
+        static public void Remove(Account Account) { Accounts.Remove(Accounts.First(a => a.Nickname == Account.Nickname)); }
+        static public void Remove(string Nickname) { Accounts.Remove(Accounts.First(a => a.Nickname == Nickname)); }
+
+        public static ObservableCollection<Account> SelectedAccounts { get { return new ObservableCollection<Account>(Accounts.Where<Account>(a => a.IsEnabled == true)); } }
+
+        public static void SwitchSelectionAll(bool active)
+        {
+            foreach (Account acc in Accounts)
+            {
+                acc.IsEnabled = active;
+            }
+        }
+
+        public static void CreateEmptyAccount()
+        {
+            string name_pre = "New Account";
+            string name_suf = "";
+            bool isnew = false;
+            int i = 0;
+            while (!isnew)
+            {
+                if (i != 0)
+                {
+                    name_suf = "(" + i.ToString() + ")";
+                }
+                isnew = !AccountManager.Accounts.Any<Account>(a => a.Nickname == name_pre + name_suf);
+                i++;
+            }
+
+            Account acc = new Account(name_pre + name_suf);
+        }
+
+        public static void LaunchAccounts()
+        {
+            foreach(Account acc in SelectedAccounts)
+            {
+                acc.Client.Launch();
+            }
+        }
+        public static void LaunchAccounts(ObservableCollection<Account> accs)
+        {
+            foreach (Account acc in accs)
+            {
+                acc.Client.Launch();
+            }
+        }
+
+        public static bool HasEntry => Accounts.Count == 0 ? false : true;
+
+        public static void MoveAccount(Account acc,int steps)
+        {
+            if(Accounts.Contains(acc))
+            {
+                int index = Accounts.IndexOf(acc);
+                int newindex = index + steps;
+                if (newindex > Accounts.Count)
+                    newindex -= Accounts.Count;
+                if (newindex < 0)
+                    newindex += Accounts.Count;
+                Accounts.Insert(newindex,acc);
+                Accounts.RemoveAt(index);
+
+            }
+        }
+
+        public static void ImportAccounts()
+        {
+            //Import accounts
+        }
+
+        public static void SaveAccounts()
+        {
+            //Import accounts
+        }
+
+        public static bool IsValidEmail(string inp)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(inp);
+                return addr.Address == inp;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    }
+
+    public class Account
+    {
+        public string Nickname { get; set; }
+        public bool IsEnabled = false;
+        public AccountSettings Settings { get; set; }
+
+        private void CreateAccount(string nickname)
+        {
+            if (!AccountManager.Accounts.Any(a => a.Nickname == nickname))
+            {
+                Nickname = nickname;
+                AccountManager.Accounts.Add(this);
+                Client Client = new Client(this);
+                Settings = new AccountSettings();
+                Settings.Arguments = new Arguments();
+            }
+            else
+            {
+                MessageBox.Show("Account with Nickname"+nickname+"allready exists!");	
+            }
+        }
+
+        public Account(string nickname)
+        {
+            CreateAccount(nickname);
+        }
+        public Account(string nickname, Account account)
+        {
+            this.Settings = account.Settings;//inherit settings
+            CreateAccount(nickname);
+        }
+
+        public Client Client { get { return ClientManager.Clients.FirstOrDefault(c => c.account == this); } }
+    }
+
+    public class AccountSettings
+    {
+        public Arguments Arguments { get; set; }
+        public string GFXFile;
+
+        public ObservableCollection<Bitmap> Icons { get { return UI_Managers.AccIconManager.Icons; } }
+
+        public Bitmap Icon
+        {
+            get
+            {
+                if (iconpath == null)
+                {
+                    return null;
+                }
+                return new Bitmap(iconpath);
+            }
+            set
+            {
+                iconpath = value.ToString();
+            }
+        }
+
+        public string iconpath;
+        //Missing stuff (all nullable):
+        /*
+        email;
+        password;
+        localdat;
+        Icon;
+        Arguments;
+        GFX Profile;
+        Plugins/Dlls;
+        Window Size,Startposition etc.
+        */
+    }
+
+
+    /*
     public static class AccountManager
     {
         private static ObservableCollection<Account> accountCollection { get; set; }
@@ -124,7 +291,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 {
                     AES aes = new AES();
                     aes_accountlist.Clear();
-                    foreach (Account acc in AccountManager.AccountCollection)
+                    foreach (Account acc in AccountManager.accountCollection)
                     {
                         acc.Email = aes.Encrypt(acc.Email);
                         acc.Password = aes.Encrypt(acc.Password);
@@ -300,4 +467,5 @@ namespace Gw2_Launchbuddy.ObjectManagers
             return Client;
         }
     }
+    */
 }

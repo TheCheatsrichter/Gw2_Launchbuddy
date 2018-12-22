@@ -21,6 +21,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class ServerManager
     {
+        public static Server SelectedAuthserver = null;
+        public static Server SelectedAssetserver = null;
+
         public static ObservableCollection<Server> authservers= new ObservableCollection<Server>();
         public static ObservableCollection<Server> assetservers= new ObservableCollection<Server>();
 

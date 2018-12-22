@@ -246,6 +246,19 @@ namespace Gw2_Launchbuddy
             return success;
         }
 
+        public static bool ClearMutex(int ProID, string MutexName)
+        {
+            bool success = false;
+
+            if (HandleManager.KillHandle(Process.GetProcessById(ProID), MutexName, false))
+            {
+                success = true;
+            }
+            
+
+            return success;
+        }
+
         /// <summary>
         /// Kills the handle whose name contains the nameFragment.
         /// </summary>

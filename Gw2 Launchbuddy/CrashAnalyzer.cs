@@ -117,15 +117,13 @@ namespace Gw2_Launchbuddy
 
         private static void outdated_client()
         {
-            AccountManager.DefaultAccount.Argument("-image");
-            LaunchManager.LaunchGW2(AccountManager.DefaultAccount);
             System.Windows.Forms.MessageBox.Show("The Gw2 Launcher is trying to update!\nPlease wait for completion before you continue.");
         }
 
         private static void Unhandled_Launch(string argus)
         {
             Process pro = new Process();
-            pro.StartInfo = new ProcessStartInfo(ClientManager.ClientInfo.FullPath, argus);
+            pro.StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath, argus);
             pro.Start();
         }
     }

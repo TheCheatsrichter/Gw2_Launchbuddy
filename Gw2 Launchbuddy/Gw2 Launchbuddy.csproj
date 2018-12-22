@@ -192,12 +192,11 @@
       <DependentUpon>LoadingScreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="MusicManager.cs" />
-    <Compile Include="ObjectManagers\AccountArgumentManager.cs" />
     <Compile Include="ObjectManagers\AccountManager.cs" />
     <Compile Include="AddOnManager.cs" />
     <Compile Include="LaunchManager.cs" />
     <Compile Include="ObjectManagers\ApiManager.cs" />
-    <Compile Include="ObjectManagers\ArgumentManager.cs" />
+    <Compile Include="ObjectManagers\Arguments.cs" />
     <Compile Include="ObjectManagers\ClientManager.cs" />
     <Compile Include="CrashAnalyzer.cs" />
     <Compile Include="CrashReporter.cs" />
@@ -208,15 +207,16 @@
     <Compile Include="GUI_ApplicationManager.xaml.cs">
       <DependentUpon>GUI_ApplicationManager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HandleManager.cs" />
+    <Compile Include="ObjectManagers\HandleManager.cs" />
+    <Compile Include="ObjectManagers\EnviromentManager.cs" />
     <Compile Include="ObjectManagers\PluginManager.cs" />
     <Compile Include="InjectionManager.cs" />
+    <Compile Include="UIManagers\AccIconManager.cs" />
     <Compile Include="Wrappers\ProcessWrapper.cs" />
     <Compile Include="ObjectManagers\ServerManager.cs" />
     <Compile Include="Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ObjectManagers\AccountClientManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -231,11 +231,7 @@
     <Compile Include="TextBoxPopUp.xaml.cs">
       <DependentUpon>TextBoxPopUp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Versionswitcher.cs" />
-    <Page Include="Clientfix.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Compile Include="Helpers\Versionswitcher.cs" />
     <Page Include="GUI_ApplicationManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -255,9 +251,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Clientfix.xaml.cs">
-      <DependentUpon>Clientfix.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -375,6 +368,27 @@
     <Resource Include="Resources\Icons\tools.png" />
     <Resource Include="Resources\Icons\crashfix.png" />
     <Resource Include="Resources\clientifix.png" />
+    <Resource Include="Resources\Icons\idle.png" />
+    <Resource Include="Resources\Icons\loading.png" />
+    <Resource Include="Resources\Icons\running.png" />
+    <Resource Include="Resources\Icons\Classes\c_berserker.png" />
+    <Resource Include="Resources\Icons\Classes\c_chronomancer.png" />
+    <Resource Include="Resources\Icons\Classes\c_daredevil.png" />
+    <Resource Include="Resources\Icons\Classes\c_deadeye.png" />
+    <Resource Include="Resources\Icons\Classes\c_dragonhunter.png" />
+    <Resource Include="Resources\Icons\Classes\c_druid.png" />
+    <Resource Include="Resources\Icons\Classes\c_firebrand.png" />
+    <Resource Include="Resources\Icons\Classes\c_herald.png" />
+    <Resource Include="Resources\Icons\Classes\c_holosmith.png" />
+    <Resource Include="Resources\Icons\Classes\c_mirage.png" />
+    <Resource Include="Resources\Icons\Classes\c_reaper.png" />
+    <Resource Include="Resources\Icons\Classes\c_renegade.png" />
+    <Resource Include="Resources\Icons\Classes\c_scourge.png" />
+    <Resource Include="Resources\Icons\Classes\c_scrapper.png" />
+    <Resource Include="Resources\Icons\Classes\c_soulbeast.png" />
+    <Resource Include="Resources\Icons\Classes\c_spellbreaker.png" />
+    <Resource Include="Resources\Icons\Classes\c_tempest.png" />
+    <Resource Include="Resources\Icons\Classes\c_weaver.png" />
     <Content Include="Resources\Update Helper.exe" />
   </ItemGroup>
   <ItemGroup>
