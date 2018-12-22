@@ -1400,23 +1400,6 @@ namespace Gw2_Launchbuddy
             lv_gfx.Items.Refresh();
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            
-            ComboBox box = sender as ComboBox;
-            GFXOption option = box.DataContext as GFXOption;
-
-            if (option !=null)
-            {
-                lv_gfx.SelectedItem = option;
-                if(option.Value!=option.OldValue)
-                {
-                    (lv_gfx.SelectedItem as ListViewItem).Background = Brushes.Gray;
-                }
-            }
-            
-        }
-
         private void lv_gfx_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //if (lv_gfx.SelectedItem != null) MessageBox.Show((lv_gfx.SelectedItem as GFXOption).ToXml());
@@ -1506,20 +1489,6 @@ namespace Gw2_Launchbuddy
                 VersionSwitcher.ApplyRelease(lv_lbversions.SelectedItem as Release);
                 (sender as Button).Content = "Download";
             }
-        }
-
-        private void bt_selectaccgfx_Click(object sender, RoutedEventArgs e)
-        {
-            Account acc = (sender as Button).DataContext as Account;
-
-            Builders.FileDialog.DefaultExt(".xml")
-                .Filter("GFX Files(*.xml)|*.xml")
-                .ShowDialog((Helpers.FileDialog fileDialog) =>
-                {
-
-                    acc.Settings.GFXFile = fileDialog.FileName;
-                    (sender as Button).Content = acc.Settings.GFXFile;
-                });
         }
 
         private void bt_bugreport_Click(object sender, RoutedEventArgs e)

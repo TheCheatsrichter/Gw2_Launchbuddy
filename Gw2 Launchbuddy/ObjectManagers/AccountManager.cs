@@ -142,7 +142,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
     public class AccountSettings
     {
         public Arguments Arguments { get; set; }
-        public string GFXFile;
+        public GFXConfig GFXFile { get; set; }
+
+        public AccountSettings()
+        {
+            GFXFile = GFXManager.LoadFile(EnviromentManager.GwClientXmlPath);
+        }
 
         public ObservableCollection<Bitmap> Icons { get { return UI_Managers.AccIconManager.Icons; } }
 

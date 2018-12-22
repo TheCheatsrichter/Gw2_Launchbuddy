@@ -420,10 +420,10 @@
                             </ListView>
                         </DockPanel>
 
-                        <StackPanel x:Name="gr_acceditor" IsEnabled="False">
+                        <DockPanel x:Name="gr_acceditor" IsEnabled="False">
                             <TextBox x:Name="tb_accnickname" Text="{Binding Path=Nickname}" DockPanel.Dock="Top" FontSize="20" FontWeight="Bold" />
                             <Separator  DockPanel.Dock="Top"/>
-                            <ScrollViewer Margin="2,2,0,2" DataContext="{Binding Path=Settings}">
+                            <ScrollViewer Margin="2,2,0,2" VerticalScrollBarVisibility="Auto" DataContext="{Binding Path=Settings}">
                                 <StackPanel>
                                     <Expander Header="Login Credentials">
                                         <WrapPanel Grid.ColumnSpan="5" Grid.Row="2" Grid.RowSpan="2">
@@ -490,19 +490,19 @@
                                             <Label Content="GFX Configurator" Style="{StaticResource H1}"/>
                                             <DockPanel Grid.Row="2" Margin="0,5,0,0" Grid.ColumnSpan="2" LastChildFill="False">
                                                 <!--Button x:Name="bt_applygfx" DockPanel.Dock="Right" Width="200" Content="Apply as Default" Click="bt_applygfx_Click" ToolTip="Set the current configuration to your default graphic configuration."/-->
-                                                <Button x:Name="bt_loadgfx"  DockPanel.Dock="Left" Content="Load Config"  Width="100" Click="bt_loadgfx_Click" Margin="0,0,5,0" ToolTip="Load a saved graphic configuration from your system."/>
-                                                <Button x:Name="bt_savegfx"  DockPanel.Dock="Left" Content="Save Config"  Width="100" Click="bt_savegfx_Click" Margin="0,0,5,0" ToolTip="Save the currently selected configuration to a file."/>
+                                                <Button x:Name="bt_loadgfx"  DockPanel.Dock="Left" Content="Import Config"  Width="100" Click="bt_loadgfx_Click" Margin="0,0,5,0" ToolTip="Load a saved graphic configuration from your system."/>
+                                                <Button x:Name="bt_savegfx"  DockPanel.Dock="Left" Content="Export Config"  Width="100" Click="bt_savegfx_Click" Margin="0,0,5,0" ToolTip="Save the currently selected configuration to a file."/>
                                                 <Button x:Name="bt_resetgfx" DockPanel.Dock="Left" Content="Reset Config"  Width="100" Click="bt_resetgfx_Click" Margin="0,0,5,0" ToolTip="Resets the selected options to their old value."/>
                                             </DockPanel>
 
-                                            <ListView x:Name="lv_gfx" Grid.ColumnSpan="2" Grid.Row="1" SelectionChanged="lv_gfx_SelectionChanged" MinHeight="64">
+                                            <ListView x:Name="lv_gfx" Grid.ColumnSpan="2" Grid.Row="1" SelectionChanged="lv_gfx_SelectionChanged" MinHeight="64" ItemsSource="{Binding Path=GFXFile.Config}">
                                                 <ListView.View>
                                                     <GridView>
                                                         <GridViewColumn Header="Parameter" Width="200"  DisplayMemberBinding="{Binding Name}"/>
                                                         <GridViewColumn Header="Setup" Width="250">
                                                             <GridViewColumn.CellTemplate>
                                                                 <DataTemplate>
-                                                                    <ComboBox ItemsSource="{Binding Path=IEOptions}" SelectedValue="{Binding Path=Value}" Width="200" SelectionChanged="ComboBox_SelectionChanged"/>
+                                                                    <ComboBox ItemsSource="{Binding Path=IEOptions}" SelectedValue="{Binding Path=Value}" Width="200" />
                                                                 </DataTemplate>
                                                             </GridViewColumn.CellTemplate>
                                                         </GridViewColumn>
@@ -535,7 +535,7 @@
                                     </Expander>
                                 </StackPanel>
                             </ScrollViewer>
-                        </StackPanel>
+                        </DockPanel>
                     </DockPanel>
  
                 </TabItem>

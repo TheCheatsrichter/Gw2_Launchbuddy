@@ -221,6 +221,11 @@ namespace Gw2_Launchbuddy
         public bool issaved = false;
         public string Configname { set; get; }
         public string ConfigPath { set; get; }
-        public ObservableCollection<GFXOption> Config = new ObservableCollection<GFXOption>();
+        public ObservableCollection<GFXOption> Config { get; set; }
+        
+        public GFXConfig()
+        {
+            Config = new ObservableCollection<GFXOption>();
+        }
     }
 }
