@@ -12,18 +12,30 @@ namespace Gw2_Launchbuddy.ObjectManagers
 {
     public static class PluginManager
     {
-        private static ObservableCollection<IPlugin> pluginCollection { get; set; }
-        public static ReadOnlyObservableCollection<IPlugin> PluginCollection { get; set; }
+        private static ObservableCollection<ITestPlugin> testPluginCollection { get; set; }
+        public static ReadOnlyObservableCollection<ITestPlugin> TestPluginCollection { get; set; }
+        private static ObservableCollection<IOverlay> overlayPluginCollection { get; set; }
+        public static ReadOnlyObservableCollection<IOverlay> OverlayPluginCollection { get; set; }
 
         static PluginManager()
         {
-            pluginCollection = new ObservableCollection<IPlugin>();
-            PluginCollection = new ReadOnlyObservableCollection<IPlugin>(pluginCollection);
+            testPluginCollection = new ObservableCollection<ITestPlugin>();
+            TestPluginCollection = new ReadOnlyObservableCollection<ITestPlugin>(testPluginCollection);
 
-            var plugins = LoadPlugins<IPlugin>("Plugins");
-            foreach (var plugin in plugins)
+            var testPlugins = LoadPlugins<ITestPlugin>("Plugins\\");
+            foreach (var plugin in testPlugins)
             {
-                pluginCollection.Add(plugin);
+                testPluginCollection.Add(plugin);
+            }
+
+
+            overlayPluginCollection = new ObservableCollection<IOverlay>();
+            OverlayPluginCollection = new ReadOnlyObservableCollection<IOverlay>(overlayPluginCollection);
+
+            var overlayPlugins = LoadPlugins<IOverlay>("Plugins\\");
+            foreach (var plugin in overlayPlugins)
+            {
+                overlayPluginCollection.Add(plugin);
             }
         }
         public static ICollection<T> LoadPlugins<T>(string path)
@@ -35,21 +47,28 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 var dlls = Directory.GetFiles(path, "*.dll");
 
                 var assemblies = new List<Assembly>();
-                foreach(var dll in dlls)
+                foreach (var dll in dlls)
                 {
-                    AssemblyName assemblyName = AssemblyName.GetAssemblyName(dll);
-                    Assembly assembly = Assembly.Load(assemblyName);
-
-                    if(assembly != null)
+                    try
                     {
-                        var types = assembly.GetTypes();
-                        foreach (var type in types)
+                        AssemblyName assemblyName = AssemblyName.GetAssemblyName(dll);
+                        Assembly assembly = Assembly.Load(assemblyName);
+
+                        if (assembly != null)
                         {
-                            if (!type.IsInterface && !type.IsAbstract && type.GetInterface(typeof(T).Name) != null)
+                            var types = assembly.GetTypes();
+                            foreach (var type in types)
                             {
-                                plugins.Add((T)Activator.CreateInstance(type));
+                                if (!type.IsInterface && !type.IsAbstract && type.GetInterface(typeof(T).Name) != null)
+                                {
+                                    plugins.Add((T)Activator.CreateInstance(type));
+                                }
                             }
                         }
+                    }
+                    catch
+                    {
+                        Console.WriteLine(dll + "is not an assemly of expected type");
                     }
                 }
             }
@@ -58,7 +77,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void DoInits()
         {
-            foreach (var plugin in PluginCollection)
+            foreach (var plugin in TestPluginCollection)
+            {
+                plugin.Init();
+            }
+
+            foreach (var plugin in OverlayPluginCollection)
             {
                 plugin.Init();
             }

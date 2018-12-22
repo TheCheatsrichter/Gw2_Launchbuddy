@@ -876,7 +876,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_close_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var plugin in PluginManager.PluginCollection) plugin.Exit();
+            foreach (var plugin in PluginManager.TestPluginCollection) plugin.Exit();
             Mainwin_SaveSetup();
             DllInjector.SaveDlls();
             Properties.Settings.Default.Save();
@@ -1475,6 +1475,7 @@ namespace Gw2_Launchbuddy
                     if (fileDialog.Result == System.Windows.Forms.DialogResult.OK)
                     {
                         acc.SetIcon(fileDialog.FileName);
+                        bt_accsave.IsEnabled = true;
                     }
                     lv_accssettings.Items.Refresh();
                 });

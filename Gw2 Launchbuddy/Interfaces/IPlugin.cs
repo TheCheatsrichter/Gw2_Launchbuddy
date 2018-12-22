@@ -8,12 +8,24 @@ namespace Gw2_Launchbuddy.Interfaces
     {
         string Name { get; }
         string Version { get; }
-
+        
         void Init();
+    }
+
+    public interface IOverlay : IPlugin
+    {
+        string ProjectName { get; }
+        string ProjectURL { get; }
+        string OverlayDll { get; }
+    }
+
+    public interface ITestPlugin : IPlugin
+    {
         void Exit();
         void Client_PreLaunch();
         void Client_PostLaunch();
         void Client_Exit();
+
     }
 
     public interface IAccount

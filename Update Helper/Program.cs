@@ -51,9 +51,7 @@ namespace Update_Helper
                 File.Delete(bakdest);
 
                 //Open Directory
-
-                Process pro_dir = new Process { StartInfo = new ProcessStartInfo(dir) };
-                pro_dir.Start();
+                new Process { StartInfo = new ProcessStartInfo(dir) }.Start();
             }
             catch { }
 

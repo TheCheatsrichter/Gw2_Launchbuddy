@@ -39,5 +39,8 @@ namespace Gw2_Launchbuddy
 
         [Option('a', "args", Separator = ':', HelpText = "Arguments to use when launching with -launch. Use : as a separator, no arguments with input.")]
         public IEnumerable<string> Args { get; set; }
+
+        [Option("delaymutex", HelpText = "Delay in miliseconds between mutex close attempts. Higher values increase the time between retries. (Up to 9 retries will be attempted)", Hidden = true)]
+        public int? Delay { get; set; }
     }
 }
