@@ -127,11 +127,13 @@ namespace Gw2_Launchbuddy
 
         private static void readonly_write()
         {
+            /*
             foreach(Client client in Client.GetClients())
             {
                 client.Stop();
             }
             outdated_client();
+            */
         }
 
         private static void Unhandled_Launch(string argus)
