@@ -380,7 +380,7 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" ToolTip="{Binding Path=Client.Status}">
-                                        <Image Height="32" Source="{Binding StatusToIcon}" />
+                                        <Image Height="32" Source="{Binding Path=Client.StatusToIcon}" />
                                         <Label Content="{Binding Path=Nickname}" BorderThickness="0" Margin="0,2,0,0" FontSize="18" FontWeight="Bold"/>
                                         <Image Source="{Binding Path=Icon}"/>
                                     </StackPanel>
