@@ -3,7 +3,6 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 using Gw2_Launchbuddy.ObjectManagers;
-using System.Net;
 
 namespace Gw2_Launchbuddy
 {
@@ -28,31 +27,23 @@ namespace Gw2_Launchbuddy
 
         public static void RunParsed(Options options)
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            EnviromentManager.Init();
 
             Globals.options = options;
 
             // Load things before MainWindow
+            /*
             AccountManager.ImportExport.LoadAccountInfo();
             ClientManager.ClientInfo.LoadClientInfo();
+            */
             //PluginManager.DoInits();
-
-            var launchCount = 0;
+            /*
             foreach (var account in options.Launch)
-            {
                 AccountManager.Account(account).IsSelected();
-                launchCount++;
-            }
-            foreach (var arg in options.Args)
+            foreach(var arg in options.Args)
                 AccountArgumentManager.StopGap.IsSelected("-" + arg, true);
-            if (launchCount > 0)
-            {
-                AccountArgumentManager.StopGap.IsSelected("-email");
-                AccountArgumentManager.StopGap.IsSelected("-password");
-                AccountArgumentManager.StopGap.IsSelected("-nopatchui");
-
-                LaunchManager.Launch();
-            }
+            */
+            //LaunchManager.Launch();
 
             if (!options.Silent)
             {

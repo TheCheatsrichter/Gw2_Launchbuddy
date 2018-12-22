@@ -1,17 +1,183 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.IO;
 using System.Windows;
-using System.Windows.Media;
+using System.Collections;
 using System.Windows.Media.Imaging;
-using System.Xml.Serialization;
+using System.Drawing;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
+
+    public static class AccountManager
+    {
+        static public Account EditAccount = null;
+        static public ObservableCollection<Account> Accounts = new ObservableCollection<Account>();
+        static public void Remove(Account Account) { Accounts.Remove(Accounts.First(a => a.Nickname == Account.Nickname)); }
+        static public void Remove(string Nickname) { Accounts.Remove(Accounts.First(a => a.Nickname == Nickname)); }
+
+        public static ObservableCollection<Account> SelectedAccounts { get { return new ObservableCollection<Account>(Accounts.Where<Account>(a => a.IsEnabled == true)); } }
+
+        public static void SwitchSelectionAll(bool active)
+        {
+            foreach (Account acc in Accounts)
+            {
+                acc.IsEnabled = active;
+            }
+        }
+
+        public static void CreateEmptyAccount()
+        {
+            string name_pre = "New Account";
+            string name_suf = "";
+            bool isnew = false;
+            int i = 0;
+            while (!isnew)
+            {
+                if (i != 0)
+                {
+                    name_suf = "(" + i.ToString() + ")";
+                }
+                isnew = !AccountManager.Accounts.Any<Account>(a => a.Nickname == name_pre + name_suf);
+                i++;
+            }
+
+            Account acc = new Account(name_pre + name_suf);
+        }
+
+        public static void LaunchAccounts()
+        {
+            foreach(Account acc in SelectedAccounts)
+            {
+                acc.Client.Launch();
+            }
+        }
+        public static void LaunchAccounts(ObservableCollection<Account> accs)
+        {
+            foreach (Account acc in accs)
+            {
+                acc.Client.Launch();
+            }
+        }
+
+        public static bool HasEntry => Accounts.Count == 0 ? false : true;
+
+        public static void MoveAccount(Account acc,int steps)
+        {
+            if(Accounts.Contains(acc))
+            {
+                int index = Accounts.IndexOf(acc);
+                int newindex = index + steps;
+                if (newindex > Accounts.Count)
+                    newindex -= Accounts.Count;
+                if (newindex < 0)
+                    newindex += Accounts.Count;
+                Accounts.Insert(newindex,acc);
+                Accounts.RemoveAt(index);
+
+            }
+        }
+
+        public static void ImportAccounts()
+        {
+            //Import accounts
+        }
+
+        public static void SaveAccounts()
+        {
+            //Import accounts
+        }
+
+        public static bool IsValidEmail(string inp)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(inp);
+                return addr.Address == inp;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    }
+
+    public class Account
+    {
+        public string Nickname { get; set; }
+        public bool IsEnabled = false;
+        public AccountSettings Settings { get; set; }
+
+        private void CreateAccount(string nickname)
+        {
+            if (!AccountManager.Accounts.Any(a => a.Nickname == nickname))
+            {
+                Nickname = nickname;
+                AccountManager.Accounts.Add(this);
+                Client Client = new Client(this);
+                Settings = new AccountSettings();
+                Settings.Arguments = new Arguments();
+            }
+            else
+            {
+                MessageBox.Show("Account with Nickname"+nickname+"allready exists!");	
+            }
+        }
+
+        public Account(string nickname)
+        {
+            CreateAccount(nickname);
+        }
+        public Account(string nickname, Account account)
+        {
+            this.Settings = account.Settings;//inherit settings
+            CreateAccount(nickname);
+        }
+
+        public Client Client { get { return ClientManager.Clients.FirstOrDefault(c => c.account == this); } }
+    }
+
+    public class AccountSettings
+    {
+        public Arguments Arguments { get; set; }
+        public string GFXFile;
+
+        public ObservableCollection<Bitmap> Icons { get { return UI_Managers.AccIconManager.Icons; } }
+
+        public Bitmap Icon
+        {
+            get
+            {
+                if (iconpath == null)
+                {
+                    return null;
+                }
+                return new Bitmap(iconpath);
+            }
+            set
+            {
+                iconpath = value.ToString();
+            }
+        }
+
+        public string iconpath;
+        //Missing stuff (all nullable):
+        /*
+        email;
+        password;
+        localdat;
+        Icon;
+        Arguments;
+        GFX Profile;
+        Plugins/Dlls;
+        Window Size,Startposition etc.
+        */
+    }
+
+
+    /*
     public static class AccountManager
     {
         private static ObservableCollection<Account> accountCollection { get; set; }
@@ -19,14 +185,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static Account DefaultAccount { get; private set; }
 
-        public static ObservableCollection<Account> SelectedAccountCollection { get => new ObservableCollection<Account>(accountCollection.Where(a => a.Selected == true)); }
+        public static ObservableCollection<Account> SelectedAccountCollection { get => new ObservableCollection<Account>(accountCollection.Where(a => a.Selected==true)); }
 
         static AccountManager()
         {
             accountCollection = new ObservableCollection<Account>();
             AccountCollection = new ReadOnlyObservableCollection<Account>(accountCollection);
 
-            DefaultAccount = new ObjectManagers.Account("", "", "");
+            DefaultAccount = new ObjectManagers.Account(null, null, null);
             AccountArgumentManager.StopGap.IsSelected("-shareArchive", true);
         }
 
@@ -71,7 +237,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             foreach (var account in accounts)
             {
                 account.Selected = true;
-            }
+            }             
         }
 
         public static bool IsValidEmail(string email)
@@ -89,20 +255,24 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static class ImportExport
         {
-            private static string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\Launchbuddy.bin";
             public static void LoadAccountInfo()
             {
                 try
                 {
+                    var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\Launchbuddy.bin";
+
                     if (File.Exists(path) == true)
                     {
                         using (Stream stream = File.Open(path, FileMode.Open))
                         {
+                            AES aes = new AES();
                             var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                             ObservableCollection<Account> aes_accountlist = (ObservableCollection<Account>)bformatter.Deserialize(stream);
 
                             foreach (Account acc in aes_accountlist)
                             {
+                                acc.Email = aes.Decrypt(acc.Email);
+                                acc.Password = aes.Decrypt(acc.Password);
                                 Add(acc);
                             }
                         }
@@ -116,12 +286,30 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             public static void SaveAccountInfo()
             {
+                ObservableCollection<Account> aes_accountlist = new ObservableCollection<Account>();
                 try
                 {
+                    AES aes = new AES();
+                    aes_accountlist.Clear();
+                    foreach (Account acc in AccountManager.accountCollection)
+                    {
+                        acc.Email = aes.Encrypt(acc.Email);
+                        acc.Password = aes.Encrypt(acc.Password);
+                        aes_accountlist.Add(acc);
+                    }
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show("Could not encrypt passwords\n" + err.Message);
+                }
+
+                try
+                {
+                    var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\Launchbuddy.bin";
                     using (Stream stream = System.IO.File.Open(path, FileMode.Create))
                     {
                         var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                        bformatter.Serialize(stream, accountCollection);
+                        bformatter.Serialize(stream, aes_accountlist);
                     }
                 }
                 catch (Exception e)
@@ -145,47 +333,28 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public string Email
         {
-            get
-            {
-                try
-                {
-                    return new AES().Decrypt(email);
-                }
-                catch
-                {
-                    email = new AES().Encrypt(email);
-                }
-                return new AES().Decrypt(email);
-            }
+            get => email;
             set
             {
-                email = new AES().Encrypt(value);
+                email = value;
                 AccountArgumentManager.Get(this, "-email")?.WithOptionString(value);
             }
         }
 
         public string ObscuredEmail
         {
-            get => Email.Substring(0, 2) + "********" + Email.Substring(Email.LastIndexOf('.') - 2);
+            get
+            {
+                return email.Split('@')[0].Substring(0,2) + "***" + email.Split('@')[1];
+            }
         }
 
         public string Password
         {
-            get
-            {
-                try
-                {
-                    return new AES().Decrypt(password);
-                }
-                catch
-                {
-                    password = new AES().Encrypt(password);
-                }
-                return new AES().Decrypt(password);
-            }
+            get => password;
             set
             {
-                password = new AES().Encrypt(value);
+                password = value;
                 AccountArgumentManager.Get(this, "-password")?.WithOptionString(value);
             }
         }
@@ -229,67 +398,54 @@ namespace Gw2_Launchbuddy.ObjectManagers
         }
 
         [NonSerialized]
+        private static ImageSource defaultIcon;
+
+        public static ImageSource DefaultIcon
+        {
+            get
+            {
+                if (defaultIcon == null)
+                {
+                    using (MemoryStream memory = new MemoryStream())
+                    {
+                        System.Drawing.Bitmap bitmap = Gw2_Launchbuddy.Properties.Resources.user;
+                        bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Png);
+                        memory.Position = 0;
+                        BitmapImage bitmapimage = new BitmapImage();
+                        bitmapimage.BeginInit();
+                        bitmapimage.StreamSource = memory;
+                        bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmapimage.EndInit();
+
+                        defaultIcon = bitmapimage;
+                    }
+                }
+                return defaultIcon;
+            }
+        }
+
+        [NonSerialized]
         private ImageSource icon;
 
         public ImageSource Icon
         {
-            get
-            {
-                if (icon == null)
-                {
-                    var image = new BitmapImage();
-                    using (var ms = new MemoryStream(IconBytes))
-                    {
-                        ms.Position = 0;
-                        image.BeginInit();
-                        image.StreamSource = ms;
-                        image.CacheOption = BitmapCacheOption.OnLoad;
-                        image.EndInit();
-                        icon = image;
-                    }
-                }
-                return icon;
-            }
+            get => icon ?? DefaultIcon;
             private set => icon = value;
-        }
-
-        private byte[] iconBytes;
-
-        public byte[] IconBytes
-        {
-            get
-            {
-                if (iconBytes == null)
-                {
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        System.Drawing.Bitmap bitmap = Gw2_Launchbuddy.Properties.Resources.user;
-                        bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                        ms.Position = 0;
-                        iconBytes = ms.GetBuffer();
-                    }
-                }
-                return iconBytes;
-            }
-            set
-            {
-                iconBytes = value;
-                Icon = null;
-            }
         }
 
         public void SetIcon(string Path)
         {
             if (System.IO.File.Exists(Path))
             {
-                using (var fs = new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read))
+                var bitmap = new BitmapImage();
+                using (var stream = new FileStream(Path, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    using (var ms = new MemoryStream())
-                    {
-                        fs.Position = 0;
-                        fs.CopyTo(ms);
-                        IconBytes = ms.GetBuffer();
-                    }
+                    bitmap.BeginInit();
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.StreamSource = stream;
+                    bitmap.EndInit();
+
+                    icon = bitmap;
                 }
             }
         }
@@ -311,4 +467,5 @@ namespace Gw2_Launchbuddy.ObjectManagers
             return Client;
         }
     }
+    */
 }

@@ -27,51 +27,25 @@ namespace Gw2_Launchbuddy
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            lv_instances.ItemsSource = AccountClientManager.AccountClientCollection;
+            lv_instances.ItemsSource = ClientManager.ActiveClients;
         }
 
         private void lv_gfx_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            try
-            {
-                if (lv_instances.SelectedIndex >= 0)
-                {
-                    AccountClient selinstance = lv_instances.SelectedItem as AccountClient;
-                    IntPtr hwndMain = ((Client)selinstance.Client).MainWindowHandle;
-                    SetForegroundWindow(hwndMain);
-                }
-            }
-            catch
-            {
-                AccountClient selinstance = lv_instances.SelectedItem as AccountClient;
-                AccountClientManager.Remove(selinstance);
-            }
-
+            var client=lv_instances.SelectedItem as Client;
+            client.Focus();
         }
 
         private void bt_closeinstance_Click(object sender, RoutedEventArgs e)
         {
-            AccountClient selinstance = (sender as Button).DataContext as AccountClient;
-            try
-            {
-                ((Client)selinstance.Client).Stop();
-            }
-            catch { }
-            //Globals.LinkedAccs.Remove(selinstance);
+            var client = (sender as Button).DataContext as Client;
+            client.Close();
         }
 
         private void bt_maxmin_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                AccountClient selinstance = (sender as Button).DataContext as AccountClient;
-                IntPtr hwndMain = ((Client)selinstance.Client).MainWindowHandle;
-                SetForegroundWindow(hwndMain);
-            }
-            catch
-            {
-
-            }
+            var client = (sender as Button).DataContext as Client;
+            client.Focus();
 
         }
 

@@ -81,7 +81,7 @@ namespace Gw2_Launchbuddy
                         MessageBox.Show(dll+" was moved or deleted! Please check your AddOn Injected Software");
                 }
             }
-            string basicdll=ClientManager.ClientInfo.InstallPath + @"bin64\d3d9.dll";
+            string basicdll=EnviromentManager.GwClientPath + @"bin64\d3d9.dll";
             if (File.Exists(basicdll) && !DllCollection.Contains(basicdll))
             {
                     MessageBox.Show("Found existing d3d9.dll! Automatically added to AddOns.");

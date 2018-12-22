@@ -247,4 +247,67 @@
   <data name="crashfix" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\icons\crashfix.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="idle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\idle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="loading" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\loading.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="running" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\running.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_berserker" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_berserker.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_chronomancer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_chronomancer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_daredevil" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_daredevil.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_deadeye" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_deadeye.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_dragonhunter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_dragonhunter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_druid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_druid.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_firebrand" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_firebrand.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_herald" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_herald.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_holosmith" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_holosmith.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_mirage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_mirage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_reaper" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_reaper.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_renegade" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_renegade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_scourge" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_scourge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_scrapper" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_scrapper.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_soulbeast" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_soulbeast.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_spellbreaker" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_spellbreaker.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_tempest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_tempest.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_weaver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_weaver.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

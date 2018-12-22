@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
+using System.Threading;
 using System.Windows;
 
 namespace Gw2_Launchbuddy
 {
     internal static class LaunchManager
     {
+        /*
         private static List<int> nomutexpros = new List<int>();
 
         public static void Launch()
@@ -44,7 +45,10 @@ namespace Gw2_Launchbuddy
             if (AccountManager.SelectedAccountCollection.Count > 0)
             {
                 foreach (Account Account in AccountManager.SelectedAccountCollection)
+                {
                     LaunchGW2(Account);
+                }
+
             }
             else
             {
@@ -90,5 +94,6 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show("Launch failure. If you want to help, please provide the following:\r\n" + err.GetType().ToString() + "\r\n" + err.Message + "\r\n" + err.StackTrace);
             }
         }
+        */
     }
 }

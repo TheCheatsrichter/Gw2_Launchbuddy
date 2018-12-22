@@ -186,7 +186,7 @@
         <Canvas x:Name="Canvas_Custom_UI">
             <Canvas x:Name="Canvas_login" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0">
                 <Image x:Name="img_loginwindow" Source="/Resources/loginwindow.png" Height="300" />
-                <ListView x:Name="Cinema_Accountlist" BorderThickness="0" Canvas.Left="100" Canvas.Top="80" Width="280" Height="135" SelectionChanged="listview_acc_SelectionChanged" Style="{DynamicResource Style_lvacc}" BorderBrush="#FF5F5F5F" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ListView x:Name="Cinema_Accountlist" BorderThickness="0" Canvas.Left="100" Canvas.Top="80" Width="280" Height="135" Style="{DynamicResource Style_lvacc}" BorderBrush="#FF5F5F5F" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <ListView.OpacityMask>
                         <ImageBrush ImageSource="Resources/opacitymask.png"/>
                     </ListView.OpacityMask>
@@ -294,14 +294,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="100*"/>
                 <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
-
-            <StackPanel Grid.Row="1" >
-                <Label Content="Current Setup:" x:Name="lab_currentsetup"/>
-                <Label Content="Used Addons:" x:Name="lab_usedaddons"/>
-            </StackPanel>
-
             <Grid Margin="20,5" Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50*"/>
@@ -341,11 +334,10 @@
                     <TabItem.Header>
                         <StackPanel>
                             <Image Height="20" Source="Resources/Icons/home.png"/>
-                            <Label FontSize="10" Margin="0,-5,0,-7">General</Label>
+                            <Label FontSize="10" Margin="0,-5,0,-7">Home</Label>
                         </StackPanel>
                     </TabItem.Header>
                     <StackPanel>
-                        <Button Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"  FontWeight="Bold" Margin="0,0,0,-20" ToolTip="Overview your general gw2 client details and choose basic command line &#x0a;arguments by checking the corresponding checkbox next to it"/>
                         <Grid Margin="0,-3,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="7*"/>
@@ -353,7 +345,7 @@
                                 <ColumnDefinition Width="259*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="30*"/>
+                                <RowDefinition Height="30"/>
                                 <RowDefinition Height="80"/>
                             </Grid.RowDefinitions>
 
@@ -366,8 +358,11 @@
                             <Label x:Name="label" Content="Gw2 Client Details:" HorizontalAlignment="Left" Grid.ColumnSpan="2" Style="{StaticResource H1}"/>
                             <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
                                 <Label x:Name="lab_version" Content="Build Version:" ToolTip="The current Guild Wars 2 build your system is using." />
-                                <Label x:Name="lab_para" Content="Latest Startparameters:" Grid.Column="1" Grid.Row="1" ToolTip="Your start parameters/command line arguments at the last launch" />
-                                <Label x:Name="lab_path" Content="Install Path:" Grid.Column="1" Grid.Row="1" />
+                                <DockPanel>
+                                    <Button x:Name="bt_installpath" DockPanel.Dock="Right" ToolTip="Set your gamefolder path if it isn't &#x0a; determined correctly by launchbuddy" Content="Set Directory" Click="bt_installpath_Click" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom"  BorderThickness="1" Width="100" HorizontalAlignment="Right" Margin="0,0,0,5"/>
+                                    <Label x:Name="lab_path" Content="Install Path:" Grid.Column="1" Grid.Row="1"/>
+                                </DockPanel>
+
                             </StackPanel>
                             <Grid Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right">
                                 <Grid.RowDefinitions>
@@ -378,54 +373,20 @@
                                 <Image Source="Resources/donate.png"  VerticalAlignment="Top" Height="40" MouseDown="bt_donate_Click" />
                             </Grid>
 
-                            <Button x:Name="bt_installpath" ToolTip="Set your gamefolder path if it isn't &#x0a; determined correctly by launchbuddy" Content="Set Directory" Click="bt_installpath_Click" Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom"  BorderThickness="1" Width="100" HorizontalAlignment="Right" Margin="0,0,0,5"/>
+                            
                         </Grid>
                         <Separator Margin="5"/>
-                        <Grid Grid.Row="1" Margin="5,0,5,0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="100*"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50*"/>
-                                <ColumnDefinition Width="50*"/>
-                            </Grid.ColumnDefinitions>
-                            <ListBox x:Name="argListBox" ItemsSource="{Binding}"   SelectionChanged="arglistbox_SelectionChanged" Grid.Row="1" Grid.Column="0" Margin="0,0,5,0" >
-                                <ListBox.Resources>
-                                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
-                                                <Setter Property="IsSelected" Value="True" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ListBox.Resources>
-                                <CheckBox Content="-32" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-repair" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-bmp" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-diag" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-dx9single" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-forwardrenderer" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-image" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-log" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-maploadinfo" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-mce" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-nomusic" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-noui" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-nosound" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-prefreset" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-uispanallmonitors" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-uninstall" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-useOldFov" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-verify" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-umbra gpu" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <CheckBox Content="-windowed" Margin="5,0,0,0" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                            </ListBox>
-                            <Label x:Name="lab_descr" Content="Description (Wiki):" Grid.Column="1" Style="{StaticResource H2}"/>
-                            <TextBlock x:Name="textblock_descr" TextWrapping="Wrap" FontSize="13.333" Grid.Row="1" Grid.Column="1" Margin="5,0"/>
-                            <Label x:Name="lab_arglist" Content="Arguments:" Grid.Row="0" Style="{StaticResource H2}"/>
-
-                        </Grid>
+                        <ListView x:Name="lv_accs" DataContext="{Binding Path=Account}" SelectionChanged="lv_accs_SelectionChanged">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" ToolTip="{Binding Path=Client.Status}">
+                                        <Image Height="32" Source="{Binding Path=Client.StatusToIcon}" />
+                                        <Label Content="{Binding Path=Nickname}" BorderThickness="0" Margin="0,2,0,0" FontSize="18" FontWeight="Bold"/>
+                                        <Image Source="{Binding Path=Icon}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
                     </StackPanel>
                 </TabItem>
 
@@ -433,124 +394,157 @@
                     <TabItem.Header>
                         <StackPanel>
                             <Image Height="20" Source="Resources/Icons/accounts.png"/>
-                            <Label FontSize="10" Margin="0,-5,0,-7">Account Manager</Label>
+                            <Label FontSize="10" Margin="0,-5,0,-7">Account Settings</Label>
                         </StackPanel>
                     </TabItem.Header>
-                    <Grid Grid.Row="3" Margin="0,0"  >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="190*"/>
-                            <ColumnDefinition Width="190*"/>
-                            <ColumnDefinition Width="190*"/>
-                            <ColumnDefinition Width="100*"/>
-                            <ColumnDefinition Width="100*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="25"/>
-                            <RowDefinition Height="100*"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                        </Grid.RowDefinitions>
-                        <WrapPanel Grid.ColumnSpan="5" Grid.Row="2" Grid.RowSpan="2">
-                            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" Margin="0,0,15,0" >
-                                <Label x:Name="lab_nick" Content="Nickname:" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <TextBox x:Name="tb_nick" Height="23" MinWidth="150"  IsEnabled="False"/>
-                                <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left"  VerticalAlignment="Center"  IsEnabled="False" Height="26" Width="62" Grid.Row="2" Grid.Column="1" />
-                                <PasswordBox x:Name="tb_passw" Height="23" MinWidth="150" IsEnabled="False" />
-                                <Label x:Name="lab_email" Content="Email:"  d:LayoutOverrides="Width" VerticalAlignment="Center"/>
-                                <TextBox x:Name="tb_email" Height="23" MinWidth="150" IsEnabled="False" />
+                    <DockPanel>
+                        <DockPanel DockPanel.Dock="Left" MinWidth="120" Width="80" Background="LightGray" LastChildFill="True">
+                            <StackPanel DockPanel.Dock="Bottom">
+                                <Button x:Name="bt_accadd" Content="Add"  Click="bt_accadd_Click" />
+                                <StackPanel x:Name="sp_acclistbuttons"  IsEnabled="False">
+                                    <Button x:Name="bt_accrem" Content="Remove" Click="bt_accrem_Click" />
+                                    <UniformGrid Height="20" Rows="1">
+                                        <Button x:Name="bt_accsortup"  Content="↑"  Click="bt_accsortup_Click" DockPanel.Dock="Left"/>
+                                        <Button x:Name="bt_accsortdown"  Content="↓" Click="bt_accsortdown_Click" DockPanel.Dock="Right"/>
+                                    </UniformGrid>
+                                    <Button x:Name="bt_accsave" Content="Save" />
+                                </StackPanel>
                             </StackPanel>
-                            <StackPanel Grid.ColumnSpan="5" Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Right">
-                                <Button x:Name="bt_addacc" Content="Add" Click="bt_addacc_Click" IsEnabled="False" Width="100"  Margin="5,3"/>
-                                <Button x:Name="bt_accedit" Content="Edit" Margin="3" IsEnabled="False" Width="100" Click="bt_accedit_Click"/>
-                                <Button x:Name="bt_remacc" Content="Remove" IsEnabled="False" Click="bt_remacc_Click" Width="100" Margin="5,3" />
-                                <Button x:Name="bt_accsortup" Content="↑" IsEnabled="False" Margin="3" Width="30" Click="bt_accsortup_Click"/>
-                                <Button x:Name="bt_accsortdown" Content="↓" IsEnabled="False" Margin="3" Width="30" Click="bt_accsortdown_Click"/>
-                                <Button x:Name="bt_accsave" Content="Save" IsEnabled="False" Margin="3" Width="30" Click="bt_accsave_Click"/>
-                            </StackPanel>
-                        </WrapPanel>
-                        <CheckBox x:Name="cb_login" Content="Use Autologin" FontSize="16" Checked="cb_login_Checked" Unchecked="cb_login_Unchecked" FontWeight="Bold" Grid.Row="0" Grid.ColumnSpan="4" ToolTip="Check this box if you want to use the account manager to automatically start selected accounts.&#x0a;If you want the normal manual login keep this unchecked." />
-                        <ListView ItemsSource="{Binding}" SelectionMode="Multiple" x:Name="listview_acc"  IsEnabled="False" SelectionChanged="listview_acc_SelectionChanged" Grid.Row="1" Grid.ColumnSpan="5">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Nickname" Width="150" DisplayMemberBinding="{Binding Nickname}" />
-                                    <GridViewColumn Header="Email" Width="150" DisplayMemberBinding="{Binding ObscuredEmail}" />
-                                    <GridViewColumn Header="Created at" Width="150" DisplayMemberBinding="{Binding CreateDate}" />
-                                    <GridViewColumn Header="Icon" Width="64">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Button Height="32" Width="32" x:Name="bt_selecticon" Click="bt_selecticon_Click" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-                                                    <Grid>
-                                                        <Image Source="{Binding Icon}"/>
-                                                    </Grid>
-                                                </Button>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
 
-                                    <GridViewColumn Header="Graphic Config" Width="100">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Button Content="{Binding ConfigurationName}" Height="32" x:Name="bt_selectaccgfx" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="bt_selectaccgfx_Click" />
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                        <Button Grid.Row="0" ToolTip="Manage all of your accounts in this section by entering their data. Then choose which accounts should be started by selecting them in the list" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
-                    </Grid>
-                </TabItem>
-                <TabItem>
-                    <TabItem.Header>
-                        <StackPanel>
-                            <Image Height="20" Source="Resources/Icons/gpu.png"/>
-                            <Label FontSize="10" Margin="0,-5,0,-7">Graphic Settings</Label>
-                        </StackPanel>
-                    </TabItem.Header>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50*"/>
-                            <ColumnDefinition Width="50*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="100*"/>
-                            <RowDefinition Height="30"/>
-                        </Grid.RowDefinitions>
-
-                        <Label Content="GFX Configurator" Style="{StaticResource H1}"/>
-                        <DockPanel Grid.Row="2" Margin="0,5,0,0" Grid.ColumnSpan="2" LastChildFill="False">
-                            <Button x:Name="bt_applygfx" DockPanel.Dock="Right" Width="200" Content="Apply as Default" Click="bt_applygfx_Click" ToolTip="Set the current configuration to your default graphic configuration."/>
-                            <Button x:Name="bt_loadgfx"  DockPanel.Dock="Left" Content="Load Config"  Width="100" Click="bt_loadgfx_Click" Margin="0,0,5,0" ToolTip="Load a saved graphic configuration from your system."/>
-                            <Button x:Name="bt_savegfx"  DockPanel.Dock="Left" Content="Save Config"  Width="100" Click="bt_savegfx_Click" Margin="0,0,5,0" ToolTip="Save the currently selected configuration to a file."/>
-                            <Button x:Name="bt_resetgfx" DockPanel.Dock="Left" Content="Reset Config"  Width="100" Click="bt_resetgfx_Click" Margin="0,0,5,0" ToolTip="Resets the selected options to their old value."/>
+                            <ListView x:Name="lv_accssettings" SelectionChanged="lv_accssettings_SelectionChanged">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding Path=Nickname}" Background="LightGray" HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </DockPanel>
 
-                        <ListView x:Name="lv_gfx" Grid.ColumnSpan="2" Grid.Row="1" SelectionChanged="lv_gfx_SelectionChanged">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Parameter" Width="200"  DisplayMemberBinding="{Binding Name}"/>
-                                    <GridViewColumn Header="Setup" Width="250">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <ComboBox ItemsSource="{Binding Path=IEOptions}" SelectedValue="{Binding Path=Value}" Width="200" SelectionChanged="ComboBox_SelectionChanged"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Previous" Width="150"  DisplayMemberBinding="{Binding Path=OldValue}"/>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                        <Button ToolTip="Configure your ingame graphic settings or create a graphic configuration file for a specific account" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
-                    </Grid>
+                        <StackPanel x:Name="gr_acceditor" IsEnabled="False">
+                            <TextBox x:Name="tb_accnickname" Text="{Binding Path=Nickname}" DockPanel.Dock="Top" FontSize="20" FontWeight="Bold" />
+                            <Separator  DockPanel.Dock="Top"/>
+                            <ScrollViewer Margin="2,2,0,2" DataContext="{Binding Path=Settings}">
+                                <StackPanel>
+                                    <Expander Header="Login Credentials">
+                                        <WrapPanel Grid.ColumnSpan="5" Grid.Row="2" Grid.RowSpan="2">
+                                            <StackPanel Orientation="Horizontal" >
+                                                <Label x:Name="lab_email" Content="Email:"  d:LayoutOverrides="Width" VerticalAlignment="Center"/>
+                                                <TextBox x:Name="tb_email" Height="23" MinWidth="150" />
+                                                <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left"  VerticalAlignment="Center"  IsEnabled="False" Height="26" Width="62" Grid.Row="2" Grid.Column="1" />
+                                                <PasswordBox x:Name="tb_passw" Height="23" MinWidth="150" />
+                                            </StackPanel>
+                                        </WrapPanel>
+                                    </Expander>
+                                    <Expander Header="Icon">
+                                        <StackPanel>
+                                            <ListView DataContext="{Binding Path=Icons}">
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Image Height="64" Width="64"></Image>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Content="Select" Width="100"/>
+                                                <StackPanel Orientation="Horizontal" Margin="30,0,0,0" >
+                                                    <Button Content="Add Custom" Width="100"/>
+                                                    <Button Content="Delete Custom" Width="100"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Expander>
+                                    <Expander Header="Arguments">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50*"/>
+                                                <ColumnDefinition Width="50*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <Label Content="Argument List:"/>
+                                                <ListView x:Name="lv_args" ItemsSource="{Binding Path=Arguments}">
+                                                    <ListView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <CheckBox Name="cb_argument" Content="{Binding Flag}" IsChecked="{Binding IsActive}" MouseEnter="cb_argument_MouseEnter" />
+                                                        </DataTemplate>
+                                                    </ListView.ItemTemplate>
+                                                </ListView>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1">
+                                                <Label x:Name="lab_descr" Content="Description:"/>
+                                                <TextBlock x:Name="textblock_descr" TextWrapping="Wrap" Margin="2,0,0,0"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Expander>
+                                    <Expander Header="GFX Settings">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50*"/>
+                                                <ColumnDefinition Width="50*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="30"/>
+                                                <RowDefinition Height="100*"/>
+                                                <RowDefinition Height="30"/>
+                                            </Grid.RowDefinitions>
+
+                                            <Label Content="GFX Configurator" Style="{StaticResource H1}"/>
+                                            <DockPanel Grid.Row="2" Margin="0,5,0,0" Grid.ColumnSpan="2" LastChildFill="False">
+                                                <!--Button x:Name="bt_applygfx" DockPanel.Dock="Right" Width="200" Content="Apply as Default" Click="bt_applygfx_Click" ToolTip="Set the current configuration to your default graphic configuration."/-->
+                                                <Button x:Name="bt_loadgfx"  DockPanel.Dock="Left" Content="Load Config"  Width="100" Click="bt_loadgfx_Click" Margin="0,0,5,0" ToolTip="Load a saved graphic configuration from your system."/>
+                                                <Button x:Name="bt_savegfx"  DockPanel.Dock="Left" Content="Save Config"  Width="100" Click="bt_savegfx_Click" Margin="0,0,5,0" ToolTip="Save the currently selected configuration to a file."/>
+                                                <Button x:Name="bt_resetgfx" DockPanel.Dock="Left" Content="Reset Config"  Width="100" Click="bt_resetgfx_Click" Margin="0,0,5,0" ToolTip="Resets the selected options to their old value."/>
+                                            </DockPanel>
+
+                                            <ListView x:Name="lv_gfx" Grid.ColumnSpan="2" Grid.Row="1" SelectionChanged="lv_gfx_SelectionChanged" MinHeight="64">
+                                                <ListView.View>
+                                                    <GridView>
+                                                        <GridViewColumn Header="Parameter" Width="200"  DisplayMemberBinding="{Binding Name}"/>
+                                                        <GridViewColumn Header="Setup" Width="250">
+                                                            <GridViewColumn.CellTemplate>
+                                                                <DataTemplate>
+                                                                    <ComboBox ItemsSource="{Binding Path=IEOptions}" SelectedValue="{Binding Path=Value}" Width="200" SelectionChanged="ComboBox_SelectionChanged"/>
+                                                                </DataTemplate>
+                                                            </GridViewColumn.CellTemplate>
+                                                        </GridViewColumn>
+                                                        <GridViewColumn Header="Previous" Width="150"  DisplayMemberBinding="{Binding Path=OldValue}"/>
+                                                    </GridView>
+                                                </ListView.View>
+                                            </ListView>
+                                            <Button ToolTip="Configure your ingame graphic settings or create a graphic configuration file for a specific account" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
+                                        </Grid>
+                                    </Expander>
+                                    <Expander Header="3rd Party Plugins">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="30"/>
+                                                <RowDefinition Height="150*"/>
+                                                <RowDefinition Height="40"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50*"/>
+                                                <ColumnDefinition Width="50*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Content="Injected Software:" Style="{StaticResource H1}"/>
+                                            <ListView x:Name="lv_InjectDlls" Grid.Row="1" Grid.ColumnSpan="2" MinHeight="120" >
+                                            </ListView>
+                                            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right">
+                                                <Button x:Name="bt_AddDll" Content="Add DLL" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_AddDll_Click"/>
+                                                <Button x:Name="bt_RemDll" Content="Remove DLL" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_RemDll_Click"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Expander>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </DockPanel>
+ 
                 </TabItem>
 
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel>
                             <Image Height="20" Source="Resources/Icons/server.png"/>
-                            <Label FontSize="10" Margin="0,-5,0,-7">Serverselection</Label>
+                            <Label FontSize="10" Margin="0,-5,0,-7">Network Settings</Label>
                         </StackPanel>
                     </TabItem.Header>
                     <Grid >
@@ -630,89 +624,6 @@
                         <TextBox x:Name="tb_clientport"  IsEnabled="False" Text="443" Grid.Column="2" Grid.Row="6" VerticalAlignment="Center" FontWeight="Normal"/>
                         <Button ToolTip="Select which authentication/asset server should be used by your gw2 client. First press Refresh serverlist and then choose your wished server" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
                     </Grid>
-                </TabItem>
-                <TabItem>
-                    <TabItem.Header>
-                        <StackPanel>
-                            <Image Height="20" Source="Resources/Icons/addon.png"/>
-                            <Label FontSize="10" Margin="0,-5,0,-7">AddOns</Label>
-                        </StackPanel>
-                    </TabItem.Header>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="50*"/>
-                            <RowDefinition Height="50*"/>
-                        </Grid.RowDefinitions>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="150*"/>
-                                <RowDefinition Height="40"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50*"/>
-                                <ColumnDefinition Width="50*"/>
-                            </Grid.ColumnDefinitions>
-                            <Button ToolTip="Manage third party software addons/plugins which should be started with the gw2 client" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
-                            <Label x:Name="lab_AddOnManager" Content="External Software:" Style="{StaticResource H1}"/>
-                            <StackPanel Orientation="Horizontal" Grid.Row="3" Visibility="Hidden">
-                                <CheckBox x:Name="cb_reshade" Content="Use Reshade Unlocker" Checked="cb_reshade_Checked" Unchecked="cb_reshade_Unchecked" FontSize="16" FontWeight="Bold" IsEnabled="False"  VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Row="3" Margin="5,0,0,0"/>
-                                <Button x:Name="bt_reshadepath" Content="Set ReshadeUnlocker Path" Click="bt_reshadepath_Click" Grid.Column="1"  Margin="5,0,0,0"/>
-                            </StackPanel>
-                            <ListView x:Name="lv_AddOns" Grid.Row="1" Grid.ColumnSpan="2" >
-                                <ListView.View>
-                                    <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
-                                        <GridViewColumn  HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
-                                            <GridViewColumnHeader Tag="Name" Click="listview_auth_Click" Content="Name"/>
-                                        </GridViewColumn>
-                                        <GridViewColumn HeaderStringFormat="" Width="200" DisplayMemberBinding="{Binding Args}">
-                                            <GridViewColumnHeader Tag="Args" Click="listview_auth_Click" Content="Parameters"/>
-                                        </GridViewColumn>
-                                        <GridViewColumn HeaderStringFormat="" Width="70" DisplayMemberBinding="{Binding IsMultilaunch}">
-                                            <GridViewColumnHeader Tag="IsMultilaunch" Click="listview_auth_Click" Content="Multilaunch"/>
-                                        </GridViewColumn>
-                                        <GridViewColumn Width="80" DisplayMemberBinding="{Binding IsLbAddon}">
-                                            <GridViewColumnHeader Tag="IsLbAddon" Click="listview_auth_Click" Content="Start with LB"/>
-                                        </GridViewColumn>
-                                        <GridViewColumn  DisplayMemberBinding="{Binding Path}">
-                                            <GridViewColumnHeader Tag="Path" Click="listview_auth_Click" Content="Path"/>
-                                        </GridViewColumn>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2" Margin="0,5">
-                                <Label Content="Name:"/>
-                                <TextBox x:Name="tb_AddonName" Width="100" Height="23"/>
-                                <Label Content="Parameters"/>
-                                <TextBox x:Name="tb_AddonArgs" Width="100" Height="23"/>
-                                <CheckBox x:Name="cb_AddonMultilaunch" Content="Multilaunch"  VerticalAlignment="Center" Margin="5,0" />
-                                <CheckBox x:Name="cb_AddonOnLB" Content="Start with LB" VerticalAlignment="Center" Margin="5,0" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right">
-                                <Button x:Name="bt_AddAddon" Content="Add" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_AddAddon_Click"/>
-                                <Button x:Name="bt_RemAddon" Content="Remove" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_RemAddon_Click"/>
-                            </StackPanel>
-                        </Grid>
-                        <Grid Grid.Row="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="150*"/>
-                                <RowDefinition Height="40"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50*"/>
-                                <ColumnDefinition Width="50*"/>
-                            </Grid.ColumnDefinitions>
-                            <Label Content="Injected Software:" Style="{StaticResource H1}"/>
-                            <ListView x:Name="lv_InjectDlls" Grid.Row="1" Grid.ColumnSpan="2" >
-                            </ListView>
-                            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right">
-                                <Button x:Name="bt_AddDll" Content="Add DLL" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_AddDll_Click"/>
-                                <Button x:Name="bt_RemDll" Content="Remove DLL" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_RemDll_Click"/>
-                            </StackPanel>
-                        </Grid>
-                    </Grid>
-                    
                 </TabItem>
                 <TabItem>
                     <TabItem.Header>
