@@ -1,5 +1,4 @@
 ﻿using Gw2_Launchbuddy.Interfaces;
-using Gw2_Launchbuddy.Wrappers;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -11,6 +10,7 @@ using System.Threading;
 using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.ComponentModel;
+using Gw2_Launchbuddy;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -239,6 +239,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
         private void RestoreGFX()
         {
             GFXManager.RestoreDefault();
+        }
+
+        private void InjectDlls()
+        {
+            foreach(string dll in account.Settings.DLLs)
+            {
+                DllInjector.Inject((uint)Process.Id,dll);
+            }
         }
 
         public void Launch()

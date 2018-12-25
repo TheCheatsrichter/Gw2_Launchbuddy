@@ -174,7 +174,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DLLInjector.cs" />
+    <Compile Include="Modifiers\DLLInjector.cs" />
     <Compile Include="Extensions\ProcessExtensions.cs" />
     <Compile Include="Extensions\XmlTextReaderExtensions.cs" />
     <Compile Include="Helpers\Builders.cs" />
@@ -188,26 +188,23 @@
     </Compile>
     <Compile Include="MusicManager.cs" />
     <Compile Include="ObjectManagers\AccountManager.cs" />
-    <Compile Include="AddOnManager.cs" />
+    <Compile Include="ObjectManagers\AddOnManager.cs" />
     <Compile Include="LaunchManager.cs" />
     <Compile Include="ObjectManagers\ApiManager.cs" />
     <Compile Include="ObjectManagers\Arguments.cs" />
     <Compile Include="ObjectManagers\ClientManager.cs" />
-    <Compile Include="CrashAnalyzer.cs" />
-    <Compile Include="CrashReporter.cs" />
-    <Compile Include="CustomUI.cs" />
-    <Compile Include="Encryption_AES.cs" />
-    <Compile Include="GFXManager.cs" />
+    <Compile Include="ObjectManagers\CrashAnalyzer.cs" />
+    <Compile Include="Helpers\CrashReporter.cs" />
+    <Compile Include="Extensions\Encryption_AES.cs" />
+    <Compile Include="ObjectManagers\GFXManager.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="GUI_ApplicationManager.xaml.cs">
       <DependentUpon>GUI_ApplicationManager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ObjectManagers\HandleManager.cs" />
+    <Compile Include="Modifiers\HandleManager.cs" />
     <Compile Include="ObjectManagers\EnviromentManager.cs" />
     <Compile Include="ObjectManagers\PluginManager.cs" />
-    <Compile Include="InjectionManager.cs" />
     <Compile Include="UIManagers\AccIconManager.cs" />
-    <Compile Include="Wrappers\ProcessWrapper.cs" />
     <Compile Include="ObjectManagers\ServerManager.cs" />
     <Compile Include="Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
@@ -395,6 +392,9 @@
       <Project>{fb87d35e-72c7-4fff-9584-ca3ec177d188}</Project>
       <Name>PluginContract</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Wrappers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">

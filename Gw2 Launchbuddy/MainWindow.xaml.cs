@@ -130,11 +130,6 @@ namespace Gw2_Launchbuddy
 
         }
 
-        private void LoadDlls()
-        {
-            lv_InjectDlls.ItemsSource= DllInjector.LoadDlls();
-        }
-
         private void Mainwin_LoadSetup()
         {
             if (Properties.Settings.Default.mainwin_pos_x >=0 && Properties.Settings.Default.mainwin_pos_y >= 0)
@@ -876,7 +871,6 @@ namespace Gw2_Launchbuddy
         {
             foreach (var plugin in PluginManager.TestPluginCollection) plugin.Exit();
             Mainwin_SaveSetup();
-            DllInjector.SaveDlls();
             Properties.Settings.Default.Save();
             Application.Current.Shutdown();
         }
@@ -1530,12 +1524,16 @@ namespace Gw2_Launchbuddy
 
         private void bt_AddDll_Click(object sender, RoutedEventArgs e)
         {
-            DllInjector.AddDLL();
-        }
-
-        private void bt_RemDll_Click(object sender, RoutedEventArgs e)
-        {
-            DllInjector.RemDLL(lv_InjectDlls.SelectedItem as string);
+            AccountSettings accsettings = (sender as Button).DataContext as AccountSettings;
+            Builders.FileDialog.DefaultExt(".dll")
+                .Filter("DLL Files(*.dll)|*.dll")
+                .ShowDialog((Helpers.FileDialog fileDialog) =>
+                {
+                    if (fileDialog.FileName != "" && !accsettings.DLLs.Contains(fileDialog.FileName))
+                    {
+                        accsettings.DLLs.Add(fileDialog.FileName);
+                    }
+                });
         }
 
         private void bt_accadd_Click(object sender, RoutedEventArgs e)
@@ -1583,6 +1581,12 @@ namespace Gw2_Launchbuddy
         private void cb_argument_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             textblock_descr.Text = ((sender as CheckBox).DataContext as Argument).Description;
+        }
+
+        private void bt_RemDll_Click(object sender, RoutedEventArgs e)
+        {
+            AccountSettings accsett = (sender as Button).DataContext as AccountSettings;
+            accsett.DLLs.Remove(lv_InjectDlls.SelectedItem as string);
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

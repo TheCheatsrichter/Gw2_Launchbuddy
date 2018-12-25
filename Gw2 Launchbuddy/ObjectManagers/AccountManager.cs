@@ -143,11 +143,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
     {
         public Arguments Arguments { get; set; }
         public GFXConfig GFXFile { get; set; }
+        public ObservableCollection<string> DLLs { get; set; }
 
         public AccountSettings()
         {
             //Init Defaults if no safefile
-            GFXFile = GFXManager.LoadFile(EnviromentManager.GwClientXmlPath);
+            if(GFXFile==null)GFXFile = GFXManager.LoadFile(EnviromentManager.GwClientXmlPath);
+            if(DLLs==null)DLLs = new ObservableCollection<string>();
         }
 
         public ObservableCollection<Bitmap> Icons { get { return UI_Managers.AccIconManager.Icons; } }
