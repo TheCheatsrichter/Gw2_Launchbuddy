@@ -268,6 +268,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                         break;
 
                     case var expression when (Status < ClientStatus.Injected):
+                        InjectDlls();
                         Status = ClientStatus.Injected;
                         break;
 
