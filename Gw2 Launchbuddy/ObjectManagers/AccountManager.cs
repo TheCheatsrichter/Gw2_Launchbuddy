@@ -28,7 +28,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
-        public static void CreateEmptyAccount()
+        public static Account CreateEmptyAccount()
         {
             string name_pre = "New Account";
             string name_suf = "";
@@ -44,7 +44,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 i++;
             }
 
-            Account acc = new Account(name_pre + name_suf);
+            return new Account(name_pre + name_suf);
         }
 
         public static void LaunchAccounts()
@@ -142,12 +142,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
     public class AccountSettings
     {
         public Arguments Arguments { get; set; }
-        private GFXConfig gfxfile;
-        public GFXConfig GFXFile { get { GFXManager.SelectedGFX = gfxfile;return gfxfile; } set { gfxfile = GFXFile; } }
+        public GFXConfig GFXFile { get; set; }
 
         public AccountSettings()
         {
-            gfxfile = GFXManager.LoadFile(EnviromentManager.GwClientXmlPath);
+            //Init Defaults if no safefile
+            GFXFile = GFXManager.LoadFile(EnviromentManager.GwClientXmlPath);
         }
 
         public ObservableCollection<Bitmap> Icons { get { return UI_Managers.AccIconManager.Icons; } }

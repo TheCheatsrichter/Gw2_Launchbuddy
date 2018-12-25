@@ -10,6 +10,7 @@ using System.Windows;
 using System.Threading;
 using System.Drawing;
 using System.Windows.Media.Imaging;
+using System.ComponentModel;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -90,9 +91,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
         private ClientStatus status = ClientStatus.None;
         public Process Process = new Process();
         public event EventHandler StatusChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnStatusChanged(EventArgs e)
         {
+            OnPropertyChanged("StatusToIcon");
 #if DEBUG
             Console.WriteLine("Account: " + account + " Status: " + Status);
 #endif
@@ -100,6 +103,15 @@ namespace Gw2_Launchbuddy.ObjectManagers
             if (handler != null)
             {
                 handler(this, e);
+            }
+        }
+
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
             }
         }
 
@@ -217,6 +229,18 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
+        private void SwapGFX()
+        {
+            if(account.Settings.GFXFile!=null)
+            {
+                GFXManager.UseGFX(account.Settings.GFXFile);
+            }
+        }
+        private void RestoreGFX()
+        {
+            GFXManager.RestoreDefault();
+        }
+
         public void Launch()
         {
             while (Status < ClientStatus.Running)
@@ -225,6 +249,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 {
                     case var expression when (Status < ClientStatus.Configured):
                         ConfigureProcess();
+                        SwapGFX();
                         Status = ClientStatus.Configured;
                         break;
 
@@ -244,6 +269,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                         break;
 
                     case var expression when (Status < ClientStatus.Running):
+                        RestoreGFX();
                         Status = ClientStatus.Running;
                         break;
 

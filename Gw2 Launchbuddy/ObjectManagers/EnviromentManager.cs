@@ -30,6 +30,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static string GwClientExePath { get { return GwClientPath + GwClientExeName; } }
         public static bool? GwClientUpToDate = null;
 
+        public static string TMP_GFXConfig = GwAppdataPath + "TMP_GFX.xml";
+        public static string TMP_BackupGFXConfig = GwAppdataPath + "TMP_GFX.bak";
+
         public static void Init()
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;

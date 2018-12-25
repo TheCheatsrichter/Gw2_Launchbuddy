@@ -522,8 +522,6 @@ namespace Gw2_Launchbuddy
         private void LoadConfig()
         {
             //Read the GFX Settings
-            lv_gfx.ItemsSource = EnviromentManager.GwClientXmlPath;
-            lv_gfx.Items.Refresh();
             lab_path.Content = "Install Path: " + EnviromentManager.GwClientPath;
             RefreshUI();
         }
@@ -1371,6 +1369,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_loadgfx_Click(object sender, RoutedEventArgs e)
         {
+            AccountSettings accsettings= (sender as Button).DataContext as AccountSettings;
             Builders.FileDialog.DefaultExt(".xml")
                 .Filter("XML Files(*.xml)|*.xml")
                 .InitialDirectory(EnviromentManager.GwClientPath)
@@ -1381,9 +1380,8 @@ namespace Gw2_Launchbuddy
                         var tmp = GFXManager.LoadFile(fileDialog.FileName);
                         if (tmp != null)
                         {
-                            GFXManager.SelectedGFX = tmp;
-                            lv_gfx.ItemsSource = GFXManager.SelectedGFX.Config;
-                            lv_gfx.Items.Refresh();
+                            accsettings.GFXFile = tmp;
+                            lv_gfx.ItemsSource = accsettings.GFXFile.Config;
                         }
                         else
                         {
@@ -1395,36 +1393,15 @@ namespace Gw2_Launchbuddy
 
         private void bt_resetgfx_Click(object sender, RoutedEventArgs e)
         {
-            GFXManager.SelectedGFX = GFXManager.ReadFile(EnviromentManager.GwClientXmlPath);
-            lv_gfx.ItemsSource = GFXManager.SelectedGFX.Config;
+            AccountSettings accsettings = (sender as Button).DataContext as AccountSettings;
+            accsettings.GFXFile = GFXManager.ReadFile(EnviromentManager.GwClientXmlPath);
             lv_gfx.Items.Refresh();
-        }
-
-        private void lv_gfx_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //if (lv_gfx.SelectedItem != null) MessageBox.Show((lv_gfx.SelectedItem as GFXOption).ToXml());
         }
 
         private void bt_savegfx_Click(object sender, RoutedEventArgs e)
         {
-            GFXManager.SaveFile();
-        }
-
-        private void bt_applygfx_Click(object sender, RoutedEventArgs e)
-        {
-            GFXManager.OverwriteGFX();
-
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.FileName = EnviromentManager.GwClientPath + EnviromentManager.GwClientExePath;
-            startInfo.Arguments = " -image -shareArchive";
-            Process gw2pro = new Process { StartInfo = startInfo };
-
-            gw2pro.Start();
-            gw2pro.WaitForExit();
-
-            GFXManager.SelectedGFX = GFXManager.ReadFile(EnviromentManager.GwClientXmlPath);
-            lv_gfx.ItemsSource = GFXManager.SelectedGFX.Config;
-            lv_gfx.Items.Refresh();
+            AccountSettings accsettings = (sender as Button).DataContext as AccountSettings;
+            GFXManager.SaveFile(accsettings.GFXFile);
         }
 
         private void bt_accsortup_Click(object sender, RoutedEventArgs e)
@@ -1563,7 +1540,10 @@ namespace Gw2_Launchbuddy
 
         private void bt_accadd_Click(object sender, RoutedEventArgs e)
         {
-            AccountManager.CreateEmptyAccount();
+            Account newacc=AccountManager.CreateEmptyAccount();
+            lv_accssettings.SelectedItem = newacc;
+            tb_accnickname.Focus();
+            tb_accnickname.SelectAll();
         }
 
         private void lv_accs_SelectionChanged(object sender, SelectionChangedEventArgs e)

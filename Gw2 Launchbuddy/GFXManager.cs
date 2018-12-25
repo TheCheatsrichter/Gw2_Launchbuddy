@@ -11,9 +11,6 @@ namespace Gw2_Launchbuddy
 {
     public static class GFXManager
     {
-        public static GFXConfig SelectedGFX = new GFXConfig();
-        private static GFXConfig CurrentConfig = new GFXConfig();
-
         //Options to skip
         private static List<string> SkippedOptions = new List<string>
         {
@@ -22,8 +19,7 @@ namespace Gw2_Launchbuddy
 
         static public GFXConfig LoadFile(string path)
         {
-            CurrentConfig.ConfigPath = path;
-            return ReadFile(CurrentConfig.ConfigPath);
+            return ReadFile(path);
         }
 
         static public bool IsValidGFX(string path)
@@ -35,7 +31,7 @@ namespace Gw2_Launchbuddy
             return true;
         }
 
-        public static void SaveFile()
+        public static void SaveFile(GFXConfig Config)
         {
             SaveFileDialog savediag = new System.Windows.Forms.SaveFileDialog();
             savediag.DefaultExt = ".xml";
@@ -46,7 +42,7 @@ namespace Gw2_Launchbuddy
             savediag.InitialDirectory = EnviromentManager.GwClientPath;
             savediag.ShowDialog();
 
-            if (savediag.FileName != "") ToXml(savediag.FileName);
+            if (savediag.FileName != "") ToXml(savediag.FileName,Config);
         }
 
         private static List<string> GetHeader()
@@ -70,52 +66,40 @@ namespace Gw2_Launchbuddy
             return foot;
         }
 
-        public static void UseGFX(string path)
+        public static void UseGFX(GFXConfig config)
         {
-            if (path == null || path == "")
-                return;
-
-            if (!File.Exists(path) && path != "Default")
+            string path = EnviromentManager.TMP_GFXConfig;
+            ToXml(path, config);
+            if (!File.Exists(path))
             {
-                MessageBox.Show("GFX Setting not found!\n\nPath:" + path + " \n\nLaunching with default settings!");
-                path = "Default";
+                MessageBox.Show("GFX Setting could not be created! Please check GFX settings!");
             }
-
-            if (path == "Default" && File.Exists(Globals.AppDataPath + "GFX_tmp.xml"))
+            if (File.Exists(path))
             {
-                if (File.Exists(EnviromentManager.GwClientXmlPath)) File.Delete(EnviromentManager.GwClientXmlPath);
-                File.Move(Globals.AppDataPath + "GFX_tmp.xml", EnviromentManager.GwClientXmlPath);
-            }
-
-            if (File.Exists(path) && Path.GetExtension(path) == ".xml")
-            {
-                if (!File.Exists(Globals.AppDataPath + "GFX_tmp.xml"))
-                {
-                    File.Move(EnviromentManager.GwClientXmlPath, Globals.AppDataPath + "GFX_tmp.xml");
-                }
                 if (File.Exists(EnviromentManager.GwClientXmlPath))
                 {
-                    File.Delete(EnviromentManager.GwClientXmlPath);
+                    File.Move(EnviromentManager.GwClientXmlPath, EnviromentManager.TMP_BackupGFXConfig);
                 }
-                File.Copy(path, EnviromentManager.GwClientXmlPath);
+                File.Move(path, EnviromentManager.GwClientXmlPath);
             }
         }
 
         public static void RestoreDefault()
         {
-            if (File.Exists(Globals.AppDataPath + "GFX_tmp.xml"))
+            if (File.Exists(EnviromentManager.TMP_BackupGFXConfig))
             {
                 if (File.Exists(EnviromentManager.GwClientXmlPath)) File.Delete(EnviromentManager.GwClientXmlPath);
-                File.Move(Globals.AppDataPath + "GFX_tmp.xml", EnviromentManager.GwClientXmlPath);
+                File.Move(EnviromentManager.TMP_BackupGFXConfig, EnviromentManager.GwClientXmlPath);
             }
+            if (File.Exists(EnviromentManager.TMP_GFXConfig)) File.Delete(EnviromentManager.TMP_GFXConfig);
         }
 
-        public static string[] ToXml(string dest)
+        public static string[] ToXml(string dest,GFXConfig GFXConfig)
         {
             //ToDo: Add Resolution Option and Gamma Slider
             List<string> XmlFormat = new List<string>();
             XmlFormat.AddRange(GetHeader());
-            foreach (GFXOption option in CurrentConfig.Config)
+            foreach (GFXOption option in GFXConfig.Config)
             {
                 XmlFormat.AddRange(option.ToXml());
             }
@@ -125,16 +109,15 @@ namespace Gw2_Launchbuddy
             return XmlFormat.ToArray();
         }
 
-        public static void OverwriteGFX()
+        public static void OverwriteGFX(GFXConfig config)
         {
-            ToXml(EnviromentManager.GwClientXmlPath);
+            ToXml(EnviromentManager.GwClientXmlPath,config);
         }
 
         static public GFXConfig ReadFile(string path)
         {
-            CurrentConfig.Config.Clear();
-            CurrentConfig.Configname = Path.GetFileNameWithoutExtension(path);
-            CurrentConfig.ConfigPath = path;
+
+            GFXConfig tmp_conf = new GFXConfig();
             var xmlfile = new XmlDocument();
             xmlfile.Load(path);
             foreach (XmlNode node in xmlfile.SelectNodes("//OPTION"))
@@ -168,9 +151,9 @@ namespace Gw2_Launchbuddy
                     }
                 }
 
-                CurrentConfig.Config.Add(gfxoption);
+                tmp_conf.Config.Add(gfxoption);
             }
-            return CurrentConfig;
+            return tmp_conf;
         }
     }
 
