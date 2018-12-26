@@ -7,6 +7,7 @@ using System.Windows;
 using System.Collections;
 using System.Windows.Media.Imaging;
 using System.Drawing;
+using System.ComponentModel;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -139,11 +140,24 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public Client Client { get { return ClientManager.Clients.FirstOrDefault(c => c.account == this); } }
     }
 
-    public class AccountSettings
+    public class AccountSettings : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public Arguments Arguments { get; set; }
         public GFXConfig GFXFile { get; set; }
         public ObservableCollection<string> DLLs { get; set; }
+
+        private Icon icon;
+
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
 
         public AccountSettings()
         {
@@ -152,25 +166,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
             if(DLLs==null)DLLs = new ObservableCollection<string>();
         }
 
-        public ObservableCollection<Bitmap> Icons { get { return UI_Managers.AccIconManager.Icons; } }
-
-        public Bitmap Icon
-        {
-            get
-            {
-                if (iconpath == null)
-                {
-                    return null;
-                }
-                return new Bitmap(iconpath);
-            }
-            set
-            {
-                iconpath = value.ToString();
-            }
-        }
-
-        public string iconpath;
+        public Icon Icon { get { return icon; } set { icon = value; OnPropertyChanged("Icon"); } }
+        public ObservableCollection<Icon> Icons { get { return IconManager.Icons; } }
         //Missing stuff (all nullable):
         /*
         email;

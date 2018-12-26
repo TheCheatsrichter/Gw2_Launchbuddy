@@ -203,8 +203,8 @@
     </Compile>
     <Compile Include="Modifiers\HandleManager.cs" />
     <Compile Include="ObjectManagers\EnviromentManager.cs" />
+    <Compile Include="ObjectManagers\IconManager.cs" />
     <Compile Include="ObjectManagers\PluginManager.cs" />
-    <Compile Include="UIManagers\AccIconManager.cs" />
     <Compile Include="ObjectManagers\ServerManager.cs" />
     <Compile Include="Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
@@ -394,6 +394,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="UIManagers\" />
     <Folder Include="Wrappers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

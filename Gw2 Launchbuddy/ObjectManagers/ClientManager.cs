@@ -85,7 +85,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         }
     }
 
-    public class Client
+    public class Client : INotifyPropertyChanged
     {
         public readonly Account account;
         private ClientStatus status = ClientStatus.None;

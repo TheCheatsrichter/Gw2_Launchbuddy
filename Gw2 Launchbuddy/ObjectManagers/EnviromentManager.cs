@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
 using System.Net;
-using Gw2_Launchbuddy.UI_Managers;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -21,6 +20,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
         public static string LBActiveClientsPath = LBAppdataPath + "lbac.txt";
         public static string LBAccountPath = LBAppdataPath + "lb_acc.bin";
+        public static string LBIconsPath = LBAppdataPath + "Icons\\";
 
         public static string GwAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\";
         public static string GwClientXmlPath;
@@ -46,8 +46,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             AccountManager.ImportAccounts();
             ClientManager.ImportActiveClients();
             CrashAnalyzer.ReadCrashLogs();
-
-            AccIconManager.Init();
+            IconManager.Init();
         }
 
         public static void LoadGwClientInfo()

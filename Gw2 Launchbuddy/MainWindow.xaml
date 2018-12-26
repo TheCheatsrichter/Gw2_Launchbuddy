@@ -437,18 +437,30 @@
                                     </Expander>
                                     <Expander Header="Icon">
                                         <StackPanel>
-                                            <ListView DataContext="{Binding Path=Icons}">
-                                                <ListView.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Image Height="64" Width="64"></Image>
-                                                    </DataTemplate>
-                                                </ListView.ItemTemplate>
-                                            </ListView>
+                                            <DockPanel>
+                                                <ListView Name="lv_accicon" ItemsSource="{Binding Path=Icons}" MinWidth="256" SelectionChanged="lv_accicon_SelectionChanged">
+                                                    <ListView.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <UniformGrid MinWidth="256" Columns="5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </ItemsPanelTemplate>
+                                                    </ListView.ItemsPanel>
+                                                    <ListView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Image x:Name="img_iconpreview" Margin="20" Source="{Binding Path=Image}" MaxHeight="64" MaxWidth="64" HorizontalAlignment="Center"/>
+                                                        </DataTemplate>
+                                                    </ListView.ItemTemplate>
+                                                </ListView>
+                                                <StackPanel DockPanel.Dock="Right">
+                                                    <Label Content="Current Icon:-"/>
+                                                    <Image Source="{Binding Path=Icon.Image}"/>
+                                                </StackPanel>
+                                            </DockPanel>
+
+
                                             <StackPanel Orientation="Horizontal">
-                                                <Button Content="Select" Width="100"/>
-                                                <StackPanel Orientation="Horizontal" Margin="30,0,0,0" >
-                                                    <Button Content="Add Custom" Width="100"/>
-                                                    <Button Content="Delete Custom" Width="100"/>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Button Name="bt_addicon" Content="Add Icon" Width="100" Click="bt_addicon_Click"/>
+                                                    <Button Name="bt_remicon" Content="Delete Icon" Width="100" Click="bt_remicon_Click"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>

@@ -652,7 +652,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_launch_Click(object sender, RoutedEventArgs e)
         {
-            myWindow.WindowState = WindowState.Minimized;
+            //myWindow.WindowState = WindowState.Minimized;
             AccountManager.LaunchAccounts();
         }
 
@@ -1587,6 +1587,23 @@ namespace Gw2_Launchbuddy
         {
             AccountSettings accsett = (sender as Button).DataContext as AccountSettings;
             accsett.DLLs.Remove(lv_InjectDlls.SelectedItem as string);
+        }
+
+        private void lv_accicon_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            AccountSettings accsett = (sender as ListView).DataContext as AccountSettings;
+            accsett.Icon = (sender as ListView).SelectedItem as Icon;
+        }
+
+        private void bt_addicon_Click(object sender, RoutedEventArgs e)
+        {
+            IconManager.AddIcon();
+        }
+
+        private void bt_remicon_Click(object sender, RoutedEventArgs e)
+        {
+            if(lv_accicon.SelectedItem !=null)
+                IconManager.RemIcon(lv_accicon.SelectedItem as Icon);
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
