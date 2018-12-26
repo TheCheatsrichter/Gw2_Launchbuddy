@@ -653,6 +653,12 @@ namespace Gw2_Launchbuddy
         private void bt_launch_Click(object sender, RoutedEventArgs e)
         {
             //myWindow.WindowState = WindowState.Minimized;
+            if (lv_accs.SelectedItem == null)
+            {
+                tab_home.Focus();
+                MessageBox.Show("Please select Accounts to launch!");
+            }
+                
             AccountManager.LaunchAccounts();
         }
 

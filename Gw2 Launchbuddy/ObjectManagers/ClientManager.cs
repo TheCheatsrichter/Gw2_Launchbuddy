@@ -253,43 +253,53 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             while (Status < ClientStatus.Running)
             {
-                switch (Status)
+                try
                 {
-                    case var expression when (Status < ClientStatus.Configured):
-                        ConfigureProcess();
-                        SwapGFX();
-                        Status = ClientStatus.Configured;
-                        break;
+                    switch (Status)
+                    {
+                        case var expression when (Status < ClientStatus.Configured):
+                            ConfigureProcess();
+                            SwapGFX();
+                            Status = ClientStatus.Configured;
+                            break;
 
-                    case var expression when (Status < ClientStatus.Created):
-                        Process.Start();
-                        Suspend();
-                        Status = ClientStatus.Created;
-                        break;
+                        case var expression when (Status < ClientStatus.Created):
+                            Process.Start();
+                            Suspend();
+                            Status = ClientStatus.Created;
+                            break;
 
-                    case var expression when (Status < ClientStatus.Injected):
-                        InjectDlls();
-                        Status = ClientStatus.Injected;
-                        break;
+                        case var expression when (Status < ClientStatus.Injected):
+                            InjectDlls();
+                            Status = ClientStatus.Injected;
+                            break;
 
-                    case var expression when (Status < ClientStatus.MutexClosed):
-                        CloseMutex();
-                        Status = ClientStatus.MutexClosed;
-                        break;
+                        case var expression when (Status < ClientStatus.MutexClosed):
+                            CloseMutex();
+                            Status = ClientStatus.MutexClosed;
+                            break;
 
-                    case var expression when (Status < ClientStatus.Running):
-                        RestoreGFX();
-                        Status = ClientStatus.Running;
-                        break;
+                        case var expression when (Status < ClientStatus.Running):
+                            RestoreGFX();
+                            Status = ClientStatus.Running;
+                            break;
 
-                    default:
-                        //Undeclared Status Close Process and create new one
-                        Close();
-                        Status = ClientStatus.None;
-                        break;
+                        default:
+                            //Undeclared Status Close Process and create new one
+                            Close();
+                            Status = ClientStatus.None;
+                            break;
+                    }
+                    
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                    Status = ClientStatus.None;
                 }
             }
             Focus();
+
         }
 
         //UI functions

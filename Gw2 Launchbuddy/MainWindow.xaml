@@ -330,7 +330,7 @@
                 <TabControl.Background>
                     <ImageBrush/>
                 </TabControl.Background>
-                <TabItem >
+                <TabItem x:Name="tab_home">
                     <TabItem.Header>
                         <StackPanel>
                             <Image Height="20" Source="Resources/Icons/home.png"/>
@@ -376,7 +376,7 @@
                             
                         </Grid>
                         <Separator Margin="5"/>
-                        <ListView x:Name="lv_accs" DataContext="{Binding Path=Account}" SelectionChanged="lv_accs_SelectionChanged">
+                        <ListView x:Name="lv_accs" DataContext="{Binding Path=Account}" SelectionChanged="lv_accs_SelectionChanged" SelectionMode="Multiple">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" ToolTip="{Binding Path=Client.Status}" >

@@ -78,6 +78,7 @@ namespace Gw2_Launchbuddy
             {
                 if (File.Exists(EnviromentManager.GwClientXmlPath))
                 {
+                    File.Delete(EnviromentManager.TMP_BackupGFXConfig);
                     File.Move(EnviromentManager.GwClientXmlPath, EnviromentManager.TMP_BackupGFXConfig);
                 }
                 File.Move(path, EnviromentManager.GwClientXmlPath);
