@@ -35,12 +35,16 @@ public class AES
 
     public string Encrypt(string unencrypted)
     {
+        if (unencrypted == null)
+            return null;
         byte[] tmp = ProtectedData.Protect(encoder.GetBytes(unencrypted), entropy, DataProtectionScope.LocalMachine);
         return Convert.ToBase64String(Encrypt(tmp));
     }
 
     public string Decrypt(string encrypted)
     {
+        if (encrypted == null)
+            return null;
         byte[] tmp = Decrypt(Convert.FromBase64String(encrypted));
         return encoder.GetString(ProtectedData.Unprotect(tmp, entropy, DataProtectionScope.LocalMachine));
     }

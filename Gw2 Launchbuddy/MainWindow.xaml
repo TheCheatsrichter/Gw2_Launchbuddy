@@ -193,7 +193,7 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Width="280">
-                                <GridViewColumnHeader Click="listview_auth_Click" Visibility="Collapsed"/>
+                                <GridViewColumnHeader Click="lv_auth_Click" Visibility="Collapsed"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <WrapPanel>
@@ -429,16 +429,16 @@
                                         <WrapPanel Grid.ColumnSpan="5" Grid.Row="2" Grid.RowSpan="2">
                                             <StackPanel Orientation="Horizontal" >
                                                 <Label x:Name="lab_email" Content="Email:"  d:LayoutOverrides="Width" VerticalAlignment="Center"/>
-                                                <TextBox x:Name="tb_email" Height="23" MinWidth="150" />
-                                                <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left"  VerticalAlignment="Center"  IsEnabled="False" Height="26" Width="62" Grid.Row="2" Grid.Column="1" />
-                                                <PasswordBox x:Name="tb_passw" Height="23" MinWidth="150" />
+                                                <TextBox x:Name="tb_email" Height="23" MinWidth="150" LostKeyboardFocus="tb_email_LostKeyboardFocus" Text="{Binding Path=UI_Email}"/>
+                                                <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left"  VerticalAlignment="Center" IsEnabled="False" Height="26" Width="62" Grid.Row="2" Grid.Column="1" />
+                                                <PasswordBox x:Name="tb_passw" Height="23" MinWidth="150" LostKeyboardFocus="tb_passw_LostKeyboardFocus" />
                                             </StackPanel>
                                         </WrapPanel>
                                     </Expander>
                                     <Expander Header="Icon">
                                         <StackPanel>
                                             <DockPanel>
-                                                <ListView Name="lv_accicon" ItemsSource="{Binding Path=Icons}" MinWidth="256" SelectionChanged="lv_accicon_SelectionChanged">
+                                                <ListView Name="lv_accicon" ItemsSource="{Binding Path=Icons}" MinWidth="256" MaxHeight="400" SelectionChanged="lv_accicon_SelectionChanged">
                                                     <ListView.ItemsPanel>
                                                         <ItemsPanelTemplate>
                                                             <UniformGrid MinWidth="256" Columns="5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -452,7 +452,7 @@
                                                 </ListView>
                                                 <StackPanel DockPanel.Dock="Right">
                                                     <Label Content="Current Icon:-"/>
-                                                    <Image Source="{Binding Path=Icon.Image}"/>
+                                                    <Image MaxHeight="72" Source="{Binding Path=Icon.Image}"/>
                                                 </StackPanel>
                                             </DockPanel>
 
@@ -590,50 +590,47 @@
                         </Grid>
                         <Label x:Name="lab_port_assets" Content="Port (optional):" IsEnabled="False" Grid.Column="1" Grid.Row="5" FontSize="16" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal" />
                         <Label x:Name="lab_port_client" Content="Port :" IsEnabled="False" Grid.Column="1" Grid.Row="6" FontSize="16" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal"/>
-                        <CheckBox x:Name="checkb_clientport" Content="Use Clientport: " FontSize="16" FontWeight="Bold" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Center" ToolTip="Use a specific clientport on your system to bypass problems with firewall and proxies."/>
-                        <CheckBox x:Name="checkb_auth" Grid.ColumnSpan="2" Content="Use Authentication Server : (Select Server)" VerticalAlignment="Center" FontSize="16" IsEnabled="False" FontWeight="Bold" HorizontalAlignment="Left" Grid.Row="4" Margin="0,4.36"/>
-                        <CheckBox x:Name="checkb_assets" Grid.ColumnSpan="2" Content="Use Assets Server : (Select Server)" VerticalAlignment="Center" FontSize="16" IsEnabled="False"  FontWeight="Bold" Grid.Row="5" HorizontalAlignment="Left" Margin="0,4.36"/>
+                        <CheckBox x:Name="checkb_clientport" Content="Use Clientport: " FontSize="16" FontWeight="Bold" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Center" ToolTip="Use a specific clientport on your system to bypass problems with firewall and proxies." Checked="checkb_clientport_Checked"/>
+                        <CheckBox x:Name="checkb_auth" Grid.ColumnSpan="2" Content="Use Authentication Server : (Select Server)" VerticalAlignment="Center" FontSize="16" IsEnabled="False" FontWeight="Bold" HorizontalAlignment="Left" Grid.Row="4" Margin="0,4.36" Checked="checkb_auth_Checked" Unchecked="checkb_auth_Unchecked"/>
+                        <CheckBox x:Name="checkb_assets" Grid.ColumnSpan="2" Content="Use Assets Server : (Select Server)" VerticalAlignment="Center" FontSize="16" IsEnabled="False"  FontWeight="Bold" Grid.Row="5" HorizontalAlignment="Left" Margin="0,4.36" Checked="checkb_assets_Checked" Unchecked="checkb_assets_Unchecked"/>
                         <Label x:Name="lab_port_auth" Content="Port (optional):" VerticalAlignment="Bottom" IsEnabled="False" Grid.Column="1" FontSize="16" Grid.Row="4" HorizontalAlignment="Right" Margin="0,0,2.117,0" FontWeight="Normal"/>
                         <Button x:Name="bt_checkservers" Content="Refresh Serverlist" Click="bt_checkservers_Click" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,5" FontWeight="Normal" ToolTip="Update the available servers."  />
-                        <ListView x:Name="listview_assets" SelectionChanged="listview_assets_SelectionChanged" Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" Grid.ColumnSpan="2" FontWeight="Normal" FontSize="12">
+                        <ListView x:Name="lv_assets" SelectionChanged="lv_assets_SelectionChanged" Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" Grid.ColumnSpan="2" FontWeight="Normal" FontSize="12">
                             <ListView.View>
                                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
                                     <GridViewColumn  HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding IP}">
-                                        <GridViewColumnHeader Tag="IP" Click="listview_assets_Click" Content="IP"/>
+                                        <GridViewColumnHeader Tag="IP" Click="lv_assets_Click" Content="IP"/>
                                     </GridViewColumn>
                                     <GridViewColumn HeaderStringFormat="" Width="65" DisplayMemberBinding="{Binding Port}">
-                                        <GridViewColumnHeader Tag="Port" Click="listview_assets_Click" Content="Port"/>
-                                    </GridViewColumn>
-                                    <GridViewColumn HeaderStringFormat="" Width="75" DisplayMemberBinding="{Binding Location}">
-                                        <GridViewColumnHeader Tag="Location" Click="listview_assets_Click" Content="Location"/>
+                                        <GridViewColumnHeader Tag="Port" Click="lv_assets_Click" Content="Port"/>
                                     </GridViewColumn>
                                     <GridViewColumn Width="60" DisplayMemberBinding="{Binding Ping}">
-                                        <GridViewColumnHeader Tag="Ping" Click="listview_assets_Click" Content="Ping"/>
+                                        <GridViewColumnHeader Tag="Ping" Click="lv_assets_Click" Content="Ping"/>
                                     </GridViewColumn>
                                 </GridView>
                             </ListView.View>
                         </ListView>
                         <Label x:Name="lab_assetserverlist" Content="Asset Servers:" RenderTransformOrigin="0.322,-0.072" Grid.Column="1" Style="{StaticResource H1}" ToolTip="Asset servers are used to download game content and updates. &#x0a;If you suffer from slow download speeds try to switch the server here!"/>
-                        <ListView x:Name="listview_auth" SelectionChanged="listview_auth_SelectionChanged" Grid.Row="1" Margin="0,0,5,0" FontWeight="Normal" FontSize="12">
+                        <ListView x:Name="lv_auth" SelectionChanged="lv_auth_SelectionChanged" Grid.Row="1" Margin="0,0,5,0" FontWeight="Normal" FontSize="12">
                             <ListView.View>
                                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
                                     <GridViewColumn  HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding IP}">
-                                        <GridViewColumnHeader Tag="IP" Click="listview_auth_Click" Content="IP"/>
+                                        <GridViewColumnHeader Tag="IP" Click="lv_auth_Click" Content="IP"/>
                                     </GridViewColumn>
                                     <GridViewColumn HeaderStringFormat="" Width="65" DisplayMemberBinding="{Binding Port}">
-                                        <GridViewColumnHeader Tag="Port" Click="listview_auth_Click" Content="Port"/>
+                                        <GridViewColumnHeader Tag="Port" Click="lv_auth_Click" Content="Port"/>
                                     </GridViewColumn>
                                     <GridViewColumn HeaderStringFormat="" Width="70" DisplayMemberBinding="{Binding Type}">
-                                        <GridViewColumnHeader Tag="Type" Click="listview_auth_Click" Content="Type"/>
+                                        <GridViewColumnHeader Tag="Type" Click="lv_auth_Click" Content="Type"/>
                                     </GridViewColumn>
                                     <GridViewColumn Width="60" DisplayMemberBinding="{Binding Ping}">
-                                        <GridViewColumnHeader Tag="Ping" Click="listview_auth_Click" Content="Ping"/>
+                                        <GridViewColumnHeader Tag="Ping" Click="lv_auth_Click" Content="Ping"/>
                                     </GridViewColumn>
                                 </GridView>
                             </ListView.View>
                         </ListView>
                         <Label x:Name="lab_authserverlist" Content="Authentication Servers:"  Style="{StaticResource H1}" ToolTip="This servers are used to login. &#x0a;If you suffer from login errors or frequent login server disconnetcions change it here!"/>
-                        <TextBox x:Name="tb_clientport"  IsEnabled="False" Text="443" Grid.Column="2" Grid.Row="6" VerticalAlignment="Center" FontWeight="Normal"/>
+                        <TextBox x:Name="tb_clientport" Text="443" Grid.Column="2" Grid.Row="6" VerticalAlignment="Center" FontWeight="Normal"/>
                         <Button ToolTip="Select which authentication/asset server should be used by your gw2 client. First press Refresh serverlist and then choose your wished server" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
                     </Grid>
                 </TabItem>
@@ -704,10 +701,10 @@
                                             <ListView.View>
                                                 <GridView>
                                                     <GridViewColumn HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
-                                                        <GridViewColumnHeader Tag="Name" Click="listview_auth_Click" Content="Image Name"/>
+                                                        <GridViewColumnHeader Tag="Name" Click="lv_auth_Click" Content="Image Name"/>
                                                     </GridViewColumn>
                                                     <GridViewColumn HeaderStringFormat=""  DisplayMemberBinding="{Binding Path}">
-                                                        <GridViewColumnHeader Tag="Path" Click="listview_auth_Click" Content="Path"/>
+                                                        <GridViewColumnHeader Tag="Path" Click="lv_auth_Click" Content="Path"/>
                                                     </GridViewColumn>
                                                 </GridView>
                                             </ListView.View>

@@ -200,9 +200,24 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 args += arg.ToString() + " ";
             }
-            args += "-shareArchive";
+            args += "-shareArchive ";
+            
             //Add Login Credentials
+            if (account.Settings.Email!=null && account.Settings.Password!=null)
+            {
+                args += "-nopatchui -autologin ";
+                args += "-email " + account.Settings.Email+" ";
+                args += "-password " + account.Settings.Password + " ";
+            }
+
             //Add Server Options
+            if (ServerManager.SelectedAssetserver != null)
+                if(ServerManager.SelectedAssetserver.Enabled)
+                args += "-assetserver " + ServerManager.SelectedAssetserver.ToArgument;
+            if (ServerManager.SelectedAuthserver != null)
+                if (ServerManager.SelectedAuthserver.Enabled)
+                    args += "-authserver " + ServerManager.SelectedAuthserver.ToArgument;
+
             Process.StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath, Arguments=args };
         }
 
@@ -298,8 +313,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     Status = ClientStatus.None;
                 }
             }
-            Focus();
+            try
+            {
+                Focus();
+            }
+            catch
+            {
 
+            }
         }
 
         //UI functions

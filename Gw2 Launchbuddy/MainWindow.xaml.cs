@@ -500,16 +500,16 @@ namespace Gw2_Launchbuddy
         {
             bt_checkservers.IsEnabled = true;
 
-            listview_auth.ItemsSource = ServerManager.authservers;
-            listview_assets.ItemsSource = ServerManager.assetservers;
+            lv_auth.ItemsSource = ServerManager.authservers;
+            lv_assets.ItemsSource = ServerManager.assetservers;
             lab_authserverlist.Content = "Authentication Servers (" + ServerManager.authservers.Count + " servers found):";
             lab_assetserverlist.Content = "Asset Servers (" + ServerManager.assetservers.Count + " servers found):";
             bt_checkservers.Content = "Check Servers (Last update: " + $"{DateTime.Now:HH:mm:ss tt}" + ")";
 
             // Sorting  servers (ping).
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(listview_auth.ItemsSource);
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lv_auth.ItemsSource);
             view.SortDescriptions.Add(new SortDescription("Ping", ListSortDirection.Descending));
-            CollectionView sview = (CollectionView)CollectionViewSource.GetDefaultView(listview_assets.ItemsSource);
+            CollectionView sview = (CollectionView)CollectionViewSource.GetDefaultView(lv_assets.ItemsSource);
             sview.SortDescriptions.Add(new SortDescription("Ping", ListSortDirection.Descending));
             sview.Refresh();
         }
@@ -547,15 +547,17 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        private void listview_assets_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void lv_assets_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // UI Handling for selected Asset Server
-            if (listview_assets.SelectedItem!=null)
+            if (lv_assets.SelectedItem!=null)
             {
-                ServerManager.SelectedAuthserver = (Server)listview_assets.SelectedItem;
+                ServerManager.SelectedAssetserver = (Server)lv_assets.SelectedItem;
                 tb_assetsport.Text = ServerManager.SelectedAssetserver.Port;
                 checkb_assets.Content = "Use Assets Server : " + ServerManager.SelectedAssetserver.IP;
                 checkb_assets.IsEnabled = true;
+
+                tb_assetsport.IsEnabled = true;
             }
             else
             {
@@ -563,16 +565,17 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        private void listview_auth_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void lv_auth_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // UI Handling for selected Authentication Server
-            if (listview_auth.SelectedItem!=null)
+            if (lv_auth.SelectedItem!=null)
             {
-                ServerManager.SelectedAssetserver = (Server)listview_auth.SelectedItem;
+                ServerManager.SelectedAuthserver = (Server)lv_auth.SelectedItem;
 
-                tb_authport.Text = ServerManager.SelectedAssetserver.Port;
+                tb_authport.Text = ServerManager.SelectedAuthserver.Port;
+                tb_authport.IsEnabled = true;
 
-                checkb_auth.Content = "Use Authentication Server : " + ServerManager.SelectedAssetserver.IP;
+                checkb_auth.Content = "Use Authentication Server : " + ServerManager.SelectedAuthserver.IP;
                 checkb_auth.IsEnabled = true;
             }
             else
@@ -664,9 +667,9 @@ namespace Gw2_Launchbuddy
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(listview_auth.ItemsSource);
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lv_auth.ItemsSource);
             view.SortDescriptions.Add(new SortDescription("Ping", ListSortDirection.Ascending));
-            CollectionView sview = (CollectionView)CollectionViewSource.GetDefaultView(listview_assets.ItemsSource);
+            CollectionView sview = (CollectionView)CollectionViewSource.GetDefaultView(lv_assets.ItemsSource);
             sview.SortDescriptions.Add(new SortDescription("Ping", ListSortDirection.Ascending));
         }
 
@@ -778,9 +781,9 @@ namespace Gw2_Launchbuddy
                 });
         }
 
-        private void listview_auth_Click(object sender, RoutedEventArgs e)
+        private void lv_auth_Click(object sender, RoutedEventArgs e)
         {
-            SortByColumn(listview_auth, sender);
+            SortByColumn(lv_auth, sender);
         }
 
         private void bt_setmusic_Click(object sender, RoutedEventArgs e)
@@ -986,9 +989,9 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        private void listview_assets_Click(object sender, RoutedEventArgs e)
+        private void lv_assets_Click(object sender, RoutedEventArgs e)
         {
-            SortByColumn(listview_assets, sender);
+            SortByColumn(lv_assets, sender);
         }
 
         private static BitmapSource LoadImage(string path)
@@ -1368,6 +1371,97 @@ namespace Gw2_Launchbuddy
             {
                 sv_accsettings.Focus();
             }
+        }
+
+        private void tb_email_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
+        {
+            string email = tb_email.Text;
+            if (!Regex.IsMatch(email, @"([^\s]).+@([^\s])[^\.]+(\..+)") && email.Contains('*') && email != null)
+            {
+                MessageBox.Show("Invalid email "+tb_email.Text+". Leave blank to deactivate.");
+                tb_email.SelectAll();
+                tb_email.Focus();
+            }else
+            {
+                AccountSettings sett = (sender as TextBox).DataContext as AccountSettings;
+                sett.Email = (sender as TextBox).Text;
+            }
+        }
+
+        private void tb_passw_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
+        {
+            if (tb_passw.Password.Length >= 8 || tb_passw.Password=="" || tb_passw.Password==null)
+            {
+                AccountSettings sett = (sender as PasswordBox).DataContext as AccountSettings;
+                sett.Password = (sender as PasswordBox).Password;
+            }else
+            {
+                MessageBox.Show("Invalid Password! Leave blank to deactivate.");
+                tb_passw.SelectAll();
+                tb_passw.Focus();
+            }
+        }
+
+        private void checkb_clientport_Checked(object sender, RoutedEventArgs e)
+        {
+            if (ServerManager.IsPort(tb_clientport.Text))
+            {
+                ServerManager.clientport = tb_clientport.Text;
+            }
+            else
+            {
+                MessageBox.Show("Invalid clientport");
+                tb_clientport.Focus();
+            }
+        }
+
+        private void checkb_assets_Checked(object sender, RoutedEventArgs e)
+        {
+            Server assetserv = new Server();
+            assetserv = lv_assets.SelectedItem as Server;
+
+            assetserv.Port = tb_assetsport.Text;
+
+            if (ServerManager.IsPort(tb_assetsport.Text))
+            {
+                assetserv.Port = tb_assetsport.Text;
+                ServerManager.SelectedAssetserver.Enabled = true;
+            }
+            else
+            {
+                MessageBox.Show("Invalid assetserver port");
+                tb_assetsport.Focus();
+            }
+        }
+
+        private void checkb_auth_Checked(object sender, RoutedEventArgs e)
+        {
+            Server authserv = new Server();
+            authserv = lv_auth.SelectedItem as Server;
+
+            authserv.Port = tb_authport.Text;
+
+            if (ServerManager.IsPort(tb_authport.Text))
+            {
+                authserv.Port = tb_assetsport.Text;
+                ServerManager.SelectedAuthserver.Enabled = true;
+            }
+            else
+            {
+                MessageBox.Show("Invalid authentication server port");
+                tb_authport.Focus();
+            }
+        }
+
+        private void checkb_assets_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ServerManager.SelectedAssetserver.Enabled = false;
+        }
+
+        private void checkb_auth_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+            ServerManager.SelectedAuthserver.Enabled = false;
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

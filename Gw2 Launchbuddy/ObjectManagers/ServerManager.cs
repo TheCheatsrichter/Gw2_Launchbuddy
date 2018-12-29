@@ -16,11 +16,15 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public string Port { get; set; }
         public string Ping { get; set; }
         public string Type { get; set; }
-        public string Location { get; set; }
+        public bool Enabled = false;
+
+        public string ToArgument { get { return IP + ":" + Port+" "; } }
     }
 
     public static class ServerManager
     {
+        public static string clientport = null;
+
         public static Server SelectedAuthserver = null;
         public static Server SelectedAssetserver = null;
 
@@ -35,6 +39,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             assetservers=fetch_assetserverlist();
             authservers = fetch_authserverlist();
+        }
+
+        public static bool IsPort(string inp)
+        {
+            return Regex.IsMatch(inp, @"\d+");
         }
 
         public static void AddAuthServer(string ip)
@@ -53,7 +62,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             if (Regex.Match(ip, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}") != null)
             {
-                assetservers.Add(new Server { IP = ip.ToString(), Port = default_assetport, Type = "-", Ping = getping(ip).ToString(), Location = getlocation(ip.ToString()) });
+                assetservers.Add(new Server { IP = ip.ToString(), Port = default_assetport, Type = "-", Ping = getping(ip).ToString() });
             }
             else
             {
@@ -108,7 +117,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
                 foreach (IPAddress ip in assetips)
                 {
-                    tmp_assetlist.Add(new Server { IP = ip.ToString(), Port = default_assetport, Type = "asset", Ping = getping(ip.ToString()).ToString(), Location = getlocation(ip.ToString()) });
+                    tmp_assetlist.Add(new Server { IP = ip.ToString(), Port = default_assetport, Type = "asset", Ping = getping(ip.ToString()).ToString()});
                 }
                 /*Temporary disabled
                 foreach (Server Server in Globals.manual_assetlist)
@@ -152,29 +161,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
             sock.Close();
 
             return Math.Round(t, 0);
-        }
-
-        public static string getlocation(string ip)
-        {
-            //Getting the geolocation of the asset CDN servers
-            //This might be one origin of AV flagging the exe!
-            try
-            {
-                using (var objClient = new System.Net.WebClient())
-                {
-                    var strFile = objClient.DownloadString("http://freegeoip.net/xml/" + ip); // limited to 100 requests / hour !
-
-                    using (XmlReader reader = XmlReader.Create(new StringReader(strFile)))
-                    {
-                        reader.ReadToFollowing("RegionName");
-                        return reader.ReadInnerXml();
-                    }
-                }
-            }
-            catch
-            {
-                return "-";
-            }
         }
     }
 }

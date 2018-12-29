@@ -168,6 +168,26 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public Icon Icon { get { return icon; } set { icon = value; OnPropertyChanged("Icon"); } }
         public ObservableCollection<Icon> Icons { get { return IconManager.Icons; } }
+
+
+        private string enc_email=null;
+        private string enc_password=null;
+        private AES Cryptor = new AES();
+
+        public string Email { set { enc_email = Cryptor.Encrypt(value); } get { return Cryptor.Decrypt(enc_email); } }
+        public string Password { set { enc_password = Cryptor.Encrypt(value); } get { return Cryptor.Decrypt(enc_password); } }
+
+        public string UI_Email
+        {
+            get
+            {
+                if (Email == null) return "";
+                return Email.Substring(0, 2) + "*****@****." + Email.Split('.')[1];
+            }
+            set { }
+        }
+        public string UI_Password { get { return "***************"; } set{}}
+
         //Missing stuff (all nullable):
         /*
         email;
