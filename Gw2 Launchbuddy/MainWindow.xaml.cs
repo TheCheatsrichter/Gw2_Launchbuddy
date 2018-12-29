@@ -1418,6 +1418,12 @@ namespace Gw2_Launchbuddy
             ServerManager.SelectedAuthserver.Enabled = false;
         }
 
+        private void bt_noicon_Click(object sender, RoutedEventArgs e)
+        {
+            AccountSettings accsett = (sender as Button).DataContext as AccountSettings;
+            accsett.Icon = null;
+        }
+
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var endpos = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];

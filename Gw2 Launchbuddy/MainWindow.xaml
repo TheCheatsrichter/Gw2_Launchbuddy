@@ -323,7 +323,6 @@
                         </Image>
                     </Grid>
                 </Button>
-                <!--<Button x:Name="bt_shortcut" Content="Create Shortcut (Coming back soon)" Grid.Column="1" Grid.Row="1"  Click="bt_shortcut_Click" BorderThickness="1" Margin="5,0,0,0" IsEnabled="false"/>-->
             </Grid>
 
             <TabControl x:Name="tab_options" Grid.Row="0" TabStripPlacement="Left" BorderBrush="White">
@@ -398,7 +397,7 @@
                         </StackPanel>
                     </TabItem.Header>
                     <DockPanel>
-                        <DockPanel DockPanel.Dock="Left" MinWidth="120" Width="80" Background="LightGray" LastChildFill="True">
+                        <DockPanel DockPanel.Dock="Left" MinWidth="120" Background="LightGray" LastChildFill="True">
                             <StackPanel DockPanel.Dock="Bottom">
                                 <Button x:Name="bt_accadd" Content="Add"  Click="bt_accadd_Click" />
                                 <StackPanel x:Name="sp_acclistbuttons"  IsEnabled="False">
@@ -412,20 +411,28 @@
                             </StackPanel>
 
                             <ListView x:Name="lv_accssettings" SelectionChanged="lv_accssettings_SelectionChanged">
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding Path=Nickname}" Background="LightGray" HorizontalAlignment="Center"/>
+                                        <Grid>
+                                            <Image Source="{Binding Path=Settings.Icon.Image}" VerticalAlignment="Center" MaxHeight="64" HorizontalAlignment="Center"/>
+                                            <Label Content="{Binding Path=Nickname}" BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center" OpacityMask="{x:Null}" Background="#43000000" FontWeight="Bold" FontSize="14" Foreground="White" BorderBrush="Black"/>
+                                        </Grid>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
                         </DockPanel>
 
                         <DockPanel x:Name="gr_acceditor" IsEnabled="False">
-                            <TextBox x:Name="tb_accnickname" Text="{Binding Path=Nickname}" DockPanel.Dock="Top" FontSize="20" FontWeight="Bold" KeyDown="tb_accnickname_KeyDown"/>
+                            <TextBox x:Name="tb_accnickname" Text="{Binding Path=Nickname}" DockPanel.Dock="Top" FontSize="20" FontWeight="Bold" KeyDown="tb_accnickname_KeyDown" Background="#FFF7F7F7"/>
                             <Separator  DockPanel.Dock="Top"/>
-                            <ScrollViewer x:Name="sv_accsettings" Margin="2,2,0,2" VerticalScrollBarVisibility="Auto" DataContext="{Binding Path=Settings}">
+                            <ScrollViewer x:Name="sv_accsettings" Margin="2,2,0,2" VerticalScrollBarVisibility="Auto" DataContext="{Binding Path=Settings}" Background="#FFF7F7F7">
                                 <StackPanel>
-                                    <Expander Header="Login Credentials" >
+                                    <Expander Header="Login Credentials">
                                         <WrapPanel Grid.ColumnSpan="5" Grid.Row="2" Grid.RowSpan="2">
                                             <StackPanel Orientation="Horizontal" >
                                                 <Label x:Name="lab_email" Content="Email:"  d:LayoutOverrides="Width" VerticalAlignment="Center"/>
@@ -461,6 +468,7 @@
                                                 <StackPanel Orientation="Horizontal">
                                                     <Button Name="bt_addicon" Content="Add Icon" Width="100" Click="bt_addicon_Click"/>
                                                     <Button Name="bt_remicon" Content="Delete Icon" Width="100" Click="bt_remicon_Click"/>
+                                                    <Button Name="bt_noicon" Content="No Icon" Width="100" Click="bt_noicon_Click" />
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>
@@ -487,7 +495,7 @@
                                             </StackPanel>
                                         </Grid>
                                     </Expander>
-                                    <Expander Header="GFX Settings">
+                                    <Expander Header="Graphic Settings">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="50*"/>
