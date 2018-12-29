@@ -105,10 +105,12 @@ namespace Gw2_Launchbuddy
             //Setup
             DonatePopup();
             UIInit();
-            
+
             /*Thread checkver = new Thread(checkversion);
             checkver.IsBackground = true;
             checkver.Start();*/
+            LoadEnviromentUI();
+
             cinema_setup();
             Mainwin_LoadSetup(); //do this after cinema setup!
 
@@ -123,6 +125,12 @@ namespace Gw2_Launchbuddy
                 checklbver.Start();
             }
 
+        }
+
+        private void LoadEnviromentUI()
+        {
+            lab_version.Content = "Version: "+EnviromentManager.GwClientVersion;
+            lab_path.Content = "Path: "+EnviromentManager.GwClientPath;
         }
 
         private void Mainwin_LoadSetup()
@@ -1422,6 +1430,14 @@ namespace Gw2_Launchbuddy
         {
             AccountSettings accsett = (sender as Button).DataContext as AccountSettings;
             accsett.Icon = null;
+        }
+
+        private void bt_accclone_Click(object sender, RoutedEventArgs e)
+        {
+            if (AccountManager.EditAccount!=null)
+            {
+                AccountManager.Clone(AccountManager.EditAccount);
+            }
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

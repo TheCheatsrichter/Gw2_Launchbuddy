@@ -290,7 +290,7 @@
         </StackPanel>
 
 
-        <Grid  x:Name="SettingsGrid" Grid.Row="1" Background="White"  Grid.RowSpan="3" Grid.ColumnSpan="3">
+        <Grid  x:Name="SettingsGrid" Grid.Row="1"  Grid.RowSpan="3" Grid.ColumnSpan="3" Background="White">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100*"/>
                 <RowDefinition Height="50"/>
@@ -325,10 +325,7 @@
                 </Button>
             </Grid>
 
-            <TabControl x:Name="tab_options" Grid.Row="0" TabStripPlacement="Left" BorderBrush="White">
-                <TabControl.Background>
-                    <ImageBrush/>
-                </TabControl.Background>
+            <TabControl x:Name="tab_options" Grid.Row="0" TabStripPlacement="Left" BorderBrush="White" Background="GhostWhite">
                 <TabItem x:Name="tab_home">
                     <TabItem.Header>
                         <StackPanel>
@@ -375,13 +372,14 @@
 
                         </Grid>
                         <Separator Margin="5"/>
+                        <Label Content="Accounts:" Style="{StaticResource H1}"/>
                         <ListView x:Name="lv_accs" DataContext="{Binding Path=Account}" SelectionChanged="lv_accs_SelectionChanged" SelectionMode="Multiple">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" ToolTip="{Binding Path=Client.Status}" >
+                                        <Image Height="32" Source="{Binding Path=Settings.Icon.Image,Mode=TwoWay}" />
                                         <Image Height="32" Source="{Binding Path=Client.StatusToIcon,Mode=TwoWay}" />
                                         <Label Content="{Binding Path=Nickname}" BorderThickness="0" Margin="0,2,0,0" FontSize="18" FontWeight="Bold"/>
-                                        <Image Source="{Binding Path=Icon}"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
@@ -400,6 +398,7 @@
                         <DockPanel DockPanel.Dock="Left" MinWidth="120" Background="LightGray" LastChildFill="True">
                             <StackPanel DockPanel.Dock="Bottom">
                                 <Button x:Name="bt_accadd" Content="Add"  Click="bt_accadd_Click" />
+                                <Button x:Name="bt_accclone" Content="Clone" Click="bt_accclone_Click"   />
                                 <StackPanel x:Name="sp_acclistbuttons"  IsEnabled="False">
                                     <Button x:Name="bt_accrem" Content="Remove" Click="bt_accrem_Click" />
                                     <UniformGrid Height="20" Rows="1">
@@ -430,7 +429,10 @@
                         <DockPanel x:Name="gr_acceditor" IsEnabled="False">
                             <TextBox x:Name="tb_accnickname" Text="{Binding Path=Nickname}" DockPanel.Dock="Top" FontSize="20" FontWeight="Bold" KeyDown="tb_accnickname_KeyDown" Background="#FFF7F7F7"/>
                             <Separator  DockPanel.Dock="Top"/>
-                            <ScrollViewer x:Name="sv_accsettings" Margin="2,2,0,2" VerticalScrollBarVisibility="Auto" DataContext="{Binding Path=Settings}" Background="#FFF7F7F7">
+                            <ScrollViewer x:Name="sv_accsettings" Margin="2,2,0,2" VerticalScrollBarVisibility="Auto" DataContext="{Binding Path=Settings}" >
+                                <ScrollViewer.Background>
+                                    <ImageBrush ImageSource="{Binding Path=Icon.Image}" Opacity="0.03"/>
+                                </ScrollViewer.Background>
                                 <StackPanel>
                                     <Expander Header="Login Credentials">
                                         <WrapPanel Grid.ColumnSpan="5" Grid.Row="2" Grid.RowSpan="2">
