@@ -43,7 +43,6 @@ namespace Gw2_Launchbuddy
 
         private int reso_x, reso_y;
 
-        private SortAdorner listViewSortAdorner = null;
         private GridViewColumnHeader listViewSortCol = null;
 
         public class CinemaImage
@@ -113,13 +112,9 @@ namespace Gw2_Launchbuddy
             cinema_setup();
             Mainwin_LoadSetup(); //do this after cinema setup!
 
-            //Cinema_Accountlist.ItemsSource= AccountManager.Accounts;
-            //lv_accs.ItemsSource = AccountManager.Accounts;
-            //lv_accssettings.ItemsSource = AccountManager.Accounts;
-            //argListBox.ItemsSource = AccountArgumentManager.AccountArgumentCollection.Where(a => a.Argument.Active && a.Account == AccountManager.DefaultAccount);
-
-
-            LoadAddons();
+            Cinema_Accountlist.ItemsSource= AccountManager.Accounts;
+            lv_accs.ItemsSource = AccountManager.Accounts;
+            lv_accssettings.ItemsSource = AccountManager.Accounts;
             SettingsTabSetup();
             AddOnManager.LaunchLbAddons();
             if (Properties.Settings.Default.notifylbupdate)
@@ -612,16 +607,6 @@ namespace Gw2_Launchbuddy
                 });
         }
 
-        private void SaveAddons()
-        {
-            AddOnManager.SaveAddons(Globals.AppDataPath + "Addons.xml");
-        }
-
-        private void LoadAddons()
-        {
-            //lv_AddOns.ItemsSource = AddOnManager.LoadAddons(Globals.AppDataPath + "Addons.xml");
-        }
-
         private void bt_addacc_Click(object sender, RoutedEventArgs e)
         {
             bt_accsave.IsEnabled = true;
@@ -642,7 +627,6 @@ namespace Gw2_Launchbuddy
             Properties.Settings.Default.instance_win_Y = Globals.Appmanager.Top;
             Properties.Settings.Default.Save();
             AccountManager.SaveAccounts();
-            SaveAddons();
             Environment.Exit(Environment.ExitCode);
         }
 
@@ -671,26 +655,6 @@ namespace Gw2_Launchbuddy
             view.SortDescriptions.Add(new SortDescription("Ping", ListSortDirection.Ascending));
             CollectionView sview = (CollectionView)CollectionViewSource.GetDefaultView(lv_assets.ItemsSource);
             sview.SortDescriptions.Add(new SortDescription("Ping", ListSortDirection.Ascending));
-        }
-
-        private void SortByColumn(ListView list, object sender)
-        {
-            GridViewColumnHeader column = (sender as GridViewColumnHeader);
-            string sortBy = column.Tag.ToString();
-            if (listViewSortCol != null)
-            {
-                AdornerLayer.GetAdornerLayer(listViewSortCol).Remove(listViewSortAdorner);
-                list.Items.SortDescriptions.Clear();
-            }
-
-            ListSortDirection newDir = ListSortDirection.Ascending;
-            if (listViewSortCol == column && listViewSortAdorner.Direction == newDir)
-                newDir = ListSortDirection.Descending;
-
-            listViewSortCol = column;
-            listViewSortAdorner = new SortAdorner(listViewSortCol, newDir);
-            AdornerLayer.GetAdornerLayer(listViewSortCol).Add(listViewSortAdorner);
-            list.Items.SortDescriptions.Add(new SortDescription(sortBy, newDir));
         }
 
         private void bt_donate_Click(object sender, RoutedEventArgs e)
@@ -779,11 +743,6 @@ namespace Gw2_Launchbuddy
                         img_slideshow.OpacityMask = newmask;
                     }
                 });
-        }
-
-        private void lv_auth_Click(object sender, RoutedEventArgs e)
-        {
-            SortByColumn(lv_auth, sender);
         }
 
         private void bt_setmusic_Click(object sender, RoutedEventArgs e)
@@ -987,11 +946,6 @@ namespace Gw2_Launchbuddy
             {
                 cinema_videoplayback.Stop();
             }
-        }
-
-        private void lv_assets_Click(object sender, RoutedEventArgs e)
-        {
-            SortByColumn(lv_assets, sender);
         }
 
         private static BitmapSource LoadImage(string path)
@@ -1470,92 +1424,4 @@ namespace Gw2_Launchbuddy
             endpos.Value = sl_logoendpos.Value * (reso_x / 200);
         }
     }
-
-    public class SortAdorner : Adorner
-    {
-        private static Geometry ascGeometry =
-                Geometry.Parse("M 0 4 L 3.5 0 L 7 4 Z");
-
-        private static Geometry descGeometry =
-                Geometry.Parse("M 0 0 L 3.5 4 L 7 0 Z");
-
-        public ListSortDirection Direction { get; private set; }
-
-        public SortAdorner(UIElement element, ListSortDirection dir) : base(element)
-        {
-            this.Direction = dir;
-        }
-
-        protected override void OnRender(DrawingContext drawingContext)
-        {
-            base.OnRender(drawingContext);
-
-            if (AdornedElement.RenderSize.Width < 20)
-                return;
-
-            TranslateTransform transform = new TranslateTransform
-                    (
-                            AdornedElement.RenderSize.Width - 15,
-                            (AdornedElement.RenderSize.Height - 5) / 2
-                    );
-            drawingContext.PushTransform(transform);
-
-            Geometry geometry = ascGeometry;
-            if (this.Direction == ListSortDirection.Descending)
-                geometry = descGeometry;
-            drawingContext.DrawGeometry(Brushes.Black, null, geometry);
-
-            drawingContext.Pop();
-        }
-    }
-
-    public class ListBoxHelper : DependencyObject
-    {
-        public static int GetAutoSizeItemCount(DependencyObject obj)
-        {
-            return (int)obj.GetValue(AutoSizeItemCountProperty);
-        }
-
-        public static void SetAutoSizeItemCount(DependencyObject obj, int value)
-        {
-            obj.SetValue(AutoSizeItemCountProperty, value);
-        }
-
-        // Using a DependencyProperty as the backing store for AutoSizeItemCount.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty AutoSizeItemCountProperty =
-            DependencyProperty.RegisterAttached("AutoSizeItemCount", typeof(int), typeof(ListBoxHelper), new PropertyMetadata(0, OnAutoSizeItemCountChanged));
-
-        private static void OnAutoSizeItemCountChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ListBox listBox = d as ListBox;
-            listBox.AddHandler(ScrollViewer.ScrollChangedEvent, new ScrollChangedEventHandler((lb, arg) => UpdateSize(listBox)));
-            listBox.ItemContainerGenerator.ItemsChanged += (ig, arg) => UpdateSize(listBox);
-        }
-
-        private static void UpdateSize(ListBox listBox)
-        {
-            ItemContainerGenerator gen = listBox.ItemContainerGenerator;
-            FrameworkElement element = listBox.InputHitTest(new Point(listBox.Padding.Left + 5, listBox.Padding.Top + 5)) as FrameworkElement;
-            if (element != null && gen != null)
-            {
-                object item = element.DataContext;
-                if (item != null)
-                {
-                    FrameworkElement container = gen.ContainerFromItem(item) as FrameworkElement;
-                    if (container == null)
-                    {
-                        container = element;
-                    }
-                    int maxCount = GetAutoSizeItemCount(listBox);
-                    double newHeight = Math.Min(maxCount, gen.Items.Count) * container.ActualHeight;
-                    newHeight += listBox.Padding.Top + listBox.Padding.Bottom + listBox.BorderThickness.Top + listBox.BorderThickness.Bottom + 2;
-                    if (listBox.ActualHeight != newHeight)
-                        listBox.Height = newHeight;
-                }
-            }
-        }
- 
-    }
-    
-
 }

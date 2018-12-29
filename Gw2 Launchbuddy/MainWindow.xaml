@@ -193,7 +193,7 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Width="280">
-                                <GridViewColumnHeader Click="lv_auth_Click" Visibility="Collapsed"/>
+                                <GridViewColumnHeader Visibility="Collapsed"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <WrapPanel>
@@ -599,13 +599,13 @@
                             <ListView.View>
                                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
                                     <GridViewColumn  HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding IP}">
-                                        <GridViewColumnHeader Tag="IP" Click="lv_assets_Click" Content="IP"/>
+                                        <GridViewColumnHeader Tag="IP" Content="IP"/>
                                     </GridViewColumn>
                                     <GridViewColumn HeaderStringFormat="" Width="65" DisplayMemberBinding="{Binding Port}">
-                                        <GridViewColumnHeader Tag="Port" Click="lv_assets_Click" Content="Port"/>
+                                        <GridViewColumnHeader Tag="Port" Content="Port"/>
                                     </GridViewColumn>
                                     <GridViewColumn Width="60" DisplayMemberBinding="{Binding Ping}">
-                                        <GridViewColumnHeader Tag="Ping" Click="lv_assets_Click" Content="Ping"/>
+                                        <GridViewColumnHeader Tag="Ping" Content="Ping"/>
                                     </GridViewColumn>
                                 </GridView>
                             </ListView.View>
@@ -615,16 +615,16 @@
                             <ListView.View>
                                 <GridView ColumnHeaderStringFormat="" AllowsColumnReorder="False">
                                     <GridViewColumn  HeaderStringFormat="" Width="100" DisplayMemberBinding="{Binding IP}">
-                                        <GridViewColumnHeader Tag="IP" Click="lv_auth_Click" Content="IP"/>
+                                        <GridViewColumnHeader Tag="IP" Content="IP"/>
                                     </GridViewColumn>
                                     <GridViewColumn HeaderStringFormat="" Width="65" DisplayMemberBinding="{Binding Port}">
-                                        <GridViewColumnHeader Tag="Port" Click="lv_auth_Click" Content="Port"/>
+                                        <GridViewColumnHeader Tag="Port" Content="Port"/>
                                     </GridViewColumn>
                                     <GridViewColumn HeaderStringFormat="" Width="70" DisplayMemberBinding="{Binding Type}">
-                                        <GridViewColumnHeader Tag="Type" Click="lv_auth_Click" Content="Type"/>
+                                        <GridViewColumnHeader Tag="Type" Content="Type"/>
                                     </GridViewColumn>
                                     <GridViewColumn Width="60" DisplayMemberBinding="{Binding Ping}">
-                                        <GridViewColumnHeader Tag="Ping" Click="lv_auth_Click" Content="Ping"/>
+                                        <GridViewColumnHeader Tag="Ping" Content="Ping"/>
                                     </GridViewColumn>
                                 </GridView>
                             </ListView.View>
@@ -701,10 +701,10 @@
                                             <ListView.View>
                                                 <GridView>
                                                     <GridViewColumn HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
-                                                        <GridViewColumnHeader Tag="Name" Click="lv_auth_Click" Content="Image Name"/>
+                                                        <GridViewColumnHeader Tag="Name" Content="Image Name"/>
                                                     </GridViewColumn>
                                                     <GridViewColumn HeaderStringFormat=""  DisplayMemberBinding="{Binding Path}">
-                                                        <GridViewColumnHeader Tag="Path" Click="lv_auth_Click" Content="Path"/>
+                                                        <GridViewColumnHeader Tag="Path" Content="Path"/>
                                                     </GridViewColumn>
                                                 </GridView>
                                             </ListView.View>

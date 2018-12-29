@@ -67,17 +67,15 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void MoveAccount(Account acc,int steps)
         {
-            if(Accounts.Contains(acc))
+            if(Accounts.Contains(acc)&& Accounts.Count>1)
             {
                 int index = Accounts.IndexOf(acc);
-                int newindex = index + steps;
-                if (newindex > Accounts.Count)
+                int newindex = index + (steps*-1);
+                if (newindex > Accounts.Count-1)
                     newindex -= Accounts.Count;
                 if (newindex < 0)
                     newindex += Accounts.Count;
-                Accounts.Insert(newindex,acc);
-                Accounts.RemoveAt(index);
-
+                Accounts.Move(index,newindex);
             }
         }
 
