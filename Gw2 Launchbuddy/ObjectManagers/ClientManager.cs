@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.ComponentModel;
 using Gw2_Launchbuddy;
+using System.Windows.Threading;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -33,13 +34,23 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             Client client = sender as Client;
             Console.WriteLine(client.account.Nickname + " status changed to: " + client.Status + " = " + ((int)client.Status).ToString());
-            if (ActiveClients.Contains(client) && !(client.Status < ActiveStatus_Threshold))
+            if (ActiveClients.Contains(client) && client.Status < ActiveStatus_Threshold)
             {
-                ActiveClients.Remove(client);
+                Application.Current.Dispatcher.BeginInvoke(
+                DispatcherPriority.Background,
+                  new Action(() =>
+                  {
+                      ActiveClients.Remove(client);
+                  }));
             }
             if (!ActiveClients.Contains(client) && (client.Status >= ActiveStatus_Threshold))
             {
-                ActiveClients.Add(client);
+                Application.Current.Dispatcher.BeginInvoke(
+                DispatcherPriority.Background,
+                  new Action(() =>
+                  {
+                      ActiveClients.Add(client);
+                  }));
                 //SaveActiveClients();
             }          
         }
@@ -92,6 +103,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public Process Process = new Process();
         public event EventHandler StatusChanged;
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public Account Account { set {} get { return account; } }
 
         protected virtual void OnStatusChanged(EventArgs e)
         {
@@ -149,13 +162,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public void Close()
         {
             //May need more gracefully close function
-            if (Process.Responding)
-                Process.Close();
-            else
-            {
-                Resume();
-                Process.Close();
-            }
+            Process.Kill();
         }
 
 

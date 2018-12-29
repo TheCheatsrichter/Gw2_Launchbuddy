@@ -588,7 +588,10 @@ namespace Gw2_Launchbuddy
         }
         private void bt_launch_Click(object sender, RoutedEventArgs e)
         {
-            //myWindow.WindowState = WindowState.Minimized;
+            if (EnviromentManager.LBUseClientGUI) EnviromentManager.LBInstanceGUI.Show();
+            if(EnviromentManager.LBUseLoadingGUI) EnviromentManager.LBLoadingGUI.Show();
+
+
             if (lv_accs.SelectedItem == null)
             {
                 tab_home.Focus();

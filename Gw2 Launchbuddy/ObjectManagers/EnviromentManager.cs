@@ -21,6 +21,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static string LBActiveClientsPath = LBAppdataPath + "lbac.txt";
         public static string LBAccountPath = LBAppdataPath + "lb_acc.bin";
         public static string LBIconsPath = LBAppdataPath + "Icons\\";
+        public static bool LBUseClientGUI = Properties.Settings.Default.useinstancegui;
+        public static bool LBUseLoadingGUI = Properties.Settings.Default.useloadingui;
+
+        public static GUI_ApplicationManager LBInstanceGUI = new GUI_ApplicationManager();
+        public static LoadingScreen LBLoadingGUI = new LoadingScreen();
 
         public static string GwAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\";
         public static string GwClientXmlPath;

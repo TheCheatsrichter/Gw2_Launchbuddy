@@ -33,13 +33,14 @@ namespace Gw2_Launchbuddy
         private void lv_gfx_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var client=lv_instances.SelectedItem as Client;
-            client.Focus();
+            if(client!=null)client.Focus();
         }
 
         private void bt_closeinstance_Click(object sender, RoutedEventArgs e)
         {
             var client = (sender as Button).DataContext as Client;
             client.Close();
+            lv_instances.ItemsSource = ClientManager.ActiveClients;
         }
 
         private void bt_maxmin_Click(object sender, RoutedEventArgs e)

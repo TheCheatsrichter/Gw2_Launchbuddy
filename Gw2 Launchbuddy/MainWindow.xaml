@@ -398,8 +398,8 @@
                         <DockPanel DockPanel.Dock="Left" MinWidth="120" Background="LightGray" LastChildFill="True">
                             <StackPanel DockPanel.Dock="Bottom">
                                 <Button x:Name="bt_accadd" Content="Add"  Click="bt_accadd_Click" />
-                                <Button x:Name="bt_accclone" Content="Clone" Click="bt_accclone_Click"   />
                                 <StackPanel x:Name="sp_acclistbuttons"  IsEnabled="False">
+                                    <Button x:Name="bt_accclone" Content="Clone" Click="bt_accclone_Click"   />
                                     <Button x:Name="bt_accrem" Content="Remove" Click="bt_accrem_Click" />
                                     <UniformGrid Height="20" Rows="1">
                                         <Button x:Name="bt_accsortup"  Content="↑"  Click="bt_accsortup_Click" DockPanel.Dock="Left"/>
