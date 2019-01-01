@@ -28,24 +28,6 @@
                         />
         </Storyboard>
 
-        <Storyboard x:Key="anim_musicfadeout">
-            <DoubleAnimation 
-        		Storyboard.TargetName="Cinema_MediaPlayer"
-        		Storyboard.TargetProperty="Volume"
-        		To="0" Duration="0:0:1"
-        		AutoReverse="False"
-                        />
-        </Storyboard>
-
-        <Storyboard x:Key="anim_musicfadein">
-            <DoubleAnimation 
-        		Storyboard.TargetName="Cinema_MediaPlayer"
-        		Storyboard.TargetProperty="Volume"
-        		To="{Binding Value, ElementName=sl_volumecontrol}" Duration="0:0:3"
-        		AutoReverse="False"
-                        />
-        </Storyboard>
-
         <EasingDoubleKeyFrame x:Key="Mask_EndPos" KeyTime="0:0:4.9" Value="800">
             <EasingDoubleKeyFrame.EasingFunction>
                 <CubicEase EasingMode="EaseInOut"/>
