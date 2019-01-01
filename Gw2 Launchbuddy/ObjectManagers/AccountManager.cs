@@ -8,6 +8,7 @@ using System.Collections;
 using System.Windows.Media.Imaging;
 using System.Drawing;
 using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -87,14 +88,21 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
-        public static void ImportAccounts()
-        {
-            //Import accounts
-        }
-
         public static void SaveAccounts()
         {
-            //Import accounts
+
+            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(Accounts.GetType());
+            FileStream file = File.Create(EnviromentManager.LBAccPath);
+            writer.Serialize(file, Accounts);
+            file.Close();
+
+        }
+        public static void ImportAccounts()
+        {
+            Stream xmlInputStream = File.OpenRead(EnviromentManager.LBAccPath);
+            XmlSerializer deserializer = new XmlSerializer(typeof(ObservableCollection<Account>));
+            Accounts = (ObservableCollection<Account>)deserializer.Deserialize(xmlInputStream);
+            xmlInputStream.Close();
         }
 
         public static bool IsValidEmail(string inp)
@@ -114,6 +122,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
     public class Account
     {
         public string Nickname { get; set; }
+        [XmlIgnore]
         public bool IsEnabled = false;
         public AccountSettings Settings { get; set; }
 
@@ -136,6 +145,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
+        private Account() { }
+
         public Account(string nickname)
         {
             CreateAccount(nickname);
@@ -146,6 +157,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             CreateAccount(nickname);
         }
 
+        [XmlIgnore]
         public Client Client { get { return ClientManager.Clients.FirstOrDefault(c => c.account == this); } }
     }
 
@@ -156,8 +168,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public Arguments Arguments { get; set; }
         public GFXConfig GFXFile { get; set; }
         public ObservableCollection<string> DLLs { get; set; }
-
         private Icon icon;
+
 
         protected void OnPropertyChanged(string name)
         {
@@ -176,16 +188,21 @@ namespace Gw2_Launchbuddy.ObjectManagers
         }
 
         public Icon Icon { get { return icon; } set { icon = value; OnPropertyChanged("Icon"); } }
+        [XmlIgnore]
         public ObservableCollection<Icon> Icons { get { return IconManager.Icons; } }
 
+        public string enc_email=null;
+        public string enc_password=null;
 
-        private string enc_email=null;
-        private string enc_password=null;
+        [XmlIgnore]
         private AES Cryptor = new AES();
 
+        [XmlIgnore]
         public string Email { set { enc_email = Cryptor.Encrypt(value); } get { return Cryptor.Decrypt(enc_email); } }
+        [XmlIgnore]
         public string Password { set { enc_password = Cryptor.Encrypt(value); } get { return Cryptor.Decrypt(enc_password); } }
 
+        [XmlIgnore]
         public string UI_Email
         {
             get
@@ -195,8 +212,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             set { }
         }
-        public string UI_Password { get { return "***************"; } set{}}
 
+        [XmlIgnore]
+        public string UI_Password { get { return "***************"; } set{}}
 
         public AccountSettings GetClone()
         {

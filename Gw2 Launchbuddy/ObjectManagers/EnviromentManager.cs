@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
 using System.Net;
+using System.Reflection;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -21,6 +22,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static string LBActiveClientsPath = LBAppdataPath + "lbac.txt";
         public static string LBAccountPath = LBAppdataPath + "lb_acc.bin";
         public static string LBIconsPath = LBAppdataPath + "Icons\\";
+        public static string LBAccPath = LBAppdataPath + "Accs.xml";
+
         public static bool LBUseClientGUI = Properties.Settings.Default.useinstancegui;
         public static bool LBUseLoadingGUI = Properties.Settings.Default.useloadingui;
 
@@ -44,6 +47,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             VersionSwitcher.DeleteUpdater();
 
+            DirectorySetup();
+
             LoadGwClientInfo();
             CheckGwClientVersion();
             VersionSwitcher.CheckForUpdate();
@@ -52,6 +57,23 @@ namespace Gw2_Launchbuddy.ObjectManagers
             ClientManager.ImportActiveClients();
             CrashAnalyzer.ReadCrashLogs();
             IconManager.Init();
+        }
+
+        private static void DirectorySetup()
+        {
+            PropertyInfo[] props = typeof(EnviromentManager).GetProperties(BindingFlags.Public);
+
+            foreach(PropertyInfo prop in props.Where(p=>p.PropertyType== typeof(string)))
+            {
+                object value=null;
+                if (File.GetAttributes(prop.GetValue(value) as string).HasFlag(FileAttributes.Directory))
+                {
+                    if(!Directory.Exists(prop.GetValue(value) as string))
+                    {
+                        Directory.CreateDirectory(prop.GetValue(value) as string);
+                    }
+                }
+            }
         }
 
         public static void LoadGwClientInfo()

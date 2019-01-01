@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace Gw2_Launchbuddy
 {
@@ -189,6 +190,7 @@ namespace Gw2_Launchbuddy
         public string OldValue { set; get; }
         public List<string> Options = new List<string>();
 
+        [XmlIgnore]
         public IEnumerable<string> IEOptions
         {
             set { IEOptions = value; }

@@ -377,8 +377,8 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" ToolTip="{Binding Path=Client.Status}" >
-                                        <Image Height="32" Source="{Binding Path=Settings.Icon.Image,Mode=TwoWay}" />
-                                        <Image Height="32" Source="{Binding Path=Client.StatusToIcon,Mode=TwoWay}" />
+                                        <Image Height="32" Source="{Binding Path=Settings.Icon.Image}" />
+                                        <Image Height="32" Source="{Binding Path=Client.StatusToIcon}" />
                                         <Label Content="{Binding Path=Nickname}" BorderThickness="0" Margin="0,2,0,0" FontSize="18" FontWeight="Bold"/>
                                     </StackPanel>
                                 </DataTemplate>
@@ -405,7 +405,8 @@
                                         <Button x:Name="bt_accsortup"  Content="↑"  Click="bt_accsortup_Click" DockPanel.Dock="Left"/>
                                         <Button x:Name="bt_accsortdown"  Content="↓" Click="bt_accsortdown_Click" DockPanel.Dock="Right"/>
                                     </UniformGrid>
-                                    <Button x:Name="bt_accsave" Content="Save" />
+                                    <Button x:Name="bt_accsave" Content="Save" Click="bt_accsave_Click" />
+                                    <Button x:Name="bt_accload" Content="Load" Click="bt_accload_Click" Visibility="Collapsed"/>
                                 </StackPanel>
                             </StackPanel>
 

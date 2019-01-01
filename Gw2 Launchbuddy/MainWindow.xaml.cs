@@ -1228,7 +1228,6 @@ namespace Gw2_Launchbuddy
         private void bt_accsave_Click(object sender, RoutedEventArgs e)
         {
             AccountManager.SaveAccounts();
-            bt_accsave.IsEnabled = false;
         }
 
         private void lv_crashlogs_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1441,6 +1440,12 @@ namespace Gw2_Launchbuddy
             {
                 AccountManager.Clone(AccountManager.EditAccount);
             }
+        }
+
+        private void bt_accload_Click(object sender, RoutedEventArgs e)
+        {
+            AccountManager.ImportAccounts();
+            lv_accssettings.ItemsSource = AccountManager.Accounts;
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

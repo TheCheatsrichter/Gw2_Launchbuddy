@@ -10,19 +10,23 @@ using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using System.Xml.Serialization;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
     public class Icon
     {
         public string Name { set; get; }
-        public BitmapImage Image { set; get; }
+        [XmlIgnore]
+        public BitmapImage Image { set { } get { if (Name != null)return new BitmapImage(new Uri(Name)); return null; } }
 
         public Icon(string name, BitmapImage image)
         {
             Name = name;
             Image = image;
         }
+
+        private Icon() { if(Name!=null)Image = new BitmapImage(new Uri(Name)); }
     }
 
     public static class IconManager

@@ -7,9 +7,10 @@ using System.Collections.ObjectModel;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
+    [Serializable]
     public class Arguments:ObservableCollection<Argument>
     {
-        public Arguments()
+        public Arguments(bool import=false)
         {
             Add(new Argument("-32", "Forces the game to run in 32 bit.",false));
             Add(new Argument("-bmp", "Forces the game to create lossless screenshots as .BMP files. Use for creating high-quality screenshots at the expense of much larger files.", false));
@@ -28,17 +29,21 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Add(new Argument("-maploadinfo", "Shows diagnostic information during map loads, including load percentages and elapsed time.", false));
         }
 
+        private Arguments() { }
+
         public void SetActive(Argument arg,bool active)=>this.First<Argument>(a => a.Flag == arg.Flag).IsActive=active;
         public void SetActive(string arg, bool active) => this.First<Argument>(a => a.Flag == arg).IsActive = active;
 
         public ObservableCollection<Argument> GetActive() => new ObservableCollection<Argument>(this.Where<Argument>(a => a.IsActive));
     }
-
+    [Serializable]
     public class Argument
     {
         public string Flag { get; set; }
         public bool IsActive { get; set; }
         public string Description { get; }
+
+        private Argument() { }
 
         public Argument(string flag,string description,bool active)
         {
