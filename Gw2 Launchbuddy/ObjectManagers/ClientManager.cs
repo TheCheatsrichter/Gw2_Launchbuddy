@@ -271,12 +271,28 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
+        private bool ProcessExists()
+        {
+            try
+            {
+                object res = System.Diagnostics.Process.GetProcessById(Process.Id);
+                return true;
+            }
+            catch
+            {
+                MessageBox.Show("Client " + account.Nickname + " got closed or crashed before a clean Start. Retry started!");
+                return false;
+            }
+        }
+
         public void Launch()
         {
             while (Status < ClientStatus.Running)
             {
                 try
                 {
+                    if(Status > ClientStatus.Created)
+                        if (!ProcessExists()) Status = ClientStatus.None;
                     switch (Status)
                     {
                         case var expression when (Status < ClientStatus.Configured):

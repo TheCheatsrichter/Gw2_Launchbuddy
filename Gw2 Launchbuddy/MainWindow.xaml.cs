@@ -986,6 +986,13 @@ namespace Gw2_Launchbuddy
 
         private void Cinema_Launchaccount_Click(object sender, RoutedEventArgs e)
         {
+            AccountManager.SwitchSelectionAll(false);
+
+            foreach(object acc in Cinema_Accountlist.SelectedItems)
+            {
+                (acc as Account).IsEnabled = true;
+            }
+
             AccountManager.LaunchAccounts();
         }
 
