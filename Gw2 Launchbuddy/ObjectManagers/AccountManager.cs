@@ -126,7 +126,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public bool IsEnabled = false;
         public AccountSettings Settings { get; set; }
 
-        private void CreateAccount(string nickname)
+        private void CreateAccount(string nickname=null)
         {
             if (!AccountManager.Accounts.Any(a => a.Nickname == nickname))
             {
@@ -145,7 +145,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
-        private Account() { }
+        private Account() { CreateAccount(); }
 
         public Account(string nickname)
         {
