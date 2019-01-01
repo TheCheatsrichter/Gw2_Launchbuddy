@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows;
+using Gw2_Launchbuddy.ObjectManagers;
 
 namespace Gw2_Launchbuddy
 {
@@ -26,7 +27,7 @@ namespace Gw2_Launchbuddy
             Release newest_release = new Release();
             foreach (Release release in Releaselist)
             {
-                if (release.Version.CompareTo(Globals.LBVersion) > 0)
+                if (release.Version.CompareTo(EnviromentManager.LBVersion) > 0)
                 {
                     if (release.Version.CompareTo(newest_version) > 0)
                     {

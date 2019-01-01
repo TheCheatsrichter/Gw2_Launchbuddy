@@ -45,7 +45,6 @@ namespace Gw2_Launchbuddy
 
 
         public static ObservableCollection<string> DllCollection= new ObservableCollection<string>();
-        public static string DllConfigPath = Globals.AppDataPath + "DllCollection.txt";
 
 
 
@@ -66,28 +65,6 @@ namespace Gw2_Launchbuddy
                 return DllInjectionResult.InjectionFailed;
             }
 
-            return DllInjectionResult.Success;
-        }
-
-        public static DllInjectionResult InjectAll(uint _procId)
-        {
-            foreach (string sDllPath in DllCollection)
-            {
-                if (!File.Exists(sDllPath))
-                {
-                    return DllInjectionResult.DllNotFound;
-                }
-
-                if (_procId == 0)
-                {
-                    return DllInjectionResult.GameProcessNotFound;
-                }
-
-                if (!bInject(_procId, sDllPath))
-                {
-                    return DllInjectionResult.InjectionFailed;
-                }
-            }
             return DllInjectionResult.Success;
         }
 

@@ -42,7 +42,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             var plugins = new List<T>();
 
-            if (Directory.Exists(path) && !Globals.options.Safe)
+            if (Directory.Exists(path) && !EnviromentManager.LaunchOptions.Safe)
             {
                 var dlls = Directory.GetFiles(path, "*.dll");
 

@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
 using System.Net;
 using System.Reflection;
+using CommandLine;
+
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -18,6 +18,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class EnviromentManager
     {
+        public static Version LBVersion = new Version("1.7.0");
+        public static LaunchOptions LaunchOptions;
+
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
         public static string LBActiveClientsPath = LBAppdataPath + "lbac.txt";
         public static string LBAccountPath = LBAppdataPath + "lb_acc.bin";
@@ -75,6 +78,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 }
             }
         }
+
 
         public static void LoadGwClientInfo()
         {
@@ -178,5 +182,29 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 MessageBox.Show("Please close all running Gw2 game instances to update the game.");
             }
         }
+    }
+
+    public class LaunchOptions
+    {
+        [Option('q', "silent", HelpText = "Run Launchbuddy silently.")]
+        public bool Silent { get; set; }
+
+        [Option("settings", HelpText = "Use Settings.json instead of command line Arguments.")]
+        public bool Settings { get; set; }
+
+        [Option('l', "launch", Separator = ':', HelpText = "Launch with Nicknames of saved accounts. Use : as a separator.")]
+        public IEnumerable<string> Launch { get; set; }
+
+        [Option('m', "minimized", HelpText = "Run Launchbuddy but open minimized.")]
+        public string Minimized { get; set; }
+
+        [Option('s', "safe", HelpText = "Do not load plugins.")]
+        public bool Safe { get; set; }
+
+        [Option('a', "args", Separator = ':', HelpText = "Arguments to use when launching with -launch. Use : as a separator, no arguments with input.")]
+        public IEnumerable<string> Args { get; set; }
+
+        [Option("delaymutex", HelpText = "Delay in miliseconds between mutex close attempts. Higher values increase the time between retries. (Up to 9 retries will be attempted)", Hidden = true)]
+        public int? Delay { get; set; }
     }
 }

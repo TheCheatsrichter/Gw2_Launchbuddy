@@ -43,7 +43,7 @@ namespace Gw2_Launchbuddy
 
         private int reso_x, reso_y;
 
-        private GridViewColumnHeader listViewSortCol = null;
+
 
         public class CinemaImage
         {
@@ -66,10 +66,6 @@ namespace Gw2_Launchbuddy
             try
             {             
                 InitializeComponent();
-                if (!Directory.Exists(Globals.AppDataPath))
-                {
-                    Directory.CreateDirectory(Globals.AppDataPath);
-                }
             }
             catch
             {
@@ -595,7 +591,6 @@ namespace Gw2_Launchbuddy
             }else
             {
                 if (EnviromentManager.LBUseClientGUI) EnviromentManager.LBInstanceGUI.Show();
-                if (EnviromentManager.LBUseLoadingGUI) EnviromentManager.LBLoadingGUI.Show();
                 AccountManager.LaunchAccounts();
             }
         }
@@ -633,8 +628,8 @@ namespace Gw2_Launchbuddy
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Properties.Settings.Default.instance_win_X = Globals.Appmanager.Left;
-            Properties.Settings.Default.instance_win_Y = Globals.Appmanager.Top;
+            Properties.Settings.Default.instance_win_X = EnviromentManager.LBInstanceGUI.Left;
+            Properties.Settings.Default.instance_win_Y = EnviromentManager.LBInstanceGUI.Top;
             Properties.Settings.Default.Save();
             AccountManager.SaveAccounts();
             Environment.Exit(Environment.ExitCode);
@@ -1176,7 +1171,7 @@ namespace Gw2_Launchbuddy
             if (lv_lbversions.SelectedItem != null)
             {
                 Version rl_version = (lv_lbversions.SelectedItem as Release).Version;
-                if (rl_version.CompareTo(Globals.LBVersion) < 0)
+                if (rl_version.CompareTo(EnviromentManager.LBVersion) < 0)
                 {
                     MessageBoxResult win = MessageBox.Show("Usage of older versions of Launchbuddy can corrupt your Launchbuddy data!\n\nAre you sure you want to download V" + rl_version, "Release Download", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                     if (win.ToString() == "No")

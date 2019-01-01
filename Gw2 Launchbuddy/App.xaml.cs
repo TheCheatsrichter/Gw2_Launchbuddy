@@ -22,28 +22,16 @@ namespace Gw2_Launchbuddy
         public static void Main(string[] args)
         {
             AttachConsole(-1);
-            var result = Parser.Default.ParseArguments<Options>(args).WithParsed(options => RunParsed(options));
+            var result = Parser.Default.ParseArguments<LaunchOptions>(args).WithParsed(options => RunParsed(options));
         }
 
-        public static void RunParsed(Options options)
+        public static void RunParsed(LaunchOptions options)
         {
             EnviromentManager.Init();
 
-            Globals.options = options;
+            EnviromentManager.LaunchOptions = options;
 
-            // Load things before MainWindow
-            /*
-            AccountManager.ImportExport.LoadAccountInfo();
-            ClientManager.ClientInfo.LoadClientInfo();
-            */
-            //PluginManager.DoInits();
-            /*
-            foreach (var account in options.Launch)
-                AccountManager.Account(account).IsSelected();
-            foreach(var arg in options.Args)
-                AccountArgumentManager.StopGap.IsSelected("-" + arg, true);
-            */
-            //LaunchManager.Launch();
+            PluginManager.DoInits();
 
             if (!options.Silent)
             {
