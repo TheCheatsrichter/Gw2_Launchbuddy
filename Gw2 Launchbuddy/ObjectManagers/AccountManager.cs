@@ -99,10 +99,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
         }
         public static void ImportAccounts()
         {
-            Stream xmlInputStream = File.OpenRead(EnviromentManager.LBAccPath);
-            XmlSerializer deserializer = new XmlSerializer(typeof(ObservableCollection<Account>));
-            Accounts = (ObservableCollection<Account>)deserializer.Deserialize(xmlInputStream);
-            xmlInputStream.Close();
+            if(File.Exists(EnviromentManager.LBAccPath))
+            {
+                Stream xmlInputStream = File.OpenRead(EnviromentManager.LBAccPath);
+                XmlSerializer deserializer = new XmlSerializer(typeof(ObservableCollection<Account>));
+                Accounts = (ObservableCollection<Account>)deserializer.Deserialize(xmlInputStream);
+                xmlInputStream.Close();
+            }
         }
 
         public static bool IsValidEmail(string inp)

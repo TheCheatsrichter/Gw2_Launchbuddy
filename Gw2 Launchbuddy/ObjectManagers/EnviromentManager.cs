@@ -66,6 +66,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private static void DirectorySetup()
         {
+            if (!Directory.Exists(LBAppdataPath)) Directory.CreateDirectory(LBAppdataPath);
+
             PropertyInfo[] props = typeof(EnviromentManager).GetProperties(BindingFlags.Public);
 
             foreach(PropertyInfo prop in props.Where(p=>p.PropertyType== typeof(string)))
