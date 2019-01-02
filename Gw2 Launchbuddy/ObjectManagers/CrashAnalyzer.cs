@@ -122,6 +122,7 @@ namespace Gw2_Launchbuddy
 
         private static void outdated_client()
         {
+            Unhandled_Launch("-image");
             System.Windows.Forms.MessageBox.Show("The Gw2 Launcher is trying to update!\nPlease wait for completion before you continue.");
         }
 

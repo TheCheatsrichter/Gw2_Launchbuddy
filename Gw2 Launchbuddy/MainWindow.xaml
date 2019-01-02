@@ -473,16 +473,21 @@
                                             <StackPanel>
                                                 <Label Content="Argument List:"/>
                                                 <ListView x:Name="lv_args" ItemsSource="{Binding Path=Arguments}">
+                                                    <ListView.ItemContainerStyle>
+                                                        <Style TargetType="ListViewItem">
+                                                            <EventSetter Event="MouseEnter" Handler="lvitem_argument_MouseEnter" />
+                                                        </Style>
+                                                    </ListView.ItemContainerStyle>
                                                     <ListView.ItemTemplate>
                                                         <DataTemplate>
-                                                            <CheckBox Name="cb_argument" Content="{Binding Flag}" IsChecked="{Binding IsActive}" MouseEnter="cb_argument_MouseEnter" />
+                                                            <CheckBox Name="cb_argument" Content="{Binding Flag}" IsChecked="{Binding IsActive}"/>
                                                         </DataTemplate>
                                                     </ListView.ItemTemplate>
                                                 </ListView>
                                             </StackPanel>
                                             <StackPanel Grid.Column="1">
                                                 <Label x:Name="lab_descr" Content="Description:"/>
-                                                <TextBlock x:Name="textblock_descr" TextWrapping="Wrap" Margin="2,0,0,0"/>
+                                                <TextBlock x:Name="textblock_descr" Background="White" TextWrapping="Wrap" MinHeight="50"/>
                                             </StackPanel>
                                         </Grid>
                                     </Expander>

@@ -41,7 +41,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
     {
         public string Flag { get; set; }
         public bool IsActive { get; set; }
-        public string Description { get; }
+        public string Description { get; set; }
 
         private Argument() { }
 

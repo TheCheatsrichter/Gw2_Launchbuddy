@@ -1300,9 +1300,9 @@ namespace Gw2_Launchbuddy
             AccountManager.Remove(lv_accssettings.SelectedItem as Account);
         }
 
-        private void cb_argument_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        private void lvitem_argument_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            textblock_descr.Text = ((sender as CheckBox).DataContext as Argument).Description;
+            textblock_descr.Text = ((sender as ListViewItem).DataContext as Argument).Description;
         }
 
         private void bt_RemDll_Click(object sender, RoutedEventArgs e)
