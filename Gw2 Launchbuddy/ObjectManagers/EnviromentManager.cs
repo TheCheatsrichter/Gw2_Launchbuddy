@@ -37,6 +37,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static string GwClientXmlPath;
         public static string GwClientVersion;
         public static string GwClientExeName;
+        public static string GwClientExeNameWithoutExtension { get { return Path.GetFileNameWithoutExtension(GwClientExeName); } }
         public static string GwClientPath;
         public static string GwClientExePath { get { return GwClientPath + GwClientExeName; } }
         public static bool? GwClientUpToDate = null;
@@ -46,16 +47,17 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void Init()
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
-            VersionSwitcher.DeleteUpdater();
-
+            //Path Setup
             DirectorySetup();
-
             LoadGwClientInfo();
             CheckGwClientVersion();
+
+            //Updater Network Protocol
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            VersionSwitcher.DeleteUpdater();
             VersionSwitcher.CheckForUpdate();
 
+            //Account Import Export
             AccountManager.ImportAccounts();
             ClientManager.ImportActiveClients();
             CrashAnalyzer.ReadCrashLogs();

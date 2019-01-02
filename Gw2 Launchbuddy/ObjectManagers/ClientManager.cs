@@ -18,7 +18,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class ClientManager
     {
-        private static string filepath = "gw2lb_ac.txt"; //Change this to Appdata Lb folder
         public static Client.ClientStatus ActiveStatus_Threshold = Client.ClientStatus.Running;
 
         public static ObservableCollection<Client> Clients = new ObservableCollection<Client>();
@@ -50,8 +49,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
                   new Action(() =>
                   {
                       ActiveClients.Add(client);
+                      SaveActiveClients();
                   }));
-                //SaveActiveClients();
             }          
         }
 
@@ -59,9 +58,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             //Saving all active clients to a file within the Appdata Lb folder, rather than registry, to minimize errors by privileges
             //Format:"Nickname,Client.Status,Client.Process.Id,Client.Process.StartTime
-            if (File.Exists(filepath))
-                File.Delete(filepath);
-            var filewriter = File.AppendText(filepath);
+            if (File.Exists(EnviromentManager.LBActiveClientsPath))
+                File.Delete(EnviromentManager.LBActiveClientsPath);
+            var filewriter = File.AppendText(EnviromentManager.LBActiveClientsPath);
             foreach (Client client in ActiveClients)
             {
                 filewriter.WriteLine(client.account.Nickname + "," + (int)client.Status + "," + client.Process.Id + "," + client.Process.StartTime.ToString());
@@ -69,29 +68,54 @@ namespace Gw2_Launchbuddy.ObjectManagers
             filewriter.Close();
         }
 
+        private static bool SearchForeignClients()
+        {
+            foreach (Process pro in Process.GetProcessesByName(EnviromentManager.GwClientExeNameWithoutExtension))
+            {
+                if (ActiveClients.Where<Client>(c => c.Process.Id == pro.Id).Count<Client>() == 0)
+                {
+                    MessageBox.Show("A Guild Wars 2 instance has been found which was not launched by Launchbuddy.\n Please close the application to avoid unexpected behavior.");
+                    return false;
+                }
+            }
+            return true;
+        }
+
         public static bool ImportActiveClients()
         {
-            if (File.Exists(filepath))
+            if (File.Exists(EnviromentManager.LBActiveClientsPath))
             {
-                var lines_client = File.ReadLines(filepath);
+                var lines_client = File.ReadLines(EnviromentManager.LBActiveClientsPath);
                 foreach (string line in lines_client)
                 {
                     Account acc = AccountManager.Accounts.First(a => a.Nickname == line.Split(',')[0]);
-                    Process pro = Process.GetProcessById(Int32.Parse(line.Split(',')[2]));
+                    Process pro;
+                    try
+                    {
+                        pro = Process.GetProcessById(Int32.Parse(line.Split(',')[2]));
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                    
                     if (pro != null)
                     {
                         if (pro.StartTime.ToString() == line.Split(',')[3])
                         {
-                            acc.Client.Process = pro;
+                            Client.ClientStatus status = (Client.ClientStatus)Int32.Parse(line.Split(',')[1]);
+                            acc.Client.SetProcess(pro,status);
+                            if (status.HasFlag(Client.ClientStatus.Running)) ActiveClients.Add(acc.Client);
                         }
                         else
                         {
                             continue;
                         }
-                        acc.Client.Status = (Client.ClientStatus)Int32.Parse(line.Split(',')[1]);
                     }
                 }
             }
+            SearchForeignClients();
+
             return true;
         }
     }
@@ -151,6 +175,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 OnStatusChanged(EventArgs.Empty);
             }
             get { return status; }
+        }
+
+        public void SetProcess(Process pro, ClientStatus prostatus)
+        {
+            Process = pro;
+            Process.EnableRaisingEvents = true;
+            Process.Exited += OnClientClose;
+            status = status | prostatus;
+            if (prostatus == ClientStatus.None || prostatus == ClientStatus.Closed)
+                status = ClientStatus.None;
         }
 
         public Client(Account acc)
