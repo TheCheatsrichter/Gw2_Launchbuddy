@@ -294,7 +294,15 @@ namespace Gw2_Launchbuddy
                 }
                 else
                 {
-                    name = GetHandleName(handleInfo, hProcess);
+                    try
+                    {
+                        name = GetHandleName(handleInfo, hProcess);
+                    }
+                    catch (OutOfMemoryException e)
+                    {
+                        return success = false;
+                    }
+                    
                 }
 
                 //if (Regex.IsMatch(name, @"local\.dat$", RegexOptions.IgnoreCase))
@@ -509,16 +517,9 @@ namespace Gw2_Launchbuddy
             // Setup buffer to store unicode string
             int bufferSize = GetHandleNameLength(handle);
             IntPtr pStringBuffer;
-            try
-            {
-                // Allocate unmanaged memory to store name
-                pStringBuffer = Marshal.AllocHGlobal(bufferSize);
-            }
-            catch(System.OutOfMemoryException e)
-            {
-                MessageBox.Show("OutOfMemory Exception in GetHandleName!\nBuffersize= "+bufferSize.ToString()+"\n"+e.Message);
-                return String.Empty;
-            }
+
+            // Allocate unmanaged memory to store name
+            pStringBuffer = Marshal.AllocHGlobal(bufferSize);
 
 
             // Query to fill string buffer with name
@@ -550,8 +551,7 @@ namespace Gw2_Launchbuddy
             NtQueryObject(handle, OBJECT_INFORMATION_CLASS.ObjectBasicInformation, pInfoBuffer, infoBufferSize, out infoBufferSize);
 
             // Map memory to structure
-            OBJECT_BASIC_INFORMATION objInfo =
-                (OBJECT_BASIC_INFORMATION)Marshal.PtrToStructure(pInfoBuffer, typeof(OBJECT_BASIC_INFORMATION));
+            OBJECT_BASIC_INFORMATION objInfo =(OBJECT_BASIC_INFORMATION)Marshal.PtrToStructure(pInfoBuffer, typeof(OBJECT_BASIC_INFORMATION));
 
             Marshal.FreeHGlobal(pInfoBuffer);   //release
 

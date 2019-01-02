@@ -137,7 +137,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Injected = 0x01 << 2,
             MutexClosed = 0x01 << 3,
             Running = 0x01 << 4,
-            Closed = 0x01 << 5
+            Closed = 0x01 << 5,
+            Crash= 0x01 << 6
         };
 
         public ClientStatus Status
@@ -280,7 +281,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             catch
             {
-                MessageBox.Show("Client " + account.Nickname + " got closed or crashed before a clean Start. Retry started!");
                 return false;
             }
         }
@@ -291,8 +291,21 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 try
                 {
+                    //Check if it crashed/closed in between a step
                     if(Status > ClientStatus.Created)
-                        if (!ProcessExists()) Status = ClientStatus.None;
+                        if (!ProcessExists())
+                        {
+                            MessageBoxResult win = MessageBox.Show("Client " + account.Nickname + " got closed or crashed before a clean Start. Do you want to retry to start this Client?", "Client Retry", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                            if (win.ToString() == "Yes")
+                            {
+                                Status = ClientStatus.None;
+                            }
+                            else
+                            {
+                                Status = ClientStatus.Crash;
+                            }
+                        }
+
                     switch (Status)
                     {
                         case var expression when (Status < ClientStatus.Configured):
