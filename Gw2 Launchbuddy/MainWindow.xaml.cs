@@ -1339,7 +1339,7 @@ namespace Gw2_Launchbuddy
         private void tb_email_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
             string email = tb_email.Text;
-            if (!Regex.IsMatch(email, @"([^\s]).+@([^\s])[^\.]+(\..+)") && email.Contains('*') && email != null)
+            if (!Regex.IsMatch(email, @"([^\s]).+@([^\s])[^\.]+(\..+)") && email != "" || email.Contains('*') )
             {
                 MessageBox.Show("Invalid email "+tb_email.Text+". Leave blank to deactivate.");
                 tb_email.SelectAll();
@@ -1457,7 +1457,7 @@ namespace Gw2_Launchbuddy
             serverthread.Start();
         }
 
-        private void tab_options_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void tab_home_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             lv_accs.ItemsSource = null;
             lv_accs.ItemsSource = AccountManager.Accounts;

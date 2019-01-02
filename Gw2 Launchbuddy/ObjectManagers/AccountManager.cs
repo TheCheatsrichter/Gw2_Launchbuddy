@@ -210,8 +210,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             get
             {
-                if (Email == null || Email =="") return "";
-                return Email.Substring(0, 2) + "*****@****." + Email.Split('.')[1];
+                try
+                {
+                    return Email.Substring(0, 2) + "*****@****." + Email.Split('.')[1];
+                }
+                catch
+                {
+                    return "";
+                }
             }
             set { }
         }

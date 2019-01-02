@@ -307,8 +307,8 @@
                 </Button>
             </Grid>
 
-            <TabControl x:Name="tab_options" Grid.Row="0" TabStripPlacement="Left" BorderBrush="White" Background="GhostWhite" SelectionChanged="tab_options_SelectionChanged">
-                <TabItem x:Name="tab_home">
+            <TabControl x:Name="tab_options" Grid.Row="0" TabStripPlacement="Left" BorderBrush="White" Background="GhostWhite">
+                <TabItem x:Name="tab_home" MouseEnter="tab_home_MouseEnter">
                     <TabItem.Header>
                         <StackPanel>
                             <Image Height="20" Source="Resources/Icons/home.png"/>
