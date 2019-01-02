@@ -380,6 +380,9 @@
     <Resource Include="Resources\Icons\Classes\c_spellbreaker.png" />
     <Resource Include="Resources\Icons\Classes\c_tempest.png" />
     <Resource Include="Resources\Icons\Classes\c_weaver.png" />
+    <Resource Include="Resources\Icons\injection.png" />
+    <Resource Include="Resources\Icons\account.png" />
+    <Resource Include="Resources\Icons\picture.png" />
     <Content Include="Resources\Update Helper.exe" />
   </ItemGroup>
   <ItemGroup>

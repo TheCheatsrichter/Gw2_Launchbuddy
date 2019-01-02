@@ -116,7 +116,7 @@
             <Setter Property="TextBlock.Foreground" Value="White"/>
             <Setter Property="Background" Value="Black"/>
         </Style>
-
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
 
     </Window.Resources>
 
@@ -307,7 +307,7 @@
                 </Button>
             </Grid>
 
-            <TabControl x:Name="tab_options" Grid.Row="0" TabStripPlacement="Left" BorderBrush="White" Background="GhostWhite">
+            <TabControl x:Name="tab_options" Grid.Row="0" TabStripPlacement="Left" BorderBrush="White" Background="GhostWhite" SelectionChanged="tab_options_SelectionChanged">
                 <TabItem x:Name="tab_home">
                     <TabItem.Header>
                         <StackPanel>
@@ -364,9 +364,12 @@
                             </ListView.ItemContainerStyle>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <DockPanel ToolTip="{Binding Path=Client.Status}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                                    <DockPanel ToolTip="{Binding Path=Client.Status}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" LastChildFill="False" >
                                         <Image Height="32" Source="{Binding Path=Settings.Icon.Image}" DockPanel.Dock="Left"/>
                                         <Image Height="32" Source="{Binding Path=Client.StatusToIcon}" DockPanel.Dock="Right"/>
+                                        <Image Height="32" Source="Resources/Icons/settings.png" Visibility="{Binding Path=Settings.HasArguments, Converter={StaticResource BoolToVis}}" DockPanel.Dock="Right"/>
+                                        <Image Height="32" Source="Resources/Icons/injection.png" Visibility="{Binding Path=Settings.HasDlls, Converter={StaticResource BoolToVis}}" DockPanel.Dock="Right"/>
+                                        <Image Height="32" Source="Resources/Icons/account.png" Visibility="{Binding Path=Settings.HasLoginCredentials, Converter={StaticResource BoolToVis}}" DockPanel.Dock="Right"/>
                                         <Label Content="{Binding Path=Nickname}" BorderThickness="0" Margin="0,2,0,0" FontSize="18" FontWeight="Bold"/>
                                     </DockPanel>
                                 </DataTemplate>
@@ -423,17 +426,29 @@
                                     <ImageBrush ImageSource="{Binding Path=Icon.Image}" Opacity="0.03"/>
                                 </ScrollViewer.Background>
                                 <StackPanel>
-                                    <Expander Header="Login Credentials">
+                                    <Expander>
+                                        <Expander.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="Resources/Icons/account.png" Height="22"/>
+                                                <Label Style="{StaticResource H2}">Login Credentials</Label>
+                                            </StackPanel>
+                                        </Expander.Header>
                                         <WrapPanel Grid.ColumnSpan="5" Grid.Row="2" Grid.RowSpan="2">
                                             <StackPanel Orientation="Horizontal" >
-                                                <Label x:Name="lab_email" Content="Email:"  d:LayoutOverrides="Width" VerticalAlignment="Center"/>
+                                                <Label x:Name="lab_email" Content="Email:"  d:LayoutOverrides="Width" VerticalAlignment="Center" FontWeight="Bold"/>
                                                 <TextBox x:Name="tb_email" Height="23" MinWidth="150" LostKeyboardFocus="tb_email_LostKeyboardFocus" Text="{Binding Path=UI_Email}"/>
-                                                <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left"  VerticalAlignment="Center" IsEnabled="False" Height="26" Width="62" Grid.Row="2" Grid.Column="1" />
+                                                <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left"  VerticalAlignment="Center" IsEnabled="False" Height="26" Width="62" Grid.Row="2" Grid.Column="1" FontWeight="Bold" />
                                                 <PasswordBox x:Name="tb_passw" Height="23" MinWidth="150" LostKeyboardFocus="tb_passw_LostKeyboardFocus" />
                                             </StackPanel>
                                         </WrapPanel>
                                     </Expander>
-                                    <Expander Header="Icon">
+                                    <Expander >
+                                        <Expander.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="Resources/Icons/picture.png" Height="22"/>
+                                                <Label Style="{StaticResource H2}">Icon</Label>
+                                            </StackPanel>
+                                        </Expander.Header>
                                         <StackPanel>
                                             <DockPanel>
                                                 <ListView Name="lv_accicon" ItemsSource="{Binding Path=Icons}" MinWidth="256" MaxHeight="400" SelectionChanged="lv_accicon_SelectionChanged">
@@ -449,7 +464,7 @@
                                                     </ListView.ItemTemplate>
                                                 </ListView>
                                                 <StackPanel DockPanel.Dock="Right">
-                                                    <Label Content="Current Icon:-"/>
+                                                    <Label Content="Current Icon:-" Style="{StaticResource H3}"/>
                                                     <Image MaxHeight="72" Source="{Binding Path=Icon.Image}"/>
                                                 </StackPanel>
                                             </DockPanel>
@@ -464,14 +479,20 @@
                                             </StackPanel>
                                         </StackPanel>
                                     </Expander>
-                                    <Expander Header="Arguments">
+                                    <Expander >
+                                        <Expander.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="Resources/Icons/settings.png" Height="22"/>
+                                                <Label Style="{StaticResource H2}">Arguments</Label>
+                                            </StackPanel>
+                                        </Expander.Header>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="50*"/>
                                                 <ColumnDefinition Width="50*"/>
                                             </Grid.ColumnDefinitions>
                                             <StackPanel>
-                                                <Label Content="Argument List:"/>
+                                                <Label Content="Arguments:" Style="{StaticResource H3}"/>
                                                 <ListView x:Name="lv_args" ItemsSource="{Binding Path=Arguments}">
                                                     <ListView.ItemContainerStyle>
                                                         <Style TargetType="ListViewItem">
@@ -486,12 +507,18 @@
                                                 </ListView>
                                             </StackPanel>
                                             <StackPanel Grid.Column="1">
-                                                <Label x:Name="lab_descr" Content="Description:"/>
+                                                <Label x:Name="lab_descr" Content="Description:" Style="{StaticResource H3}"/>
                                                 <TextBlock x:Name="textblock_descr" Background="White" TextWrapping="Wrap" MinHeight="50"/>
                                             </StackPanel>
                                         </Grid>
                                     </Expander>
-                                    <Expander Header="Graphic Settings">
+                                    <Expander>
+                                        <Expander.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="Resources/Icons/gpu.png" Height="22"/>
+                                                <Label Style="{StaticResource H2}">Graphic Configuration</Label>
+                                            </StackPanel>
+                                        </Expander.Header>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="50*"/>
@@ -503,7 +530,7 @@
                                                 <RowDefinition Height="30"/>
                                             </Grid.RowDefinitions>
 
-                                            <Label Content="GFX Configurator" Style="{StaticResource H1}"/>
+                                            <Label Content="GFX Configurator" Style="{StaticResource H2}"/>
                                             <DockPanel Grid.Row="2" Margin="0,5,0,0" Grid.ColumnSpan="2" LastChildFill="False">
                                                 <!--Button x:Name="bt_applygfx" DockPanel.Dock="Right" Width="200" Content="Apply as Default" Click="bt_applygfx_Click" ToolTip="Set the current configuration to your default graphic configuration."/-->
                                                 <Button x:Name="bt_loadgfx"  DockPanel.Dock="Left" Content="Import Config"  Width="100" Click="bt_loadgfx_Click" Margin="0,0,5,0" ToolTip="Load a saved graphic configuration from your system."/>
@@ -529,7 +556,13 @@
                                             <Button ToolTip="Configure your ingame graphic settings or create a graphic configuration file for a specific account" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
                                         </Grid>
                                     </Expander>
-                                    <Expander Header="3rd Party Plugins">
+                                    <Expander>
+                                        <Expander.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="Resources/Icons/addon.png" Height="22"/>
+                                                <Label Style="{StaticResource H2}">Plugins</Label>
+                                            </StackPanel>
+                                        </Expander.Header>
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="30"/>
@@ -540,7 +573,10 @@
                                                 <ColumnDefinition Width="50*"/>
                                                 <ColumnDefinition Width="50*"/>
                                             </Grid.ColumnDefinitions>
-                                            <Label Content="Injected Software:" Style="{StaticResource H1}"/>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="Resources/Icons/injection.png" Height="18"/>
+                                                <Label Content="Injected Software:" Style="{StaticResource H2}"/>
+                                            </StackPanel>
                                             <ListView x:Name="lv_InjectDlls" Grid.Row="1" Grid.ColumnSpan="2" MinHeight="120" ItemsSource="{Binding Path=DLLs}">
                                             </ListView>
                                             <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right">
@@ -556,7 +592,7 @@
 
                 </TabItem>
 
-                <TabItem>
+                <TabItem Name="tab_server" Initialized="tab_server_Initialized">
                     <TabItem.Header>
                         <StackPanel>
                             <Image Height="20" Source="Resources/Icons/server.png"/>
@@ -917,16 +953,16 @@
                                 </ListView.View>
                             </ListView>
                             <WebBrowser x:Name="wb_releasedescr" Grid.Row="1" Grid.Column="1" Margin="3,0,0,0" />
-                            <DockPanel  Grid.Row="2" Grid.ColumnSpan="2">
+                            <DockPanel  Grid.Row="2" Grid.ColumnSpan="2" LastChildFill="False">
                                 <Button x:Name="bt_fetchlbversions" Margin="3" Content="Check for Updates" DockPanel.Dock="Left" Click="bt_fetchlbversions_Click" ToolTip="Check for Gw2 Launchbuddy updates."/>
-                                <Button x:Name="bt_downloadrelease" Margin="3" Content="Download" Click="bt_downloadrelease_Click" IsEnabled="False" DockPanel.Dock="Right" ToolTip="Download the selected Launchbuddy version."/>
+                                <Button x:Name="bt_downloadrelease" Margin="3" Content="Download" Click="bt_downloadrelease_Click" IsEnabled="False" DockPanel.Dock="Left" ToolTip="Download the selected Launchbuddy version." MinWidth="80" MaxWidth="130"/>
                             </DockPanel>
 
                         </Grid>
                         <Separator Margin="-3,15,0,10"/>
                         <Label Content="Bug Report:" Style="{StaticResource H2}"></Label>
 
-                        <Button x:Name="bt_bugreport" Content="Report a Bug"  Click="bt_bugreport_Click" Height="30"/>
+                        <Button x:Name="bt_bugreport" Content="Report a Bug"  Click="bt_bugreport_Click" Height="30" MaxWidth="100" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                     </StackPanel>
                 </TabItem>
 

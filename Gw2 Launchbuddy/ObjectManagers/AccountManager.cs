@@ -54,12 +54,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void Clone(Account acc)
         {
-            Account newacc = new Account(GenerateName(acc.Nickname+" Clone"),acc);
+            Account newacc = new Account(GenerateName(acc.Nickname + " Clone"), acc);
         }
 
         public static void LaunchAccounts()
         {
-            foreach(Account acc in SelectedAccounts)
+            foreach (Account acc in SelectedAccounts)
             {
                 acc.Client.Launch();
             }
@@ -74,17 +74,17 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static bool HasEntry => Accounts.Count == 0 ? false : true;
 
-        public static void MoveAccount(Account acc,int steps)
+        public static void MoveAccount(Account acc, int steps)
         {
-            if(Accounts.Contains(acc)&& Accounts.Count>1)
+            if (Accounts.Contains(acc) && Accounts.Count > 1)
             {
                 int index = Accounts.IndexOf(acc);
-                int newindex = index + (steps*-1);
-                if (newindex > Accounts.Count-1)
+                int newindex = index + (steps * -1);
+                if (newindex > Accounts.Count - 1)
                     newindex -= Accounts.Count;
                 if (newindex < 0)
                     newindex += Accounts.Count;
-                Accounts.Move(index,newindex);
+                Accounts.Move(index, newindex);
             }
         }
 
@@ -99,7 +99,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         }
         public static void ImportAccounts()
         {
-            if(File.Exists(EnviromentManager.LBAccPath))
+            if (File.Exists(EnviromentManager.LBAccPath))
             {
                 Stream xmlInputStream = File.OpenRead(EnviromentManager.LBAccPath);
                 XmlSerializer deserializer = new XmlSerializer(typeof(ObservableCollection<Account>));
@@ -129,14 +129,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public bool IsEnabled = false;
         public AccountSettings Settings { get; set; }
 
-        private void CreateAccount(string nickname=null)
+        private void CreateAccount(string nickname = null)
         {
             if (!AccountManager.Accounts.Any(a => a.Nickname == nickname))
             {
                 Nickname = nickname;
                 AccountManager.Accounts.Add(this);
                 Client Client = new Client(this);
-                if(Settings==null)
+                if (Settings == null)
                 {
                     Settings = new AccountSettings();
                     Settings.Arguments = new Arguments();
@@ -144,7 +144,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             else
             {
-                MessageBox.Show("Account with Nickname"+nickname+"allready exists!");	
+                MessageBox.Show("Account with Nickname" + nickname + "allready exists!");
             }
         }
 
@@ -186,38 +186,38 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public AccountSettings()
         {
             //Init Defaults if no safefile
-            if(GFXFile==null)GFXFile = GFXManager.LoadFile(EnviromentManager.GwClientXmlPath);
-            if(DLLs==null)DLLs = new ObservableCollection<string>();
+            if (GFXFile == null) GFXFile = GFXManager.LoadFile(EnviromentManager.GwClientXmlPath);
+            if (DLLs == null) DLLs = new ObservableCollection<string>();
         }
 
         public Icon Icon { get { return icon; } set { icon = value; OnPropertyChanged("Icon"); } }
         [XmlIgnore]
         public ObservableCollection<Icon> Icons { get { return IconManager.Icons; } }
 
-        public string enc_email=null;
-        public string enc_password=null;
+        public string enc_email = null;
+        public string enc_password = null;
 
         [XmlIgnore]
         private AES Cryptor = new AES();
 
         [XmlIgnore]
-        public string Email { set { enc_email = Cryptor.Encrypt(value); } get { return Cryptor.Decrypt(enc_email); } }
+        public string Email { set { enc_email = Cryptor.Encrypt(value); if (value == "") enc_email = null; } get { return Cryptor.Decrypt(enc_email); } }
         [XmlIgnore]
-        public string Password { set { enc_password = Cryptor.Encrypt(value); } get { return Cryptor.Decrypt(enc_password); } }
+        public string Password { set {enc_password = Cryptor.Encrypt(value); if (value == "") enc_password = null; } get { return Cryptor.Decrypt(enc_password); } }
 
         [XmlIgnore]
         public string UI_Email
         {
             get
             {
-                if (Email == null) return "";
+                if (Email == null || Email =="") return "";
                 return Email.Substring(0, 2) + "*****@****." + Email.Split('.')[1];
             }
             set { }
         }
 
         [XmlIgnore]
-        public string UI_Password { get { return "***************"; } set{}}
+        public string UI_Password { get { return "***************"; } set { } }
 
         public AccountSettings GetClone()
         {
@@ -226,6 +226,17 @@ namespace Gw2_Launchbuddy.ObjectManagers
             settings.Password = null;
             return settings;
         }
+
+        [XmlIgnore]
+        public bool HasLoginCredentials { get { return Email != null && Password != null; } set { } }
+        [XmlIgnore]
+        public bool HasArguments { get { if (Arguments.Contains(Arguments.FirstOrDefault<Argument>(a => a.IsActive == true))) { return true; } return false; } set { } }
+        [XmlIgnore]
+        public bool HasDlls { get { if (DLLs.Count > 0) { return true; } return false; } set { } }
+
+        //UI Bools
+
+
 
         //Missing stuff (all nullable):
         /*

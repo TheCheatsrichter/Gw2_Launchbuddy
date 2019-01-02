@@ -1447,6 +1447,22 @@ namespace Gw2_Launchbuddy
             lv_accssettings.ItemsSource = AccountManager.Accounts;
         }
 
+        private void tab_server_Initialized(object sender, EventArgs e)
+        {
+            bt_checkservers.Content = "Loading Server List";
+            bt_checkservers.IsEnabled = false;
+
+            Thread serverthread = new Thread(UpdateServerList);
+            serverthread.IsBackground = true;
+            serverthread.Start();
+        }
+
+        private void tab_options_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            lv_accs.ItemsSource = null;
+            lv_accs.ItemsSource = AccountManager.Accounts;
+        }
+
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var endpos = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];

@@ -12,6 +12,7 @@
 
     <SolidColorBrush x:Key="H1_Foreground" Color="#FF2E2E2E"/>
     <SolidColorBrush x:Key="H2_Foreground" Color="#FF494949"/>
+    <SolidColorBrush x:Key="H3_Foreground" Color="#FF494949"/>
     <SolidColorBrush x:Key="Text_Foreground" Color="#FF5B5959"/>
     <SolidColorBrush x:Key="MainText_Foreground" Color="White"/>
 
@@ -152,6 +153,12 @@
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Foreground" Value="{StaticResource H2_Foreground}"/>
         <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <Style x:Key="H3" TargetType="{x:Type Label}">
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{StaticResource H3_Foreground}"/>
+        <Setter Property="FontSize" Value="12"/>
     </Style>
 
     <Style TargetType="{x:Type Label}">

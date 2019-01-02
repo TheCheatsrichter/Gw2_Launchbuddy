@@ -391,6 +391,26 @@ namespace Gw2_Launchbuddy.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap injection {
+            get {
+                object obj = ResourceManager.GetObject("injection", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap injection1 {
+            get {
+                object obj = ResourceManager.GetObject("injection1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Icon ähnlich wie (Symbol).
         /// </summary>
         internal static System.Drawing.Icon launchbuddy {
@@ -556,6 +576,16 @@ namespace Gw2_Launchbuddy.Properties {
         internal static System.Drawing.Bitmap pause {
             get {
                 object obj = ResourceManager.GetObject("pause", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap picture {
+            get {
+                object obj = ResourceManager.GetObject("picture", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

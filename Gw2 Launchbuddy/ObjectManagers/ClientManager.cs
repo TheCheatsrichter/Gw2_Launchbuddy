@@ -88,7 +88,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 var lines_client = File.ReadLines(EnviromentManager.LBActiveClientsPath);
                 foreach (string line in lines_client)
                 {
-                    Account acc = AccountManager.Accounts.First(a => a.Nickname == line.Split(',')[0]);
+                    Account acc;
+                    try
+                    {
+                        acc = AccountManager.Accounts.First(a => a.Nickname == line.Split(',')[0]);
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                    
                     Process pro;
                     try
                     {
@@ -245,7 +254,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             args += "-shareArchive ";
             
             //Add Login Credentials
-            if (account.Settings.Email!=null && account.Settings.Password!=null)
+            if (account.Settings.HasLoginCredentials)
             {
                 args += "-nopatchui -autologin ";
                 args += "-email " + account.Settings.Email+" ";
