@@ -25,6 +25,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Windows;
 
 namespace Gw2_Launchbuddy
 {
@@ -354,7 +355,7 @@ namespace Gw2_Launchbuddy
         /// <returns>Unmanaged IntPtr to the handles (raw data, must be processed)</returns>
         private static IntPtr GetAllHandles()
         {
-            int bufferSize = 0x10000;   //initial buffer size of 65536 bytes (initial estimate)
+            int bufferSize = 0x1000;   //initial buffer size of 65536 bytes (initial estimate)
             int actualSize;             //will store size of actual data written to buffer
 
             //initial allocation
@@ -380,6 +381,7 @@ namespace Gw2_Launchbuddy
                 queryResult = NtQuerySystemInformation(SYSTEM_INFORMATION_CLASS.SystemHandleInformation,
                     pSysInfoBuffer, bufferSize, out actualSize);
             }
+
 
             if (queryResult == NTSTATUS.STATUS_SUCCESS)
             {
@@ -506,9 +508,18 @@ namespace Gw2_Launchbuddy
 
             // Setup buffer to store unicode string
             int bufferSize = GetHandleNameLength(handle);
+            IntPtr pStringBuffer;
+            try
+            {
+                // Allocate unmanaged memory to store name
+                pStringBuffer = Marshal.AllocHGlobal(bufferSize);
+            }
+            catch(System.OutOfMemoryException e)
+            {
+                MessageBox.Show("OutOfMemory Exception in GetHandleName!\nBuffersize= "+bufferSize.ToString()+"\n"+e.Message);
+                return String.Empty;
+            }
 
-            // Allocate unmanaged memory to store name
-            IntPtr pStringBuffer = Marshal.AllocHGlobal(bufferSize);
 
             // Query to fill string buffer with name
             NtQueryObject(handle, OBJECT_INFORMATION_CLASS.ObjectNameInformation, pStringBuffer, bufferSize, out bufferSize);

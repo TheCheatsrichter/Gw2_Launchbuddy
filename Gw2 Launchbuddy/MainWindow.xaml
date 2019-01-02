@@ -315,8 +315,8 @@
                             <Label FontSize="10" Margin="0,-5,0,-7">Home</Label>
                         </StackPanel>
                     </TabItem.Header>
-                    <StackPanel>
-                        <Grid Margin="0,-3,0,0">
+                    <DockPanel>
+                        <Grid Margin="0,-3,0,0" DockPanel.Dock="Top">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="7*"/>
                                 <ColumnDefinition Width="424*"/>
@@ -353,20 +353,26 @@
 
 
                         </Grid>
-                        <Separator Margin="5"/>
-                        <Label Content="Accounts:" Style="{StaticResource H1}"/>
+                        <Separator Margin="5" DockPanel.Dock="Top"/>
+                        <Label Content="Accounts:" Style="{StaticResource H1}" DockPanel.Dock="Top"/>
                         <ListView x:Name="lv_accs" DataContext="{Binding Path=Account}" SelectionChanged="lv_accs_SelectionChanged" SelectionMode="Multiple">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" ToolTip="{Binding Path=Client.Status}" >
-                                        <Image Height="32" Source="{Binding Path=Settings.Icon.Image}" />
-                                        <Image Height="32" Source="{Binding Path=Client.StatusToIcon}" />
+                                    <DockPanel ToolTip="{Binding Path=Client.Status}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                                        <Image Height="32" Source="{Binding Path=Settings.Icon.Image}" DockPanel.Dock="Left"/>
+                                        <Image Height="32" Source="{Binding Path=Client.StatusToIcon}" DockPanel.Dock="Right"/>
                                         <Label Content="{Binding Path=Nickname}" BorderThickness="0" Margin="0,2,0,0" FontSize="18" FontWeight="Bold"/>
-                                    </StackPanel>
+                                    </DockPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                    </StackPanel>
+                    </DockPanel>
                 </TabItem>
 
                 <TabItem >
