@@ -20,57 +20,44 @@
                 </ImageBrush.RelativeTransform>
                 <ImageBrush.Transform>
                     <TransformGroup>
-                        <ScaleTransform ScaleX="1.15" ScaleY="1.4"/>
+                        <ScaleTransform ScaleX="1.15" ScaleY="1.8"/>
                         <SkewTransform/>
                         <RotateTransform/>
-                        <TranslateTransform X="-12" Y="-85"/>
+                        <TranslateTransform X="-10" Y="-150"/>
                     </TransformGroup>
                 </ImageBrush.Transform>
             </ImageBrush>
         </Grid.OpacityMask>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
-            <RowDefinition Height="20" />
             <RowDefinition Height="100*" />
         </Grid.RowDefinitions>
-        <Label Content="Game Instances" FontSize="16" FontStyle="Italic" Foreground="White"/>
-        <Button x:Name="bt_close" Grid.Row="1" BorderThickness="0" Width="50" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="bt_close_Click"  Foreground="White" HorizontalAlignment="Right">
+        <Label Content="Game Instances" FontSize="12" FontStyle="Italic" Foreground="White" VerticalAlignment="Center"/>
+        <Button x:Name="bt_close" Grid.Row="0" BorderThickness="1" Width="45" Margin="2" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="bt_close_Click"  Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" BorderBrush="#FF919191">
             Close
         </Button>
-        <StackPanel Grid.Row="2">
-            <Grid>
-                <ListView x:Name="lv_instances" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2" Grid.Row="1" SelectionChanged="lv_gfx_SelectionChanged" Width="160" Background="Transparent" BorderThickness="0" Height="230">
-                    <ListView.Resources>
-                        <Style TargetType="GridViewColumnHeader">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                        </Style>
-                    </ListView.Resources>
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn>
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <DockPanel Height="50">
-                                            <Image Width="45" Height="45" Source="{Binding Path=Account.Settings.Icon.Image}"></Image>
-                                            <DockPanel>
-                                                <Label Content="{Binding Path=Account.Nickname}" Width="100" FontWeight="Bold" Margin="0,-5,0,0" DockPanel.Dock="Top"/>
-                                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
-                                                    <Button x:Name="bt_maxmin" Click="bt_maxmin_Click" Width="25">
-                                                        <Image Source="Resources/Icons/focus.png" />
-                                                    </Button>
-                                                    <Button x:Name="bt_closeinstance" Click="bt_closeinstance_Click" Width="25">
-                                                        <Image Source="Resources/Icons/close.png" />
-                                                    </Button>
-                                                </StackPanel>
-                                            </DockPanel>
-                                        </DockPanel>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </Grid>
-        </StackPanel>
+
+        <ListView x:Name="lv_instances" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2" Grid.Row="1" SelectionChanged="lv_gfx_SelectionChanged"  Background="Transparent" BorderThickness="0" Margin="2,0" >
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel Height="50" Background="#33FFFFFF" LastChildFill="False">
+                        <Image MaxWidth="45" MaxHeight="45" Source="{Binding Path=Account.Settings.Icon.Image}" DockPanel.Dock="Left"></Image>
+                        <TextBlock Text="{Binding Path=Account.Nickname}" ToolTip="{Binding Path=Account.Nickname}" MaxWidth="120" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Foreground="#FFDDDDDD" DockPanel.Dock="Left" FontSize="18" FontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                        <ToolBar Width="15" DockPanel.Dock="Right" Background="#FF040404" Foreground="White" Header="" HorizontalAlignment="Center">
+                            <Button x:Name="bt_closeinstance" Click="bt_closeinstance_Click" Content="Close"/>
+                            <Button Name="bt_suspend" Content="Suspend" Click="bt_suspend_Click"/>
+                            <Button Name="bt_resume" Content="Resume" Click="bt_resume_Click"/>
+                        </ToolBar>
+                    </DockPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
     </Grid>
 </Window>

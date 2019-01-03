@@ -207,6 +207,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             //May need more gracefully close function
             Process.Kill();
+            Status = ClientStatus.Closed;
         }
 
 

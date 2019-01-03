@@ -58,5 +58,15 @@ namespace Gw2_Launchbuddy
         private void Window_Initialized(object sender, EventArgs e)
         {
         }
+
+        private void bt_suspend_Click(object sender, RoutedEventArgs e)
+        {
+            ((sender as Button).DataContext as Client).Suspend();
+        }
+
+        private void bt_resume_Click(object sender, RoutedEventArgs e)
+        {
+            ((sender as Button).DataContext as Client).Resume();
+        }
     }
 }
