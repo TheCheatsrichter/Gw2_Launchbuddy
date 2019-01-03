@@ -255,7 +255,7 @@ namespace Gw2_Launchbuddy
             {
                 success = true;
             }
-            
+
 
             return success;
         }
@@ -302,7 +302,7 @@ namespace Gw2_Launchbuddy
                     {
                         return success = false;
                     }
-                    
+
                 }
 
                 //if (Regex.IsMatch(name, @"local\.dat$", RegexOptions.IgnoreCase))
@@ -389,8 +389,7 @@ namespace Gw2_Launchbuddy
                 queryResult = NtQuerySystemInformation(SYSTEM_INFORMATION_CLASS.SystemHandleInformation,
                     pSysInfoBuffer, bufferSize, out actualSize);
             }
-
-
+            
             if (queryResult == NTSTATUS.STATUS_SUCCESS)
             {
                 return pSysInfoBuffer; //pSystInfoBuffer will be freed later
@@ -551,7 +550,7 @@ namespace Gw2_Launchbuddy
             NtQueryObject(handle, OBJECT_INFORMATION_CLASS.ObjectBasicInformation, pInfoBuffer, infoBufferSize, out infoBufferSize);
 
             // Map memory to structure
-            OBJECT_BASIC_INFORMATION objInfo =(OBJECT_BASIC_INFORMATION)Marshal.PtrToStructure(pInfoBuffer, typeof(OBJECT_BASIC_INFORMATION));
+            OBJECT_BASIC_INFORMATION objInfo = (OBJECT_BASIC_INFORMATION)Marshal.PtrToStructure(pInfoBuffer, typeof(OBJECT_BASIC_INFORMATION));
 
             Marshal.FreeHGlobal(pInfoBuffer);   //release
 

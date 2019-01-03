@@ -66,7 +66,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             }
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
                         Console.WriteLine(dll + "is not an assemly of expected type");
                     }

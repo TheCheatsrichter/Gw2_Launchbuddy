@@ -37,14 +37,12 @@ namespace Gw2_Launchbuddy
         ///
         ///##########################################
         ///
-        
+
         private bool cinemamode = false;
         private bool slideshowthread_isrunning = false;
 
         private int reso_x, reso_y;
-
-
-
+        
         public class CinemaImage
         {
             public string Name
@@ -64,7 +62,7 @@ namespace Gw2_Launchbuddy
         public MainWindow()
         {
             try
-            {             
+            {
                 InitializeComponent();
             }
             catch
@@ -97,7 +95,6 @@ namespace Gw2_Launchbuddy
             Properties.Settings.Default.counter_launches = 1;
 #endif
 
-
             //Setup
             DonatePopup();
             UIInit();
@@ -110,7 +107,7 @@ namespace Gw2_Launchbuddy
             cinema_setup();
             Mainwin_LoadSetup(); //do this after cinema setup!
 
-            Cinema_Accountlist.ItemsSource= AccountManager.Accounts;
+            Cinema_Accountlist.ItemsSource = AccountManager.Accounts;
             lv_accs.ItemsSource = AccountManager.Accounts;
             lv_accssettings.ItemsSource = AccountManager.Accounts;
             SettingsTabSetup();
@@ -125,13 +122,13 @@ namespace Gw2_Launchbuddy
 
         private void LoadEnviromentUI()
         {
-            lab_version.Content = "Version: "+EnviromentManager.GwClientVersion;
-            lab_path.Content = "Path: "+EnviromentManager.GwClientPath;
+            lab_version.Content = "Version: " + EnviromentManager.GwClientVersion;
+            lab_path.Content = "Path: " + EnviromentManager.GwClientPath;
         }
 
         private void Mainwin_LoadSetup()
         {
-            if (Properties.Settings.Default.mainwin_pos_x >=0 && Properties.Settings.Default.mainwin_pos_y >= 0)
+            if (Properties.Settings.Default.mainwin_pos_x >= 0 && Properties.Settings.Default.mainwin_pos_y >= 0)
             {
                 this.Top = Properties.Settings.Default.mainwin_pos_x;
                 this.Left = Properties.Settings.Default.mainwin_pos_y;
@@ -355,7 +352,7 @@ namespace Gw2_Launchbuddy
                 //Notes: Login frame = 560x300
                 //Test resolutions here!
                 //Only edit width!
-                
+
                 myWindow.Width = 1600;
 
                 myWindow.Height = (int)(myWindow.Width / 16 * 9);
@@ -369,7 +366,7 @@ namespace Gw2_Launchbuddy
                 double windowHeight = this.Height;
                 this.Left = (screenWidth / 2) - (windowWidth / 2);
                 this.Top = (screenHeight / 2) - (windowHeight / 2);
-                
+
 
                 //Setting up the Login Window Location
                 Canvas.SetTop(Canvas_login, reso_y - (reso_y / 2));
@@ -472,11 +469,12 @@ namespace Gw2_Launchbuddy
 
         private void checkversion()
         {
-            if(EnviromentManager.GwClientUpToDate==false)
+            if (EnviromentManager.GwClientUpToDate == false)
             {
                 lab_version.Content = "Build: " + EnviromentManager.GwClientVersion + " (outdated)";
                 lab_version.Foreground = new SolidColorBrush(Colors.Red);
-            }else
+            }
+            else
             {
                 lab_version.Content = "Build: " + EnviromentManager.GwClientVersion;
                 lab_version.Foreground = new SolidColorBrush(Colors.Green);
@@ -549,7 +547,7 @@ namespace Gw2_Launchbuddy
         private void lv_assets_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // UI Handling for selected Asset Server
-            if (lv_assets.SelectedItem!=null)
+            if (lv_assets.SelectedItem != null)
             {
                 ServerManager.SelectedAssetserver = (Server)lv_assets.SelectedItem;
                 tb_assetsport.Text = ServerManager.SelectedAssetserver.Port;
@@ -567,7 +565,7 @@ namespace Gw2_Launchbuddy
         private void lv_auth_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // UI Handling for selected Authentication Server
-            if (lv_auth.SelectedItem!=null)
+            if (lv_auth.SelectedItem != null)
             {
                 ServerManager.SelectedAuthserver = (Server)lv_auth.SelectedItem;
 
@@ -588,7 +586,8 @@ namespace Gw2_Launchbuddy
             {
                 tab_home.Focus();
                 MessageBox.Show("Please select Accounts to launch!");
-            }else
+            }
+            else
             {
                 if (EnviromentManager.LBUseClientGUI) EnviromentManager.LBInstanceGUI.Show();
                 AccountManager.LaunchAccounts();
@@ -982,7 +981,7 @@ namespace Gw2_Launchbuddy
         {
             AccountManager.SwitchSelectionAll(false);
 
-            foreach(object acc in Cinema_Accountlist.SelectedItems)
+            foreach (object acc in Cinema_Accountlist.SelectedItems)
             {
                 (acc as Account).IsEnabled = true;
             }
@@ -1106,7 +1105,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_loadgfx_Click(object sender, RoutedEventArgs e)
         {
-            AccountSettings accsettings= (sender as Button).DataContext as AccountSettings;
+            AccountSettings accsettings = (sender as Button).DataContext as AccountSettings;
             Builders.FileDialog.DefaultExt(".xml")
                 .Filter("XML Files(*.xml)|*.xml")
                 .InitialDirectory(EnviromentManager.GwClientPath)
@@ -1232,7 +1231,7 @@ namespace Gw2_Launchbuddy
         private void lv_crashlogs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Crashlog crashlog = lv_crashlogs.SelectedItem as Crashlog;
-            tblock_crashinfo.Text =  crashlog.Quickinfo;
+            tblock_crashinfo.Text = crashlog.Quickinfo;
             tblock_crashsolutioninfo.Text = crashlog.Solutioninfo;
             bt_fixcrash.IsEnabled = crashlog.IsSolveable;
         }
@@ -1260,7 +1259,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_accadd_Click(object sender, RoutedEventArgs e)
         {
-            Account newacc=AccountManager.CreateEmptyAccount();
+            Account newacc = AccountManager.CreateEmptyAccount();
             lv_accssettings.SelectedItem = newacc;
             tb_accnickname.Focus();
             tb_accnickname.SelectAll();
@@ -1270,7 +1269,7 @@ namespace Gw2_Launchbuddy
         {
             var accs = (sender as ListView).SelectedItems;
             AccountManager.SwitchSelectionAll(false);
-            foreach(Account acc in accs)
+            foreach (Account acc in accs)
             {
                 acc.IsEnabled = true;
             }
@@ -1278,8 +1277,8 @@ namespace Gw2_Launchbuddy
 
         private void lv_accssettings_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var acc=(sender as ListView).SelectedItem as Account;
-            if (acc!=null )
+            var acc = (sender as ListView).SelectedItem as Account;
+            if (acc != null)
             {
                 AccountManager.EditAccount = acc;
                 gr_acceditor.DataContext = AccountManager.EditAccount;
@@ -1324,13 +1323,13 @@ namespace Gw2_Launchbuddy
 
         private void bt_remicon_Click(object sender, RoutedEventArgs e)
         {
-            if(lv_accicon.SelectedItem !=null)
+            if (lv_accicon.SelectedItem != null)
                 IconManager.RemIcon(lv_accicon.SelectedItem as Icon);
         }
 
         private void tb_accnickname_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if(e.Key == System.Windows.Input.Key.Enter)
+            if (e.Key == System.Windows.Input.Key.Enter)
             {
                 sv_accsettings.Focus();
             }
@@ -1339,12 +1338,13 @@ namespace Gw2_Launchbuddy
         private void tb_email_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
             string email = tb_email.Text;
-            if (!Regex.IsMatch(email, @"([^\s]).+@([^\s])[^\.]+(\..+)") && email != "" || email.Contains('*') )
+            if (!Regex.IsMatch(email, @"([^\s]).+@([^\s])[^\.]+(\..+)") && email != "" || email.Contains('*'))
             {
-                MessageBox.Show("Invalid email "+tb_email.Text+". Leave blank to deactivate.");
+                MessageBox.Show("Invalid email " + tb_email.Text + ". Leave blank to deactivate.");
                 tb_email.SelectAll();
                 tb_email.Focus();
-            }else
+            }
+            else
             {
                 AccountSettings sett = (sender as TextBox).DataContext as AccountSettings;
                 sett.Email = (sender as TextBox).Text;
@@ -1353,11 +1353,12 @@ namespace Gw2_Launchbuddy
 
         private void tb_passw_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
-            if (tb_passw.Password.Length >= 8 || tb_passw.Password=="" || tb_passw.Password==null)
+            if (tb_passw.Password.Length >= 8 || tb_passw.Password == "" || tb_passw.Password == null)
             {
                 AccountSettings sett = (sender as PasswordBox).DataContext as AccountSettings;
                 sett.Password = (sender as PasswordBox).Password;
-            }else
+            }
+            else
             {
                 MessageBox.Show("Invalid Password! Leave blank to deactivate.");
                 tb_passw.SelectAll();
@@ -1435,7 +1436,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_accclone_Click(object sender, RoutedEventArgs e)
         {
-            if (AccountManager.EditAccount!=null)
+            if (AccountManager.EditAccount != null)
             {
                 AccountManager.Clone(AccountManager.EditAccount);
             }
