@@ -51,18 +51,9 @@ namespace Update_Helper
                 File.Delete(bakdest);
 
                 //Open Directory
-                new Process { StartInfo = new ProcessStartInfo(dir) }.Start();
+                new Process { StartInfo = new ProcessStartInfo(dest) }.Start();
             }
             catch { }
-
-            //Kill and delete updater (Self)
-            ProcessStartInfo Info = new ProcessStartInfo();
-            Info.Arguments = "/C timeout /T 3 & Del \"" + new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath + "\"";
-            Info.WindowStyle = ProcessWindowStyle.Hidden;
-            Info.CreateNoWindow = true;
-            Info.FileName = "cmd.exe";
-            Process.Start(Info);
-            
         }
     }
 }

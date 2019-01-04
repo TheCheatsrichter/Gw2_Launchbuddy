@@ -1,39 +1,19 @@
-﻿using Gw2_Launchbuddy.Interfaces;
+﻿using Gw2_Launchbuddy.Interfaces.Plugins;
+using Gw2_Launchbuddy.Interfaces.Plugins.Test;
+
 
 namespace TestPlugin
 {
-    public class TestPlugin : ITestPlugin
+    public class TestPlugin : IPluginTest
     {
-        public string Name { get { return "Test Plugin"; } }
-
-        public string Version { get { return "0.0.1"; } }
-
-        /*
-        public void Init()
+        public PluginInfo Plugin => new PluginInfo()
         {
-            MessageBox.Show("Plugin \"Initialized\"!");
-        }
-
-        public void Exit()
-        {
-            MessageBox.Show("Plugin \"Exited\"!");
-        }
-
-        public void Client_Exit()
-        {
-            MessageBox.Show("Client Exited!");
-        }
-
-        public void Client_PostLaunch()
-        {
-            MessageBox.Show("Client Launched!");
-        }
-
-        public void Client_PreLaunch()
-        {
-            MessageBox.Show("Client Pre Launch!");
-        }
-        */
+            Name = "Test Plugin",
+            Version = "0.0.1",
+            Author = "KairuByte",
+            Url = null
+        };
+        
         public void Init()
         {
 
@@ -58,7 +38,5 @@ namespace TestPlugin
         {
 
         }
-
-
     }
 }

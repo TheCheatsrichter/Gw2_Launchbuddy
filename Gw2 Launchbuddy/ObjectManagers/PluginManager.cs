@@ -5,34 +5,35 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Reflection;
-using Gw2_Launchbuddy.Interfaces;
+using Gw2_Launchbuddy.Interfaces.Plugins.Injectable;
+using Gw2_Launchbuddy.Interfaces.Plugins.Test;
 using System.Collections.ObjectModel;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
     public static class PluginManager
     {
-        private static ObservableCollection<ITestPlugin> testPluginCollection { get; set; }
-        public static ReadOnlyObservableCollection<ITestPlugin> TestPluginCollection { get; set; }
-        private static ObservableCollection<IOverlay> overlayPluginCollection { get; set; }
-        public static ReadOnlyObservableCollection<IOverlay> OverlayPluginCollection { get; set; }
+        private static ObservableCollection<IPluginTest> testPluginCollection { get; set; }
+        public static ReadOnlyObservableCollection<IPluginTest> TestPluginCollection { get; set; }
+        private static ObservableCollection<IPluginInjectable> overlayPluginCollection { get; set; }
+        public static ReadOnlyObservableCollection<IPluginInjectable> OverlayPluginCollection { get; set; }
 
         static PluginManager()
         {
-            testPluginCollection = new ObservableCollection<ITestPlugin>();
-            TestPluginCollection = new ReadOnlyObservableCollection<ITestPlugin>(testPluginCollection);
+            testPluginCollection = new ObservableCollection<IPluginTest>();
+            TestPluginCollection = new ReadOnlyObservableCollection<IPluginTest>(testPluginCollection);
 
-            var testPlugins = LoadPlugins<ITestPlugin>("Plugins\\");
+            var testPlugins = LoadPlugins<IPluginTest>("Plugins\\");
             foreach (var plugin in testPlugins)
             {
                 testPluginCollection.Add(plugin);
             }
 
 
-            overlayPluginCollection = new ObservableCollection<IOverlay>();
-            OverlayPluginCollection = new ReadOnlyObservableCollection<IOverlay>(overlayPluginCollection);
+            overlayPluginCollection = new ObservableCollection<IPluginInjectable>();
+            OverlayPluginCollection = new ReadOnlyObservableCollection<IPluginInjectable>(overlayPluginCollection);
 
-            var overlayPlugins = LoadPlugins<IOverlay>("Plugins\\");
+            var overlayPlugins = LoadPlugins<IPluginInjectable>("Plugins\\");
             foreach (var plugin in overlayPlugins)
             {
                 overlayPluginCollection.Add(plugin);

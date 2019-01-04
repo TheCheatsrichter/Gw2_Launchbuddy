@@ -52,12 +52,18 @@ namespace Gw2_Launchbuddy
             string pathToUH = System.IO.Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath) + "\\Updater.exe";
             if (!System.IO.File.Exists(pathToUH)) System.IO.File.WriteAllBytes(pathToUH, Properties.Resources.Update_Helper);
 
-            //Execute Update Helper
+            //Run helper and delete after finish
             ProcessStartInfo Info = new ProcessStartInfo();
-            Info.Arguments = Process.GetCurrentProcess().Id + " \"" + rel.Version + "\" \"" + rel.DownloadURL + "\" \"" + System.IO.Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName) + "\"";
+            // Running cmd
+            Info.FileName = "cmd.exe";
+            // Tell it we are running a command directly, no user input
+            Info.Arguments = "/C" +
+                // Call the helper and pass expected params
+                "CALL \"" + pathToUH + "\" " + Process.GetCurrentProcess().Id + " \"" + rel.Version + "\" \"" + rel.DownloadURL + "\" \"" + System.IO.Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName) + "\" " +
+                // Then delete UH when complete
+                " & DEL \"" + pathToUH + "\"";
             Info.WindowStyle = ProcessWindowStyle.Hidden;
             Info.CreateNoWindow = true;
-            Info.FileName = pathToUH;
             Process.Start(Info);
         }
 

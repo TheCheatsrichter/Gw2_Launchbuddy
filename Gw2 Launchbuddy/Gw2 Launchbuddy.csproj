@@ -218,7 +218,7 @@
     <Compile Include="TextBoxPopUp.xaml.cs">
       <DependentUpon>TextBoxPopUp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\Versionswitcher.cs" />
+    <Compile Include="Helpers\VersionSwitcher.cs" />
     <Page Include="GUI_ApplicationManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

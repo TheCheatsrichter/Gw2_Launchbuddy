@@ -1,53 +1,70 @@
-﻿using System;
+﻿using Gw2_Launchbuddy.Interfaces.Plugins;
+using System;
 using System.Collections.Generic;
 using System.Windows.Media;
+using System.Linq;
 
-namespace Gw2_Launchbuddy.Interfaces
+namespace Gw2_Launchbuddy.Interfaces.Plugins
 {
     public interface IPlugin
     {
-        string Name { get; }
-        string Version { get; }
-        
+        PluginInfo Plugin { get; }
         void Init();
     }
-
-    public interface IOverlay : IPlugin
+    public class PluginInfo
     {
-        string ProjectName { get; }
-        string ProjectURL { get; }
-        string OverlayDll { get; }
+        public string Name { get; set; }
+        public string Author { get; set; }
+        public string Version { get; set; }
+        public string Url { get; set; }
+        public string Description { get; set; }
     }
 
-    public interface ITestPlugin : IPlugin
+    public interface IPluginDerived : IPlugin
+    {
+        ProjectInfo Project { get; }
+    }
+    
+    public class ProjectInfo
+    {
+        public string Name { get; set; }
+        public string Author { get; set; }
+        public string Version { get; set; }
+        public string Url { get; set; }
+    }
+}
+
+namespace Gw2_Launchbuddy.Interfaces.Plugins.Injectable
+{
+    public interface IPluginInjectable : IPlugin
+    {
+        PluginSettings Settings { get; }
+    }
+    
+    public class PluginSettings
+    {
+        private string subdirectory = null;
+        private string target = null;
+        public string Subdirectory
+        {
+            get => subdirectory;
+            set => subdirectory = System.IO.Directory.CreateDirectory("Plugins/" + value).FullName + "\\";
+        }
+        public string Target
+        {
+            get => target;
+            set => target = System.IO.Path.GetFullPath(subdirectory + value);
+        }
+    }
+}
+
+namespace Gw2_Launchbuddy.Interfaces.Plugins.Test
+{
+    public interface IPluginTest : IPlugin
     {
         void Exit();
         void Client_PreLaunch();
         void Client_PostLaunch();
         void Client_Exit();
-
-    }
-
-    public interface IAccount
-    {
-        string Nickname { get; }
-        //string Email { get; }
-        //string Password { get; }
-
-        DateTime CreateDate { get; }
-        DateTime ModifyDate { get; }
-        DateTime RunDate { get; }
-
-        bool Selected { get; }
-
-        ImageSource Icon { get; }
-        List<IArgument> GetArgumentList();
-    }
-    public interface IArgument
-    {
-        string Flag { get; }
-        string Description { get; }
-        string OptionString { get; set; }
-        bool Active { get; }
     }
 }
