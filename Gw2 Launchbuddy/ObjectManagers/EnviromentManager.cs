@@ -178,7 +178,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             if (Process.GetProcessesByName("*Gw2*.exe").Length == 0)
             {
                 Process pro = new Process();
-                pro.StartInfo = new ProcessStartInfo { Arguments = "-image" };
+                pro.StartInfo = new ProcessStartInfo { FileName=EnviromentManager.GwClientExePath, Arguments = "-image" };
                 pro.Start();
             }
             else

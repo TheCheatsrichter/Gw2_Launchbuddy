@@ -585,6 +585,30 @@
                                             </StackPanel>
                                         </Grid>
                                     </Expander>
+                                    <Expander>
+                                        <Expander.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="Resources/Icons/multitab.png" Height="22"/>
+                                                <Label Style="{StaticResource H2}">Hotkeys</Label>
+                                            </StackPanel>
+                                        </Expander.Header>
+                                        <StackPanel>
+                                            <ListView x:Name="lv_hotkeys" ItemsSource="{Binding AccHotkeys}" Height="200">
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBox Name="tb_hotkey" Text="{Binding Path=KeyAsString,Mode=OneWay}" Width="100" PreviewKeyDown="tb_hotkey_PreviewKeyDown" PreviewKeyUp="tb_hotkey_PreviewKeyUp" />
+                                                            <ComboBox ItemsSource="{Binding Path=Commands}" SelectedItem="{Binding Path=Command}" Width="100"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                            <DockPanel LastChildFill="False">
+                                                <Button Name="bt_hotkeyadd" Content="Add" Width="80" Click="bt_hotkeyadd_Click"/>
+                                                <Button Name="bt_hotkeyrem" Content="Remove" Width="80" Click="bt_hotkeyrem_Click"/>
+                                            </DockPanel>
+                                        </StackPanel>
+                                    </Expander>
                                 </StackPanel>
                             </ScrollViewer>
                         </DockPanel>

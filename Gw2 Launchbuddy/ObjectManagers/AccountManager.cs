@@ -99,13 +99,21 @@ namespace Gw2_Launchbuddy.ObjectManagers
         }
         public static void ImportAccounts()
         {
-            if (File.Exists(EnviromentManager.LBAccPath))
+            try
             {
-                Stream xmlInputStream = File.OpenRead(EnviromentManager.LBAccPath);
-                XmlSerializer deserializer = new XmlSerializer(typeof(ObservableCollection<Account>));
-                Accounts = (ObservableCollection<Account>)deserializer.Deserialize(xmlInputStream);
-                xmlInputStream.Close();
+                if (File.Exists(EnviromentManager.LBAccPath))
+                {
+                    Stream xmlInputStream = File.OpenRead(EnviromentManager.LBAccPath);
+                    XmlSerializer deserializer = new XmlSerializer(typeof(ObservableCollection<Account>));
+                    Accounts = (ObservableCollection<Account>)deserializer.Deserialize(xmlInputStream);
+                    xmlInputStream.Close();
+                }
             }
+            catch(Exception e)
+            {
+                MessageBox.Show("Could not load Accountdata.\n"+e.Message);
+            }
+
         }
 
         public static bool IsValidEmail(string inp)
@@ -120,6 +128,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 return false;
             }
         }
+
+        public static Account GetAccountByName(string nickname)
+        {
+            if (Accounts.Any<Account>(a => a.Nickname == nickname)) return Accounts.First<Account>(a => a.Nickname == nickname);
+            return null;
+        }
     }
 
     public class Account
@@ -133,19 +147,20 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             if (!AccountManager.Accounts.Any(a => a.Nickname == nickname))
             {
+                Client Client = new Client(this);
                 Nickname = nickname;
                 AccountManager.Accounts.Add(this);
-                Client Client = new Client(this);
                 if (Settings == null)
                 {
-                    Settings = new AccountSettings();
+                    Settings = new AccountSettings(Nickname);
                     Settings.Arguments = new Arguments();
+                    Settings.AccHotkeys = new ObservableCollection<Hotkey>();
                 }
             }
             else
             {
                 MessageBox.Show("Account with Nickname" + nickname + "allready exists!");
-            }
+            } 
         }
 
         private Account() { CreateAccount(); }
@@ -166,13 +181,30 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public class AccountSettings : INotifyPropertyChanged
     {
+        public string Nickname { set; get; }
+        [XmlIgnore]
+        private Account account { get { return AccountManager.GetAccountByName(Nickname); } }
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Arguments Arguments { get; set; }
         public GFXConfig GFXFile { get; set; }
         public ObservableCollection<string> DLLs { get; set; }
         private Icon icon;
+        public ObservableCollection<Hotkey> AccHotkeys { set; get; }
 
+
+        public void AddHotkey()
+        {
+            AccHotkeys.Add(new Hotkey(account.Client));
+        }
+
+        public void RemoveHotkey(Hotkey key)
+        {
+            if (Hotkeys.HotkeyCollection.Contains(key))
+                Hotkeys.HotkeyCollection.Remove(key);
+            if (AccHotkeys.Contains(key))
+                AccHotkeys.Remove(key);
+        }
 
         protected void OnPropertyChanged(string name)
         {
@@ -188,6 +220,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
             //Init Defaults if no safefile
             if (GFXFile == null) GFXFile = GFXManager.LoadFile(EnviromentManager.GwClientXmlPath);
             if (DLLs == null) DLLs = new ObservableCollection<string>();
+        }
+
+        public AccountSettings(string nickname)
+        {
+            //Init Defaults if no safefile
+            if (GFXFile == null) GFXFile = GFXManager.LoadFile(EnviromentManager.GwClientXmlPath);
+            if (DLLs == null) DLLs = new ObservableCollection<string>();
+            Nickname = nickname;
         }
 
         public Icon Icon { get { return icon; } set { icon = value; OnPropertyChanged("Icon"); } }

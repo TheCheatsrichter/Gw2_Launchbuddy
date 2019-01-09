@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
@@ -1462,6 +1463,29 @@ namespace Gw2_Launchbuddy
         {
             lv_accs.ItemsSource = null;
             lv_accs.ItemsSource = AccountManager.Accounts;
+        }
+
+        private void bt_hotkeyrem_Click(object sender, RoutedEventArgs e)
+        {
+            ((sender as Button).DataContext as AccountSettings).RemoveHotkey(lv_hotkeys.SelectedItem as Hotkey);
+        }
+
+        private void bt_hotkeyadd_Click(object sender, RoutedEventArgs e)
+        {
+            ((sender as Button).DataContext as AccountSettings).AddHotkey();
+        }
+
+        private void tb_hotkey_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            Hotkey hotkey = ((sender as TextBox).DataContext as Hotkey);
+            hotkey.Modifiers = Keyboard.Modifiers;
+            hotkey.KeyValue = e.Key;
+            (sender as TextBox).Text = hotkey.KeyAsString;
+        }
+
+        private void tb_hotkey_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            (sender as TextBox).Text = ((sender as TextBox).DataContext as Hotkey).KeyAsString;
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

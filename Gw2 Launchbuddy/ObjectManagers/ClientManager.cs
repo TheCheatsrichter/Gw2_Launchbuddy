@@ -137,6 +137,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public event EventHandler StatusChanged;
         public event PropertyChangedEventHandler PropertyChanged;
 
+        //public ObservableCollection<string> HotkeyCommands { get { return GetCommands(typeof(Client)); } }
+
         public Account Account { set {} get { return account; } }
 
         protected virtual void OnStatusChanged(EventArgs e)
