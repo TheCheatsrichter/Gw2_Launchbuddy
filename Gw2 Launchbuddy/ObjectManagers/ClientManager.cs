@@ -215,21 +215,65 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
-
-        [DllImport("kernel32.dll")]
-        public static extern uint SuspendThread(IntPtr hThread);
-
-        public void Suspend()
+        [Flags]
+        public enum ThreadAccess : int
         {
-            SuspendThread(Process.Handle);
+            TERMINATE = (0x0001),
+            SUSPEND_RESUME = (0x0002),
+            GET_CONTEXT = (0x0008),
+            SET_CONTEXT = (0x0010),
+            SET_INFORMATION = (0x0020),
+            QUERY_INFORMATION = (0x0040),
+            SET_THREAD_TOKEN = (0x0080),
+            IMPERSONATE = (0x0100),
+            DIRECT_IMPERSONATION = (0x0200)
         }
 
         [DllImport("kernel32.dll")]
+        static extern IntPtr OpenThread(ThreadAccess dwDesiredAccess, bool bInheritHandle, uint dwThreadId);
+        [DllImport("kernel32.dll")]
+        public static extern uint SuspendThread(IntPtr hThread);
+        [DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern bool CloseHandle(IntPtr handle);
+        [DllImport("kernel32.dll")]
         public static extern uint ResumeThread(IntPtr hThread);
+
+        public void Suspend()
+        {
+            foreach (ProcessThread pT in Process.Threads)
+            {
+                IntPtr pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)pT.Id);
+
+                if (pOpenThread == IntPtr.Zero)
+                {
+                    continue;
+                }
+
+                SuspendThread(pOpenThread);
+
+                CloseHandle(pOpenThread);
+            }
+        }
 
         public void Resume()
         {
-            ResumeThread(Process.Handle);
+            foreach (ProcessThread pT in Process.Threads)
+            {
+                IntPtr pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)pT.Id);
+
+                if (pOpenThread == IntPtr.Zero)
+                {
+                    continue;
+                }
+
+                uint suspendCount = 0;
+                do
+                {
+                    suspendCount = ResumeThread(pOpenThread);
+                } while (suspendCount > 0);
+
+                CloseHandle(pOpenThread);
+            }
         }
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
@@ -371,6 +415,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
                         case var expression when (Status < ClientStatus.Injected):
                             InjectDlls();
+                            Resume();
                             Status = ClientStatus.Injected;
                             break;
 
