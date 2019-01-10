@@ -89,7 +89,15 @@ namespace Gw2_Launchbuddy.ObjectManagers
         [XmlIgnore]
         public ObservableCollection<string> Commands { get { return GetCommands();}}
         [XmlIgnore]
-        public string KeyAsString { get { return keyvalue.ToString() + "+" + Modifiers.ToString(); } }
+        public string KeyAsString {
+            get {
+                if(Modifiers!=ModifierKeys.None)
+                    return Modifiers.ToString() + "+" + keyvalue.ToString();
+                if(keyvalue!= Key.None)
+                    return keyvalue.ToString();
+                return "No Key set";
+            }
+        }
         [XmlIgnore]
         private EventHandler<NHotkey.HotkeyEventArgs> executevent;
         [XmlIgnore]
