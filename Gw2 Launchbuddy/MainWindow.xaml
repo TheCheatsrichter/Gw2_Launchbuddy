@@ -593,7 +593,8 @@
                                             </StackPanel>
                                         </Expander.Header>
                                         <StackPanel>
-                                            <ListView x:Name="lv_hotkeys" ItemsSource="{Binding AccHotkeys}" Height="200">
+                                            <Label Foreground="Red" Content="Changes require restart to take effect!"/>
+                                            <ListView x:Name="lv_hotkeys" ItemsSource="{Binding AccHotkeys}" Height="200" SelectionChanged="lv_hotkeys_SelectionChanged">
                                                 <ListView.ItemTemplate>
                                                     <DataTemplate>
                                                         <StackPanel Orientation="Horizontal">

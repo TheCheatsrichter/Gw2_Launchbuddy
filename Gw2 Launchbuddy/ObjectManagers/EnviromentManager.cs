@@ -62,6 +62,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
             ClientManager.ImportActiveClients();
             CrashAnalyzer.ReadCrashLogs();
             IconManager.Init();
+
+            Hotkeys.RegisterAll();
+        }
+
+        public static void Close()
+        {
+            Hotkeys.UnregisterAll();
         }
 
         private static void DirectorySetup()

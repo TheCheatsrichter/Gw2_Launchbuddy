@@ -99,6 +99,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
         }
         public static void ImportAccounts()
         {
+#if DEBUG
+            if (File.Exists(EnviromentManager.LBAccPath))
+            {
+                Stream xmlInputStream = File.OpenRead(EnviromentManager.LBAccPath);
+                XmlSerializer deserializer = new XmlSerializer(typeof(ObservableCollection<Account>));
+                Accounts = (ObservableCollection<Account>)deserializer.Deserialize(xmlInputStream);
+                xmlInputStream.Close();
+            }
+#endif
+#if !DEBUG
             try
             {
                 if (File.Exists(EnviromentManager.LBAccPath))
@@ -113,8 +123,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 MessageBox.Show("Could not load Accountdata.\n"+e.Message);
             }
+#endif
+}
 
-        }
 
         public static bool IsValidEmail(string inp)
         {
@@ -154,7 +165,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 {
                     Settings = new AccountSettings(Nickname);
                     Settings.Arguments = new Arguments();
-                    Settings.AccHotkeys = new ObservableCollection<Hotkey>();
                 }
             }
             else
@@ -190,18 +200,23 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public GFXConfig GFXFile { get; set; }
         public ObservableCollection<string> DLLs { get; set; }
         private Icon icon;
-        public ObservableCollection<Hotkey> AccHotkeys { set; get; }
+        public ObservableCollection<AccountHotkey> AccHotkeys { set; get; }
 
+        private void Init()
+        {
+            if (GFXFile == null) GFXFile = GFXManager.LoadFile(EnviromentManager.GwClientXmlPath);
+            if (DLLs == null) DLLs = new ObservableCollection<string>();
+            if (AccHotkeys == null) AccHotkeys = new ObservableCollection<AccountHotkey>();
+        }
 
         public void AddHotkey()
         {
-            AccHotkeys.Add(new Hotkey(account.Client));
+            AccHotkeys.Add(new AccountHotkey(Nickname));
         }
 
-        public void RemoveHotkey(Hotkey key)
+        public void RemoveHotkey(AccountHotkey key)
         {
-            if (Hotkeys.HotkeyCollection.Contains(key))
-                Hotkeys.HotkeyCollection.Remove(key);
+            Hotkeys.Remove(key);
             if (AccHotkeys.Contains(key))
                 AccHotkeys.Remove(key);
         }
@@ -218,15 +233,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public AccountSettings()
         {
             //Init Defaults if no safefile
-            if (GFXFile == null) GFXFile = GFXManager.LoadFile(EnviromentManager.GwClientXmlPath);
-            if (DLLs == null) DLLs = new ObservableCollection<string>();
+            Init();
         }
 
         public AccountSettings(string nickname)
         {
             //Init Defaults if no safefile
-            if (GFXFile == null) GFXFile = GFXManager.LoadFile(EnviromentManager.GwClientXmlPath);
-            if (DLLs == null) DLLs = new ObservableCollection<string>();
+            Init();
             Nickname = nickname;
         }
 

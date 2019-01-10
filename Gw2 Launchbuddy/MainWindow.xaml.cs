@@ -688,6 +688,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_close_Click(object sender, RoutedEventArgs e)
         {
+            EnviromentManager.Close();
             foreach (var plugin in PluginManager.TestPluginCollection) plugin.Exit();
             Mainwin_SaveSetup();
             Properties.Settings.Default.Save();
@@ -1467,7 +1468,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_hotkeyrem_Click(object sender, RoutedEventArgs e)
         {
-            ((sender as Button).DataContext as AccountSettings).RemoveHotkey(lv_hotkeys.SelectedItem as Hotkey);
+            ((sender as Button).DataContext as AccountSettings).RemoveHotkey(lv_hotkeys.SelectedItem as AccountHotkey);
         }
 
         private void bt_hotkeyadd_Click(object sender, RoutedEventArgs e)
@@ -1486,6 +1487,11 @@ namespace Gw2_Launchbuddy
         private void tb_hotkey_PreviewKeyUp(object sender, KeyEventArgs e)
         {
             (sender as TextBox).Text = ((sender as TextBox).DataContext as Hotkey).KeyAsString;
+        }
+
+        private void lv_hotkeys_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            object test=((sender as ListView).SelectedItem)as Hotkey;
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
