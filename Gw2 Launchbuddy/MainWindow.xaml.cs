@@ -154,7 +154,6 @@ namespace Gw2_Launchbuddy
         {
             cb_lbupdatescheck.IsChecked = Properties.Settings.Default.notifylbupdate;
             cb_useinstancegui.IsChecked = Properties.Settings.Default.useinstancegui;
-            cb_useloadingui.IsChecked = Properties.Settings.Default.useloadingui;
         }
 
         private void DonatePopup()
@@ -343,20 +342,15 @@ namespace Gw2_Launchbuddy
             {
                 //Cinema Mode
 
-                /*
+                
                 WindowHeaderGrid.Visibility = Visibility.Hidden;
-                reso_x = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
-                reso_y = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
                 myWindow.WindowState = WindowState.Maximized;
-                */
+                
 
                 //Notes: Login frame = 560x300
                 //Test resolutions here!
                 //Only edit width!
 
-                myWindow.Width = 1600;
-
-                myWindow.Height = (int)(myWindow.Width / 16 * 9);
                 int reso_x = (int)myWindow.Width;
                 int reso_y = (int)myWindow.Height;
 
@@ -370,8 +364,8 @@ namespace Gw2_Launchbuddy
 
 
                 //Setting up the Login Window Location
-                Canvas.SetTop(Canvas_login, reso_y - (reso_y / 2));
-                Canvas.SetLeft(Canvas_login, reso_x / 10);
+                Canvas.SetTop(Canvas_login, screenHeight - (screenHeight / 2.5));
+                Canvas.SetLeft(Canvas_login, screenWidth / 10);
                 //Setting up End Position of Logo Animation
                 var endpos = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];
                 endpos.Value = Properties.Settings.Default.cinema_slideshowendpos * reso_x / 200;
@@ -1217,12 +1211,6 @@ namespace Gw2_Launchbuddy
         private void bt_manualassetserver_Click(object sender, RoutedEventArgs e)
         {
             ServerManager.AddAssetServer(tb_manualassetserver.Text);
-        }
-
-        private void cb_useloadingui_Click(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.useloadingui = (bool)cb_useloadingui.IsChecked;
-            Properties.Settings.Default.Save();
         }
 
         private void bt_accsave_Click(object sender, RoutedEventArgs e)
