@@ -319,4 +319,31 @@
   <data name="picture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\icons\picture.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="c_elementalist" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_elementalist.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_engineer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_engineer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_guard" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_guard.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_mesmer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_mesmer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_necro" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_necro.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_ranger" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_ranger.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_revenant" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_revenant.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_thief" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_thief.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_warrior" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_warrior.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

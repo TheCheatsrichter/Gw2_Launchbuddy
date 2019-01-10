@@ -389,6 +389,15 @@
     <Resource Include="Resources\Icons\injection.png" />
     <Resource Include="Resources\Icons\account.png" />
     <Resource Include="Resources\Icons\picture.png" />
+    <Resource Include="Resources\Icons\Classes\c_elementalist.png" />
+    <Resource Include="Resources\Icons\Classes\c_engineer.png" />
+    <Resource Include="Resources\Icons\Classes\c_guard.png" />
+    <Resource Include="Resources\Icons\Classes\c_mesmer.png" />
+    <Resource Include="Resources\Icons\Classes\c_necro.png" />
+    <Resource Include="Resources\Icons\Classes\c_ranger.png" />
+    <Resource Include="Resources\Icons\Classes\c_revenant.png" />
+    <Resource Include="Resources\Icons\Classes\c_thief.png" />
+    <Resource Include="Resources\Icons\Classes\c_warrior.png" />
     <Content Include="Resources\Update Helper.exe" />
   </ItemGroup>
   <ItemGroup>
