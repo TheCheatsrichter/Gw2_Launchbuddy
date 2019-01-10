@@ -237,6 +237,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
         static extern bool CloseHandle(IntPtr handle);
         [DllImport("kernel32.dll")]
         public static extern uint ResumeThread(IntPtr hThread);
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
         public void Suspend()
         {
@@ -253,6 +256,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
                 CloseHandle(pOpenThread);
             }
+        }
+
+        public void Minimize()
+        {
+            ShowWindow(Process.MainWindowHandle,0x6);
+        }
+
+        public void Maximize()
+        {
+            ShowWindow(Process.MainWindowHandle, 0x3);
         }
 
         public void Resume()

@@ -35,6 +35,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
             "Resume",
             "Suspend",
             "Focus",
+            "Minimize",
+            "Maximize",
             "Close"
         };
         private static ObservableCollection<IHotkey> HotkeyCollection = new ObservableCollection<IHotkey>();
