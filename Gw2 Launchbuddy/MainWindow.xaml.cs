@@ -1002,7 +1002,7 @@ namespace Gw2_Launchbuddy
 
         private void myWindow_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.DragMove();
+            try { this.DragMove(); } catch { }
         }
 
         private void bt_mute_Click(object sender, RoutedEventArgs e)
@@ -1327,10 +1327,23 @@ namespace Gw2_Launchbuddy
             }
         }
 
+        bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private void tb_email_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
             string email = tb_email.Text;
-            if (!Regex.IsMatch(email, @"([^\s]).+@([^\s])[^\.]+(\..+)") && email != "" || email.Contains('*'))
+            if (!IsValidEmail(email) && email != "" || email.Contains('*'))
             {
                 MessageBox.Show("Invalid email " + tb_email.Text + ". Leave blank to deactivate.");
                 tb_email.SelectAll();

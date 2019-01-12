@@ -283,7 +283,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 try
                 {
-                    return Email.Substring(0, 2) + "*****@****." + Email.Split('.')[1];
+                    return Email.Substring(0, 2) + "*****@****" + Email.Substring(Email.Length-3);
                 }
                 catch
                 {

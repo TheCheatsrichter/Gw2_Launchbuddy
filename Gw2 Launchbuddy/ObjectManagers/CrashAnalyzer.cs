@@ -195,8 +195,7 @@ namespace Gw2_Launchbuddy
                 Crashlogs = new ObservableCollection<Crashlog>(from i in Crashlogs orderby i.CrashTime select i);
                 Crashlogs = new ObservableCollection<Crashlog>(Crashlogs.Reverse());
 
-                //Clean up Crashlog   
-                /*      
+                //Clean up Crashlog      
                  if (Crashlogs.Count >= 25)
                 {
                     try
@@ -214,9 +213,7 @@ namespace Gw2_Launchbuddy
                     {
                         System.Windows.Forms.MessageBox.Show(e.Message);
                     }
-                    
                 }
-                */
                 
             }
             catch (Exception e)
