@@ -283,7 +283,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 try
                 {
-                    return Email.Substring(0, 2) + "*****@****." + Email.Split('.')[1];
+                    string preAtObscured = email.Split('@')[0].Substring(0, 2) + new String('*', email.Split('@')[0].Length - 2);
+                    string postAtObscured = new String('*', email.Split('@')[1].Split('.')[0].Length) + '.' + email.Split('@')[1].Split('.')[1];
+                    return preAtObscured + '@' + postAtObscured;
                 }
                 catch
                 {
