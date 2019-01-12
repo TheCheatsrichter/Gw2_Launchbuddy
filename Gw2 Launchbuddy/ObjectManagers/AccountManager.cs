@@ -202,11 +202,29 @@ namespace Gw2_Launchbuddy.ObjectManagers
         private Icon icon;
         public ObservableCollection<AccountHotkey> AccHotkeys { set; get; }
 
+        //Adavanced Settings
+        [XmlIgnore]
+        private uint relaunchesmax;
+        public uint RelaunchesMax { set { relaunchesmax = value; RelaunchesLeft = value; } get { return relaunchesmax; } }
+        [XmlIgnore]
+        private uint relaunchesleft;
+        [XmlIgnore]
+        public uint RelaunchesLeft { set { relaunchesleft = value; } get { return relaunchesleft; } }
+
+        private ProcessPriorityClass processpriority = ProcessPriorityClass.Normal;
+        public ProcessPriorityClass ProcessPriority { set { processpriority = value; } get { return processpriority; } }
+        [XmlIgnore]
+        private ObservableCollection<ProcessPriorityClass> processpriorities = new ObservableCollection<ProcessPriorityClass>(Enum.GetValues(typeof(ProcessPriorityClass)).Cast<ProcessPriorityClass>());
+        [XmlIgnore]
+        public ObservableCollection<ProcessPriorityClass> ProcessPriorities { get { return processpriorities; } }
+
         private void Init()
         {
             if (GFXFile == null) GFXFile = GFXManager.LoadFile(EnviromentManager.GwClientXmlPath);
             if (DLLs == null) DLLs = new ObservableCollection<string>();
             if (AccHotkeys == null) AccHotkeys = new ObservableCollection<AccountHotkey>();
+            if (RelaunchesMax == null) RelaunchesMax = 0;
+            RelaunchesLeft = RelaunchesMax;
         }
 
         public void AddHotkey()
@@ -286,12 +304,20 @@ namespace Gw2_Launchbuddy.ObjectManagers
             return settings;
         }
 
+        public void SetRelaunched(uint MaxRelaunches)
+        {
+            RelaunchesMax = MaxRelaunches;
+            RelaunchesLeft = RelaunchesMax;
+        }
+
         [XmlIgnore]
         public bool HasLoginCredentials { get { return Email != null && Password != null; } set { } }
         [XmlIgnore]
         public bool HasArguments { get { if (Arguments.Contains(Arguments.FirstOrDefault<Argument>(a => a.IsActive == true))) { return true; } return false; } set { } }
         [XmlIgnore]
         public bool HasDlls { get { if (DLLs.Count > 0) { return true; } return false; } set { } }
+        [XmlIgnore]
+        public bool HasAdvancedSettings { get { if (ProcessPriority!=ProcessPriorityClass.Normal || RelaunchesMax>0) { return true; } return false; } set { } }
 
         //UI Bools
 

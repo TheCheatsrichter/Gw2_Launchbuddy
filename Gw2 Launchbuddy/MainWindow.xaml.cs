@@ -1273,10 +1273,12 @@ namespace Gw2_Launchbuddy
                 AccountManager.EditAccount = acc;
                 gr_acceditor.DataContext = AccountManager.EditAccount;
                 gr_acceditor.IsEnabled = true;
+                gr_acceditor.Visibility = Visibility.Visible;
                 sp_acclistbuttons.IsEnabled = true;
             }
             else
             {
+                gr_acceditor.Visibility = Visibility.Collapsed;
                 gr_acceditor.IsEnabled = false;
                 sp_acclistbuttons.IsEnabled = false;
             }
@@ -1480,6 +1482,25 @@ namespace Gw2_Launchbuddy
         private void lv_hotkeys_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             object test=((sender as ListView).SelectedItem)as Hotkey;
+        }
+
+        private void tb_relaunches_LostFocus(object sender, RoutedEventArgs e)
+        {
+            textinput_onlyint(sender as TextBox);
+            ((sender as TextBox).DataContext as AccountSettings).SetRelaunched(UInt32.Parse((sender as TextBox).Text));
+        }
+
+        private void textinput_onlyint(TextBox tb)
+        {
+            if (!Regex.IsMatch(tb.Text, @"[0-9]+"))
+            {
+                tb.Text = "0";
+            }                
+        }
+
+        private void cb_useinstancegui_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.useinstancegui = (bool)(sender as CheckBox).IsChecked;
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

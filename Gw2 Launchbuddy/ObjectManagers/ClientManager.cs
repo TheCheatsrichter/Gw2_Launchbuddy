@@ -301,13 +301,18 @@ namespace Gw2_Launchbuddy.ObjectManagers
         protected virtual void OnClientClose(object sender, EventArgs e)
         {
             Process pro = sender as Process;
-            if (pro == this.Process)
-                this.Status = ClientStatus.Closed;
+            Status = ClientStatus.Closed;
+            if (Account.Settings.RelaunchesLeft > 0)
+            {
+                Account.Settings.RelaunchesLeft--;
+                Launch();
+            }
         }
 
         private void ConfigureProcess()
         {
             Process.EnableRaisingEvents = true;
+            try { Process.Exited -= OnClientClose; } catch { };
             Process.Exited += OnClientClose;
             string args = "";
             foreach (Argument arg in account.Settings.Arguments.GetActive())
@@ -333,6 +338,21 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     args += "-authserver " + ServerManager.SelectedAuthserver.ToArgument;
 
             Process.StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath, Arguments=args };
+        }
+
+        private void SetProcessPriority()
+        {
+            if (Account.Settings.ProcessPriority != null)
+            {
+                try
+                {
+                    Process.PriorityClass = Account.Settings.ProcessPriority;
+                }
+                catch
+                {
+                    MessageBox.Show("Could not set Process priority");
+                }
+            }
         }
 
         private void CloseMutex()
@@ -439,6 +459,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
                         case var expression when (Status < ClientStatus.Running):
                             RestoreGFX();
+                            SetProcessPriority();
                             Status = ClientStatus.Running;
                             break;
 

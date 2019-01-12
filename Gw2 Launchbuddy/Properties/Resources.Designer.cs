@@ -63,6 +63,16 @@ namespace Gw2_Launchbuddy.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap acc_opacitymask {
+            get {
+                object obj = ResourceManager.GetObject("acc_opacitymask", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap accounts {
             get {
                 object obj = ResourceManager.GetObject("accounts", resourceCulture);
@@ -73,9 +83,29 @@ namespace Gw2_Launchbuddy.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap add {
+            get {
+                object obj = ResourceManager.GetObject("add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap addon {
             get {
                 object obj = ResourceManager.GetObject("addon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap bin {
+            get {
+                object obj = ResourceManager.GetObject("bin", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -353,6 +383,16 @@ namespace Gw2_Launchbuddy.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap check {
+            get {
+                object obj = ResourceManager.GetObject("check", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap clientifix {
             get {
                 object obj = ResourceManager.GetObject("clientifix", resourceCulture);
@@ -366,6 +406,16 @@ namespace Gw2_Launchbuddy.Properties {
         internal static System.Drawing.Bitmap close {
             get {
                 object obj = ResourceManager.GetObject("close", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap copy {
+            get {
+                object obj = ResourceManager.GetObject("copy", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -396,6 +446,16 @@ namespace Gw2_Launchbuddy.Properties {
         internal static System.Drawing.Bitmap error {
             get {
                 object obj = ResourceManager.GetObject("error", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap feature {
+            get {
+                object obj = ResourceManager.GetObject("feature", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -726,6 +786,16 @@ namespace Gw2_Launchbuddy.Properties {
         internal static System.Drawing.Bitmap running {
             get {
                 object obj = ResourceManager.GetObject("running", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap save {
+            get {
+                object obj = ResourceManager.GetObject("save", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

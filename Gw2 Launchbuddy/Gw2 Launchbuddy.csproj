@@ -398,6 +398,13 @@
     <Resource Include="Resources\Icons\Classes\c_revenant.png" />
     <Resource Include="Resources\Icons\Classes\c_thief.png" />
     <Resource Include="Resources\Icons\Classes\c_warrior.png" />
+    <Resource Include="Resources\Icons\add.png" />
+    <Resource Include="Resources\Icons\bin.png" />
+    <Resource Include="Resources\Icons\check.png" />
+    <Resource Include="Resources\Icons\copy.png" />
+    <Resource Include="Resources\Icons\save.png" />
+    <Resource Include="Resources\Icons\feature.png" />
+    <Resource Include="Resources\acc_opacitymask.png" />
     <Content Include="Resources\Update Helper.exe" />
   </ItemGroup>
   <ItemGroup>

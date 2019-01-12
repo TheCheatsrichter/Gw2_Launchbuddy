@@ -367,9 +367,10 @@
                                     <DockPanel ToolTip="{Binding Path=Client.Status}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" LastChildFill="False" >
                                         <Image Height="32" Source="{Binding Path=Settings.Icon.Image}" DockPanel.Dock="Left"/>
                                         <Image Height="32" Source="{Binding Path=Client.StatusToIcon}" DockPanel.Dock="Right"/>
-                                        <Image Height="32" Source="Resources/Icons/settings.png" Visibility="{Binding Path=Settings.HasArguments, Converter={StaticResource BoolToVis}}" DockPanel.Dock="Right"/>
-                                        <Image Height="32" Source="Resources/Icons/injection.png" Visibility="{Binding Path=Settings.HasDlls, Converter={StaticResource BoolToVis}}" DockPanel.Dock="Right"/>
-                                        <Image Height="32" Source="Resources/Icons/account.png" Visibility="{Binding Path=Settings.HasLoginCredentials, Converter={StaticResource BoolToVis}}" DockPanel.Dock="Right"/>
+                                        <Image Height="32" Source="Resources/Icons/settings.png" Visibility="{Binding Path=Settings.HasArguments, Converter={StaticResource BoolToVis}}" ToolTip="Uses Arguments" DockPanel.Dock="Right"/>
+                                        <Image Height="32" Source="Resources/Icons/injection.png" Visibility="{Binding Path=Settings.HasDlls, Converter={StaticResource BoolToVis}}" ToolTip="Uses Injected Software" DockPanel.Dock="Right"/>
+                                        <Image Height="32" Source="Resources/Icons/feature.png" Visibility="{Binding Path=Settings.HasAdvancedSettings, Converter={StaticResource BoolToVis}}" ToolTip="Uses Advanced Settings" DockPanel.Dock="Right"/>
+                                        <Image Height="32" Source="Resources/Icons/account.png" Visibility="{Binding Path=Settings.HasLoginCredentials, Converter={StaticResource BoolToVis}}" ToolTip="Uses Autologin" DockPanel.Dock="Right"/>
                                         <Label Content="{Binding Path=Nickname}" BorderThickness="0" Margin="0,2,0,0" FontSize="18" FontWeight="Bold"/>
                                     </DockPanel>
                                 </DataTemplate>
@@ -411,7 +412,11 @@
                                     <DataTemplate>
                                         <Grid>
                                             <Image Source="{Binding Path=Settings.Icon.Image}" VerticalAlignment="Center" MaxHeight="64" HorizontalAlignment="Center"/>
-                                            <Label Content="{Binding Path=Nickname}" BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center" OpacityMask="{x:Null}" Background="#43000000" FontWeight="Bold" FontSize="14" Foreground="White" BorderBrush="Black"/>
+                                            <Label Content="{Binding Path=Nickname}" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#43000000" FontWeight="Bold" FontSize="14" Foreground="White">
+                                                <Label.OpacityMask>
+                                                    <ImageBrush ImageSource="Resources/acc_opacitymask.png"/>
+                                                </Label.OpacityMask>
+                                            </Label>
                                         </Grid>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
@@ -426,7 +431,7 @@
                                     <ImageBrush ImageSource="{Binding Path=Icon.Image}" Opacity="0.03"/>
                                 </ScrollViewer.Background>
                                 <StackPanel>
-                                    <Expander>
+                                    <Expander ToolTip="Set up Login Data for an automated Login">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="Resources/Icons/account.png" Height="22"/>
@@ -442,7 +447,7 @@
                                             </StackPanel>
                                         </WrapPanel>
                                     </Expander>
-                                    <Expander >
+                                    <Expander ToolTip="Choose an icon for this account">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="Resources/Icons/picture.png" Height="22"/>
@@ -479,7 +484,7 @@
                                             </StackPanel>
                                         </StackPanel>
                                     </Expander>
-                                    <Expander >
+                                    <Expander ToolTip="Choose Gw2 launch arguments">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="Resources/Icons/settings.png" Height="22"/>
@@ -512,7 +517,7 @@
                                             </StackPanel>
                                         </Grid>
                                     </Expander>
-                                    <Expander>
+                                    <Expander ToolTip="Set up a custom Graphic Configuration for this account">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="Resources/Icons/gpu.png" Height="22"/>
@@ -556,7 +561,7 @@
                                             <Button ToolTip="Configure your ingame graphic settings or create a graphic configuration file for a specific account" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
                                         </Grid>
                                     </Expander>
-                                    <Expander>
+                                    <Expander ToolTip="Add 3rd Party software for this account">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="Resources/Icons/addon.png" Height="22"/>
@@ -585,7 +590,7 @@
                                             </StackPanel>
                                         </Grid>
                                     </Expander>
-                                    <Expander>
+                                    <Expander ToolTip="Configure Hotkeys for quick Clientcontrol">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="Resources/Icons/multitab.png" Height="22"/>
@@ -609,6 +614,32 @@
                                                 <Button Name="bt_hotkeyrem" Content="Remove" Width="80" Click="bt_hotkeyrem_Click"/>
                                             </DockPanel>
                                         </StackPanel>
+                                    </Expander>
+                                    <Expander ToolTip="Settings for Geeks.">
+                                        <Expander.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="Resources/Icons/feature.png" Height="22"/>
+                                                <Label Style="{StaticResource H2}">Advanced Settings</Label>
+                                            </StackPanel>
+                                        </Expander.Header>
+                                        <ScrollViewer>
+                                            <StackPanel>
+                                                <DockPanel>
+                                                    <Label  Content="Relaunch Client when it closes/crashes" VerticalAlignment="Center"/>
+                                                    <DockPanel  DockPanel.Dock="Right">
+                                                        <TextBox Name="tb_relaunches" Text="{Binding RelaunchesMax}" Width="80" DockPanel.Dock="Right" VerticalAlignment="Center" LostFocus="tb_relaunches_LostFocus"/>
+                                                        <Label Content="Maximum Relaunches:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+                                                    </DockPanel>
+                                                </DockPanel>
+                                                <DockPanel>
+                                                    <Label x:Name="cb_propriority" Content="Set Process Priority" VerticalAlignment="Center"/>
+                                                    <DockPanel  DockPanel.Dock="Right">
+                                                        <ComboBox Text="0" Width="80" DockPanel.Dock="Right" VerticalAlignment="Center" ItemsSource="{Binding ProcessPriorities}" SelectedItem="{Binding ProcessPriority}"/>
+                                                        <Label Content="Priority:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+                                                    </DockPanel>
+                                                </DockPanel>
+                                            </StackPanel>
+                                        </ScrollViewer>
                                     </Expander>
                                 </StackPanel>
                             </ScrollViewer>
@@ -957,7 +988,7 @@
                         -->
                         <Separator Margin="3"/>
                         <CheckBox x:Name="cb_lbupdatescheck" Content="Automatically Check for Launchbuddy Updates" Margin="5" Click="cb_lbupdatescheck_Click" ToolTip="Choose if Launchbuddy should automatically search for updates on startup."/>
-                        <CheckBox x:Name="cb_useinstancegui" Content="Use Game Instance GUI" Margin="5" Click="cb_useinstancegui_Click" ToolTip="Choose if the instance manager should be launched whenever you launch gw2."/>
+                        <CheckBox x:Name="cb_useinstancegui" Content="Use Game Instance GUI" Margin="5" Click="cb_useinstancegui_Click" ToolTip="Choose if the instance manager should be launched whenever you launch gw2." Checked="cb_useinstancegui_Checked"/>
                         <Label Content="Launchbuddy Releases" Style="{StaticResource H2}"/>
                         <Grid Height="250" Margin="3">
                             <Grid.ColumnDefinitions>
