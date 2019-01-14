@@ -61,14 +61,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             foreach (Account acc in SelectedAccounts)
             {
-                acc.Client.Launch();
+                acc.Client.Launch(true);
             }
         }
         public static void LaunchAccounts(ObservableCollection<Account> accs)
         {
             foreach (Account acc in accs)
             {
-                acc.Client.Launch();
+                acc.Client.Launch(true);
             }
         }
 
