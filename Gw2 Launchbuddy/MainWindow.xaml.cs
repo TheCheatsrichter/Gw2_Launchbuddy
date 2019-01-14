@@ -1348,16 +1348,19 @@ namespace Gw2_Launchbuddy
         private void tb_email_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
             string email = tb_email.Text;
-            if (!IsValidEmail(email) && email != "" || email.Contains('*'))
+            if(!email.Contains('*'))
             {
-                MessageBox.Show("Invalid email " + tb_email.Text + ". Leave blank to deactivate.");
-                tb_email.SelectAll();
-                tb_email.Focus();
-            }
-            else
-            {
-                AccountSettings sett = (sender as TextBox).DataContext as AccountSettings;
-                sett.Email = (sender as TextBox).Text;
+                if (!IsValidEmail(email) && email != "" || email.Contains('*'))
+                {
+                    MessageBox.Show("Invalid email " + tb_email.Text + ". Leave blank to deactivate.");
+                    tb_email.SelectAll();
+                    tb_email.Focus();
+                }
+                else
+                {
+                    AccountSettings sett = (sender as TextBox).DataContext as AccountSettings;
+                    sett.Email = (sender as TextBox).Text;
+                }
             }
         }
 
