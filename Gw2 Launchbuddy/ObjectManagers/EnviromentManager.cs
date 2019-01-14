@@ -45,6 +45,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static string TMP_GFXConfig = GwAppdataPath + "TMP_GFX.xml";
         public static string TMP_BackupGFXConfig = GwAppdataPath + "TMP_GFX.bak";
 
+        public static string LBAddonPath = LBAppdataPath + "Addons.xml";
+
         public static void Init()
         {
             //Path Setup
@@ -63,11 +65,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
             CrashAnalyzer.ReadCrashLogs();
             IconManager.Init();
 
+            //Temp AddonManager
+            AddOnManager.LoadAddons(LBAddonPath);
+            AddOnManager.LaunchLbAddons();
+
             Hotkeys.RegisterAll();
         }
 
         public static void Close()
         {
+            AddOnManager.SaveAddons(LBAddonPath);
             Hotkeys.UnregisterAll();
         }
 

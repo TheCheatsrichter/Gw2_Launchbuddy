@@ -50,7 +50,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             foreach (Process pro in processes)
             {
-                foreach (AddOn addon in addOnCollection.Where(a => a.Name == pro.ProcessName))
+                foreach (AddOn addon in addOnCollection.Where(a => Path.GetFileNameWithoutExtension(a.Path) == pro.ProcessName))
                 {
                     addon.ChildProcess.Add(pro);
                 }

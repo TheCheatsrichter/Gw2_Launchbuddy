@@ -586,6 +586,11 @@ namespace Gw2_Launchbuddy
             {
                 if (EnviromentManager.LBUseClientGUI) EnviromentManager.LBInstanceGUI.Show();
                 AccountManager.LaunchAccounts();
+                if (addonflag)
+                {
+                    addonflag = false;
+                    AddOnManager.LaunchAll();
+                }
             }
         }
 
@@ -1515,6 +1520,26 @@ namespace Gw2_Launchbuddy
         {
             Properties.Settings.Default.useinstancegui = (bool)(sender as CheckBox).IsChecked;
         }
+
+
+        #region DELETE ON 1.9
+
+        public bool addonflag = true;
+        private void bt_AddAddon_Click(object sender, RoutedEventArgs e)
+        {
+            AddOnManager.Add(tb_AddonName.Text,tb_AddonArgs.Text.Split('-'), false,(bool)cb_AddonOnLB.IsChecked);
+        }
+
+        private void bt_RemAddon_Click(object sender, RoutedEventArgs e)
+        {
+            AddOnManager.Remove((lv_AddOns.SelectedItem as AddOn).Name);
+        }
+
+        private void tab_addons_GotFocus(object sender, RoutedEventArgs e)
+        {
+            lv_AddOns.ItemsSource = AddOnManager.addOnCollection;
+        }
+        #endregion DELETE ON 1.9
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
