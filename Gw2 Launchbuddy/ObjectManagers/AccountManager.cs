@@ -61,14 +61,15 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             foreach (Account acc in SelectedAccounts)
             {
-                acc.Client.Launch(true);
+                acc.Client.Launch();
+                acc.Settings.RelaunchesLeft = acc.Settings.RelaunchesMax;
             }
         }
         public static void LaunchAccounts(ObservableCollection<Account> accs)
         {
             foreach (Account acc in accs)
             {
-                acc.Client.Launch(true);
+                acc.Client.Launch();
             }
         }
 

@@ -412,12 +412,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
-        private void SetRestarts()
-        {
-            Account.Settings.RelaunchesLeft = Account.Settings.RelaunchesMax;
-        }
-
-        public void Launch(bool external_launch=false)
+        public void Launch()
         {
             while (Status < ClientStatus.Running)
             {
@@ -434,6 +429,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             }
                             else
                             {
+                                Account.Settings.RelaunchesLeft = 0;
                                 Status = ClientStatus.Crash;
                             }
                         }
@@ -447,7 +443,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             break;
 
                         case var expression when (Status < ClientStatus.Created):
-                            if (external_launch) SetRestarts();
                             Process.Start();
                             Suspend();
                             Status = ClientStatus.Created;
