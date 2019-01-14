@@ -759,9 +759,6 @@
                                     <GridViewColumn HeaderStringFormat="" Width="120" DisplayMemberBinding="{Binding args}">
                                         <GridViewColumnHeader Tag="args" Content="Parameters"/>
                                     </GridViewColumn>
-                                    <GridViewColumn HeaderStringFormat="" Width="70" DisplayMemberBinding="{Binding IsMultilaunch}">
-                                        <GridViewColumnHeader Tag="IsMultilaunch"  Content="Multilaunch"/>
-                                    </GridViewColumn>
                                     <GridViewColumn Width="80" DisplayMemberBinding="{Binding IsLbAddon}">
                                         <GridViewColumnHeader Tag="IsLbAddon" Content="Start with LB"/>
                                     </GridViewColumn>
