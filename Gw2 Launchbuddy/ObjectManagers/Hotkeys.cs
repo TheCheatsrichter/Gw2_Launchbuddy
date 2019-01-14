@@ -111,7 +111,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             ObservableCollection<string> commands = new ObservableCollection<string>();
             foreach (var func in TargetType.GetMethods())
             {
-                if (func.ReturnType.Name == "Void" && func.IsPublic && func.GetParameters().Length == 0 && Hotkeys.Command_Whitelist.Contains(func.Name))
+                if (func.ReturnType.Name == "Void" && func.IsPublic && Hotkeys.Command_Whitelist.Contains(func.Name))
                 {
                     commands.Add(func.Name);
                 }
