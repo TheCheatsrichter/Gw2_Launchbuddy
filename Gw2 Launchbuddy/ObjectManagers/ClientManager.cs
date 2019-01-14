@@ -325,8 +325,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
             if (account.Settings.HasLoginCredentials)
             {
                 args += "-nopatchui -autologin ";
-                args += "-email " + account.Settings.Email+" ";
-                args += "-password " + account.Settings.Password + " ";
+                args += "-email \"" + account.Settings.Email+"\" ";
+                args += "-password \"" + account.Settings.Password + "\" ";
             }
 
             //Add Server Options
