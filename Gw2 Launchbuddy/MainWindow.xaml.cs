@@ -154,6 +154,7 @@ namespace Gw2_Launchbuddy
         {
             cb_lbupdatescheck.IsChecked = Properties.Settings.Default.notifylbupdate;
             cb_useinstancegui.IsChecked = Properties.Settings.Default.useinstancegui;
+            datlaunchingcheckbox.IsChecked = Properties.Settings.Default.datlaunching;
         }
 
         private void DonatePopup()
@@ -584,8 +585,17 @@ namespace Gw2_Launchbuddy
             }
             else
             {
-                if (EnviromentManager.LBUseClientGUI) EnviromentManager.LBInstanceGUI.Show();
-                AccountManager.LaunchAccounts();
+                //if (EnviromentManager.LBUseClientGUI) EnviromentManager.LBInstanceGUI.Show(); // Disabled because the setting won't work for me
+                if (Properties.Settings.Default.datlaunching)
+                {
+                    if (Process.GetProcessesByName(Path.GetFileNameWithoutExtension(EnviromentManager.GwClientExePath)).Count() < 1) { AccountManager.LaunchAccounts(); }
+                    else { MessageBox.Show("You can't have more than one account launched at a time with datlaunching enabled."); }
+                }
+                else
+                {
+                    AccountManager.LaunchAccounts();
+                }
+
                 if (addonflag)
                 {
                     addonflag = false;
@@ -1543,6 +1553,31 @@ namespace Gw2_Launchbuddy
             lv_AddOns.ItemsSource = AddOnManager.addOnCollection;
         }
         #endregion DELETE ON 1.9
+
+        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.datlaunching = (bool)datlaunchingcheckbox.IsChecked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void datlaunchingcheckbox_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.datlaunching = (bool)(sender as CheckBox).IsChecked;
+
+            if ((bool)(sender as CheckBox).IsChecked)
+            {
+                lv_accs.SelectionMode = SelectionMode.Single;
+            }
+            else
+            {
+                lv_accs.SelectionMode = SelectionMode.Multiple;
+            }
+        }
+
+        private void lv_accs_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            bt_launch_Click(sender, e);
+        }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {

@@ -298,5 +298,17 @@ namespace Gw2_Launchbuddy.Properties {
                 this["mainwin_size_y"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool datlaunching {
+            get {
+                return ((bool)(this["datlaunching"]));
+            }
+            set {
+                this["datlaunching"] = value;
+            }
+        }
     }
 }

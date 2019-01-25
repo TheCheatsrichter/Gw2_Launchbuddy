@@ -340,6 +340,7 @@
                                     <Button x:Name="bt_installpath" DockPanel.Dock="Right" ToolTip="Set your gamefolder path if it isn't &#x0a; determined correctly by launchbuddy" Content="Set Directory" Click="bt_installpath_Click" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom"  BorderThickness="1" Width="100" HorizontalAlignment="Right" Margin="0,0,0,5"/>
                                     <Label x:Name="lab_path" Content="Install Path:" Grid.Column="1" Grid.Row="1"/>
                                 </DockPanel>
+                                <CheckBox x:Name="datlaunchingcheckbox" Content="Dat Launching" Click="CheckBox_Click" Checked="datlaunchingcheckbox_Checked"/>
 
                             </StackPanel>
                             <Grid Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right">
@@ -355,7 +356,7 @@
                         </Grid>
                         <Separator Margin="5" DockPanel.Dock="Top"/>
                         <Label Content="Accounts:" Style="{StaticResource H1}" DockPanel.Dock="Top"/>
-                        <ListView x:Name="lv_accs" DataContext="{Binding Path=Account}" SelectionChanged="lv_accs_SelectionChanged" SelectionMode="Multiple">
+                        <ListView x:Name="lv_accs" DataContext="{Binding Path=Account}" SelectionChanged="lv_accs_SelectionChanged" SelectionMode="Multiple" MouseDoubleClick="lv_accs_MouseDoubleClick">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

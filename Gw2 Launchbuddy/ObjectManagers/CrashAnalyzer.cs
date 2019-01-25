@@ -218,7 +218,7 @@ namespace Gw2_Launchbuddy
             }
             catch (Exception e)
             {
-                System.Windows.Forms.MessageBox.Show("Could not open Crashlog!\n"+ e.Message);
+               //System.Windows.Forms.MessageBox.Show("Could not open Crashlog!\n"+ e.Message); // Why bother telling the user their crash log doesn't exist?
             }
         }
     }

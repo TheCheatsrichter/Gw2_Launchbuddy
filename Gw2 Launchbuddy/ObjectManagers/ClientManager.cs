@@ -320,30 +320,145 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 args += arg.ToString() + " ";
             }
-            args += "-shareArchive ";
-            
+
+
             //Add Login Credentials
             if (account.Settings.HasLoginCredentials)
             {
-                args += "-nopatchui -autologin ";
-                args += "-email \"" + account.Settings.Email+"\" ";
-                args += "-password \"" + account.Settings.Password + "\" ";
+                args += "-autologin ";
+                if (!Properties.Settings.Default.datlaunching)
+                {
+                    args += "-shareArchive ";
+                    args += "-nopatchui ";
+                    args += "-email \"" + account.Settings.Email + "\" ";
+                    args += "-password \"" + account.Settings.Password + "\" ";
+                }
             }
 
             //Add Server Options
             if (ServerManager.SelectedAssetserver != null)
-                if(ServerManager.SelectedAssetserver.Enabled)
-                args += "-assetserver " + ServerManager.SelectedAssetserver.ToArgument;
+                if (ServerManager.SelectedAssetserver.Enabled)
+                    args += "-assetserver " + ServerManager.SelectedAssetserver.ToArgument;
             if (ServerManager.SelectedAuthserver != null)
                 if (ServerManager.SelectedAuthserver.Enabled)
                     args += "-authserver " + ServerManager.SelectedAuthserver.ToArgument;
 
-            Process.StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath, Arguments=args };
+            // Deltra Code
+            if (Properties.Settings.Default.datlaunching)
+            {
+                args += "-autologin ";
+
+                try
+                {
+                    Debug.WriteLine("DeltraCodeLauncing: " + Properties.Settings.Default.datlaunching.ToString());
+                    string SymLinkingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\";
+                    string target = Path.Combine(SymLinkingPath, "Local.dat");
+                    string source = Path.Combine(SymLinkingPath, "Local-" + account.Nickname + ".dat");
+                    var stringCommand = string.Format(System.Globalization.CultureInfo.InvariantCulture, "/c mklink {0}{1}{2}", "", "\"" + source + "\"" + " ", "\"" + target + "\"");
+                    Debug.WriteLine(stringCommand);
+
+                    if (!File.Exists(target)) {
+                        CreateSymLink(source, target);
+                    }
+
+                    if(File.Exists(target))
+                    {
+                        FileInfo DatFile = new FileInfo(target);
+                        if (IsFileLocked(DatFile) == false)
+                        {
+                            if (DatFile.Length == 0)
+                            {
+                                DatFile.Delete();
+                                CreateSymLink(source, target);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Dat file isn't a symlink.");
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Source + e.Message);
+                }
+            }
+
+            Process.StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath, Arguments = args };
         }
+
+        private static bool IsFileLocked(FileInfo file) // https://stackoverflow.com/questions/876473/is-there-a-way-to-check-if-a-file-is-in-use
+        {
+            if(!File.Exists(file.FullName)) { return false; }
+            FileStream stream = null;
+
+            try
+            {
+                stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None);
+            }
+            catch (IOException)
+            {
+                //the file is unavailable because it is:
+                //still being written to
+                //or being processed by another thread
+                //or does not exist (has already been processed)
+                return true;
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
+            }
+
+            //file is not locked
+            return false;
+        }
+
+        public static void CreateSymLink(string source, string target) // https://github.com/amd989/Symlinker/blob/master/Symlink%20Creator/MainWindow.cs
+        {
+            try
+            {
+                // concatenates a pair of "", this is to make folders with spaces to work
+                var stringCommand = string.Format(System.Globalization.CultureInfo.InvariantCulture, "/c mklink {0}{1}{2}{3}", "", "", "\"" + target + "\"" + " ", "\"" + source + "\"");
+                Debug.WriteLine(stringCommand);
+                var processStartInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd",
+                    Arguments = stringCommand,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true
+                };
+
+                var process = new Process { StartInfo = processStartInfo, EnableRaisingEvents = true };
+                process.ErrorDataReceived += process_ErrorDataReceived;
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+                process.WaitForExit();
+                process.Close();
+                process.Dispose();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error!");
+            }
+        }
+
+        private static void process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(e.Data))
+            {
+                MessageBox.Show(e.Data, "Error!");
+            }
+        }
+		
+		// DeltraCode End
 
         private void SetProcessPriority()
         {
-            if (Account.Settings.ProcessPriority != null)
+            if (Account.Settings.ProcessPriority != null | Account.Settings.ProcessPriority != ProcessPriorityClass.Normal)
             {
                 try
                 {
@@ -443,7 +558,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             break;
 
                         case var expression when (Status < ClientStatus.Created):
-                            Process.Start();
+							if (!Properties.Settings.Default.datlaunching) { Process.Start(); }
+							else { if (File.Exists(@"C:\Users\Harrison\AppData\Roaming\Guild Wars 2\local.dat")) { Process.Start(); } } // Need to add some sort of error check to see if a .dat file is actually linked here, this is buggy.
                             Suspend();
                             Status = ClientStatus.Created;
                             break;
@@ -455,7 +571,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             break;
 
                         case var expression when (Status < ClientStatus.MutexClosed):
-                            CloseMutex();
+                            if (!Properties.Settings.Default.datlaunching)
+                            { CloseMutex(); }
                             Status = ClientStatus.MutexClosed;
                             break;
 
