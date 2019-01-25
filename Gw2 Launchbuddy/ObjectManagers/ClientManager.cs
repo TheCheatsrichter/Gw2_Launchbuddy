@@ -323,8 +323,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             args += "-shareArchive ";
 
-            /*
+
+
             //Add Login Credentials
+            /*
+            
             if (account.Settings.HasLoginCredentials)
             {
                 args += "-nopatchui -autologin ";
@@ -333,7 +336,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             */
             LocalDatManager.Apply(account.Settings.Loginfile);
-
+            args += "-autologin ";
 
             //Add Server Options
             if (ServerManager.SelectedAssetserver != null)
