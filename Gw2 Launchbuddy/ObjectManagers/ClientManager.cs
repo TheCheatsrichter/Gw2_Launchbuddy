@@ -350,7 +350,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
                 try
                 {
-                    Debug.WriteLine("DeltraCodeLauncing: " + Properties.Settings.Default.datlaunching.ToString());
                     string SymLinkingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\";
                     string target = Path.Combine(SymLinkingPath, "Local.dat");
                     string source = Path.Combine(SymLinkingPath, "Local-" + account.Nickname + ".dat");
@@ -559,7 +558,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
                         case var expression when (Status < ClientStatus.Created):
 							if (!Properties.Settings.Default.datlaunching) { Process.Start(); }
-							else { if (File.Exists(@"C:\Users\Harrison\AppData\Roaming\Guild Wars 2\local.dat")) { Process.Start(); } } // Need to add some sort of error check to see if a .dat file is actually linked here, this is buggy.
+							else { if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\local.dat")) { Process.Start(); } } // Need to add some sort of error check to see if a .dat file is actually linked here, this is buggy.
                             Suspend();
                             Status = ClientStatus.Created;
                             break;
