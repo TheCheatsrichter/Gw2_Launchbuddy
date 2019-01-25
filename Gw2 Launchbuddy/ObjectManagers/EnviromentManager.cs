@@ -42,6 +42,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static string GwClientExePath { get { return GwClientPath + GwClientExeName; } }
         public static bool? GwClientUpToDate = null;
 
+        public static string GwLocaldatPath = GwAppdataPath + "Local.dat";
+        public static string GwLocaldatBakPath = GwAppdataPath + "Local.dat.bak";
+
+        public static string LBLocaldatsPath = LBAppdataPath;
+
+
         public static string TMP_GFXConfig = GwAppdataPath + "TMP_GFX.xml";
         public static string TMP_BackupGFXConfig = GwAppdataPath + "TMP_GFX.bak";
 

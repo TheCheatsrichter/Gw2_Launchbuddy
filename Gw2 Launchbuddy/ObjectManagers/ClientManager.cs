@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.ComponentModel;
 using Gw2_Launchbuddy;
 using System.Windows.Threading;
+using Gw2_Launchbuddy.Modifiers;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -321,7 +322,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 args += arg.ToString() + " ";
             }
             args += "-shareArchive ";
-            
+
+            /*
             //Add Login Credentials
             if (account.Settings.HasLoginCredentials)
             {
@@ -329,6 +331,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 args += "-email \"" + account.Settings.Email+"\" ";
                 args += "-password \"" + account.Settings.Password + "\" ";
             }
+            */
+            LocalDatManager.Apply(account.Settings.Loginfile);
+
 
             //Add Server Options
             if (ServerManager.SelectedAssetserver != null)
@@ -462,6 +467,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                         case var expression when (Status < ClientStatus.Running):
                             RestoreGFX();
                             SetProcessPriority();
+                            LocalDatManager.ToDefault();
                             Status = ClientStatus.Running;
                             break;
 

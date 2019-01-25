@@ -20,6 +20,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Xml;
+using Gw2_Launchbuddy.Modifiers;
 
 namespace Gw2_Launchbuddy
 {
@@ -1543,6 +1544,14 @@ namespace Gw2_Launchbuddy
             lv_AddOns.ItemsSource = AddOnManager.addOnCollection;
         }
         #endregion DELETE ON 1.9
+
+
+
+        private void bt_loginfile_Click(object sender, RoutedEventArgs e)
+        {
+            AccountSettings settings = ((sender as Button).DataContext as AccountSettings);
+            settings.Loginfile = new LocalDatFile(settings.Nickname);
+        }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
