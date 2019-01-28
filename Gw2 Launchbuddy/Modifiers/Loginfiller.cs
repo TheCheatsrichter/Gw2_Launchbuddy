@@ -23,12 +23,8 @@ namespace Gw2_Launchbuddy.Modifiers
             Process pro = acc.Client.Process;
 
             //SetForegroundWindow(pro.MainWindowHandle);
-            PressKeyDown(Keys.Control | Keys.A,pro);
-            PressKeyDown(Keys.Return,pro);
             TypeString(acc.Settings.Email, pro);
             PressKeyDown(Keys.Tab, pro);
-            PressKeyDown(Keys.Control | Keys.A, pro);
-            PressKeyDown(Keys.Return, pro);
             TypeString(acc.Settings.Password, pro);
             PressKeyDown(Keys.Tab, pro);
             PressKeyDown(Keys.Tab, pro);
