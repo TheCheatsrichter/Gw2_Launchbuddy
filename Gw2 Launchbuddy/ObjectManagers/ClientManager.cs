@@ -172,9 +172,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Created = 0x01 << 1,
             Injected = 0x01 << 2,
             MutexClosed = 0x01 << 3,
-            Running = 0x01 << 4,
-            Closed = 0x01 << 5,
-            Crash= 0x01 << 6
+            Login = 0x01 <<4,
+            Running = 0x01 << 5,
+            Closed = 0x01 << 6,
+            Crash= 0x01 << 7
         };
 
         public ClientStatus Status
@@ -335,8 +336,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 args += "-password \"" + account.Settings.Password + "\" ";
             }
             */
-            LocalDatManager.Apply(account.Settings.Loginfile);
-            args += "-autologin ";
+            /*
+            if(account.Settings.Loginfile!=null)
+            {
+                LocalDatManager.Apply(account.Settings.Loginfile);
+                args += "-autologin ";
+            }
+            */
 
             //Add Server Options
             if (ServerManager.SelectedAssetserver != null)
@@ -420,6 +426,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
+        private void FillLogin()
+        {
+            if(account.Settings.HasLoginCredentials)
+            {
+                Loginfiller.Login(account);
+            }
+        }
+
         public void Launch()
         {
             while (Status < ClientStatus.Running)
@@ -467,10 +481,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             Status = ClientStatus.MutexClosed;
                             break;
 
+                        case var expression when (Status < ClientStatus.Login):
+                            FillLogin();
+                            Status = ClientStatus.Login;
+                            break;
+
                         case var expression when (Status < ClientStatus.Running):
                             RestoreGFX();
                             SetProcessPriority();
-                            LocalDatManager.ToDefault();
                             Status = ClientStatus.Running;
                             break;
 

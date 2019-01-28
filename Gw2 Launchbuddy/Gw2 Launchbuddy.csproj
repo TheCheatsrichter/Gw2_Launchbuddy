@@ -191,6 +191,8 @@
       <DependentUpon>LoadingScreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="Modifiers\LocalDatManager.cs" />
+    <Compile Include="Modifiers\Loginfiller.cs" />
+    <Compile Include="Modifiers\ModuleReader.cs" />
     <Compile Include="ObjectManagers\Hotkeys.cs" />
     <Compile Include="ObjectManagers\MusicManager.cs" />
     <Compile Include="ObjectManagers\AccountManager.cs" />

@@ -439,7 +439,7 @@
                                             </StackPanel>
                                         </Expander.Header>
                                         <WrapPanel>
-                                            <WrapPanel Grid.ColumnSpan="5" Grid.Row="2" Grid.RowSpan="2" Visibility="Collapsed">
+                                            <WrapPanel Grid.ColumnSpan="5" Grid.Row="2" Grid.RowSpan="2" Visibility="Visible">
                                                 <StackPanel Orientation="Horizontal" >
                                                     <Label x:Name="lab_email" Content="Email:"  d:LayoutOverrides="Width" VerticalAlignment="Center" FontWeight="Bold"/>
                                                     <TextBox x:Name="tb_email" Height="23" MinWidth="150" LostKeyboardFocus="tb_email_LostKeyboardFocus" Text="{Binding Path=UI_Email}"/>
@@ -447,7 +447,7 @@
                                                     <PasswordBox x:Name="tb_passw" Height="23" MinWidth="150" LostKeyboardFocus="tb_passw_LostKeyboardFocus" />
                                                 </StackPanel>
                                             </WrapPanel>
-                                            <Button Name="bt_loginfile" Height="30" Width="120" Click="bt_loginfile_Click">Set Loginfile</Button>
+                                            <Button Name="bt_loginfile" Height="30" Width="120" Click="bt_loginfile_Click" Visibility="Collapsed">Set Loginfile</Button>
                                         </WrapPanel>
                                     </Expander>
                                     <Expander ToolTip="Choose an icon for this account">
