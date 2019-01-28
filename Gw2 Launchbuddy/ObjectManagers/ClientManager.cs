@@ -491,12 +491,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             SetProcessPriority();
                             Status = ClientStatus.Running;
                             break;
-
-                        default:
-                            //Undeclared Status Close Process and create new one
-                            Close();
-                            Status = ClientStatus.None;
-                            break;
                     }
                     
                 }
@@ -506,6 +500,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     Status = ClientStatus.None;
                 }
             }
+
+            if (Status.HasFlag(ClientStatus.Crash)) Status = ClientStatus.None;
+
             try
             {
                 Focus();
