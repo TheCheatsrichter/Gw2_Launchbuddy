@@ -275,9 +275,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
         private AES Cryptor = new AES();
 
         [XmlIgnore]
-        public string Email { set { enc_email = Cryptor.Encrypt(value); if (value == "") enc_email = null; } get { return Cryptor.Decrypt(enc_email); } }
+        public string Email { set { enc_email = Cryptor.Encrypt(value); OnPropertyChanged("HasLoginCredentials"); if (value == "") enc_email = null; } get { return Cryptor.Decrypt(enc_email); } }
         [XmlIgnore]
-        public string Password { set {enc_password = Cryptor.Encrypt(value); if (value == "") enc_password = null; } get { return Cryptor.Decrypt(enc_password); } }
+        public string Password { set {enc_password = Cryptor.Encrypt(value); OnPropertyChanged("HasLoginCredentials"); if (value == "") enc_password = null; } get { return Cryptor.Decrypt(enc_password); } }
 
         [XmlIgnore]
         public string UI_Email

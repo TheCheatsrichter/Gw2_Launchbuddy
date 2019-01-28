@@ -60,7 +60,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             foreach (IHotkey hotkey in HotkeyCollection)
             {
-                HotkeyManager.Current.AddOrReplace(hotkey.ID.ToString(),hotkey.KeyValue,hotkey.Modifiers,hotkey.ExecuteEvent);
+                try
+                {
+                    HotkeyManager.Current.AddOrReplace(hotkey.ID.ToString(), hotkey.KeyValue, hotkey.Modifiers, hotkey.ExecuteEvent);
+                }
+                catch
+                {
+                    HotkeyManager.Current.Remove(hotkey.ID.ToString());
+                }
             }
         }
 
@@ -105,7 +112,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         [XmlIgnore]
         public EventHandler<NHotkey.HotkeyEventArgs> ExecuteEvent { set { executevent = value; } get { return executevent; } }
 
-        public ObservableCollection<string> GetCommands()
+        public virtual ObservableCollection<string> GetCommands()
         {
             if (TargetObject == null) return null;
             ObservableCollection<string> commands = new ObservableCollection<string>();
@@ -175,6 +182,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Init();
         }
         private AccountHotkey() { Init(); }
+
+        public override ObservableCollection<string> GetCommands()
+        {
+            return new ObservableCollection<string> {"Launch","Close","Focus","Suspend","Resume","Maximize","Minimize"};
+        }
     }
 }
 

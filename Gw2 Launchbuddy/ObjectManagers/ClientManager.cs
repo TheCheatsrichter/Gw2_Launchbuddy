@@ -428,7 +428,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private void FillLogin()
         {
-            if(account.Settings.HasLoginCredentials)
+            if(account.Settings.Email!=null && account.Settings.Password!=null)
             {
                 Loginfiller.Login(account);
             }
