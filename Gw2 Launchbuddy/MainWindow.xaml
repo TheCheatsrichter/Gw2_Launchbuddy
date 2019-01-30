@@ -438,7 +438,8 @@
                                                 <Label Style="{StaticResource H2}">Login Credentials</Label>
                                             </StackPanel>
                                         </Expander.Header>
-                                        <WrapPanel>
+                                        <StackPanel>
+                                            <TextBlock Foreground="Red" TextWrapping="Wrap" Text="In order to make autologin work make sure that NO EMAIL and NO PASSWORD is remembered when you normally login. After a client started do NOT interact with the login window."/>
                                             <WrapPanel Grid.ColumnSpan="5" Grid.Row="2" Grid.RowSpan="2" Visibility="Visible">
                                                 <StackPanel Orientation="Horizontal" >
                                                     <Label x:Name="lab_email" Content="Email:"  d:LayoutOverrides="Width" VerticalAlignment="Center" FontWeight="Bold"/>
@@ -448,7 +449,7 @@
                                                 </StackPanel>
                                             </WrapPanel>
                                             <Button Name="bt_loginfile" Height="30" Width="120" Click="bt_loginfile_Click" Visibility="Collapsed">Set Loginfile</Button>
-                                        </WrapPanel>
+                                        </StackPanel>
                                     </Expander>
                                     <Expander ToolTip="Choose an icon for this account">
                                         <Expander.Header>

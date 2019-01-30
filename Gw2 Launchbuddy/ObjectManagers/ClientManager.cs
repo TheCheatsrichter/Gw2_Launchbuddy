@@ -344,6 +344,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             */
 
+            if(Account.Settings.HasLoginCredentials)
+            {
+                args += "-autologin ";
+            }
+
             //Add Server Options
             if (ServerManager.SelectedAssetserver != null)
                 if(ServerManager.SelectedAssetserver.Enabled)
