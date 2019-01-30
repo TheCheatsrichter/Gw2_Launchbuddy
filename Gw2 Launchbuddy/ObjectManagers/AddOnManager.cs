@@ -122,10 +122,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void LaunchLbAddons()
         {
-            UpdateList();
+            //UpdateList();
             foreach (AddOn addon in addOnCollection)
             {
-                if ((addon.IsMultilaunch || addon.ChildProcess.Count <= 0) && addon.IsLbAddon)
+                if (addon.IsLbAddon)
                 {
                     try
                     {

@@ -113,7 +113,6 @@ namespace Gw2_Launchbuddy
             lv_accs.ItemsSource = AccountManager.Accounts;
             lv_accssettings.ItemsSource = AccountManager.Accounts;
             SettingsTabSetup();
-            AddOnManager.LaunchLbAddons();
             if (Properties.Settings.Default.notifylbupdate)
             {
                 Thread checklbver = new Thread(checklbversion);
@@ -587,11 +586,6 @@ namespace Gw2_Launchbuddy
             {
                 if (EnviromentManager.LBUseClientGUI) EnviromentManager.LBInstanceGUI.Show();
                 AccountManager.LaunchAccounts();
-                if (addonflag)
-                {
-                    addonflag = false;
-                    AddOnManager.LaunchAll();
-                }
             }
         }
 
