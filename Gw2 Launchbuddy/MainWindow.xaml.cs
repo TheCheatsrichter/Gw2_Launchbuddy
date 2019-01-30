@@ -1346,6 +1346,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
+        /*
         private void tb_email_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
             string email = tb_email.Text;
@@ -1379,6 +1380,7 @@ namespace Gw2_Launchbuddy
                 tb_passw.Focus();
             }
         }
+        */
 
         private void checkb_clientport_Checked(object sender, RoutedEventArgs e)
         {
@@ -1550,7 +1552,7 @@ namespace Gw2_Launchbuddy
         private void bt_loginfile_Click(object sender, RoutedEventArgs e)
         {
             AccountSettings settings = ((sender as Button).DataContext as AccountSettings);
-            settings.Loginfile = new LocalDatFile(settings.Nickname);
+            settings.SetLoginFile();
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

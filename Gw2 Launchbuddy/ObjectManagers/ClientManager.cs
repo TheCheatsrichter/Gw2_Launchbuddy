@@ -336,15 +336,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 args += "-password \"" + account.Settings.Password + "\" ";
             }
             */
-            /*
+            
             if(account.Settings.Loginfile!=null)
-            {
-                LocalDatManager.Apply(account.Settings.Loginfile);
-                args += "-autologin ";
-            }
-            */
-
-            if(Account.Settings.HasLoginCredentials)
             {
                 args += "-autologin ";
             }
@@ -373,6 +366,15 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     MessageBox.Show("Could not set Process priority");
                 }
             }
+        }
+
+        private void SwapLocalDat()
+        {
+            if (account.Settings.Loginfile != null)
+            {
+                LocalDatManager.Apply(account.Settings.Loginfile);
+            }
+
         }
 
         private void CloseMutex()
@@ -439,6 +441,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
+        private void PressLoginButton()
+        {
+            Loginfiller.PressLoginButton(Account);
+        }
+
         public void Launch()
         {
             while (Status < ClientStatus.Running)
@@ -466,6 +473,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                         case var expression when (Status < ClientStatus.Configured):
                             ConfigureProcess();
                             SwapGFX();
+                            SwapLocalDat();
                             Status = ClientStatus.Configured;
                             break;
 
@@ -487,7 +495,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             break;
 
                         case var expression when (Status < ClientStatus.Login):
-                            FillLogin();
+                            if (Account.Settings.Loginfile != null)
+                            {
+                                PressLoginButton();
+                                LocalDatManager.ToDefault();
+                            }
                             Status = ClientStatus.Login;
                             break;
 

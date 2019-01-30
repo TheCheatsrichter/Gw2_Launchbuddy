@@ -10,7 +10,7 @@ using System.Xml;
 using System.Net;
 using System.Reflection;
 using CommandLine;
-
+using Gw2_Launchbuddy.Modifiers;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -18,12 +18,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class EnviromentManager
     {
-        public static Version LBVersion = new Version("1.8.2");
+        public static Version LBVersion = new Version("1.8.3");
         public static LaunchOptions LaunchOptions;
 
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
         public static string LBActiveClientsPath = LBAppdataPath + "lbac.txt";
-        public static string LBAccountPath = LBAppdataPath + "lb_acc.bin";
         public static string LBIconsPath = LBAppdataPath + "Icons\\";
         public static string LBAccPath = LBAppdataPath + "Accs.xml";
 
@@ -45,7 +44,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static string GwLocaldatPath = GwAppdataPath + "Local.dat";
         public static string GwLocaldatBakPath = GwAppdataPath + "Local.dat.bak";
 
-        public static string LBLocaldatsPath = LBAppdataPath;
+        public static string LBLocaldatsPath = LBAppdataPath +"Loginfiles\\";
 
 
         public static string TMP_GFXConfig = GwAppdataPath + "TMP_GFX.xml";
@@ -82,22 +81,24 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             AddOnManager.SaveAddons(LBAddonPath);
             Hotkeys.UnregisterAll();
+            //Local Dat Cleanup
+            LocalDatManager.CleanUp();
         }
 
         private static void DirectorySetup()
         {
             if (!Directory.Exists(LBAppdataPath)) Directory.CreateDirectory(LBAppdataPath);
 
-            PropertyInfo[] props = typeof(EnviromentManager).GetProperties(BindingFlags.Public);
+            FieldInfo[] props = typeof(EnviromentManager).GetFields();
 
-            foreach(PropertyInfo prop in props.Where(p=>p.PropertyType== typeof(string)))
+            foreach(FieldInfo prop in props.Where(p=>p.FieldType== typeof(string)))
             {
-                object value=null;
-                if (File.GetAttributes(prop.GetValue(value) as string).HasFlag(FileAttributes.Directory))
+                string pvalue=prop.GetValue(null) as string;
+                if(pvalue!=null)
                 {
-                    if(!Directory.Exists(prop.GetValue(value) as string))
+                    if (pvalue.EndsWith("\\") && !Directory.Exists(pvalue))
                     {
-                        Directory.CreateDirectory(prop.GetValue(value) as string);
+                        Directory.CreateDirectory(pvalue);
                     }
                 }
             }

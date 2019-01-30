@@ -172,13 +172,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public class AccountHotkey : Hotkey
     {
-        public string AccountNickname { get; set; }
-        private Account Account { get { return AccountManager.GetAccountByName(AccountNickname); } }
+        public int AccountId { get; set; }
+        private Account Account { get { return AccountManager.GetAccountByID(AccountId); } }
         public override object TargetObject { get { return Account.Client; } }
 
-        public AccountHotkey(string nickname)
+        public AccountHotkey(int accountid)
         {
-            AccountNickname = nickname;
+            AccountId= accountid;
             Init();
         }
         private AccountHotkey() { Init(); }

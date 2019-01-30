@@ -147,10 +147,27 @@ namespace Gw2_Launchbuddy.ObjectManagers
             if (Accounts.Any<Account>(a => a.Nickname == nickname)) return Accounts.First<Account>(a => a.Nickname == nickname);
             return null;
         }
+
+        public static Account GetAccountByID(int id)
+        {
+            if (Accounts.Any<Account>(a => a.ID == id)) return Accounts.First<Account>(a => a.ID == id);
+            return null;
+        }
+
+        public static int GenerateID()
+        {
+            int i = 0;
+            while(Accounts.Any<Account>(a=>a.ID==i))
+            {
+                i++;
+            }
+            return i;
+        }
     }
 
     public class Account
     {
+        public int ID { get; set; }
         public string Nickname { get; set; }
         [XmlIgnore]
         public bool IsEnabled = false;
@@ -165,7 +182,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 AccountManager.Accounts.Add(this);
                 if (Settings == null)
                 {
-                    Settings = new AccountSettings(Nickname);
+                    Settings = new AccountSettings(this);
                     Settings.Arguments = new Arguments();
                 }
             }
@@ -179,11 +196,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public Account(string nickname)
         {
+            ID = AccountManager.GenerateID();
             CreateAccount(nickname);
         }
         public Account(string nickname, Account account)
         {
             this.Settings = account.Settings.GetClone();
+            ID = AccountManager.GenerateID();
             CreateAccount(nickname);
         }
 
@@ -193,9 +212,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public class AccountSettings : INotifyPropertyChanged
     {
-        public string Nickname { set; get; }
+        public int AccountID { set; get; }
         [XmlIgnore]
-        private Account account { get { return AccountManager.GetAccountByName(Nickname); } }
+        private Account account { get { return AccountManager.GetAccountByID(AccountID); } }
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Arguments Arguments { get; set; }
@@ -232,7 +251,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void AddHotkey()
         {
-            AccHotkeys.Add(new AccountHotkey(Nickname));
+            AccHotkeys.Add(new AccountHotkey(AccountID));
         }
 
         public void RemoveHotkey(AccountHotkey key)
@@ -257,11 +276,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Init();
         }
 
-        public AccountSettings(string nickname)
+        public AccountSettings(Account acc)
         {
             //Init Defaults if no safefile
             Init();
-            Nickname = nickname;
+            AccountID = acc.ID;
         }
 
         public Icon Icon { get { return icon; } set { icon = value; OnPropertyChanged("Icon"); } }
@@ -314,7 +333,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         }
 
         [XmlIgnore]
-        public bool HasLoginCredentials { get { return Email != null && Password != null; } set { } }
+        public bool HasLoginCredentials { get { return Loginfile!=null; } set { } }
         [XmlIgnore]
         public bool HasArguments { get { if (Arguments.Contains(Arguments.FirstOrDefault<Argument>(a => a.IsActive == true))) { return true; } return false; } set { } }
         [XmlIgnore]
@@ -324,16 +343,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void SetLoginFile()
         {
-            Loginfile = new LocalDatFile(account.Nickname);
+            Loginfile = new LocalDatFile(AccountID.ToString());
         }
-
-        //UI Bools
-
-
-
         //Missing stuff (all nullable):
         /*
-        localdat;
         Window Size,Startposition etc.
         */
     }

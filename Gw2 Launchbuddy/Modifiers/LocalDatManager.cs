@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Windows.Forms;
-using System.Xml.Serialization;
+
 
 namespace Gw2_Launchbuddy.Modifiers
 {
@@ -20,14 +20,7 @@ namespace Gw2_Launchbuddy.Modifiers
 
         public static void Add(LocalDatFile newfile)
         {
-            if (!datacollection.Any<LocalDatFile>(d => d.Path == newfile.Path))
-            {
-                datacollection.Add(newfile);
-            }
-            else
-            {
-                MessageBox.Show("Local dat allready in usage by another account");
-            }
+            datacollection.Add(newfile);
         }
 
         public static void Remove(LocalDatFile file)
@@ -56,7 +49,7 @@ namespace Gw2_Launchbuddy.Modifiers
         {
             if (File.Exists(sourcefile) && !File.Exists(EnviromentManager.GwLocaldatPath))
             {
-                if (!CreateSymbolicLink(sourcefile, EnviromentManager.GwLocaldatPath, 0x0))
+                if (!CreateSymbolicLink( EnviromentManager.GwLocaldatPath, sourcefile, 0x0))
                 {
                     throw new Exception("Could not create Symbolic link. Not running as Admin?");
                 }
@@ -73,14 +66,34 @@ namespace Gw2_Launchbuddy.Modifiers
             return pathInfo.Attributes.HasFlag(FileAttributes.ReparsePoint);
         }
 
+        public static void CleanUp()
+        {
+            ObservableCollection<LocalDatFile> tmp_datfiles = new ObservableCollection<LocalDatFile>();
+            foreach(Account acc in AccountManager.Accounts)
+            {
+                tmp_datfiles.Add(acc.Settings.Loginfile);
+            }
+            foreach (string file in Directory.GetFiles(EnviromentManager.LBLocaldatsPath))
+            {
+                if (!tmp_datfiles.Any<LocalDatFile>(f=>f.Name==Path.GetFileNameWithoutExtension(file)))
+                {
+                    File.Delete(file);
+                }
+            }
+        }
+
         public static void Apply(LocalDatFile file)
         {
             try
             {
+                Repair();
+
                 //Is Valid?
-                if (!file.Valid) throw new Exception("Invalid Login file " + file.Name + " please recreate this file in the account Manager.");
+                if (!file.Valid) MessageBox.Show("Invalid Login file " + file.Name + " please recreate this file in the account Manager.");
+
                 //Check Version???
                 CheckVersion(file);
+
                 //Create Backup of Local dat
                 if (!IsSymbolic(EnviromentManager.GwLocaldatPath))
                 {
@@ -94,6 +107,7 @@ namespace Gw2_Launchbuddy.Modifiers
                 //Remember last used file for ToDefault()
                 CurrentFile = file;
             }
+
             catch (Exception e)
             {
                 MessageBox.Show("An error occured while swaping the Login file." + e.Message);
@@ -127,30 +141,31 @@ namespace Gw2_Launchbuddy.Modifiers
 
         private static void CheckVersion(LocalDatFile file)
         {
-            if (!file.IsUpToDate) MessageBox.Show("The used account login file seems outdated. Outdated files may cause login problems. Please recreate the file in the account settings");
+            //if (!file.IsUpToDate) MessageBox.Show("The used account login file seems outdated. Outdated files may cause login problems. Please recreate the file in the account settings");
         }
     }
 
-    [Serializable]
     public class LocalDatFile
     {
-
         //EnviromentManager.GwClientExePath
 
-        private string path;
-        private string gw2build;
-
-        public string Path { get { return path; } }
-        public string Name { get { return System.IO.Path.GetFileNameWithoutExtension(path); } }
+        public string Path { set; get; }
+        public string gw2build { set; get; }
+        public string Name { get { return System.IO.Path.GetFileNameWithoutExtension(Path); } }
         public string Gw2Build { get { return gw2build; } }
-        [XmlIgnore]
         public bool IsUpToDate { get { return Gw2Build == EnviromentManager.GwClientVersion; } }
         public bool Valid = false;
+        public string MD5HASH {  get { return CalculateMD5(Path); } }
 
         public LocalDatFile(string filename)
         {
             gw2build = EnviromentManager.GwClientVersion;
             if (InitFile(filename)) LocalDatManager.Add(this);
+        }
+
+        ~LocalDatFile()
+        {
+            LocalDatManager.DataCollection.Remove(this);
         }
 
         private string CalculateMD5(string filename)
@@ -171,7 +186,10 @@ namespace Gw2_Launchbuddy.Modifiers
 
         private bool InitFile(string filename)
         {
-            string oldhash = CalculateMD5(EnviromentManager.GwLocaldatPath);
+            string filepath = EnviromentManager.LBLocaldatsPath + filename + ".dat";
+            gw2build = EnviromentManager.GwClientVersion;
+            Path = filepath;
+
             Process pro = new Process { StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath) };
             pro.Start();
             MessageBox.Show("Please check the remember email and password checkbox and login manually. Then press THIS button to continue!");
@@ -196,17 +214,15 @@ namespace Gw2_Launchbuddy.Modifiers
             try
             {
 #if DEBUG
-                Console.WriteLine("Login data Hashmatch: "+filename+": "+oldhash == CalculateMD5(EnviromentManager.GwLocaldatPath));
+                Console.WriteLine("Login data Hash: "+filename+": " + MD5HASH);
 #endif
-                if (oldhash == CalculateMD5(EnviromentManager.GwLocaldatPath) && LocalDatManager.DataCollection.Count > 0)
+ /*               if (LocalDatManager.DataCollection.Any(f=>f.MD5HASH==CalculateMD5(EnviromentManager.GwLocaldatPath) && f.Name!=Name))
                 {
-                    throw new Exception("User did not press login before closing Gw2.");
+                    throw new Exception("Same logindata allready used by another account!");
                 }
-                string filepath = EnviromentManager.LBLocaldatsPath + filename + ".dat";
+                */
                 if (File.Exists(filepath)) File.Delete(filepath);
                 File.Copy(EnviromentManager.GwLocaldatPath, filepath);
-                gw2build = EnviromentManager.GwClientVersion;
-                path = filepath;
                 Valid = true;
                 return true;
             }

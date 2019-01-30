@@ -35,6 +35,14 @@ namespace Gw2_Launchbuddy.Modifiers
             PressKeyUp(Keys.Enter, pro);
         }
 
+        public static void PressLoginButton(Account acc)
+        {
+            ModuleReader.WaitForModule("WINNSI.DLL", acc.Client.Process);
+            Thread.Sleep(1500);
+            PressKeyDown(Keys.Enter,acc.Client.Process);
+            PressKeyUp(Keys.Enter, acc.Client.Process);
+        }
+
         private static void PressKeyDown(Keys key, Process pro)
         {
             const uint WM_KEYDOWN = 0x0100;
