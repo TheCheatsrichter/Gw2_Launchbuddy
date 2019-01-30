@@ -780,7 +780,7 @@
                             <TextBox x:Name="tb_AddonName" Width="100" Height="23"/>
                             <Label Content="Parameters"/>
                             <TextBox x:Name="tb_AddonArgs" Width="100" Height="23"/>
-                            <CheckBox x:Name="cb_AddonOnLB" Content="Start with LB" IsChecked="True" IsEnabled="False" VerticalAlignment="Center" Margin="5,0" />
+                            <CheckBox x:Name="cb_AddonOnLB" Content="Start with LB" VerticalAlignment="Center" Margin="5,0" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right">
                             <Button x:Name="bt_AddAddon" Content="Add" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_AddAddon_Click"/>

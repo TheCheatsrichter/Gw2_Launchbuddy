@@ -586,6 +586,11 @@ namespace Gw2_Launchbuddy
             {
                 if (EnviromentManager.LBUseClientGUI) EnviromentManager.LBInstanceGUI.Show();
                 AccountManager.LaunchAccounts();
+                if (addonflag)
+                {
+                    addonflag = false;
+                    AddOnManager.LaunchAll();
+                }
             }
         }
 
