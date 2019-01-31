@@ -109,6 +109,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 Accounts = (ObservableCollection<Account>)deserializer.Deserialize(xmlInputStream);
                 xmlInputStream.Close();
             }
+            AddIDToOlderVersions();
 #endif
 #if !DEBUG
             try
@@ -128,7 +129,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
 #endif
 }
 
-
         public static bool IsValidEmail(string inp)
         {
             try
@@ -142,7 +142,19 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
-        public static Account GetAccountByName(string nickname)
+        private static void AddIDToOlderVersions()
+        {
+            foreach (Account acc in Accounts)
+            {
+                if (acc.ID == 0)
+                {
+                    acc.ID = GenerateID();
+                    acc.Settings.AccountID = acc.ID;
+                }
+            }
+        }
+
+            public static Account GetAccountByName(string nickname)
         {
             if (Accounts.Any<Account>(a => a.Nickname == nickname)) return Accounts.First<Account>(a => a.Nickname == nickname);
             return null;
@@ -156,7 +168,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static int GenerateID()
         {
-            int i = 0;
+            int i = 1;
             while(Accounts.Any<Account>(a=>a.ID==i))
             {
                 i++;
@@ -192,7 +204,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
             } 
         }
 
-        private Account() { CreateAccount(); }
+        private Account() {
+            CreateAccount();
+        }
 
         public Account(string nickname)
         {
