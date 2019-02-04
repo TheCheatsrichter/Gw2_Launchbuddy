@@ -56,14 +56,24 @@ namespace Gw2_Launchbuddy.Modifiers
     public static class ModuleReader
     {
 
-        public static void WaitForModule(string name, Process pro)
+        public static void WaitForModule(string name, Process pro, int? timeout=1000)
         {
             int ct = 0;
-            while (!CollectModules(pro).Any<Module>(m => m.ModuleName == name) && ct < 1000)
+            if(timeout!=null)
             {
-                Thread.Sleep(10);
-                ct++;
+                while (!CollectModules(pro).Any<Module>(m => m.ModuleName == name) && ct < timeout)
+                {
+                    Thread.Sleep(10);
+                    ct++;
+                }
+            }else
+            {
+                while (!CollectModules(pro).Any<Module>(m => m.ModuleName == name) )
+                {
+                    Thread.Sleep(10);
+                }
             }
+
             Console.WriteLine("DONE");
         }
 

@@ -357,7 +357,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void SetLoginFile()
         {
-            Loginfile = new LocalDatFile(AccountID.ToString());
+            Loginfile = LocalDatManager.CreateNewFile(AccountID.ToString());
         }
         //Missing stuff (all nullable):
         /*

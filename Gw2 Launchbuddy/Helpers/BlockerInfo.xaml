@@ -1,0 +1,25 @@
+﻿<Window x:Class="Gw2_Launchbuddy.Helpers.BlockerInfo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gw2_Launchbuddy.Helpers"
+        mc:Ignorable="d"
+        Title="BlockerInfo" Height="100" Width="350" Icon="/Gw2 Launchbuddy;component/launchbuddy.ico" WindowStyle="None" ResizeMode="NoResize">
+    <Grid >
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF1D1D1D" Offset="0"/>
+                <GradientStop Color="#FF0A0A0A" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid.OpacityMask>
+            <ImageBrush ImageSource="/Gw2 Launchbuddy;component/Resources/acc_opacitymask.png"/>
+        </Grid.OpacityMask>
+        <DockPanel>
+            <Button Content="Cancel" DockPanel.Dock="Bottom" Margin="15" Width="120" Name="bt_cancel" Click="bt_cancel_Click"/>
+            <TextBlock Name="tb_message"  Text="Launchbuddy is currently waiting for" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </DockPanel>
+
+    </Grid>
+</Window>

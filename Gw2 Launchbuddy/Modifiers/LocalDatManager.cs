@@ -147,6 +147,61 @@ namespace Gw2_Launchbuddy.Modifiers
         {
             //if (!file.IsUpToDate) MessageBox.Show("The used account login file seems outdated. Outdated files may cause login problems. Please recreate the file in the account settings");
         }
+
+
+        public static LocalDatFile CreateNewFile(string filename)
+        {
+            LocalDatFile datfile = new LocalDatFile();
+
+            string filepath = EnviromentManager.LBLocaldatsPath + filename + ".dat";
+            datfile.gw2build = EnviromentManager.GwClientVersion;
+            datfile.Path = filepath;
+
+            Process pro = new Process { StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath) };
+            pro.Start();
+            Action blockefunc = () => ModuleReader.WaitForModule("icm32.dll", pro,null);
+            Helpers.BlockerInfo.Run("Loginfile Creation","Please check remember email/password and login into the game.", blockefunc);
+            if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with cation.");
+
+            int ct = 0;
+            bool exists = true;
+            while (exists && ct < 100)
+            {
+                try
+                {
+                    pro.Kill();
+                    Process.GetProcessById(pro.Id);
+                    exists = true;
+                    Thread.Sleep(100);
+                    ct++;
+                }
+                catch
+                {
+                    exists = false;
+                }
+            }
+            try
+            {
+#if DEBUG
+                Console.WriteLine("Login data Hash: " + filename + ": " + datfile.MD5HASH);
+#endif
+                /*               if (LocalDatManager.DataCollection.Any(f=>f.MD5HASH==CalculateMD5(EnviromentManager.GwLocaldatPath) && f.Name!=Name))
+                               {
+                                   throw new Exception("Same logindata allready used by another account!");
+                               }
+                               */
+                if (File.Exists(filepath)) File.Delete(filepath);
+                File.Copy(EnviromentManager.GwLocaldatPath, filepath);
+                datfile.Valid = true;
+                return datfile;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error: The Gameclient did not create a valid Login data file. " + e.Message);
+                datfile.Valid = false;
+                return datfile;
+            }
+        }
     }
 
     public class LocalDatFile
@@ -161,15 +216,18 @@ namespace Gw2_Launchbuddy.Modifiers
         public bool Valid = false;
         public string MD5HASH {  get { return CalculateMD5(Path); } }
 
-        public LocalDatFile(string filename)
-        {
-            gw2build = EnviromentManager.GwClientVersion;
-            if (InitFile(filename)) LocalDatManager.Add(this);
-        }
-
         ~LocalDatFile()
         {
-            LocalDatManager.DataCollection.Remove(this);
+            try
+            {
+                LocalDatManager.DataCollection.Remove(this);
+            }catch
+            {
+#if DEBUG
+                Console.WriteLine("Tried to remove non registered Local.dat File");
+#endif
+            }
+            
         }
 
         private string CalculateMD5(string filename)
@@ -188,56 +246,6 @@ namespace Gw2_Launchbuddy.Modifiers
             return null;
         }
 
-        private bool InitFile(string filename)
-        {
-            string filepath = EnviromentManager.LBLocaldatsPath + filename + ".dat";
-            gw2build = EnviromentManager.GwClientVersion;
-            Path = filepath;
-
-            Process pro = new Process { StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath) };
-            pro.Start();
-            MessageBox.Show("Please check the remember email and password checkbox and login manually. Wait until you reach the Character select screen. Then press this button.");
-            try { pro.Close(); } catch { }
-
-            int ct = 0;
-            bool exists = true;
-            while(exists && ct < 25)
-            {
-                try
-                {
-                    Process.GetProcessById(pro.Id);
-                    exists = true;
-                    Thread.Sleep(500);
-                    ct++;
-                }
-                catch
-                {
-                    exists = false;
-                }
-            }
-            try
-            {
-#if DEBUG
-                Console.WriteLine("Login data Hash: "+filename+": " + MD5HASH);
-#endif
- /*               if (LocalDatManager.DataCollection.Any(f=>f.MD5HASH==CalculateMD5(EnviromentManager.GwLocaldatPath) && f.Name!=Name))
-                {
-                    throw new Exception("Same logindata allready used by another account!");
-                }
-                */
-                if (File.Exists(filepath)) File.Delete(filepath);
-                File.Copy(EnviromentManager.GwLocaldatPath, filepath);
-                Valid = true;
-                return true;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error: The Gameclient did not create a valid Login data file. " + e.Message);
-                Valid = false;
-                return false;
-            }
-        }
-
-        private LocalDatFile() { LocalDatManager.Add(this); }
+        public LocalDatFile() { LocalDatManager.Add(this); }
     }
 }

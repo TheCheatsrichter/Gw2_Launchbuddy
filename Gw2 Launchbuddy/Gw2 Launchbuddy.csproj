@@ -180,6 +180,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Helpers\BlockerInfo.xaml.cs">
+      <DependentUpon>BlockerInfo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Modifiers\DLLInjector.cs" />
     <Compile Include="Extensions\ProcessExtensions.cs" />
     <Compile Include="Extensions\XmlTextReaderExtensions.cs" />
@@ -230,6 +233,10 @@
     </Compile>
     <Compile Include="Helpers\VersionSwitcher.cs" />
     <Page Include="GUI_ApplicationManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Helpers\BlockerInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
