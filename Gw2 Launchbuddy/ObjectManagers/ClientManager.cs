@@ -263,11 +263,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void Minimize()
         {
+            Process.Refresh();
             ShowWindow(Process.MainWindowHandle,0x6);
         }
 
         public void Maximize()
         {
+            Process.Refresh();
             ShowWindow(Process.MainWindowHandle, 0x3);
         }
 
@@ -297,6 +299,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void Focus()
         {
+            Process.Refresh();
             IntPtr hwndMain = Process.MainWindowHandle;
             SetForegroundWindow(hwndMain);
         }

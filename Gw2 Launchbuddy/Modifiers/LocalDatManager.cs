@@ -73,13 +73,17 @@ namespace Gw2_Launchbuddy.Modifiers
             {
                 tmp_datfiles.Add(acc.Settings.Loginfile);
             }
-            foreach (string file in Directory.GetFiles(EnviromentManager.LBLocaldatsPath))
+            try
             {
-                if (!tmp_datfiles.Any<LocalDatFile>(f=>f.Name==Path.GetFileNameWithoutExtension(file)))
+                foreach (string file in Directory.GetFiles(EnviromentManager.LBLocaldatsPath))
                 {
-                    File.Delete(file);
+                    if (!tmp_datfiles.Any<LocalDatFile>(f => f.Name == Path.GetFileNameWithoutExtension(file)))
+                    {
+                        File.Delete(file);
+                    }
                 }
             }
+            catch { }
         }
 
         public static void Apply(LocalDatFile file)
@@ -192,8 +196,8 @@ namespace Gw2_Launchbuddy.Modifiers
 
             Process pro = new Process { StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath) };
             pro.Start();
-            MessageBox.Show("Please check the remember email and password checkbox and login manually. Then press THIS button to continue!");
-            try { pro.Kill(); } catch { }
+            MessageBox.Show("Please check the remember email and password checkbox and login manually. Wait until you reach the Character select screen. Then press this button.");
+            try { pro.Close(); } catch { }
 
             int ct = 0;
             bool exists = true;
