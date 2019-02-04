@@ -160,7 +160,7 @@ namespace Gw2_Launchbuddy.Modifiers
             Process pro = new Process { StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath) };
             pro.Start();
             Action blockefunc = () => ModuleReader.WaitForModule("icm32.dll", pro,null);
-            Helpers.BlockerInfo.Run("Loginfile Creation","Please check remember email/password and login into the game.", blockefunc);
+            Helpers.BlockerInfo.Run("Loginfile Creation","Please check remember email/password and press the login and play button. This window will be closed automatically on success.", blockefunc);
             if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with cation.");
 
             int ct = 0;

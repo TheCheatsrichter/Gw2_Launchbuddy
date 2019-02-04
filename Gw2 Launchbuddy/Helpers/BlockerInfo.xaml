@@ -5,20 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gw2_Launchbuddy.Helpers"
         mc:Ignorable="d"
-        Title="BlockerInfo" Height="100" Width="350" Icon="/Gw2 Launchbuddy;component/launchbuddy.ico" WindowStyle="None" ResizeMode="NoResize">
+        Title="BlockerInfo" Height="150" Width="350" Icon="/Gw2 Launchbuddy;component/launchbuddy.ico" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" Background="Black" WindowStartupLocation="CenterScreen" >
+    <Window.OpacityMask>
+        <ImageBrush ImageSource="/Gw2 Launchbuddy;component/Resources/acc_opacitymask.png"/>
+    </Window.OpacityMask>
     <Grid >
-        <Grid.Background>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#FF1D1D1D" Offset="0"/>
-                <GradientStop Color="#FF0A0A0A" Offset="1"/>
-            </LinearGradientBrush>
-        </Grid.Background>
-        <Grid.OpacityMask>
-            <ImageBrush ImageSource="/Gw2 Launchbuddy;component/Resources/acc_opacitymask.png"/>
-        </Grid.OpacityMask>
         <DockPanel>
             <Button Content="Cancel" DockPanel.Dock="Bottom" Margin="15" Width="120" Name="bt_cancel" Click="bt_cancel_Click"/>
-            <TextBlock Name="tb_message"  Text="Launchbuddy is currently waiting for" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Name="tb_message"  Text="Launchbuddy is currently waiting for" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Width="230" TextWrapping="Wrap"/>
         </DockPanel>
 
     </Grid>
