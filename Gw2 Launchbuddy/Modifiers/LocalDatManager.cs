@@ -148,6 +148,20 @@ namespace Gw2_Launchbuddy.Modifiers
             //if (!file.IsUpToDate) MessageBox.Show("The used account login file seems outdated. Outdated files may cause login problems. Please recreate the file in the account settings");
         }
 
+        public static void UpdateLocalDat(LocalDatFile file)
+        {
+            if(!file.IsUpToDate)
+            {
+                Apply(file);
+                Process pro = new Process { StartInfo= new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } };
+                pro.Start();
+                Action waitforlaunch = () => ModuleReader.WaitForModule("WINNSI.DLL",pro);
+                Helpers.BlockerInfo.Run("Loginfile Update","Launchbuddy is updating an outdated Loginfile",waitforlaunch);
+                pro.Kill();
+                ToDefault();
+                file.gw2build = EnviromentManager.GwClientVersion;
+            }
+        }
 
         public static LocalDatFile CreateNewFile(string filename)
         {

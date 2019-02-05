@@ -315,11 +315,23 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
+        private void UpdateLoginFile()
+        {
+            if(account.Settings.Loginfile!=null)
+            {
+                if(!account.Settings.Loginfile.IsUpToDate)
+                {
+                    LocalDatManager.UpdateLocalDat(account.Settings.Loginfile);
+                }
+            }
+        }
+
         private void ConfigureProcess()
         {
             Process.EnableRaisingEvents = true;
             try { Process.Exited -= OnClientClose; } catch { };
             Process.Exited += OnClientClose;
+
             string args = "";
             foreach (Argument arg in account.Settings.Arguments.GetActive())
             {
@@ -340,7 +352,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             */
             
-            if(account.Settings.Loginfile!=null)
+            if(account.Settings.Loginfile!=null && account.Settings.Loginfile.Gw2Build==EnviromentManager.GwClientVersion)
             {
                 args += "-autologin ";
             }
@@ -474,6 +486,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     switch (Status)
                     {
                         case var expression when (Status < ClientStatus.Configured):
+                            UpdateLoginFile();
                             ConfigureProcess();
                             SwapGFX();
                             SwapLocalDat();
