@@ -50,7 +50,7 @@ namespace Gw2_Launchbuddy.Helpers
                 Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => blockerinfo.Close()));
                 Done = true;
             }
-            catch { } 
+            catch { }
         }
 
         private void bt_cancel_Click(object sender, RoutedEventArgs e)

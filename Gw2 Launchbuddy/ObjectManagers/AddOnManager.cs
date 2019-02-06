@@ -248,6 +248,4 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Addonlist = list;
         }
     }
-
-    
 }

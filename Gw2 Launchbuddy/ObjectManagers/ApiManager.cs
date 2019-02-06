@@ -23,7 +23,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             catch
             {
                 Online = false;
-                MessageBox.Show("The official Gw2 API is not reachable / down! Launchbuddy can't make sure that your game client is up to date.\nPlease keep your game manually up to date to avoid crashes!");
+                MessageBox.Show("The official Guild Wars 2 API is unreachable or down! Launchbuddy can't make sure that your game client is up to date.\nPlease keep your game manually up to date to avoid crashes!");
             }
         }
 

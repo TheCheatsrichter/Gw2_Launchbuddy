@@ -200,7 +200,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             else
             {
-                MessageBox.Show("Account with Nickname" + nickname + "allready exists!");
+                MessageBox.Show("Account with Nickname" + nickname + "already exists!");
             } 
         }
 

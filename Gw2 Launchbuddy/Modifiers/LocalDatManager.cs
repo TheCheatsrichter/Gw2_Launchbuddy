@@ -56,7 +56,7 @@ namespace Gw2_Launchbuddy.Modifiers
             }
             else
             {
-                throw new Exception("Provided Local.dat file does not exist or Linkfile is allready created.");
+                throw new Exception("Provided Local.dat file does not exist or Linkfile is already created.");
             }
         }
 
@@ -174,8 +174,9 @@ namespace Gw2_Launchbuddy.Modifiers
             pro.Start();
             Action blockefunc = () => ModuleReader.WaitForModule("DPAPI.dll", pro,null);
             Helpers.BlockerInfo.Run("Loginfile Creation","Please check remember email/password and press the login and play button. This window will be closed automatically on success.", blockefunc);
-            if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with cation.");
+            if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with caution.");
             Thread.Sleep(100);
+          
             int ct = 0;
             bool exists = true;
             while (exists && ct < 100)
@@ -242,7 +243,6 @@ namespace Gw2_Launchbuddy.Modifiers
                 Console.WriteLine("Tried to remove non registered Local.dat File");
 #endif
             }
-            
         }
 
         private string CalculateMD5(string filename)

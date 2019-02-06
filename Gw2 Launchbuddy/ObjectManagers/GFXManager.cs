@@ -208,7 +208,6 @@ namespace Gw2_Launchbuddy
         public string Configname { set; get; }
         public string ConfigPath { set; get; }
         public ObservableCollection<GFXOption> Config { get; set; }
-        
         public GFXConfig()
         {
             Config = new ObservableCollection<GFXOption>();
