@@ -535,6 +535,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 MessageBox.Show("Account: "+account.Nickname+"\n\n"+ e.Message);
                 Status = ClientStatus.None;
+                CrashReporter.ReportCrashToAll(e);
             }
             if (Status.HasFlag(ClientStatus.Crash)) Status = ClientStatus.None;
         }
