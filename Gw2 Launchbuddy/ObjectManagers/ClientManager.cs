@@ -463,10 +463,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void Launch()
         {
-            while (Status < ClientStatus.Running)
+            try
             {
-                try
-                {
+                while (Status < ClientStatus.Running)
+            {
+
                     //Check if it crashed/closed in between a step
                     if(Status > ClientStatus.Created)
                         if (!ProcessExists())
@@ -523,27 +524,19 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             RestoreGFX();
                             SetProcessPriority();
                             Status = ClientStatus.Running;
+                            try { Focus(); } catch { }
                             break;
                     }
                     
                 }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    Status = ClientStatus.None;
-                }
-            }
 
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Account: "+account.Nickname+"\n\n"+ e.Message);
+                Status = ClientStatus.None;
+            }
             if (Status.HasFlag(ClientStatus.Crash)) Status = ClientStatus.None;
-
-            try
-            {
-                Focus();
-            }
-            catch
-            {
-
-            }
         }
 
         //UI functions

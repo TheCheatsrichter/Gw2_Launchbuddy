@@ -95,9 +95,6 @@ namespace Gw2_Launchbuddy.Modifiers
                 //Is Valid?
                 if (!file.Valid) MessageBox.Show("Invalid Login file " + file.Name + " please recreate this file in the account Manager.");
 
-                //Check Version???
-                CheckVersion(file);
-
                 //Create Backup of Local dat
                 if (!IsSymbolic(EnviromentManager.GwLocaldatPath))
                 {
@@ -114,8 +111,8 @@ namespace Gw2_Launchbuddy.Modifiers
 
             catch (Exception e)
             {
-                MessageBox.Show("An error occured while swaping the Login file." + e.Message);
                 Repair();
+                throw new Exception("An error occured while swaping the Login file." + e.Message);
             }
 
         }
@@ -143,23 +140,25 @@ namespace Gw2_Launchbuddy.Modifiers
             if (File.Exists(EnviromentManager.GwLocaldatBakPath)) File.Delete(EnviromentManager.GwLocaldatBakPath);
         }
 
-        private static void CheckVersion(LocalDatFile file)
-        {
-            //if (!file.IsUpToDate) MessageBox.Show("The used account login file seems outdated. Outdated files may cause login problems. Please recreate the file in the account settings");
-        }
-
         public static void UpdateLocalDat(LocalDatFile file)
         {
-            if(!file.IsUpToDate)
+            try
             {
-                Apply(file);
-                Process pro = new Process { StartInfo= new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } };
-                pro.Start();
-                Action waitforlaunch = () => ModuleReader.WaitForModule("WINNSI.DLL",pro);
-                Helpers.BlockerInfo.Run("Loginfile Update","Launchbuddy is updating an outdated Loginfile",waitforlaunch);
-                pro.Kill();
-                ToDefault();
-                file.gw2build = EnviromentManager.GwClientVersion;
+                if (!file.IsUpToDate)
+                {
+                    Apply(file);
+                    Process pro = new Process { StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } };
+                    pro.Start();
+                    Action waitforlaunch = () => ModuleReader.WaitForModule("WINNSI.DLL", pro);
+                    Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating an outdated Loginfile", waitforlaunch);
+                    pro.Kill();
+                    ToDefault();
+                    file.gw2build = EnviromentManager.GwClientVersion;
+                }
+            }
+            catch(Exception e)
+            {
+                throw new Exception("An error occured when Updating the Login file. " +e.Message);
             }
         }
 
@@ -173,17 +172,17 @@ namespace Gw2_Launchbuddy.Modifiers
 
             Process pro = new Process { StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath) };
             pro.Start();
-            Action blockefunc = () => ModuleReader.WaitForModule("icm32.dll", pro,null);
+            Action blockefunc = () => ModuleReader.WaitForModule("DPAPI.dll", pro,null);
             Helpers.BlockerInfo.Run("Loginfile Creation","Please check remember email/password and press the login and play button. This window will be closed automatically on success.", blockefunc);
             if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with cation.");
-
+            Thread.Sleep(100);
             int ct = 0;
             bool exists = true;
             while (exists && ct < 100)
             {
                 try
                 {
-                    pro.Kill();
+                    pro.CloseMainWindow();
                     Process.GetProcessById(pro.Id);
                     exists = true;
                     Thread.Sleep(100);
@@ -194,6 +193,8 @@ namespace Gw2_Launchbuddy.Modifiers
                     exists = false;
                 }
             }
+            try { pro.Kill(); } catch { }
+
             try
             {
 #if DEBUG
