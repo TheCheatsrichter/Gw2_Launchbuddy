@@ -153,7 +153,7 @@ namespace Gw2_Launchbuddy.Modifiers
                     Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating an outdated Loginfile", waitforlaunch);
                     pro.Kill();
                     ToDefault();
-                    file.gw2build = EnviromentManager.GwClientVersion;
+                    file.gw2build = Api.ClientBuild;
                 }
             }
             catch(Exception e)
@@ -167,7 +167,7 @@ namespace Gw2_Launchbuddy.Modifiers
             LocalDatFile datfile = new LocalDatFile();
 
             string filepath = EnviromentManager.LBLocaldatsPath + filename + ".dat";
-            datfile.gw2build = EnviromentManager.GwClientVersion;
+            datfile.gw2build = Api.ClientBuild;
             datfile.Path = filepath;
 
             Process pro = new Process { StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath) };
