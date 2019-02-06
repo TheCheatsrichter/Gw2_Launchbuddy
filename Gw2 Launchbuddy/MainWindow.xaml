@@ -11,7 +11,7 @@
 
     
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
-        Title="Gw2 Launchbuddy V 1.8.7" MinHeight="700" MinWidth="800" Height="700" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None">
+        Title="Gw2 Launchbuddy V 1.8.8" MinHeight="700" MinWidth="800" Height="700" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None">
     <Window.Resources>
         <Storyboard x:Key="anim_imgfadeout">
             <DoubleAnimation 
@@ -227,7 +227,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy V1.8.7 ALPHA" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy V1.8.8 ALPHA" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
@@ -443,6 +443,7 @@
                                                 <Button DockPanel.Dock="Left" Name="bt_loginfile" Height="22" Width="120" Click="bt_loginfile_Click">Set Loginfile</Button>
                                                 <Label Foreground="Green" Content="Loginfile successfully configured" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" />
                                             </DockPanel>
+                                            <Button DockPanel.Dock="Left" Name="bt_loginfileupdate" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" Height="22" Width="120" HorizontalAlignment="Left" Click="bt_loginfileupdate_Click" ToolTip="Manually repair your Loginfile if the automated Update did not work">Repair Loginfile</Button>
                                             <!--WrapPanel Grid.ColumnSpan="5" Grid.Row="2" Grid.RowSpan="2" Visibility="Visible">
                                                 <StackPanel Orientation="Horizontal" >
                                                     <Label x:Name="lab_email" Content="Email:"  d:LayoutOverrides="Width" VerticalAlignment="Center" FontWeight="Bold"/>
