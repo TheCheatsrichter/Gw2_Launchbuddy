@@ -115,7 +115,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             catch (Exception e)
             {
-                MessageBox.Show("Guild Wars may not be installed. \n " + e.Message);
+                MessageBox.Show("Guild Wars 2 may not be installed. \n " + e.Message);
                 return;
             }
             GwClientXmlPath = "";
@@ -171,7 +171,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             catch
             {
-                MessageBox.Show("Gw2 info file not found! Please choose the directory manually!");
+                MessageBox.Show("Guild Wars 2 info file not found! Please choose the directory manually!");
             }
         }
         public static void CheckGwClientVersion()
@@ -183,10 +183,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     GwClientUpToDate = Api.ClientBuild == GwClientVersion;
                     if (!(bool)GwClientUpToDate)
                     {
-                        MessageBox.Show("Your Gw2 Client is outdated. Update startet now");
+                        MessageBox.Show("Your Guild Wars 2 Client is outdated. Starting update...");
                         UpdateGwClient();
                     }
-                        
                 }
             }
             else
@@ -204,7 +203,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             else
             {
-                MessageBox.Show("Please close all running Gw2 game instances to update the game.");
+                MessageBox.Show("Please close all running Guild Wars 2 game instances to update the game.");
             }
         }
     }
@@ -214,22 +213,22 @@ namespace Gw2_Launchbuddy.ObjectManagers
         [Option('q', "silent", HelpText = "Run Launchbuddy silently.")]
         public bool Silent { get; set; }
 
-        [Option("settings", HelpText = "Use Settings.json instead of command line Arguments.")]
+        [Option("settings", HelpText = "Use Settings.json instead of command line arguments.")]
         public bool Settings { get; set; }
 
-        [Option('l', "launch", Separator = ':', HelpText = "Launch with Nicknames of saved accounts. Use : as a separator.")]
+        [Option('l', "launch", Separator = ':', HelpText = "Launch with nicknames of saved accounts. Use : as a separator.")]
         public IEnumerable<string> Launch { get; set; }
 
-        [Option('m', "minimized", HelpText = "Run Launchbuddy but open minimized.")]
+        [Option('m', "minimized", HelpText = "Start Launchbuddy minimized.")]
         public string Minimized { get; set; }
 
         [Option('s', "safe", HelpText = "Do not load plugins.")]
         public bool Safe { get; set; }
 
-        [Option('a', "args", Separator = ':', HelpText = "Arguments to use when launching with -launch. Use : as a separator, no arguments with input.")]
+        [Option('a', "args", Separator = ':', HelpText = "Arguments to use when launching with -launch. Use : as a separator, no arguments with additional input.")]
         public IEnumerable<string> Args { get; set; }
 
-        [Option("delaymutex", HelpText = "Delay in miliseconds between mutex close attempts. Higher values increase the time between retries. (Up to 9 retries will be attempted)", Hidden = true)]
+        [Option("delaymutex", HelpText = "Delay in milliseconds between mutex close attempts. Higher values increase the time between retries. (Up to 9 retries will be attempted)", Hidden = true)]
         public int? Delay { get; set; }
     }
 }

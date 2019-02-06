@@ -52,7 +52,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                       ActiveClients.Add(client);
                       SaveActiveClients();
                   }));
-            }          
+            }
         }
 
         private static void SaveActiveClients()
@@ -98,7 +98,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     {
                         continue;
                     }
-                    
                     Process pro;
                     try
                     {
@@ -108,7 +107,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     {
                         continue;
                     }
-                    
                     if (pro != null)
                     {
                         if (pro.StartTime.ToString() == line.Split(',')[3])
@@ -525,7 +523,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             Status = ClientStatus.Running;
                             break;
                     }
-                    
                 }
                 catch (Exception e)
                 {

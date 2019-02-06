@@ -389,7 +389,7 @@ namespace Gw2_Launchbuddy
                 queryResult = NtQuerySystemInformation(SYSTEM_INFORMATION_CLASS.SystemHandleInformation,
                     pSysInfoBuffer, bufferSize, out actualSize);
             }
-            
+
             if (queryResult == NTSTATUS.STATUS_SUCCESS)
             {
                 return pSysInfoBuffer; //pSystInfoBuffer will be freed later

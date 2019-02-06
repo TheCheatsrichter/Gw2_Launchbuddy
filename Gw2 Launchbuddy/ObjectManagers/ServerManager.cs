@@ -75,7 +75,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             ObservableCollection<Server> tmp_authlist = new ObservableCollection<Server>();
             ObservableCollection<Server> tmp_assetlist = new ObservableCollection<Server>();
-           
 
             try
             {

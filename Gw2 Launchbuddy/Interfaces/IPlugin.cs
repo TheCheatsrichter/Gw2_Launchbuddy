@@ -24,7 +24,6 @@ namespace Gw2_Launchbuddy.Interfaces.Plugins
     {
         ProjectInfo Project { get; }
     }
-    
     public class ProjectInfo
     {
         public string Name { get; set; }
@@ -40,7 +39,6 @@ namespace Gw2_Launchbuddy.Interfaces.Plugins.Injectable
     {
         PluginSettings Settings { get; }
     }
-    
     public class PluginSettings
     {
         private string subdirectory = null;

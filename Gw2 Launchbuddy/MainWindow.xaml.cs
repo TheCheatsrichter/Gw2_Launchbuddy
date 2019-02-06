@@ -403,7 +403,7 @@ namespace Gw2_Launchbuddy
                     }
                     catch (Exception err)
                     {
-                        MessageBox.Show("The chosen video for cinema mode is not valid/ does not exist!\n" + err.Message);
+                        MessageBox.Show("The chosen video for cinema mode is not valid or does not exist!\n" + err.Message);
                         Properties.Settings.Default.cinema_use = false;
                         Properties.Settings.Default.Save();
                     }
@@ -1518,7 +1518,7 @@ namespace Gw2_Launchbuddy
             if (!Regex.IsMatch(tb.Text, @"[0-9]+"))
             {
                 tb.Text = "0";
-            }                
+            }
         }
 
         private void cb_useinstancegui_Checked(object sender, RoutedEventArgs e)

@@ -13,7 +13,7 @@ namespace TestPlugin
             Author = "KairuByte",
             Url = null
         };
-        
+
         public void Init()
         {
 

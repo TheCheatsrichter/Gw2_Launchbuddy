@@ -82,7 +82,7 @@ namespace Gw2_Launchbuddy
             }
             else
             {
-                MessageBox.Show("Invalid Playlist path.");
+                MessageBox.Show("Invalid playlist path.");
             }
         }
 

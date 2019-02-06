@@ -48,7 +48,7 @@ namespace Gw2_Launchbuddy
         {
             { "unknown","Cooooo...\nQuaggan doesn't know what to do with this crash. :(" },
             { "host_crash","Cooo!\nQuaggan sees that your launcher crashed. You should download a new version from the Arenanet website!" },
-            { "model_leaks","Cooo!\nQuaggan remembers that his crash happened very often when the old 32 Bit Client of Guild Wars 2 was used! You should NOT run the client with the -32 parameter if possible!" },
+            { "model_leaks","Cooo!\nQuaggan remembers that this crash happened very often when the old 32 Bit Client of Guild Wars 2 was used! You should NOT run the client with the -32 parameter if possible!" },
             { "mem_read","Cooo!\nSeems like a memory read error happended to you!\nQuaggan knows that this sometimes happens when your Gw2.dat file gets corrupted.\nSometimes using the -repair argument will help youuuu!" },
             { "outdated_client","Cooo!\nYour client seems to be outdated and you tried to launch the game with autologin!\n Quaggan would update your client for youu!" },
             { "mem_write","Cooo!\nSeems like a memory write error happended to you!\nQuaggan knows that this sometimes happens when your Gw2.dat file gets corrupted.\nSometimes using the -repair argument will help youuuu!" },
@@ -102,16 +102,15 @@ namespace Gw2_Launchbuddy
         private static void mem_read()
         {
             Unhandled_Launch("-repair");
-            System.Windows.Forms.MessageBox.Show("The Gw2 Launcher is trying to fix the mem_read error!\nPlease wait for completion before you continue.");
+            System.Windows.Forms.MessageBox.Show("The Guild Wars 2 Launcher is trying to fix the mem_read error!\nPlease wait for completion before you continue.");
         }
         private static void mem_write()
         {
             Unhandled_Launch("-repair");
-            System.Windows.Forms.MessageBox.Show("The Gw2 Launcher is trying to fix the mem_write error!\nPlease wait for completion before you continue.");
+            System.Windows.Forms.MessageBox.Show("The Guild Wars 2 Launcher is trying to fix the mem_write error!\nPlease wait for completion before you continue.");
         }
         private static void model_leaks()
         {
-            
             System.Windows.Forms.MessageBox.Show("Argument -32 deactivated!");
         }
 
@@ -123,7 +122,7 @@ namespace Gw2_Launchbuddy
         private static void outdated_client()
         {
             Unhandled_Launch("-image");
-            System.Windows.Forms.MessageBox.Show("The Gw2 Launcher is trying to update!\nPlease wait for completion before you continue.");
+            System.Windows.Forms.MessageBox.Show("The Guild Wars 2 Launcher is trying to update!\nPlease wait for completion before you continue.");
         }
 
         private static void readonly_write()
@@ -147,7 +146,6 @@ namespace Gw2_Launchbuddy
 
     static public class CrashAnalyzer
     {
-       
         //Reading/Managing Crashlogs
         public static ObservableCollection<Crashlog> Crashlogs= new ObservableCollection<Crashlog>();
 
@@ -214,7 +212,6 @@ namespace Gw2_Launchbuddy
                         System.Windows.Forms.MessageBox.Show(e.Message);
                     }
                 }
-                
             }
             catch (Exception e)
             {
