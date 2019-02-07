@@ -101,17 +101,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
         }
         public static void ImportAccounts()
         {
-#if DEBUG
-            if (File.Exists(EnviromentManager.LBAccPath))
-            {
-                Stream xmlInputStream = File.OpenRead(EnviromentManager.LBAccPath);
-                XmlSerializer deserializer = new XmlSerializer(typeof(ObservableCollection<Account>));
-                Accounts = (ObservableCollection<Account>)deserializer.Deserialize(xmlInputStream);
-                xmlInputStream.Close();
-            }
-            AddIDToOlderVersions();
-#endif
-#if !DEBUG
             try
             {
                 if (File.Exists(EnviromentManager.LBAccPath))
@@ -121,12 +110,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     Accounts = (ObservableCollection<Account>)deserializer.Deserialize(xmlInputStream);
                     xmlInputStream.Close();
                 }
+                AddIDToOlderVersions();
             }
             catch(Exception e)
             {
                 MessageBox.Show("Could not load Accountdata.\n"+e.Message);
-            }
-#endif
+         }
 }
 
         public static bool IsValidEmail(string inp)
