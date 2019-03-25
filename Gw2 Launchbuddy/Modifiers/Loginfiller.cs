@@ -16,23 +16,18 @@ namespace Gw2_Launchbuddy.Modifiers
         [DllImport("user32.dll")]
         static extern bool PostMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
 
-        public static void Login(Account acc, bool clearfields = false)
+        public static void Login(string email,string passwd,Process pro, bool clearfields = false)
         {
-            ModuleReader.WaitForModule("WINNSI.DLL",acc.Client.Process);
-
-            Process pro = acc.Client.Process;
-
+            ModuleReader.WaitForModule("WINNSI.DLL",pro);
             //SetForegroundWindow(pro.MainWindowHandle);
-            TypeString(acc.Settings.Email, pro);
+            TypeString(email, pro);
             PressKeyDown(Keys.Tab, pro);
-            TypeString(acc.Settings.Password, pro);
+            TypeString(passwd, pro);
             PressKeyDown(Keys.Tab, pro);
             PressKeyDown(Keys.Tab, pro);
             PressKeyDown(Keys.Tab, pro);
             PressKeyDown(Keys.Enter, pro);
             Thread.Sleep(5000);
-            PressKeyDown(Keys.Enter, pro);
-            PressKeyUp(Keys.Enter, pro);
         }
 
         public static void PressLoginButton(Account acc)

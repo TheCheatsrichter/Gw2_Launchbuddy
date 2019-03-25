@@ -1280,6 +1280,7 @@ namespace Gw2_Launchbuddy
                 gr_acceditor.IsEnabled = true;
                 gr_acceditor.Visibility = Visibility.Visible;
                 sp_acclistbuttons.IsEnabled = true;
+                tb_passw.Clear();
             }
             else
             {
@@ -1345,7 +1346,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        /*
+        
         private void tb_email_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
             string email = tb_email.Text;
@@ -1379,7 +1380,7 @@ namespace Gw2_Launchbuddy
                 tb_passw.Focus();
             }
         }
-        */
+        
 
         private void checkb_clientport_Checked(object sender, RoutedEventArgs e)
         {
@@ -1566,6 +1567,12 @@ namespace Gw2_Launchbuddy
             {
                 MessageBox.Show("Could not repair Loginfile. Please recreate a loginfile with Set Loginfile. \n"+err.Message);
             }
+        }
+
+        private void bt_recerateloginfile_Click(object sender, RoutedEventArgs e)
+        {
+            AccountSettings settings = ((sender as Button).DataContext as AccountSettings);
+            settings.RecreateLoginFile();
         }
 
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

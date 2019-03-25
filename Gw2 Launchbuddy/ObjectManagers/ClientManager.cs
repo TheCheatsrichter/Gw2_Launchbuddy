@@ -450,7 +450,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             if(account.Settings.Email!=null && account.Settings.Password!=null)
             {
-                Loginfiller.Login(account);
+                Loginfiller.Login(account.Settings.Email, account.Settings.Password, this.Process,true);
             }
         }
 

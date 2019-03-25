@@ -135,7 +135,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             foreach (Account acc in Accounts)
             {
-                if (acc.ID == 0)
+                if (acc.ID == 0 ||acc.Settings.AccountID==0)
                 {
                     acc.ID = GenerateID();
                     acc.Settings.AccountID = acc.ID;
@@ -297,9 +297,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
         private AES Cryptor = new AES();
 
         [XmlIgnore]
-        public string Email { set { enc_email = Cryptor.Encrypt(value); OnPropertyChanged("HasLoginCredentials"); if (value == "") enc_email = null; } get { return Cryptor.Decrypt(enc_email); } }
+        public string Email { set { enc_email = Cryptor.Encrypt(value); OnPropertyChanged("HasLoginBackupData"); if (value == "") enc_email = null; } get { return Cryptor.Decrypt(enc_email); } }
         [XmlIgnore]
-        public string Password { set {enc_password = Cryptor.Encrypt(value); OnPropertyChanged("HasLoginCredentials"); if (value == "") enc_password = null; } get { return Cryptor.Decrypt(enc_password); } }
+        public string Password { set {enc_password = Cryptor.Encrypt(value); OnPropertyChanged("HasLoginBackupData"); if (value == "") enc_password = null; } get { return Cryptor.Decrypt(enc_password); } }
 
         [XmlIgnore]
         public string UI_Email
@@ -336,6 +336,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         }
 
         [XmlIgnore]
+        public bool HasLoginBackupData { get { return Email != null && Password != null && Email!="" && Password!=""; } set { } }
+        [XmlIgnore]
         public bool HasLoginCredentials { get { return Loginfile!=null; } set { } }
         [XmlIgnore]
         public bool HasArguments { get { if (Arguments.Contains(Arguments.FirstOrDefault<Argument>(a => a.IsActive == true))) { return true; } return false; } set { } }
@@ -348,6 +350,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             Loginfile = LocalDatManager.CreateNewFile(AccountID.ToString());
         }
+
+        public void RecreateLoginFile()
+        {
+            if(HasLoginBackupData)
+            Loginfile = LocalDatManager.CreateNewFileAutomated(AccountID.ToString(),Email,Password);
+        }
+
         //Missing stuff (all nullable):
         /*
         Window Size,Startposition etc.

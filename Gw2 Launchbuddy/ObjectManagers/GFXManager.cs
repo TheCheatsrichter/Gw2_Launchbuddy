@@ -71,6 +71,15 @@ namespace Gw2_Launchbuddy
         {
             string path = EnviromentManager.TMP_GFXConfig;
             ToXml(path, config);
+
+            int timeout = 0;
+            while(IsGFXLocked() && timeout < 10)
+            {
+                timeout++;
+                System.Threading.Thread.Sleep(1000);
+            }
+            if (timeout > 9) throw new System.Exception("GFX file is locked. Make sure that all game instances are launched correctly.");
+
             if (!File.Exists(path))
             {
                 MessageBox.Show("GFX Setting could not be created! Please check GFX settings!");
@@ -84,6 +93,25 @@ namespace Gw2_Launchbuddy
                 }
                 File.Move(path, EnviromentManager.GwClientXmlPath);
             }
+        }
+
+        static bool IsGFXLocked()
+        {
+            FileStream stream = null;
+            try
+            {
+                stream = File.Open(EnviromentManager.GwClientXmlPath,FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            }
+            catch (IOException)
+            {
+                return true;
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
+            }
+            return false;
         }
 
         public static void RestoreDefault()

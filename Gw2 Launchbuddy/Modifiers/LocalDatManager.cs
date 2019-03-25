@@ -162,6 +162,61 @@ namespace Gw2_Launchbuddy.Modifiers
             }
         }
 
+
+        public static LocalDatFile CreateNewFileAutomated(string filename,string email,string passwd)
+        {
+            LocalDatFile datfile = new LocalDatFile();
+
+            string filepath = EnviromentManager.LBLocaldatsPath + filename + ".dat";
+            datfile.gw2build = Api.ClientBuild;
+            datfile.Path = filepath;
+
+            Process pro = new Process { StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath) };
+            pro.Start();
+            Action blockefunc = () => ModuleReader.WaitForModule("WINNSI.DLL", pro, null);
+            Helpers.BlockerInfo.Run("Loginfile Creation", "LB is recreating your loginfile", blockefunc);
+            if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with caution.");
+            Thread.Sleep(100);
+            Loginfiller.Login(email,passwd,pro,true);
+
+            int ct = 0;
+            bool exists = true;
+            while (exists && ct < 100)
+            {
+                try
+                {
+                    pro.CloseMainWindow();
+                    Process.GetProcessById(pro.Id);
+                    exists = true;
+                    Thread.Sleep(100);
+                    ct++;
+                }
+                catch
+                {
+                    exists = false;
+                }
+            }
+            try { pro.Kill(); } catch { }
+
+            try
+            {
+#if DEBUG
+                Console.WriteLine("Login data Hash: " + filename + ": " + datfile.MD5HASH);
+#endif
+                if (File.Exists(filepath)) File.Delete(filepath);
+                File.Copy(EnviromentManager.GwLocaldatPath, filepath);
+                datfile.Valid = true;
+                return datfile;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error: The Gameclient did not create a valid Login data file. " + e.Message);
+                datfile.Valid = false;
+                return datfile;
+            }
+
+        }
+
         public static LocalDatFile CreateNewFile(string filename)
         {
             LocalDatFile datfile = new LocalDatFile();
@@ -201,11 +256,6 @@ namespace Gw2_Launchbuddy.Modifiers
 #if DEBUG
                 Console.WriteLine("Login data Hash: " + filename + ": " + datfile.MD5HASH);
 #endif
-                /*               if (LocalDatManager.DataCollection.Any(f=>f.MD5HASH==CalculateMD5(EnviromentManager.GwLocaldatPath) && f.Name!=Name))
-                               {
-                                   throw new Exception("Same logindata allready used by another account!");
-                               }
-                               */
                 if (File.Exists(filepath)) File.Delete(filepath);
                 File.Copy(EnviromentManager.GwLocaldatPath, filepath);
                 datfile.Valid = true;
