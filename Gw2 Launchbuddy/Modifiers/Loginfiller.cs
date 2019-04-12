@@ -20,6 +20,9 @@ namespace Gw2_Launchbuddy.Modifiers
         {
             ModuleReader.WaitForModule("WINNSI.DLL",pro);
             //SetForegroundWindow(pro.MainWindowHandle);
+            Thread.Sleep(1000);
+            for(int i =0;i<100;i++)PressKeyDown(Keys.Back,pro,false); //Very unclean method, but modifiers onyl work on focus
+            Thread.Sleep(50);
             TypeString(email, pro);
             PressKeyDown(Keys.Tab, pro);
             TypeString(passwd, pro);
@@ -27,7 +30,6 @@ namespace Gw2_Launchbuddy.Modifiers
             PressKeyDown(Keys.Tab, pro);
             PressKeyDown(Keys.Tab, pro);
             PressKeyDown(Keys.Enter, pro);
-            Thread.Sleep(5000);
         }
 
         public static void PressLoginButton(Account acc)
@@ -38,18 +40,24 @@ namespace Gw2_Launchbuddy.Modifiers
             PressKeyUp(Keys.Enter, acc.Client.Process);
         }
 
-        private static void PressKeyDown(Keys key, Process pro)
+        private static void PressKeyDown(Keys key, Process pro,bool delay=true)
         {
             const uint WM_KEYDOWN = 0x0100;
             PostMessage(pro.MainWindowHandle, WM_KEYDOWN, (int)key, 0);
-            Thread.Sleep(50);
+            if (delay)Thread.Sleep(50);
         }
 
-        private static void PressKeyUp(Keys key, Process pro)
+        private static void PressKeyUp(Keys key, Process pro, bool delay = true)
         {
             const uint WM_KEYUP = 0x0101;
             PostMessage(pro.MainWindowHandle, WM_KEYUP, (int)key, 0);
-            Thread.Sleep(50);
+            if(delay)Thread.Sleep(50);
+        }
+
+        private static void PressCMD(Keys key , Process pro)
+        {
+            const uint WM_COMMAND = 0x0111;
+            PostMessage(pro.MainWindowHandle, WM_COMMAND, (int)key, 0);
         }
 
         private static void TypeString(string input, Process pro)

@@ -178,6 +178,11 @@ namespace Gw2_Launchbuddy.Modifiers
             if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with caution.");
             Thread.Sleep(100);
             Loginfiller.Login(email,passwd,pro,true);
+            Thread.Sleep(250);
+
+            blockefunc = () => ModuleReader.WaitForModule("DPAPI.dll", pro, null);
+            Helpers.BlockerInfo.Run("Loginfile Creation", "Please add additional Information if needed.", blockefunc);
+            if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with caution.");
 
             int ct = 0;
             bool exists = true;
@@ -200,9 +205,8 @@ namespace Gw2_Launchbuddy.Modifiers
 
             try
             {
-#if DEBUG
                 Console.WriteLine("Login data Hash: " + filename + ": " + datfile.MD5HASH);
-#endif
+
                 if (File.Exists(filepath)) File.Delete(filepath);
                 File.Copy(EnviromentManager.GwLocaldatPath, filepath);
                 datfile.Valid = true;
@@ -214,7 +218,6 @@ namespace Gw2_Launchbuddy.Modifiers
                 datfile.Valid = false;
                 return datfile;
             }
-
         }
 
         public static LocalDatFile CreateNewFile(string filename)
