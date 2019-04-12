@@ -643,6 +643,11 @@
                                         </Expander.Header>
                                         <ScrollViewer>
                                             <StackPanel>
+                                                <StackPanel>
+                                                    <Label Style="{StaticResource H3}" Content="Window Setup:"/>
+                                                    <Button Content="Set Up Window" MaxWidth="200" Name="bt_windowinfo_setup" Click="bt_windowinfo_setup_Click"/>
+                                                    <Separator />
+                                                </StackPanel>
                                                 <DockPanel>
                                                     <Label  Content="Relaunch Client when it closes/crashes" VerticalAlignment="Center"/>
                                                     <DockPanel  DockPanel.Dock="Right">

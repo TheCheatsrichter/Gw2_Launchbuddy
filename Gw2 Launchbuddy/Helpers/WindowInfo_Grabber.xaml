@@ -1,0 +1,13 @@
+﻿<Window x:Class="Gw2_Launchbuddy.Helpers.WindowInfo_Grabber"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gw2_Launchbuddy.Helpers"
+        mc:Ignorable="d"
+        Title="Window Setup" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+    <DockPanel Margin="100">
+        <Image Source="/Gw2 Launchbuddy;component/Resources/clientifix.png" MaxHeight="150" DockPanel.Dock="Top"/>
+        <TextBlock Text="Cooooo! Place this window into the desired positon and state. Then close it." FontSize="24" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"/>
+    </DockPanel>
+</Window>

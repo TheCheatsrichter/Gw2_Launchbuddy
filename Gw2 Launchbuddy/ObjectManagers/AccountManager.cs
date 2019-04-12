@@ -219,15 +219,15 @@ namespace Gw2_Launchbuddy.ObjectManagers
         [XmlIgnore]
         private Account account { get { return AccountManager.GetAccountByID(AccountID); } }
         public event PropertyChangedEventHandler PropertyChanged;
-
         public Arguments Arguments { get; set; }
         public GFXConfig GFXFile { get; set; }
         public ObservableCollection<string> DLLs { get; set; }
         private Icon icon;
         public ObservableCollection<AccountHotkey> AccHotkeys { set; get; }
         public LocalDatFile Loginfile { set; get; }
+        public WindowConfig WinConfig { set; get; }
 
-        //Adavanced Settings
+    //Adavanced Settings
         [XmlIgnore]
         private uint relaunchesmax;
         public uint RelaunchesMax { set { relaunchesmax = value; RelaunchesLeft = value; } get { return relaunchesmax; } }
@@ -262,6 +262,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Hotkeys.Remove(key);
             if (AccHotkeys.Contains(key))
                 AccHotkeys.Remove(key);
+        }
+
+        public void CreateWinConfig()
+        {
+            if (WinConfig == null) WinConfig = new WindowConfig();
+            WinConfig.Configure_Window();
         }
 
         protected void OnPropertyChanged(string name)

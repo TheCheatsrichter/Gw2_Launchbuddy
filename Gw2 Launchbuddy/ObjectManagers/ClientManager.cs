@@ -313,6 +313,49 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int left;
+            public int top;
+            public int right;
+            public int bottom;
+        }
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool GetWindowRect(IntPtr hWnd, ref RECT Rect);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int Width, int Height, bool Repaint);
+
+        public void Window_MoveTo_Default()
+        {
+            WindowConfig config = account.Settings.WinConfig;
+            Window_Move(config.WinPos_X,config.WinPos_Y);
+        }
+
+        public void Window_ScaleTo_Default()
+        {
+            WindowConfig config = account.Settings.WinConfig;
+            Window_Scale(config.Win_Width,config.Win_Height);
+        }
+
+        private void Window_Move(int posx,int posy)
+        {
+            IntPtr handle = Process.MainWindowHandle;
+            RECT Rect = new RECT();
+            if (GetWindowRect(handle, ref Rect))
+                MoveWindow(handle, posx, posy, Rect.right - Rect.left,Rect.bottom-Rect.top,true);
+        }
+
+        private void Window_Scale(int width,int height)
+        {
+            IntPtr handle = Process.MainWindowHandle;
+            RECT Rect = new RECT();
+            if (GetWindowRect(handle, ref Rect))
+                MoveWindow(handle, Rect.left ,Rect.top, width, height, true);
+        }
+
         private void UpdateLoginFile()
         {
             if(account.Settings.Loginfile!=null)
@@ -338,6 +381,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
             args += "-shareArchive ";
 
 
+
+            if (account.Settings.WinConfig != null && !args.Contains("-windowed")) args += "-windowed ";
 
             //Add Login Credentials
             /*

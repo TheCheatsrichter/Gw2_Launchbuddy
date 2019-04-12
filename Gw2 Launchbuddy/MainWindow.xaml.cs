@@ -1575,6 +1575,12 @@ namespace Gw2_Launchbuddy
             settings.RecreateLoginFile();
         }
 
+        private void bt_windowinfo_setup_Click(object sender, RoutedEventArgs e)
+        {
+            AccountSettings settings = ((sender as Button).DataContext as AccountSettings);
+            settings.CreateWinConfig();
+        }
+
         private void sl_logoendpos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var endpos = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];

@@ -183,6 +183,9 @@
     <Compile Include="Helpers\BlockerInfo.xaml.cs">
       <DependentUpon>BlockerInfo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\WindowInfo_Grabber.xaml.cs">
+      <DependentUpon>WindowInfo_Grabber.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Modifiers\DLLInjector.cs" />
     <Compile Include="Extensions\ProcessExtensions.cs" />
     <Compile Include="Extensions\XmlTextReaderExtensions.cs" />
@@ -215,6 +218,7 @@
     <Compile Include="ObjectManagers\IconManager.cs" />
     <Compile Include="ObjectManagers\PluginManager.cs" />
     <Compile Include="ObjectManagers\ServerManager.cs" />
+    <Compile Include="ObjectManagers\WindowConfig.cs" />
     <Compile Include="Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
     </Compile>
@@ -237,6 +241,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Helpers\BlockerInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Helpers\WindowInfo_Grabber.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
