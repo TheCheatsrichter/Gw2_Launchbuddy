@@ -11,7 +11,7 @@
 
     
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
-        Title="Gw2 Launchbuddy V 1.8.9" MinHeight="700" MinWidth="800" Height="700" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None">
+        Title="Gw2 Launchbuddy V 1.9 Prerelease" MinHeight="700" MinWidth="900" Height="700" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None">
     <Window.Resources>
         <Storyboard x:Key="anim_imgfadeout">
             <DoubleAnimation 
@@ -227,7 +227,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy V1.8.9 ALPHA" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy V1.9 Prerelease" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
@@ -282,7 +282,7 @@
                     <ColumnDefinition Width="50*"/>
                     <ColumnDefinition Width="50*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="bt_launch" Grid.ColumnSpan="2" Style="{StaticResource LaunchButton}"  Click="bt_launch_Click" Grid.Row="0" Grid.Column="0" BorderThickness="0" BorderBrush="{x:Null}" Foreground="{x:Null}" HorizontalAlignment="Left" Width="752">
+                <Button x:Name="bt_launch" Grid.ColumnSpan="2" Style="{StaticResource LaunchButton}"  Click="bt_launch_Click" Grid.Row="0" Grid.Column="0" BorderThickness="0" BorderBrush="{x:Null}" Foreground="{x:Null}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150"/>

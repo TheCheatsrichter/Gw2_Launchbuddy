@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gw2_Launchbuddy.Helpers"
         mc:Ignorable="d"
-        Title="Window Setup" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        Title="Window Setup" Height="450" Width="800" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
     <DockPanel Margin="100">
         <Image Source="/Gw2 Launchbuddy;component/Resources/clientifix.png" MaxHeight="150" DockPanel.Dock="Top"/>
-        <TextBlock Text="Cooooo! Place this window into the desired positon and state. Then close it." FontSize="24" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"/>
+        <TextBlock Text="Cooooo! Change this window to the desired position and size. Then close it." FontSize="24" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"/>
     </DockPanel>
 </Window>

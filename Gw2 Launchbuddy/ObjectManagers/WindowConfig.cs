@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows;
 using Gw2_Launchbuddy.Helpers;
@@ -30,6 +31,52 @@ namespace Gw2_Launchbuddy.ObjectManagers
             this.Win_Width = tmp.Win_Width;
             this.Win_Height = tmp.Win_Height;
             this.WindowState = tmp.WindowState;
+        }
+
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GetWindowRect(HandleRef hWnd, out RECT lpRect);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int Left;        // x position of upper-left corner
+            public int Top;         // y position of upper-left corner
+            public int Right;       // x position of lower-right corner
+            public int Bottom;      // y position of lower-right corner
+        }
+
+        private RECT? GetWindowDimensions(Process pro)
+        {
+            RECT rct;
+            bool test = GetWindowRect(new HandleRef(pro,pro.MainWindowHandle), out rct);
+            if (!GetWindowRect(new HandleRef(this, pro.MainWindowHandle), out rct))
+            {
+                MessageBox.Show("ERROR");
+                return null;
+            }
+            return rct;
+        }
+
+        public bool? IsConfigured(Process pro)
+        {
+            RECT? rct = GetWindowDimensions(pro);
+
+            if(rct !=null)
+            {
+                bool success = true;
+                success = rct.Value.Top == WinPos_Y;
+                success = rct.Value.Left == WinPos_X;
+
+                success = rct.Value.Right- rct.Value.Left == Win_Width;
+                success = rct.Value.Bottom - rct.Value.Top == Win_Height;
+                return success;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

@@ -342,6 +342,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private void Window_Move(int posx,int posy)
         {
+            Process.Refresh();
             IntPtr handle = Process.MainWindowHandle;
             RECT Rect = new RECT();
             if (GetWindowRect(handle, ref Rect))
@@ -350,10 +351,42 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private void Window_Scale(int width,int height)
         {
+            Process.Refresh();
             IntPtr handle = Process.MainWindowHandle;
             RECT Rect = new RECT();
             if (GetWindowRect(handle, ref Rect))
                 MoveWindow(handle, Rect.left ,Rect.top, width, height, true);
+        }
+
+        private void Window_Init()
+        {
+            new Thread (Th_Window_Init).Start();
+        }
+
+        private void Th_Window_Init()
+        {
+            // icm32.dll
+            ModuleReader.WaitForModule("mscms.dll", Process, null);
+            Console.WriteLine($"{account.Nickname} configuring Windowsize");
+
+            Window_MoveTo_Default();
+            Window_ScaleTo_Default();
+            
+            int i = 0;
+            while (i<3 && account.Settings.WinConfig.IsConfigured(Process)!=true)
+            {
+                try
+                {
+                    Window_MoveTo_Default();
+                    Window_ScaleTo_Default();
+                }
+                catch { }
+
+                Thread.Sleep(500);
+                i++;
+            }
+            
+
         }
 
         private void UpdateLoginFile()
@@ -504,6 +537,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Loginfiller.PressLoginButton(Account);
         }
 
+        private void WaitForLogin()
+        {
+            Action blockefunc = () => ModuleReader.WaitForModule("winbrand.dll", Process, null);
+            Helpers.BlockerInfo.Run($"{account.Nickname} Login pending", $"{account.Nickname} Login requiring additional information.", blockefunc);
+        }
+
         public void Launch()
         {
             try
@@ -564,10 +603,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             break;
 
                         case var expression when (Status < ClientStatus.Running):
+                            WaitForLogin();
                             RestoreGFX();
                             SetProcessPriority();
                             Status = ClientStatus.Running;
                             try { Focus(); } catch { }
+                            try {if(account.Settings.WinConfig!=null)new Thread(Window_Init).Start();} catch { }
                             break;
                     }
                 }

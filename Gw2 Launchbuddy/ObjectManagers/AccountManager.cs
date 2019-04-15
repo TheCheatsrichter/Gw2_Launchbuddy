@@ -218,6 +218,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public int AccountID { set; get; }
         [XmlIgnore]
         private Account account { get { return AccountManager.GetAccountByID(AccountID); } }
+        [XmlIgnore]
+        private WindowConfig winconfig;
+
         public event PropertyChangedEventHandler PropertyChanged;
         public Arguments Arguments { get; set; }
         public GFXConfig GFXFile { get; set; }
@@ -225,7 +228,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         private Icon icon;
         public ObservableCollection<AccountHotkey> AccHotkeys { set; get; }
         public LocalDatFile Loginfile { set; get; }
-        public WindowConfig WinConfig { set; get; }
+        public WindowConfig WinConfig { set { OnPropertyChanged("HasWindowConfig"); winconfig = value; } get { return winconfig; } }
 
     //Adavanced Settings
         [XmlIgnore]
@@ -307,6 +310,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         [XmlIgnore]
         public string Password { set {enc_password = Cryptor.Encrypt(value); OnPropertyChanged("HasLoginBackupData"); if (value == "") enc_password = null; } get { return Cryptor.Decrypt(enc_password); } }
 
+
         [XmlIgnore]
         public string UI_Email
         {
@@ -351,6 +355,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public bool HasDlls { get { if (DLLs.Count > 0) { return true; } return false; } set { } }
         [XmlIgnore]
         public bool HasAdvancedSettings { get { if (ProcessPriority!=ProcessPriorityClass.Normal || RelaunchesMax>0) { return true; } return false; } set { } }
+        [XmlIgnore]
+        public bool HasWindowConfig { get { return WinConfig != null; } }
+
 
         public void SetLoginFile()
         {
