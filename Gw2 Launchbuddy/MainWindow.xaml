@@ -645,7 +645,10 @@
                                             <StackPanel>
                                                 <StackPanel>
                                                     <Label Style="{StaticResource H3}" Content="Window Setup:"/>
-                                                    <Button Content="Set Up Window" MaxWidth="200" Name="bt_windowinfo_setup" Click="bt_windowinfo_setup_Click"/>
+                                                    <WrapPanel>
+                                                        <Button Content="Configure Windowsettings" MaxWidth="200" Name="bt_windowinfo_setup" MinWidth="150" Click="bt_windowinfo_setup_Click"/>
+                                                        <Button Content="Delete Windowsettings" IsEnabled="{Binding HasWindowConfig}" MaxWidth="200" Name="bt_windowinfo_delete" MinWidth="150" Click="bt_windowinfo_delete_Click"/>
+                                                    </WrapPanel>
                                                     <Separator />
                                                 </StackPanel>
                                                 <DockPanel>

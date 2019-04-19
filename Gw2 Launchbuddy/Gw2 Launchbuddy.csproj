@@ -186,6 +186,9 @@
     <Compile Include="Helpers\WindowInfo_Grabber.xaml.cs">
       <DependentUpon>WindowInfo_Grabber.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\WindowSpacer.xaml.cs">
+      <DependentUpon>WindowSpacer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Modifiers\DLLInjector.cs" />
     <Compile Include="Extensions\ProcessExtensions.cs" />
     <Compile Include="Extensions\XmlTextReaderExtensions.cs" />
@@ -245,6 +248,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Helpers\WindowInfo_Grabber.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Helpers\WindowSpacer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

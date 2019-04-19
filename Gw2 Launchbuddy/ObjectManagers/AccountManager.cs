@@ -228,7 +228,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         private Icon icon;
         public ObservableCollection<AccountHotkey> AccHotkeys { set; get; }
         public LocalDatFile Loginfile { set; get; }
-        public WindowConfig WinConfig { set { OnPropertyChanged("HasWindowConfig"); winconfig = value; } get { return winconfig; } }
+        public WindowConfig WinConfig { set { winconfig = value; OnPropertyChanged("HasWindowConfig"); } get { return winconfig; } }
 
     //Adavanced Settings
         [XmlIgnore]
@@ -306,9 +306,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
         private AES Cryptor = new AES();
 
         [XmlIgnore]
-        public string Email { set { enc_email = Cryptor.Encrypt(value); OnPropertyChanged("HasLoginBackupData"); if (value == "") enc_email = null; } get { return Cryptor.Decrypt(enc_email); } }
+        public string Email { set { enc_email = Cryptor.Encrypt(value); if (value == "") enc_email = null; OnPropertyChanged("HasLoginBackupData"); } get { return Cryptor.Decrypt(enc_email); } }
         [XmlIgnore]
-        public string Password { set {enc_password = Cryptor.Encrypt(value); OnPropertyChanged("HasLoginBackupData"); if (value == "") enc_password = null; } get { return Cryptor.Decrypt(enc_password); } }
+        public string Password { set {enc_password = Cryptor.Encrypt(value); if (value == "") enc_password = null; OnPropertyChanged("HasLoginBackupData"); } get { return Cryptor.Decrypt(enc_password); } }
 
 
         [XmlIgnore]

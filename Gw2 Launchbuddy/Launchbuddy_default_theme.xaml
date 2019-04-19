@@ -130,6 +130,7 @@
     <Style x:Key="WindowButton" TargetType="{x:Type Button}">
         <Setter Property="Template" Value="{StaticResource windowbutton_template}"/>
         <Setter Property="Foreground" Value="{StaticResource MainText_Foreground}"></Setter>
+        <Setter Property="MinHeight" Value="30"/>
     </Style>
 
     <Style x:Key="LaunchButton" TargetType="{x:Type Button}">

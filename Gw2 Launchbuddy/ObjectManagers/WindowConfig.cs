@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -23,8 +24,26 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void Configure_Window()
         {
+            List<WindowSpacer> spacer_windows = new List<WindowSpacer>();
+            foreach(Account acc in AccountManager.Accounts)
+            {
+                if(acc.Settings.HasWindowConfig)
+                {
+                    WindowSpacer window = new WindowSpacer(acc);
+                    spacer_windows.Add(window);
+                    window.Show();
+                }
+            }
+
             WindowInfo_Grabber grabber = new WindowInfo_Grabber();
             grabber.ShowDialog();
+
+
+            foreach (WindowSpacer win in spacer_windows)
+            {
+                win.Close();
+            }
+
             WindowConfig tmp = grabber.GetInfo();
             this.WinPos_X = tmp.WinPos_X;
             this.WinPos_Y = tmp.WinPos_Y;
