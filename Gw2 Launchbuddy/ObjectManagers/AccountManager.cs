@@ -60,6 +60,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void LaunchAccounts()
         {
+            UpdateAccountFiles();
             foreach (Account acc in SelectedAccounts)
             {
                 acc.Client.Launch();
@@ -71,6 +72,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
             foreach (Account acc in accs)
             {
                 acc.Client.Launch();
+            }
+        }
+
+        public static void UpdateAccountFiles()
+        {
+            foreach(Account acc in SelectedAccounts.Where<Account>(x=>!x.Settings.Loginfile.IsUpToDate))
+            {
+                LocalDatManager.UpdateLocalDat(acc.Settings.Loginfile);
             }
         }
 

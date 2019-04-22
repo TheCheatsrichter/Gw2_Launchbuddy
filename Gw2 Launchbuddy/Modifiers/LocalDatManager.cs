@@ -152,6 +152,8 @@ namespace Gw2_Launchbuddy.Modifiers
                     Action waitforlaunch = () => ModuleReader.WaitForModule("WINNSI.DLL", pro);
                     Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating an outdated Loginfile", waitforlaunch);
                     pro.Kill();
+                    Action waitforlock = () => WaitForLoginfileRelease(file);
+                    Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to save the updated loginfile.", waitforlock);
                     ToDefault();
                     file.gw2build = Api.ClientBuild;
                 }
@@ -159,6 +161,35 @@ namespace Gw2_Launchbuddy.Modifiers
             catch(Exception e)
             {
                 throw new Exception("An error occured when Updating the Login file. " +e.Message);
+            }
+        }
+
+        private static bool LoginFileIsLocked(LocalDatFile file)
+        {
+            FileStream stream = null;
+            try
+            {
+                stream = File.Open(file.Path,FileMode.Open, FileAccess.Read, FileShare.None);
+            }
+            catch (IOException)
+            {
+                return true;
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
+            }
+            return false;
+        }
+
+        private static void WaitForLoginfileRelease(LocalDatFile file)
+        {
+            int i = 0;
+            while (LoginFileIsLocked(file)&& i < 5)
+            {
+                i++;
+                Thread.Sleep(1000);
             }
         }
 

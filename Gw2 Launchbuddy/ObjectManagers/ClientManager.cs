@@ -407,17 +407,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         }
 
-        private void UpdateLoginFile()
-        {
-            if(account.Settings.Loginfile!=null)
-            {
-                if(!account.Settings.Loginfile.IsUpToDate)
-                {
-                    LocalDatManager.UpdateLocalDat(account.Settings.Loginfile);
-                }
-            }
-        }
-
         private void ConfigureProcess()
         {
             Process.EnableRaisingEvents = true;
@@ -587,7 +576,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     switch (Status)
                     {
                         case var expression when (Status < ClientStatus.Configured):
-                            UpdateLoginFile();
                             ConfigureProcess();
                             SwapGFX();
                             SwapLocalDat();
