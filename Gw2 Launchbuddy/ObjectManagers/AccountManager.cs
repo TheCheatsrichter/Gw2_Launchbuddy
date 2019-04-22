@@ -77,9 +77,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void UpdateAccountFiles()
         {
-            foreach(Account acc in SelectedAccounts.Where<Account>(x=>!x.Settings.Loginfile.IsUpToDate))
+            foreach(Account acc in SelectedAccounts.Where<Account>(x=>x.Settings.Loginfile!=null))
             {
-                LocalDatManager.UpdateLocalDat(acc.Settings.Loginfile);
+                if(!acc.Settings.Loginfile.IsUpToDate)LocalDatManager.UpdateLocalDat(acc.Settings.Loginfile);
             }
         }
 
