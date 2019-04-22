@@ -227,7 +227,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy V1.9 Prerelease" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy V1.9 Beta" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
@@ -644,13 +644,14 @@
                                         <ScrollViewer>
                                             <StackPanel>
                                                 <StackPanel>
-                                                    <Label Style="{StaticResource H3}" Content="Window Setup:"/>
+                                                    <Label Style="{StaticResource H3}" Content="Window Settings:"/>
                                                     <WrapPanel>
                                                         <Button Content="Configure Windowsettings" MaxWidth="200" Name="bt_windowinfo_setup" MinWidth="150" Click="bt_windowinfo_setup_Click"/>
                                                         <Button Content="Delete Windowsettings" IsEnabled="{Binding HasWindowConfig}" MaxWidth="200" Name="bt_windowinfo_delete" MinWidth="150" Click="bt_windowinfo_delete_Click"/>
                                                     </WrapPanel>
-                                                    <Separator />
+                                                    <Separator Margin="10"/>
                                                 </StackPanel>
+                                                <Label Style="{StaticResource H3}" Content="Additional Settings:"/>
                                                 <DockPanel>
                                                     <Label  Content="Relaunch Client when it closes/crashes" VerticalAlignment="Center"/>
                                                     <DockPanel  DockPanel.Dock="Right">

@@ -603,7 +603,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             break;
 
                         case var expression when (Status < ClientStatus.Running):
-                            WaitForLogin();
                             RestoreGFX();
                             SetProcessPriority();
                             Status = ClientStatus.Running;
