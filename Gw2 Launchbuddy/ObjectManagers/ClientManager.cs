@@ -205,6 +205,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
             ClientManager.Add(this);
         }
 
+        private bool ProcessIsClosed()
+        {
+            if (Process.HasExited)
+            {
+                this.status = ClientStatus.None;
+                return true;
+            }
+            return false;
+        }
+
         public void Close()
         {
             //May need more gracefully close function
@@ -244,6 +254,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void Suspend()
         {
+            if (ProcessIsClosed()) return;
+
             foreach (ProcessThread pT in Process.Threads)
             {
                 IntPtr pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)pT.Id);
@@ -261,18 +273,21 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void Minimize()
         {
+            if (ProcessIsClosed()) return;
             Process.Refresh();
             ShowWindow(Process.MainWindowHandle,0x6);
         }
 
         public void Maximize()
         {
+            if (ProcessIsClosed()) return;
             Process.Refresh();
             ShowWindow(Process.MainWindowHandle, 0x3);
         }
 
         public void Resume()
         {
+            if (ProcessIsClosed()) return;
             foreach (ProcessThread pT in Process.Threads)
             {
                 IntPtr pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)pT.Id);
@@ -297,6 +312,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void Focus()
         {
+            if (ProcessIsClosed()) return;
             Process.Refresh();
             IntPtr hwndMain = Process.MainWindowHandle;
             SetForegroundWindow(hwndMain);
@@ -342,6 +358,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private void Window_Move(int posx,int posy)
         {
+            if (ProcessIsClosed()) return;
             Process.Refresh();
             IntPtr handle = Process.MainWindowHandle;
             RECT Rect = new RECT();
@@ -351,6 +368,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private void Window_Scale(int width,int height)
         {
+            if (ProcessIsClosed()) return;
             Process.Refresh();
             IntPtr handle = Process.MainWindowHandle;
             RECT Rect = new RECT();

@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Gw2_Launchbuddy.Modifiers
 {
@@ -115,11 +116,19 @@ namespace Gw2_Launchbuddy.Modifiers
             IntPtr[] modulePointers = new IntPtr[0];
             int bytesNeeded = 0;
 
-            // Determine number of modules
-            if (!Native.EnumProcessModulesEx(process.Handle, modulePointers, 0, out bytesNeeded, (uint)Native.ModuleFilter.ListModulesAll))
+            try
             {
-                return collectedModules;
+                // Determine number of modules
+                if (!Native.EnumProcessModulesEx(process.Handle, modulePointers, 0, out bytesNeeded, (uint)Native.ModuleFilter.ListModulesAll))
+                {
+                    return collectedModules;
+                }
             }
+            catch
+            {
+                MessageBox.Show("Gameclient got closed unexpectedly. Could not collect Modules");
+            }
+
 
             int totalNumberofModules = bytesNeeded / IntPtr.Size;
             modulePointers = new IntPtr[totalNumberofModules];
