@@ -75,7 +75,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 if (ActiveClients.Where<Client>(c => c.Process.Id == pro.Id).Count<Client>() == 0)
                 {
-                    MessageBox.Show("A Guild Wars 2 instance has been found which was not launched by Launchbuddy.\n Please close the application to avoid unexpected behavior.");
+                    MessageBox.Show("A Guild Wars 2 instance has been found which is not configured for multiboxing.\n Please close the application or wait for the update to be completed to avoid unexpected behavior.");
                     return false;
                 }
             }

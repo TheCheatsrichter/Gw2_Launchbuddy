@@ -11,6 +11,7 @@ using System.Net;
 using System.Reflection;
 using CommandLine;
 using Gw2_Launchbuddy.Modifiers;
+using System.Threading;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -176,6 +177,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
         }
         public static void CheckGwClientVersion()
         {
+            new Thread(Thread_CheckGwClientVersion).Start();
+        }
+
+        private static void Thread_CheckGwClientVersion()
+        {
             if (GwClientVersion != null)
             {
                 if (GwClientUpToDate == null && Api.Online)
@@ -183,7 +189,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     GwClientUpToDate = Api.ClientBuild == GwClientVersion;
                     if (!(bool)GwClientUpToDate)
                     {
-                        MessageBox.Show("Your Guild Wars 2 Client is outdated. Starting update...");
                         UpdateGwClient();
                     }
                 }
@@ -193,6 +198,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 LoadGwClientInfo();
             }
         }
+
         private static void UpdateGwClient()
         {
             if (Process.GetProcessesByName("*Gw2*.exe").Length == 0)
@@ -200,7 +206,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 Process pro = new Process();
                 pro.StartInfo = new ProcessStartInfo { FileName=EnviromentManager.GwClientExePath, Arguments = "-image" };
                 pro.Start();
-
             }
             else
             {
