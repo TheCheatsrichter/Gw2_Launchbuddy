@@ -584,7 +584,7 @@ namespace Gw2_Launchbuddy
             }
             else
             {
-                if (EnviromentManager.LBUseClientGUI) EnviromentManager.LBInstanceGUI.Show();
+                EnviromentManager.Show_LBInstanceGUI();
                 AccountManager.LaunchAccounts();
                 if (addonflag)
                 {
@@ -645,12 +645,28 @@ namespace Gw2_Launchbuddy
         }
         private void tb_authport_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
-            ServerManager.SelectedAssetserver.Port = tb_authport.Text;
+            try
+            {
+                ServerManager.SelectedAuthserver.Port = tb_authport.Text;
+            } catch
+            {
+                MessageBox.Show("Invalid Authserver Port");
+                tb_authport.Focus();
+            }
+            
         }
 
         private void tb_assetsport_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
-            ServerManager.SelectedAssetserver.Port = tb_assetsport.Text;
+            try
+            {
+                ServerManager.SelectedAssetserver.Port = tb_assetsport.Text;
+            }
+            catch
+            {
+                MessageBox.Show("Invalid Assetserver Port");
+                tb_assetsport.Focus();
+            }
         }
 
         private void button_Click(object sender, RoutedEventArgs e)

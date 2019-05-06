@@ -10,6 +10,7 @@ using System.Drawing;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using Gw2_Launchbuddy.Modifiers;
+using System.Threading;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -77,7 +78,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void UpdateAccountFiles()
         {
-            foreach(Account acc in SelectedAccounts.Where<Account>(x=>x.Settings.Loginfile!=null))
+            foreach(Account acc in Accounts.Where<Account>(x=>x.Settings.Loginfile!=null))
             {
                 if(!acc.Settings.Loginfile.IsUpToDate)LocalDatManager.UpdateLocalDat(acc.Settings.Loginfile);
             }

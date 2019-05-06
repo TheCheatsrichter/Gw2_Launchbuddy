@@ -149,6 +149,7 @@ namespace Gw2_Launchbuddy.Modifiers
                     Apply(file);
                     Process pro = new Process { StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } };
                     pro.Start();
+                    pro.WaitForInputIdle();
                     Action waitforlaunch = () => ModuleReader.WaitForModule("WINNSI.DLL", pro);
                     Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating an outdated Loginfile", waitforlaunch);
                     pro.Kill();
@@ -192,7 +193,6 @@ namespace Gw2_Launchbuddy.Modifiers
                 Thread.Sleep(1000);
             }
         }
-
 
         public static LocalDatFile CreateNewFileAutomated(string filename,string email,string passwd)
         {
@@ -313,6 +313,7 @@ namespace Gw2_Launchbuddy.Modifiers
         public string Name { get { return System.IO.Path.GetFileNameWithoutExtension(Path); } }
         public string Gw2Build { get { return gw2build; } }
         public bool IsUpToDate { get { return Gw2Build == EnviromentManager.GwClientVersion; } }
+        public bool IsOutdated { get { return !IsUpToDate; } }
         public bool Valid = false;
         public string MD5HASH {  get { return CalculateMD5(Path); } }
 

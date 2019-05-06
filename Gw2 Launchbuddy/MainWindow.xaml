@@ -227,7 +227,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy V1.9.1 Alpha" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy V1.9.3 Alpha" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
@@ -364,7 +364,8 @@
                             </ListView.ItemContainerStyle>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <DockPanel ToolTip="{Binding Path=Client.Status}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" LastChildFill="False" >
+                                    <DockPanel ToolTip="{Binding Path=Client.Status}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" LastChildFill="False" IsEnabled="{Binding Path=Settings.Loginfile.IsUpToDate}">
+                                        <Label Height="32" Visibility="{Binding Path=Settings.Loginfile.IsOutdated, Converter={StaticResource BoolToVis}}" ToolTip="Loginfile is outdated" Foreground="Red" Content="UPDATE REQUIRED" DockPanel.Dock="Right"/>
                                         <Image Height="32" Source="{Binding Path=Settings.Icon.Image}" DockPanel.Dock="Left"/>
                                         <Image Height="32" Source="{Binding Path=Client.StatusToIcon}" DockPanel.Dock="Right"/>
                                         <Image Height="32" Source="Resources/Icons/settings.png" Visibility="{Binding Path=Settings.HasArguments, Converter={StaticResource BoolToVis}}" ToolTip="Uses Arguments" DockPanel.Dock="Right"/>

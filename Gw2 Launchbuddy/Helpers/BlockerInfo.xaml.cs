@@ -30,16 +30,18 @@ namespace Gw2_Launchbuddy.Helpers
             InitializeComponent();
         }
 
-        public static void Run(string Title,string Message, Action blockerfunction)
+        public static void Run(string Title,string Message, Action blockerfunction,bool topmost=false)
         {
             blockerinfo = new BlockerInfo();
             blockerinfo.Title = Title;
             blockerinfo.tb_message.Text = Message;
             function = blockerfunction;
+            blockerinfo.Topmost = topmost;
             Done = false;
             Thread blocker_thread = new Thread(new ThreadStart(WaitForFunction));
             blocker_thread.Start();
             blockerinfo.ShowDialog();
+            blockerinfo.Focus();
         }
 
         private static void WaitForFunction()

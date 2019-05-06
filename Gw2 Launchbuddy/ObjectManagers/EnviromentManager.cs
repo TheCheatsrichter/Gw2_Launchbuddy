@@ -19,7 +19,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class EnviromentManager
     {
-        public static Version LBVersion = new Version("1.9.1");
+        public static Version LBVersion = new Version("1.9.3");
         public static LaunchOptions LaunchOptions;
 
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
@@ -76,6 +76,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
             AddOnManager.LaunchLbAddons();
 
             Hotkeys.RegisterAll();
+
+        }
+
+        public static void AfterUI_Inits()
+        {
+            UpdateAccounts();
         }
 
         public static void Close()
@@ -84,6 +90,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Hotkeys.UnregisterAll();
             //Local Dat Cleanup
             LocalDatManager.CleanUp();
+        }
+
+        private static void UpdateAccounts()
+        {
+            AccountManager.UpdateAccountFiles();
         }
 
         private static void DirectorySetup()
@@ -177,11 +188,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
         }
         public static void CheckGwClientVersion()
         {
-            new Thread(Thread_CheckGwClientVersion).Start();
-        }
-
-        private static void Thread_CheckGwClientVersion()
-        {
             if (GwClientVersion != null)
             {
                 if (GwClientUpToDate == null && Api.Online)
@@ -206,10 +212,21 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 Process pro = new Process();
                 pro.StartInfo = new ProcessStartInfo { FileName=EnviromentManager.GwClientExePath, Arguments = "-image" };
                 pro.Start();
+                pro.WaitForExit();
+                EnviromentManager.GwClientVersion = Api.ClientBuild;
             }
             else
             {
                 MessageBox.Show("Please close all running Guild Wars 2 game instances to update the game.");
+            }
+        }
+
+        public static void Show_LBInstanceGUI()
+        {
+            if (EnviromentManager.LBUseClientGUI)
+            {
+                if (LBInstanceGUI.IsLoaded == false) LBInstanceGUI = new GUI_ApplicationManager();
+                LBInstanceGUI.Show();
             }
         }
     }
