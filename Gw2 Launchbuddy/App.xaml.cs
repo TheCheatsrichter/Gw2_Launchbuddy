@@ -31,8 +31,6 @@ namespace Gw2_Launchbuddy
 
             EnviromentManager.LaunchOptions = options;
 
-            PluginManager.DoInits();
-
             if (!options.Silent)
             {
                 var app = new App();

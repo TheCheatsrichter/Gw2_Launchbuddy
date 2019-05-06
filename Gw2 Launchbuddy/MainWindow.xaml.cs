@@ -703,7 +703,6 @@ namespace Gw2_Launchbuddy
         {
             Mainwin_SaveSetup();
             EnviromentManager.Close();
-            foreach (var plugin in PluginManager.TestPluginCollection) plugin.Exit();
             Properties.Settings.Default.Save();
             Application.Current.Shutdown();
         }
