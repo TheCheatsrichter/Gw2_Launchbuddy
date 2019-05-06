@@ -11,7 +11,7 @@
 
     
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
-        Title="Gw2 Launchbuddy V 1.9 Prerelease" MinHeight="700" MinWidth="900" Height="700" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" WindowStartupLocation="CenterScreen" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None">
+        Title="Gw2 Launchbuddy V 1.9 Prerelease" MinHeight="700" MinWidth="900" Height="700" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None">
     <Window.Resources>
         <Storyboard x:Key="anim_imgfadeout">
             <DoubleAnimation 

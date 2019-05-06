@@ -107,6 +107,7 @@ namespace Gw2_Launchbuddy
             LoadEnviromentUI();
 
             cinema_setup();
+
             Mainwin_LoadSetup(); //do this after cinema setup!
 
             Cinema_Accountlist.ItemsSource = AccountManager.Accounts;
@@ -118,7 +119,6 @@ namespace Gw2_Launchbuddy
                 Thread checklbver = new Thread(checklbversion);
                 checklbver.Start();
             }
-
         }
 
         private void LoadEnviromentUI()
@@ -129,11 +129,9 @@ namespace Gw2_Launchbuddy
 
         private void Mainwin_LoadSetup()
         {
-            if (Properties.Settings.Default.mainwin_pos_x >= 0 && Properties.Settings.Default.mainwin_pos_y >= 0)
-            {
-                this.Top = Properties.Settings.Default.mainwin_pos_x;
-                this.Left = Properties.Settings.Default.mainwin_pos_y;
-            }
+
+            this.Top = Properties.Settings.Default.mainwin_pos_y;
+            this.Left = Properties.Settings.Default.mainwin_pos_x;
 
             if (Properties.Settings.Default.mainwin_size_x >= 100 && Properties.Settings.Default.mainwin_size_y >= 100)
             {
@@ -703,9 +701,9 @@ namespace Gw2_Launchbuddy
 
         private void bt_close_Click(object sender, RoutedEventArgs e)
         {
+            Mainwin_SaveSetup();
             EnviromentManager.Close();
             foreach (var plugin in PluginManager.TestPluginCollection) plugin.Exit();
-            Mainwin_SaveSetup();
             Properties.Settings.Default.Save();
             Application.Current.Shutdown();
         }
