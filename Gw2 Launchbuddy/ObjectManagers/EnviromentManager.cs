@@ -26,6 +26,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static string LBActiveClientsPath = LBAppdataPath + "lbac.txt";
         public static string LBIconsPath = LBAppdataPath + "Icons\\";
         public static string LBAccPath = LBAppdataPath + "Accs.xml";
+        public static string LBPluginsPath = LBAppdataPath + "Plugins\\";
 
         public static bool LBUseClientGUI = Properties.Settings.Default.useinstancegui;
         public static bool LBUseLoadingGUI = Properties.Settings.Default.useloadingui;
@@ -52,6 +53,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static string TMP_BackupGFXConfig = GwAppdataPath + "TMP_GFX.bak";
 
         public static string LBAddonPath = LBAppdataPath + "Addons.xml";
+
+        public static MainWindow MainWin = null;
 
         public static void Init()
         {
@@ -82,6 +85,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static void AfterUI_Inits()
         {
             UpdateAccounts();
+            PluginManager.LoadPlugins();
+            PluginManager.InitPlugins();
+            PluginManager.OnLBStart.Invoke(null,null);
         }
 
         public static void Close()
@@ -90,6 +96,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Hotkeys.UnregisterAll();
             //Local Dat Cleanup
             LocalDatManager.CleanUp();
+
+            PluginManager.OnLBClose.Invoke(null, null);
         }
 
         private static void UpdateAccounts()

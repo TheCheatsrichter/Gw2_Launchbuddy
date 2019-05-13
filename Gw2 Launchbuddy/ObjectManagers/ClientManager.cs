@@ -1,5 +1,4 @@
-﻿using Gw2_Launchbuddy.Interfaces;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;

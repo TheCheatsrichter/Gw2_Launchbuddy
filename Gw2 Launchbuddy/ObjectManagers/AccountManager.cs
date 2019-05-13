@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Xml.Serialization;
 using Gw2_Launchbuddy.Modifiers;
 using System.Threading;
+using PluginContracts;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -200,7 +201,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             else
             {
                 MessageBox.Show("Account with Nickname" + nickname + "already exists!");
-            } 
+            }
         }
 
         private Account() {
@@ -221,6 +222,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         [XmlIgnore]
         public Client Client { get { return ClientManager.Clients.FirstOrDefault(c => c.account == this); } }
+
     }
 
     public class AccountSettings : INotifyPropertyChanged

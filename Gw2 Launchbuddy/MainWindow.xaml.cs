@@ -104,6 +104,9 @@ namespace Gw2_Launchbuddy
             /*Thread checkver = new Thread(checkversion);
             checkver.IsBackground = true;
             checkver.Start();*/
+
+            //Reference this as Mainwin for external use
+            EnviromentManager.MainWin = this;
             LoadEnviromentUI();
 
             cinema_setup();
@@ -1605,5 +1608,18 @@ namespace Gw2_Launchbuddy
             var endpos = (System.Windows.Media.Animation.EasingDoubleKeyFrame)Resources["Mask_EndPos"];
             endpos.Value = sl_logoendpos.Value * (reso_x / 200);
         }
+
+        #region Plugins
+
+        public void AddTabPlugin(PluginContracts.LBPlugin plugin)
+        {
+            if(plugin.IsInstalled)
+            {
+                tab_options.Items.Add(plugin.UIContent);
+            }
+        }
+
+
+        #endregion Plugins
     }
 }
