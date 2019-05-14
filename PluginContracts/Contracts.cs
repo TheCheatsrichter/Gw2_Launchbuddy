@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using PluginContracts.ObjectInterfaces;
+using PluginContracts.EventArguments;
 
 namespace PluginContracts
 {
@@ -27,14 +29,14 @@ namespace PluginContracts
     public interface LBPlugin : IPlugin
     {
         TabItem UIContent { get; }
-        void OnLBStart(object sender, EventArgs e);
-        void OnLBClose(object sender, EventArgs e);
+
+        ObservableCollection<IAcc> Accounts { get; set; }
+        IEnviroment Enviroment { get; set; }
+
+        void OnLBStart(object sender, System.EventArgs e);
+        void OnLBClose(object sender, System.EventArgs e);
+
+        void OnClientStatusChanged(object sender, EventArgs e); //NEED CHANGE
     }
 
-    public interface AccountPlugin : IPlugin
-    {
-        void OnClientStart(object sender, EventArgs e);
-        void OnClientClose(object sender, EventArgs e);
-        void OnClientCrash(object sender, EventArgs e);
-    }
 }

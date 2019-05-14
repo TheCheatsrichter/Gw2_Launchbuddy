@@ -20,7 +20,7 @@ namespace AccountPlugin
         //Your Plugin Handling
 
         public bool Init() {
-            System.Windows.Forms.MessageBox.Show("LB Acc PLugin initiated");
+            System.Windows.Forms.MessageBox.Show("LB Acc Plugin initiated");
             return true;
         }                         //Initialize your Plugin
 
@@ -34,18 +34,10 @@ namespace AccountPlugin
         public IAcc[] Accounts { set; get; }                               //Information about the account bound to this instance
 
         //Account specific client events, will be called by Launchbuddy
-        public void OnClientStart(object sender, EventArgs e)
+        public void OnClientStatusChanged(object sender, EventArgs e)
         {
             // Do Stuff when the Client Launches
-            System.Windows.Forms.MessageBox.Show("On Clientstart :D");
-        }
-        public void OnClientClose(object sender, EventArgs e)
-        {
-            //Do Stuff when the Client Closes
-        }
-        public void OnClientCrash(object sender, EventArgs e)
-        {
-            //Do Stuff when the Client Crashed
+            System.Windows.Forms.MessageBox.Show("Client Status changed :OO");
         }
     }
 }

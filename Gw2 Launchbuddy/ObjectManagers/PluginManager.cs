@@ -15,6 +15,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
     {
         public static EventHandler OnLBStart;
         public static EventHandler OnLBClose;
+        public static EventHandler OnClientStatusChanged;
 
         static ObservableCollection<IPlugin> InstalledPlugins { set; get; }
 
@@ -86,10 +87,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
                 if (plugin is LBPlugin)
                 {
-                    OnLBStart += (plugin as LBPlugin).OnLBStart;
-                    OnLBClose += (plugin as LBPlugin).OnLBClose;
+                    LBPlugin lbplugin = plugin as LBPlugin;
 
-                    EnviromentManager.MainWin.AddTabPlugin(plugin as LBPlugin);
+                    OnLBStart += lbplugin.OnLBStart;
+                    OnLBClose += lbplugin.OnLBClose;
+
+                    OnClientStatusChanged += lbplugin.OnClientStatusChanged;
+
+                    EnviromentManager.MainWin.AddTabPlugin(lbplugin);
+
+                    lbplugin.Accounts = AccountManager.IAccs;
                 }
             }
         }

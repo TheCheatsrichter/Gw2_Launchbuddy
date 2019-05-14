@@ -262,4 +262,33 @@ namespace Gw2_Launchbuddy.ObjectManagers
         [Option("delaymutex", HelpText = "Delay in milliseconds between mutex close attempts. Higher values increase the time between retries. (Up to 9 retries will be attempted)", Hidden = true)]
         public int? Delay { get; set; }
     }
+
+    #region Plugin
+
+    public class AccPluginCalls : PluginContracts.ObjectInterfaces.IAcc
+    {
+        private Account acc { set; get; }
+
+        public AccPluginCalls(Account acc)
+        {
+            this.acc = acc;
+        }
+
+        public string Nickname { get { return acc.Nickname; } }
+        public int ID { get { return acc.ID; } }
+
+        public void Launch() => acc.Client.Launch();
+        public void Suspend() => acc.Client.Suspend();
+        public void Resume() => acc.Client.Resume();
+        public void Maximize() => acc.Client.Maximize();
+        public void Minimize() => acc.Client.Minimize();
+        public void Focus() => acc.Client.Focus();
+        public void Inject(string dllpath) => acc.Client.Inject(dllpath);
+        public void Window_Move(int posx, int posy) => acc.Client.Window_Move(posx, posy);
+        public void Window_Scale(int width, int height) => acc.Client.Window_Scale(width, height);
+        public void Close() => acc.Client.Close();
+        public PluginContracts.ObjectInterfaces.ClientStatus Status { get { return ((PluginContracts.ObjectInterfaces.ClientStatus)acc.Client.Status); } }
+    }
+
+    #endregion Plugin
 }

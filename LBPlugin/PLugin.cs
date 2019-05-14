@@ -1,6 +1,8 @@
 ﻿using PluginContracts;
+using PluginContracts.ObjectInterfaces;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +24,13 @@ namespace LBPlugin
 
         public PluginInfo PluginInfo { get { return plugininfo; } }
 
+        //General LB Data
+        private ObservableCollection<IAcc> accs;
+        private IEnviroment enviroment;
+
+        public ObservableCollection<IAcc> Accounts{set{ accs = value; } get { return accs; } }
+        public IEnviroment Enviroment { set { Enviroment = value; } get { return enviroment; } }
+
         //Your Plugin Handling
 
         public bool Init()
@@ -38,27 +47,40 @@ namespace LBPlugin
         public bool Uninstall() { return true; }                    //Cleanup all files/settings associated with your plugin
 
         //Account specific client events, will be called by Launchbuddy
+
         public void OnLBStart(object sender, EventArgs e)
         {
             // Do Stuff when LB Starts
             System.Windows.Forms.MessageBox.Show("On LB Start :D");
+
+            string names = "";
+
+            foreach (IAcc acc in Accounts) names += acc.Nickname+"\n";
+            System.Windows.Forms.MessageBox.Show("Launching first acc by plugin");
+            Accounts.First<IAcc>().Launch();
         }
+
         public void OnLBClose(object sender, EventArgs e)
         {
             //Do Stuff when the LB Closes
             System.Windows.Forms.MessageBox.Show("On LB Close :O");
         }
 
-
-
+        public void OnClientStatusChanged(object sender, EventArgs e)
+        {
+            //Do Stuff when the LB Closes
+            System.Windows.Forms.MessageBox.Show("On LB Close :O");
+        }
 
         //#############################################
         //UI Stuff
+        //#############################################
+
 
         //TabItem Instance
         private TabItem UI = new TabItem();
 
-        //Return UI for Interface
+        //Return UI for Interface, return if none is needed
         public TabItem UIContent { get { return UI; } }
 
         //Set Up UI

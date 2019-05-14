@@ -37,4 +37,13 @@ namespace PluginContracts.ObjectInterfaces
         Closed = 0x01 << 6,
         Crash = 0x01 << 7
     };
+
+    public interface IEnviroment
+    {
+        string LB_PluginsPath {get;}
+        string GwClient_Version { get; set; }
+        bool GwClient_UpToDate { get; }
+        string LB_LocaldatsPath { get; }
+    }
+
 }

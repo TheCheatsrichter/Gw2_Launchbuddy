@@ -33,6 +33,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             Client client = sender as Client;
             Console.WriteLine(client.account.Nickname + " status changed to: " + client.Status + " = " + ((int)client.Status).ToString());
+
             if (ActiveClients.Contains(client) && client.Status < ActiveStatus_Threshold)
             {
                 Application.Current.Dispatcher.BeginInvoke(
@@ -145,6 +146,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 #if DEBUG
             Console.WriteLine("Account: " + account + " Status: " + Status);
 #endif
+            PluginManager.OnClientStatusChanged.Invoke(null, EventArgs.Empty); //NEED CHANGE
             EventHandler handler = StatusChanged;
             if (handler != null)
             {
@@ -355,7 +357,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Window_Scale(config.Win_Width,config.Win_Height);
         }
 
-        private void Window_Move(int posx,int posy)
+        public void Window_Move(int posx,int posy)
         {
             if (ProcessIsClosed()) return;
             Process.Refresh();
@@ -365,7 +367,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 MoveWindow(handle, posx, posy, Rect.right - Rect.left,Rect.bottom-Rect.top,true);
         }
 
-        private void Window_Scale(int width,int height)
+        public void Window_Scale(int width,int height)
         {
             if (ProcessIsClosed()) return;
             Process.Refresh();
@@ -515,6 +517,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 DllInjector.Inject((uint)Process.Id,dll);
             }
+        }
+
+        public void Inject(string dllname)
+        {
+            DllInjector.Inject((uint)Process.Id, dllname);
         }
 
         private bool ProcessExists()

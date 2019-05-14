@@ -12,6 +12,7 @@ using System.Xml.Serialization;
 using Gw2_Launchbuddy.Modifiers;
 using System.Threading;
 using PluginContracts;
+using static Gw2_Launchbuddy.ObjectManagers.AccountSettings;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -175,6 +176,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             return i;
         }
+
+        static public ObservableCollection<PluginContracts.ObjectInterfaces.IAcc> IAccs {
+            get {return new ObservableCollection<PluginContracts.ObjectInterfaces.IAcc>(Accounts.Select(a=>a.PluginCalls));}
+        }
     }
 
     public class Account
@@ -190,6 +195,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             if (!AccountManager.Accounts.Any(a => a.Nickname == nickname))
             {
                 Client Client = new Client(this);
+                PluginCalls = new AccPluginCalls(this);
                 Nickname = nickname;
                 AccountManager.Accounts.Add(this);
                 if (Settings == null)
@@ -222,6 +228,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         [XmlIgnore]
         public Client Client { get { return ClientManager.Clients.FirstOrDefault(c => c.account == this); } }
+        [XmlIgnore]
+        public AccPluginCalls PluginCalls;
+
 
     }
 
@@ -242,7 +251,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public LocalDatFile Loginfile { set; get; }
         public WindowConfig WinConfig { set { winconfig = value; OnPropertyChanged("HasWindowConfig"); } get { return winconfig; } }
 
-    //Adavanced Settings
+        //Adavanced Settings
         [XmlIgnore]
         private uint relaunchesmax;
         public uint RelaunchesMax { set { relaunchesmax = value; RelaunchesLeft = value; } get { return relaunchesmax; } }
@@ -320,7 +329,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         [XmlIgnore]
         public string Email { set { enc_email = Cryptor.Encrypt(value); if (value == "") enc_email = null; OnPropertyChanged("HasLoginBackupData"); } get { return Cryptor.Decrypt(enc_email); } }
         [XmlIgnore]
-        public string Password { set {enc_password = Cryptor.Encrypt(value); if (value == "") enc_password = null; OnPropertyChanged("HasLoginBackupData"); } get { return Cryptor.Decrypt(enc_password); } }
+        public string Password { set { enc_password = Cryptor.Encrypt(value); if (value == "") enc_password = null; OnPropertyChanged("HasLoginBackupData"); } get { return Cryptor.Decrypt(enc_password); } }
 
 
         [XmlIgnore]
@@ -330,7 +339,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 try
                 {
-                    return Email.Substring(0, 2) + "*****@****" + Email.Substring(Email.Length-3);
+                    return Email.Substring(0, 2) + "*****@****" + Email.Substring(Email.Length - 3);
                 }
                 catch
                 {
@@ -358,15 +367,15 @@ namespace Gw2_Launchbuddy.ObjectManagers
         }
 
         [XmlIgnore]
-        public bool HasLoginBackupData { get { return Email != null && Password != null && Email!="" && Password!=""; } set { } }
+        public bool HasLoginBackupData { get { return Email != null && Password != null && Email != "" && Password != ""; } set { } }
         [XmlIgnore]
-        public bool HasLoginCredentials { get { return Loginfile!=null; } set { } }
+        public bool HasLoginCredentials { get { return Loginfile != null; } set { } }
         [XmlIgnore]
         public bool HasArguments { get { if (Arguments.Contains(Arguments.FirstOrDefault<Argument>(a => a.IsActive == true))) { return true; } return false; } set { } }
         [XmlIgnore]
         public bool HasDlls { get { if (DLLs.Count > 0) { return true; } return false; } set { } }
         [XmlIgnore]
-        public bool HasAdvancedSettings { get { if (ProcessPriority!=ProcessPriorityClass.Normal || RelaunchesMax>0) { return true; } return false; } set { } }
+        public bool HasAdvancedSettings { get { if (ProcessPriority != ProcessPriorityClass.Normal || RelaunchesMax > 0) { return true; } return false; } set { } }
         [XmlIgnore]
         public bool HasWindowConfig { get { return WinConfig != null; } }
 
@@ -378,13 +387,40 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void RecreateLoginFile()
         {
-            if(HasLoginBackupData)
-            Loginfile = LocalDatManager.CreateNewFileAutomated(AccountID.ToString(),Email,Password);
+            if (HasLoginBackupData)
+                Loginfile = LocalDatManager.CreateNewFileAutomated(AccountID.ToString(), Email, Password);
         }
 
-        //Missing stuff (all nullable):
-        /*
-        Window Size,Startposition etc.
-        */
+
+        #region Plugininterface
+
+        public class AccPluginCalls : PluginContracts.ObjectInterfaces.IAcc
+        {
+            private Account acc { set; get; }
+
+            public AccPluginCalls(Account acc)
+            {
+                this.acc = acc;
+            }
+
+            public string Nickname { get { return Nickname; } }
+            public int ID { get { return ID; } }
+
+            public void Launch() => acc.Client.Launch();
+            public void Suspend() => acc.Client.Suspend();
+            public void Resume() => acc.Client.Resume();
+            public void Maximize() => acc.Client.Maximize();
+            public void Minimize() => acc.Client.Minimize();
+            public void Focus() => acc.Client.Focus();
+            public void Inject(string dllpath) => acc.Client.Inject(dllpath);
+            public void Window_Move(int posx, int posy) => acc.Client.Window_Move(posx,posy);
+            public void Window_Scale(int width, int height) => acc.Client.Window_Scale(width, height);
+            public void Close() => acc.Client.Close();
+            public PluginContracts.ObjectInterfaces.ClientStatus Status { get { return ((PluginContracts.ObjectInterfaces.ClientStatus)acc.Client.Status ); } }
+        }
+
+
+
+        #endregion Plugininterface
     }
 }
