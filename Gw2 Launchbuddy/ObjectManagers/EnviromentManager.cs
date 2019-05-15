@@ -87,7 +87,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             UpdateAccounts();
             PluginManager.LoadPlugins();
             PluginManager.InitPlugins();
-            PluginManager.OnLBStart.Invoke(null,null);
+            PluginManager.OnLBStart(null);
         }
 
         public static void Close()
@@ -97,7 +97,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             //Local Dat Cleanup
             LocalDatManager.CleanUp();
 
-            PluginManager.OnLBClose.Invoke(null, null);
+            PluginManager.OnLBClose(null);
         }
 
         private static void UpdateAccounts()

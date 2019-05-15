@@ -306,7 +306,6 @@
                     </Grid>
                 </Button>
             </Grid>
-
             <TabControl x:Name="tab_options" Grid.Row="0" TabStripPlacement="Left" BorderBrush="White" Background="GhostWhite">
                 <TabItem x:Name="tab_home" MouseEnter="tab_home_MouseEnter">
                     <TabItem.Header>
@@ -581,16 +580,15 @@
                                             <Button ToolTip="Configure your ingame graphic settings or create a graphic configuration file for a specific account" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
                                         </Grid>
                                     </Expander>
-                                    <Expander ToolTip="Add 3rd Party software for this account">
+                                    <Expander ToolTip="Add 3rd Party injected software for this account">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <Image Source="Resources/Icons/addon.png" Height="22"/>
-                                                <Label Style="{StaticResource H2}">Plugins</Label>
+                                                <Image Source="Resources/Icons/injection.png" Height="22"/>
+                                                <Label Style="{StaticResource H2}">Injected Software</Label>
                                             </StackPanel>
                                         </Expander.Header>
                                         <Grid>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="30"/>
                                                 <RowDefinition Height="150*"/>
                                                 <RowDefinition Height="40"/>
                                             </Grid.RowDefinitions>
@@ -598,13 +596,9 @@
                                                 <ColumnDefinition Width="50*"/>
                                                 <ColumnDefinition Width="50*"/>
                                             </Grid.ColumnDefinitions>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image Source="Resources/Icons/injection.png" Height="18"/>
-                                                <Label Content="Injected Software:" Style="{StaticResource H2}"/>
-                                            </StackPanel>
-                                            <ListView x:Name="lv_InjectDlls" Grid.Row="1" Grid.ColumnSpan="2" MinHeight="120" ItemsSource="{Binding Path=DLLs}">
+                                            <ListView x:Name="lv_InjectDlls" Grid.Row="0" Grid.ColumnSpan="2" MinHeight="120" ItemsSource="{Binding Path=DLLs}">
                                             </ListView>
-                                            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right">
+                                            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Right">
                                                 <Button x:Name="bt_AddDll" Content="Add DLL" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_AddDll_Click" />
                                                 <Button x:Name="bt_RemDll" Content="Remove DLL" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_RemDll_Click" />
                                             </StackPanel>
@@ -760,6 +754,20 @@
                     </Grid>
                 </TabItem>
                 <!-- DELETE ON 1.9 -->
+                <TabItem Name="tab_plugins" >
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Image Height="20" Source="Resources/plugin.png"/>
+                            <Label FontSize="10" Margin="0,-5,0,-7">Plug-Ins</Label>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel>
+                        <Button Name="bt_addplugin" Content="Add Plugin" Click="bt_addplugin_Click"/>
+                        <Button Name="bt_remplugin" Content="Remove Plugin" Click="bt_remplugin_Click"/>
+                        <ListView x:Name="lv_plugins">
+                        </ListView>
+                    </StackPanel>
+                </TabItem>
                 <TabItem Name="tab_addons" GotFocus="tab_addons_GotFocus">
                     <TabItem.Header>
                         <StackPanel>
@@ -1104,6 +1112,7 @@
                         <Button x:Name="bt_bugreport" Content="Report a Bug"  Click="bt_bugreport_Click" Height="30" MaxWidth="100" HorizontalAlignment="Left" Margin="10,0,0,0"/>
                     </StackPanel>
                 </TabItem>
+                <TabItem Visibility="Hidden" Height="10"/>
 
             </TabControl>
 

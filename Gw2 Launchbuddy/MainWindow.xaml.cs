@@ -82,6 +82,8 @@ namespace Gw2_Launchbuddy
             //CrashAnalyser
             lv_crashlogs.ItemsSource = CrashAnalyzer.Crashlogs;
 
+            //Plugin List
+            lv_plugins.ItemsSource = PluginManager.InstalledPlugins;
         }
 
         public void Init()
@@ -1613,10 +1615,30 @@ namespace Gw2_Launchbuddy
 
         public void AddTabPlugin(PluginContracts.LBPlugin plugin)
         {
-            if(plugin.IsInstalled)
+            if(plugin.UIContent !=null)
             {
                 tab_options.Items.Add(plugin.UIContent);
             }
+        }
+
+        private void AddPlugin()
+        {
+            PluginManager.AddPluginWithDialog();
+        }
+
+        private void bt_addplugin_Click(object sender, RoutedEventArgs e)
+        {
+            AddPlugin();
+        }
+
+        private void bt_remplugin_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void RemPlugin(PluginContracts.IPlugin plugin)
+        {
+            PluginManager.RemovePlugin(plugin.PluginInfo);
         }
 
 

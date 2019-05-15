@@ -22,7 +22,7 @@ namespace PluginContracts
         bool Install();
         bool Uninstall();
         bool IsUpToDate { get; }
-        bool IsInstalled { get; }
+        bool Verify { get; }
         bool Update();
     }
 
@@ -36,7 +36,7 @@ namespace PluginContracts
         void OnLBStart(object sender, System.EventArgs e);
         void OnLBClose(object sender, System.EventArgs e);
 
-        void OnClientStatusChanged(object sender, EventArgs e); //NEED CHANGE
+        void OnClientStatusChanged(object sender, ClientStatusEventArgs e); //NEED CHANGE
     }
 
 }

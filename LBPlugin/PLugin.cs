@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using PluginContracts.EventArguments;
 
 namespace LBPlugin
 {
@@ -41,7 +42,7 @@ namespace LBPlugin
         }                         //Initialize your Plugin
 
         public bool IsUpToDate { get { return true; } }             //Return if your plugin is on the newest Version
-        public bool IsInstalled { get { return true; } }            //Return if your plugin has set up everything successfully to work
+        public bool Verify { get { return true; } }                 //Return if your plugin has set up everything successfully to work
         public bool Update() { return true; }                       //Update your plugin to the newest version and return if the update was successfull
         public bool Install() { return true; }                      //Initial set up for your plugin
         public bool Uninstall() { return true; }                    //Cleanup all files/settings associated with your plugin
@@ -52,24 +53,19 @@ namespace LBPlugin
         {
             // Do Stuff when LB Starts
             System.Windows.Forms.MessageBox.Show("On LB Start :D");
-
-            string names = "";
-
-            foreach (IAcc acc in Accounts) names += acc.Nickname+"\n";
-            System.Windows.Forms.MessageBox.Show("Launching first acc by plugin");
-            Accounts.First<IAcc>().Launch();
         }
 
         public void OnLBClose(object sender, EventArgs e)
         {
             //Do Stuff when the LB Closes
             System.Windows.Forms.MessageBox.Show("On LB Close :O");
+            throw new Exception("Things just went sideways");
         }
 
-        public void OnClientStatusChanged(object sender, EventArgs e)
+        public void OnClientStatusChanged(object sender, ClientStatusEventArgs e)
         {
             //Do Stuff when the LB Closes
-            System.Windows.Forms.MessageBox.Show("On LB Close :O");
+            System.Windows.Forms.MessageBox.Show($"{e.ID} status changed to: {e.Status}");
         }
 
         //#############################################

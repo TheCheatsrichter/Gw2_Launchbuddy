@@ -146,7 +146,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 #if DEBUG
             Console.WriteLine("Account: " + account + " Status: " + Status);
 #endif
-            PluginManager.OnClientStatusChanged.Invoke(null, EventArgs.Empty); //NEED CHANGE
+            PluginManager.OnClientStatusChanged(new PluginContracts.EventArguments.ClientStatusEventArgs(account.ID,(PluginContracts.ObjectInterfaces.ClientStatus)Status)); //Plugincall
+
             EventHandler handler = StatusChanged;
             if (handler != null)
             {
