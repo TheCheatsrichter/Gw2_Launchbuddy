@@ -109,7 +109,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     }
                     if (pro != null)
                     {
-                        if (pro.StartTime.ToString() == line.Split(',')[3])
+                        String processStartTime;
+                        try
+                        {
+                            processStartTime = pro.StartTime.ToString();
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                        if (processStartTime == line.Split(',')[3])
                         {
                             Client.ClientStatus status = (Client.ClientStatus)Int32.Parse(line.Split(',')[1]);
                             acc.Client.SetProcess(pro,status);
