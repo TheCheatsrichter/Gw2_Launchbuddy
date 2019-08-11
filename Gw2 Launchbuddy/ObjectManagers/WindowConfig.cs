@@ -69,6 +69,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         private RECT? GetWindowDimensions(Process pro)
         {
             RECT rct;
+            pro.Refresh();
             bool test = GetWindowRect(new HandleRef(pro,pro.MainWindowHandle), out rct);
             if (!GetWindowRect(new HandleRef(this, pro.MainWindowHandle), out rct))
             {

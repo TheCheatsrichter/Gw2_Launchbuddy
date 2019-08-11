@@ -8,16 +8,65 @@ using System.Reflection;
 using System.Collections.ObjectModel;
 using PluginContracts;
 using System.Windows;
+using System.Security.Cryptography;
+using System.Diagnostics;
+using System.ComponentModel;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
+    public class Plugin_Wrapper:INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+
+        private IPlugin plugin;
+        public IPlugin Plugin { get { return plugin; } }
+
+        public Plugin_Wrapper(IPlugin plugin)
+        {
+            this.plugin = plugin;
+            filehash = CalcFileHash();
+        }
+
+        private string filehash;
+        public string FileHash { get { return filehash; } }
+
+        public Uri VirusTotalLink { get { return new Uri($"https://www.virustotal.com/en/file/{FileHash}/analysis/"); } }
+
+        private bool willbeuninstalled=false;
+        public bool WillBeUninstalled { set { willbeuninstalled = value; OnPropertyChanged("WillBeUninstalled"); } get { return willbeuninstalled; } }
+
+        private string CalcFileHash()
+        {
+            SHA256 Sha256 = SHA256.Create();
+            string filename = EnviromentManager.LBPluginsPath + plugin.PluginInfo.Name + ".dll";
+            byte[] bytes = null;
+            using (FileStream stream = File.OpenRead(filename))
+            {
+                bytes= Sha256.ComputeHash(stream);
+            }
+            string result = "";
+            foreach (byte b in bytes) result += b.ToString("x2");
+            return result;
+        }
+    }
+
     public static class PluginManager
     {
         private static EventHandler HandlerLBStart;
         private static EventHandler HandlerLBClose;
         private static EventHandler<PluginContracts.EventArguments.ClientStatusEventArgs> HandlerClientStatusChanged;
 
-        public static ObservableCollection<IPlugin> InstalledPlugins { set; get; }
+
+        public static ObservableCollection<Plugin_Wrapper> InstalledPlugins { set; get; }
 
         public static void LoadPlugins()
         {
@@ -75,19 +124,19 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 }
             }
 
-            InstalledPlugins = new ObservableCollection<IPlugin>();
+            InstalledPlugins = new ObservableCollection<Plugin_Wrapper>();
             foreach (Type type in pluginTypes)
             {
                 IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
-                InstalledPlugins.Add(plugin);
+                InstalledPlugins.Add(new Plugin_Wrapper(plugin));
             }
         }
 
         public static void InitPlugins()
         {
-            foreach(IPlugin plugin in InstalledPlugins)
+            foreach(Plugin_Wrapper plugin in InstalledPlugins)
             {
-                InitPlugin(plugin);
+                InitPlugin(plugin.Plugin);
             }
         }
 
@@ -113,10 +162,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 HandlerLBClose += lbplugin.OnLBClose;
 
                 HandlerClientStatusChanged += lbplugin.OnClientStatusChanged;
-
-                EnviromentManager.MainWin.AddTabPlugin(lbplugin);
-
                 lbplugin.Accounts = AccountManager.IAccs;
+                lbplugin.Init();
+
+                if(lbplugin.UIContent != null)EnviromentManager.MainWin.AddTabPlugin(lbplugin);
             }
         }
 
@@ -174,13 +223,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             foreach (Type type in pluginTypes)
                             {
                                 IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
-                                InstalledPlugins.Add(plugin);
+                                
 
-                                if(!plugin.Install())  MessageBox.Show($"Plugin {assembly.FullName} could not be installed successfully. Proceed with cation.");
+                                //if(!plugin.Install())  MessageBox.Show($"Plugin {assembly.FullName} could not be installed successfully. Proceed with cation.");
 
                                 if(plugin.Verify)
                                 {
                                     File.Copy(path, EnviromentManager.LBPluginsPath + plugin.PluginInfo.Name+".dll");
+                                    InstalledPlugins.Add(new Plugin_Wrapper(plugin));
+                                    InitPlugin(plugin);
+                                    return;
                                 }
                             }
                         }
@@ -196,28 +248,80 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
-        public static void RemovePlugin(PluginInfo plugininfo)
+        public static void RemovePlugin(IPlugin pluginentry)
         {
-            foreach(IPlugin plugin in InstalledPlugins.Where(x=>x.PluginInfo==plugininfo))
+            PluginContracts.PluginInfo plugininfo = pluginentry.PluginInfo;
+            foreach(Plugin_Wrapper plugin in InstalledPlugins.Where(x=>x.Plugin.PluginInfo==plugininfo))
             {
-                if(plugin.Uninstall())
+                if(plugin.Plugin.Uninstall())
                 {
-                    File.Delete(EnviromentManager.LBPluginsPath + plugininfo.Name + ".dll");
+                    UninstallPlugin(pluginentry);
                 }
                 else
                 {
-                    MessageBoxResult win = MessageBox.Show($"Plugin { plugin.PluginInfo.Name}could not be removed completly clean. Uninstall it anyway?", "Client Retry", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    MessageBoxResult win = MessageBox.Show($"Plugin { plugin.Plugin.PluginInfo.Name}could not be removed completly clean. Uninstall it anyway?", "Client Retry", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (win.ToString() == "Yes")
                     {
-                        File.Delete(EnviromentManager.LBPluginsPath + plugininfo.Name + ".dll");
+                        UninstallPlugin(pluginentry);
                     }
                     else
                     {
                         return;
                     }
                 }
-
             }
+            Properties.Settings.Default.Save();
+        }
+
+        private static void UninstallPlugin(IPlugin pluginentry)
+        {
+            PluginInfo plugininfo = pluginentry.PluginInfo;
+            (Properties.Settings.Default.plugins_toremove as List<string>).Add(EnviromentManager.LBPluginsPath + plugininfo.Name + ".dll");
+            foreach (Plugin_Wrapper plug in InstalledPlugins.Where(a => a.Plugin == pluginentry))
+            {
+                plug.WillBeUninstalled = true;
+            }
+        }
+
+        public static void UpdatePlugin(IPlugin plugin)
+        {
+            string location=plugin.Update();
+            if(File.Exists(location))
+            {
+                if(Path.GetExtension(location)!=".dll")
+                {
+                    MessageBox.Show($"{plugin.PluginInfo.Name} did not download a .dll file. Updatefunction of the plugin might is broken.\nPlease contact {plugin.PluginInfo.Author} on {plugin.PluginInfo.Url} for further information.");
+                    return;
+                }
+                string path = EnviromentManager.LBPluginsPath + plugin.PluginInfo.Name + ".dll";
+                if (File.Exists(path)) File.Delete(path);
+                AddPlugin(location);
+            }
+        }
+
+        public static void SwapUpdatedPlugins()
+        {
+
+        }
+
+        public static void RemoveUninstalledPlugins()
+        {
+            if (Properties.Settings.Default.plugins_toremove ==null)
+            {
+                Properties.Settings.Default.plugins_toremove = new List<string>();
+            }
+            List<string> removed_plugins = new List<string>();
+            foreach(string path in Properties.Settings.Default.plugins_toremove)
+            {
+                if (File.Exists(path)) File.Delete(path);
+                removed_plugins.Add(path);
+            }
+            foreach(string plugin in removed_plugins)
+            {
+                Properties.Settings.Default.plugins_toremove.Remove(plugin);
+            }
+
+            Properties.Settings.Default.Save();
         }
 
         public static void OnLBStart(EventArgs args)
@@ -267,7 +371,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private static void PluginExceptionReport(Exception e)
         {
-            MessageBox.Show($"{e.Source} crashed with error: \n{e.Message}");
+            MessageBox.Show($"Plugin {e.Source} crashed with error: \n{e.Message}");
         }
     }
 }

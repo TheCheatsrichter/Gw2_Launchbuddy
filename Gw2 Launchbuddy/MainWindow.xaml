@@ -117,6 +117,7 @@
             <Setter Property="Background" Value="Black"/>
         </Style>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <xctk:InverseBoolConverter x:Key="NegBool"/>
 
     </Window.Resources>
 
@@ -227,7 +228,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy V1.9.3 Alpha" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy V1.9 Dev" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
@@ -463,7 +464,7 @@
                                                 </DockPanel>
                                             </StackPanel>
 
-                                            
+
                                         </DockPanel>
                                     </Expander>
                                     <Expander ToolTip="Choose an icon for this account">
@@ -761,12 +762,71 @@
                             <Label FontSize="10" Margin="0,-5,0,-7">Plug-Ins</Label>
                         </StackPanel>
                     </TabItem.Header>
-                    <StackPanel>
-                        <Button Name="bt_addplugin" Content="Add Plugin" Click="bt_addplugin_Click"/>
-                        <Button Name="bt_remplugin" Content="Remove Plugin" Click="bt_remplugin_Click"/>
+                    <DockPanel>
+                        <Button Name="bt_addplugin" Content="Add Plugin" Click="bt_addplugin_Click" DockPanel.Dock="Top"/>
                         <ListView x:Name="lv_plugins">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Label Content="UNINSTALLED ON RESTART" FontSize="45" Foreground="Red" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding Path=WillBeUninstalled , Converter={StaticResource BoolToVis}}" RenderTransformOrigin="0.5,0.5" >
+                                            <Label.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="20"/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Label.RenderTransform>
+                                        </Label>
+                                        <Grid IsEnabled="{Binding Path=WillBeUninstalled , Converter={StaticResource NegBool}}">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="35"/>
+                                                <RowDefinition Height="100*" MinHeight="150"/>
+                                            </Grid.RowDefinitions>
+                                            <DockPanel Grid.Row="0">
+                                                <Separator DockPanel.Dock="Top"/>
+                                                <Label Content="{Binding Path=Plugin.PluginInfo.Name}" Style="{StaticResource H2}" DockPanel.Dock="Left"/>
+                                                <Label Content="{Binding Path=Plugin.PluginInfo.Version}" Style="{StaticResource H2}" DockPanel.Dock="Left"/>
+                                            </DockPanel>
+                                            <DockPanel Grid.Row="1" >
+                                                <Separator DockPanel.Dock="Bottom"></Separator>
+                                                <TextBlock DockPanel.Dock="Bottom" Text="{Binding Path=Plugin.PluginInfo.Description}" Margin="3" TextWrapping="Wrap" MaxWidth="500" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                                <Label Content="Description:" Style="{StaticResource H3}" DockPanel.Dock="Bottom"/>
+                                                <StackPanel DockPanel.Dock="Left">
+                                                    <StackPanel Orientation="Horizontal" >
+                                                        <Label Content="Author:" Style="{StaticResource H3}"/>
+                                                        <Label Content="{Binding Path=Plugin.PluginInfo.Author}"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal" >
+                                                        <Label Content="Website:" Style="{StaticResource H3}"/>
+                                                        <TextBlock VerticalAlignment="Center">
+                                                        <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="{Binding Path=Plugin.PluginInfo.Url}">Official Website</Hyperlink>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal" >
+                                                        <Label Content="Other Important Links:" Style="{StaticResource H3}"/>
+                                                        <TextBlock VerticalAlignment="Center">
+                                                        <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="{Binding Path=VirusTotalLink}">VirusTotal Scan</Hyperlink>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right">
+                                                    <!--Button Name="bt_updateplugin" Content="Update" Click="bt_updateplugin_Click" DockPanel.Dock="Right" Width="100"/-->
+                                                    <Button Name="bt_remplugin" Click="bt_remplugin_Click" Content="Uninstall" DockPanel.Dock="Right" Width="100" IsEnabled="{Binding Path=WillBeUninstalled , Converter={StaticResource NegBool}}"/>
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </Grid>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
                         </ListView>
-                    </StackPanel>
+                    </DockPanel>
                 </TabItem>
                 <TabItem Name="tab_addons" GotFocus="tab_addons_GotFocus">
                     <TabItem.Header>

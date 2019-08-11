@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using PluginContracts.EventArguments;
 
-namespace LBPlugin
+namespace LBPluginTemplate
 {
     public class Plugin : PluginContracts.LBPlugin
     {
         //Your Plugin Information
         PluginInfo plugininfo = new PluginInfo
         {
-            Name = "Plugin UI Limits",                                                 //Name of your plugin
-            Version = new Version(1,0,0),                                           //Version of your plugin
-            Author = "TheCheatsrichter",                                         //Your name ;)
+            Name = "Examplename",                                   //Name of your plugin
+            Version = new Version("1.0.0"),                                      //Version of your plugin
+            Author = "TheCheatsrichter",                            //Your name ;)
             Url = new Uri("https://google.com"),                                 //The URL associated with your plugin-> website/ githubpage etc.
-            Description = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla aliquam dapibus imperdiet. Aliquam erat volutpat. Nullam non dolor non odio commodo posuere. Vestibulum viverra ligula odio, quis tincidunt augue molestie ac. Fusce est ipsum, tristique vitae ipsum ultrices, dictum scelerisque risus. Aliquam feugiat erat non est interdum pulvinar. Donec id semper sapien. Proin consequat tortor vitae nunc tincidunt, vitae ullamcorper dui mollis. Morbi at laoreet magna. Sed varius sed tellus vel facilisis. Nam sagittis rhoncus est eget suscipit. Mauris sit amet bibendum diam."
+            Description = "I like turtles",
         };
 
         public PluginInfo PluginInfo { get { return plugininfo; } }
@@ -29,21 +29,21 @@ namespace LBPlugin
         private ObservableCollection<IAcc> accs;
         private IEnviroment enviroment;
 
-        public ObservableCollection<IAcc> Accounts{set{ accs = value; } get { return accs; } }
-        public IEnviroment Enviroment { set { Enviroment = value; } get { return enviroment; } }
+        public ObservableCollection<IAcc> Accounts { set { accs = value; } get { return accs; } }   //A collection of all Accounts in LB with various functions
+        public IEnviroment Enviroment { set { Enviroment = value; } get { return enviroment; } }    //Important LB folder,filepaths and client information
 
         //Your Plugin Handling
 
-        public bool Init()
+        public bool Init()                                          //Initialize your Plugin, will be called on each LB start
         {
             UI_Init();
             return true;
-        }                         //Initialize your Plugin
+        }                         
 
         public bool IsUpToDate { get { return true; } }             //Return if your plugin is on the newest Version
-        public bool Verify { get { return true; } }                 //Return if your plugin has set up everything successfully to work
-        public string Update() { return "null"; }                       //Update your plugin to the newest version and return if the update was successfull
-        public bool Install() { return true; }                      //Initial set up for your plugin
+        public bool Verify { get { return true; } }                 //Return if your plugin has set up everything successfully to work, will be used to check if the plugin should be run
+        public string Update() { return ""; }                       //Update your plugin to the newest version and return if the update was successfull, make sure that your plugininfo.name is the name of the .dll file
+        public bool Install() { return true; }                      //Install your plugin and set every thing up, will only be called when the plugin got added
         public bool Uninstall() { return true; }                    //Cleanup all files/settings associated with your plugin
 
         //Account specific client events, will be called by Launchbuddy
@@ -56,14 +56,13 @@ namespace LBPlugin
         public void OnLBClose(object sender, EventArgs e)
         {
             //Do Stuff when the LB Closes
-            System.Windows.Forms.MessageBox.Show("On LB Close :O");
         }
 
         public void OnClientStatusChanged(object sender, ClientStatusEventArgs e)
         {
-            //Do Stuff when the LB Closes
-            System.Windows.Forms.MessageBox.Show($"{e.ID} status changed to: {e.Status}");
+            //Do Stuff when a client changes its Status
         }
+
 
         //#############################################
         //UI Stuff
@@ -71,7 +70,7 @@ namespace LBPlugin
 
 
         //TabItem Instance
-        private TabItem UI = new TabItem();
+        private TabItem UI = new TabItem(); //Your Tab in the LB UI, set to null if you don't want to show any UI
 
         //Return UI for Interface, return if none is needed
         public TabItem UIContent { get { return UI; } }

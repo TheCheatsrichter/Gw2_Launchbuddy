@@ -80,6 +80,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             Hotkeys.RegisterAll();
 
+            //Cleanup Plugin folder
+            PluginManager.RemoveUninstalledPlugins();
+
         }
 
         public static void AfterUI_Inits()

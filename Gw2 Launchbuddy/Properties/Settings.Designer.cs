@@ -298,5 +298,38 @@ namespace Gw2_Launchbuddy.Properties {
                 this["mainwin_size_y"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Generic.List<System.String> plugins_toremove {
+            get {
+                return ((global::System.Collections.Generic.List<System.String>)(this["plugins_toremove"]));
+            }
+            set {
+                this["plugins_toremove"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Generic.List<System.String> plugins_todelete {
+            get {
+                return ((global::System.Collections.Generic.List<System.String>)(this["plugins_todelete"]));
+            }
+            set {
+                this["plugins_todelete"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Generic.List<System.String> plugins_toinstall {
+            get {
+                return ((global::System.Collections.Generic.List<System.String>)(this["plugins_toinstall"]));
+            }
+            set {
+                this["plugins_toinstall"] = value;
+            }
+        }
     }
 }

@@ -76,7 +76,7 @@
     </ControlTemplate>
 
     <ControlTemplate x:Key="tabitem_template" TargetType="{x:Type TabItem}">
-        <Border Name="Border" BorderThickness="1,1,3,1" BorderBrush="LightGray" CornerRadius="5,0,0,5" Margin="0,1">
+        <Border Name="Border" BorderThickness="1,1,1,1" BorderBrush="Gray" CornerRadius="5,0,0,5" Margin="0,1">
             <ContentPresenter x:Name="ContentSite"
                                         VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
