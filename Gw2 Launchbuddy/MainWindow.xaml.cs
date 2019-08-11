@@ -1291,6 +1291,13 @@ namespace Gw2_Launchbuddy
             {
                 acc.IsEnabled = true;
             }
+            if(accs.Count>0)
+            {
+                lb_acccountinfo.Content = $"Accounts ({accs.Count} selected):";
+            }else
+            {
+                lb_acccountinfo.Content = "Accounts:";
+            }
         }
 
         private void lv_accssettings_SelectionChanged(object sender, SelectionChangedEventArgs e)

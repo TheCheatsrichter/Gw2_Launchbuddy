@@ -318,12 +318,12 @@
                     <DockPanel>
                         <Grid Margin="0,-3,0,0" DockPanel.Dock="Top">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="7*"/>
-                                <ColumnDefinition Width="424*"/>
-                                <ColumnDefinition Width="259*"/>
+                                <ColumnDefinition Width="8*"/>
+                                <ColumnDefinition Width="619*"/>
+                                <ColumnDefinition Width="159*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="2"/>
                                 <RowDefinition Height="80"/>
                             </Grid.RowDefinitions>
 
@@ -333,16 +333,17 @@
                             </Button>
                             -->
 
-                            <Label x:Name="label" Content="Gw2 Client Details:" HorizontalAlignment="Left" Grid.ColumnSpan="2" Style="{StaticResource H1}"/>
+                            
                             <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+                                <Label x:Name="label" Content="Gw2 Client Details:" HorizontalAlignment="Left" Grid.ColumnSpan="2" Style="{StaticResource H1}" Width="152"/>
                                 <Label x:Name="lab_version" Content="Build Version:" ToolTip="The current Guild Wars 2 build your system is using." />
                                 <DockPanel>
-                                    <Button x:Name="bt_installpath" DockPanel.Dock="Right" ToolTip="Set your gamefolder path if it isn't &#x0a; determined correctly by launchbuddy" Content="Set Directory" Click="bt_installpath_Click" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom"  BorderThickness="1" Width="100" HorizontalAlignment="Right" Margin="0,0,0,5"/>
-                                    <Label x:Name="lab_path" Content="Install Path:" Grid.Column="1" Grid.Row="1"/>
+                                    <Label x:Name="lab_path" Content="Install Path:" DockPanel.Dock="Left" Grid.Column="1" Grid.Row="1"/>
+                                    <Button x:Name="bt_installpath" DockPanel.Dock="Left" ToolTip="Set your gamefolder path if it isn't &#x0a; determined correctly by launchbuddy" Content="Set" Click="bt_installpath_Click" Width="40" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                 </DockPanel>
 
                             </StackPanel>
-                            <Grid Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right">
+                            <Grid Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" Width="142">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="50*"/>
                                     <RowDefinition Height="50*"/>
@@ -353,8 +354,8 @@
 
 
                         </Grid>
-                        <Separator Margin="5" DockPanel.Dock="Top"/>
-                        <Label Content="Accounts:" Style="{StaticResource H1}" DockPanel.Dock="Top"/>
+                        <Separator Margin="3" DockPanel.Dock="Top"/>
+                        <Label Name="lb_acccountinfo" Content="Accounts:" Style="{StaticResource H1}" DockPanel.Dock="Top"/>
                         <ListView x:Name="lv_accs" DataContext="{Binding Path=Account}" SelectionChanged="lv_accs_SelectionChanged" SelectionMode="Multiple">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
@@ -432,7 +433,7 @@
                                     <ImageBrush ImageSource="{Binding Path=Icon.Image}" Opacity="0.03"/>
                                 </ScrollViewer.Background>
                                 <StackPanel>
-                                    <Expander ToolTip="Set up Login Data for an automated Login">
+                                    <Expander ToolTip="Set up Login Data for an automated Login" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="Resources/Icons/account.png" Height="22"/>
@@ -446,28 +447,34 @@
                                                     <Label Foreground="Green" Content="Loginfile successfully configured" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" />
                                                 </DockPanel>
                                                 <Button DockPanel.Dock="Left" Name="bt_loginfileupdate" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" Height="22" Width="120" HorizontalAlignment="Left" Click="bt_loginfileupdate_Click" ToolTip="Manually repair your Loginfile if the automated Update did not work">Repair Loginfile</Button>
-                                                <Separator Margin="10"/>
-                                                <DockPanel Visibility="Visible">
-                                                    <Label Style="{StaticResource H3}" Content="Optional: Add Backup information" DockPanel.Dock="Top"></Label>
-                                                    <StackPanel Orientation="Vertical" MaxWidth="300" MinWidth="200" DockPanel.Dock="Left">
-                                                        <Label x:Name="lab_email" Content="Email:"  d:LayoutOverrides="Width" VerticalAlignment="Center" FontWeight="Bold"/>
-                                                        <TextBox x:Name="tb_email" Height="23" MinWidth="150" LostKeyboardFocus="tb_email_LostKeyboardFocus" Text="{Binding Path=UI_Email}"/>
-                                                        <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left"  VerticalAlignment="Center" IsEnabled="False" Height="26" Width="62" Grid.Row="2" Grid.Column="1" FontWeight="Bold" />
-                                                        <PasswordBox x:Name="tb_passw" Height="23" MinWidth="150" LostKeyboardFocus="tb_passw_LostKeyboardFocus" />
-                                                        <Button Name="bt_recerateloginfile" MinWidth="200" Content="Recreate Loginfile" Margin="0,20,0,0" Visibility="{Binding Path=HasLoginBackupData, Converter={StaticResource BoolToVis}}" HorizontalAlignment="Left" Click="bt_recerateloginfile_Click"/>
-                                                    </StackPanel>
-                                                    <StackPanel DockPanel.Dock="Right">
-                                                        <TextBlock Text=" ATTENTION: Before using recreation make sure that remember email and remember password was checked on the last successfull login!" Foreground="Red" DockPanel.Dock="Right" TextWrapping="Wrap" Margin="20,0,20,20"/>
-                                                        <Label Content="Description:" Style="{StaticResource H3}" DockPanel.Dock="Top" Margin="15,0,0,0"/>
-                                                        <TextBlock DockPanel.Dock="Right" Text="Some Gw2 Game updates can corrupt your Loginfile to an unrepairable state. To easily recreate a loginfile you can optionaly backup your login data here." TextWrapping="Wrap" Margin="20,0,20,20"/>
-                                                    </StackPanel>
-                                                </DockPanel>
+                                                <Expander DockPanel.Dock="Top" Margin="5,0,0,0" >
+                                                    <Expander.Header>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Label Style="{StaticResource H3}">Optional: Add Backup information</Label>
+                                                        </StackPanel>
+                                                    </Expander.Header>
+                                                    <DockPanel>
+                                                        <StackPanel Orientation="Vertical" MaxWidth="300" MinWidth="200" DockPanel.Dock="Left">
+                                                            <Label x:Name="lab_email" Content="Email:"  d:LayoutOverrides="Width" VerticalAlignment="Center" FontWeight="Bold"/>
+                                                            <TextBox x:Name="tb_email" Height="23" MinWidth="150" LostKeyboardFocus="tb_email_LostKeyboardFocus" Text="{Binding Path=UI_Email}"/>
+                                                            <Label x:Name="lab_passw" Content="Password:" HorizontalAlignment="Left"  VerticalAlignment="Center" IsEnabled="False" Height="26" Width="62" Grid.Row="2" Grid.Column="1" FontWeight="Bold" />
+                                                            <PasswordBox x:Name="tb_passw" Height="23" MinWidth="150" LostKeyboardFocus="tb_passw_LostKeyboardFocus" />
+                                                            <Button Name="bt_recerateloginfile" MinWidth="200" Content="Recreate Loginfile" Margin="0,20,0,0" Visibility="{Binding Path=HasLoginBackupData, Converter={StaticResource BoolToVis}}" HorizontalAlignment="Left" Click="bt_recerateloginfile_Click"/>
+                                                        </StackPanel>
+                                                        <StackPanel DockPanel.Dock="Right">
+                                                            <TextBlock Text=" ATTENTION: Before using recreation make sure that remember email and remember password was checked on the last successfull login!" Foreground="Red" DockPanel.Dock="Right" TextWrapping="Wrap" Margin="20,0,20,20"/>
+                                                            <Label Content="Description:" Style="{StaticResource H3}" DockPanel.Dock="Top" Margin="15,0,0,0"/>
+                                                            <TextBlock DockPanel.Dock="Right" Text="Some Gw2 Game updates can corrupt your Loginfile to an unrepairable state. To easily recreate a loginfile you can optionaly backup your login data here." TextWrapping="Wrap" Margin="20,0,20,20"/>
+                                                        </StackPanel>
+                                                    </DockPanel>
+                                                </Expander>
+                                                
                                             </StackPanel>
 
 
                                         </DockPanel>
                                     </Expander>
-                                    <Expander ToolTip="Choose an icon for this account">
+                                    <Expander ToolTip="Choose an icon for this account" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="Resources/Icons/picture.png" Height="22"/>
@@ -476,10 +483,10 @@
                                         </Expander.Header>
                                         <StackPanel>
                                             <DockPanel>
-                                                <ListView Name="lv_accicon" ItemsSource="{Binding Path=Icons}" MinWidth="256" MaxHeight="400" SelectionChanged="lv_accicon_SelectionChanged">
+                                                <ListView Name="lv_accicon" ItemsSource="{Binding Path=Icons}" MinWidth="200" MaxHeight="400" SelectionChanged="lv_accicon_SelectionChanged" DockPanel.Dock="Right">
                                                     <ListView.ItemsPanel>
                                                         <ItemsPanelTemplate>
-                                                            <UniformGrid MinWidth="256" Columns="5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            <UniformGrid MinWidth="128" Columns="5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                         </ItemsPanelTemplate>
                                                     </ListView.ItemsPanel>
                                                     <ListView.ItemTemplate>
@@ -488,23 +495,19 @@
                                                         </DataTemplate>
                                                     </ListView.ItemTemplate>
                                                 </ListView>
-                                                <StackPanel DockPanel.Dock="Right">
+                                                <StackPanel DockPanel.Dock="Left">
                                                     <Label Content="Current Icon:-" Style="{StaticResource H3}"/>
-                                                    <Image MaxHeight="72" Source="{Binding Path=Icon.Image}"/>
+                                                    <Image MaxHeight="128" Source="{Binding Path=Icon.Image}"/>
                                                 </StackPanel>
                                             </DockPanel>
-
-
-                                            <StackPanel Orientation="Horizontal">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Button Name="bt_addicon" Content="Add Icon" Width="100" Click="bt_addicon_Click"/>
+                                            <StackPanel Orientation="Horizontal" Margin="0,5">
+                                                <Button Name="bt_addicon" Content="Add Icon" Width="100" Click="bt_addicon_Click"/>
                                                     <Button Name="bt_remicon" Content="Delete Icon" Width="100" Click="bt_remicon_Click"/>
-                                                    <Button Name="bt_noicon" Content="No Icon" Width="100" Click="bt_noicon_Click" />
-                                                </StackPanel>
+                                                <Button Name="bt_noicon" Content="No Icon" Width="100" Click="bt_noicon_Click" />
                                             </StackPanel>
                                         </StackPanel>
                                     </Expander>
-                                    <Expander ToolTip="Choose Gw2 launch arguments">
+                                    <Expander ToolTip="Choose Gw2 launch arguments" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="Resources/Icons/settings.png" Height="22"/>
@@ -537,7 +540,7 @@
                                             </StackPanel>
                                         </Grid>
                                     </Expander>
-                                    <Expander ToolTip="Set up a custom Graphic Configuration for this account">
+                                    <Expander ToolTip="Set up a custom Graphic Configuration for this account" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="Resources/Icons/gpu.png" Height="22"/>
@@ -566,7 +569,7 @@
                                             <ListView x:Name="lv_gfx" Grid.ColumnSpan="2" Grid.Row="1" MinHeight="64" ItemsSource="{Binding Path=GFXFile.Config}">
                                                 <ListView.View>
                                                     <GridView>
-                                                        <GridViewColumn Header="Parameter" Width="200"  DisplayMemberBinding="{Binding Name}"/>
+                                                        <GridViewColumn Header="Parameter" Width="230"  DisplayMemberBinding="{Binding Name}"/>
                                                         <GridViewColumn Header="Setup" Width="250">
                                                             <GridViewColumn.CellTemplate>
                                                                 <DataTemplate>
@@ -574,14 +577,14 @@
                                                                 </DataTemplate>
                                                             </GridViewColumn.CellTemplate>
                                                         </GridViewColumn>
-                                                        <GridViewColumn Header="Previous" Width="150"  DisplayMemberBinding="{Binding Path=OldValue}"/>
+                                                        <GridViewColumn Header="Previous" Width="180"  DisplayMemberBinding="{Binding Path=OldValue}"/>
                                                     </GridView>
                                                 </ListView.View>
                                             </ListView>
                                             <Button ToolTip="Configure your ingame graphic settings or create a graphic configuration file for a specific account" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
                                         </Grid>
                                     </Expander>
-                                    <Expander ToolTip="Add 3rd Party injected software for this account">
+                                    <Expander ToolTip="Add 3rd Party injected software for this account" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="Resources/Icons/injection.png" Height="22"/>
@@ -599,13 +602,13 @@
                                             </Grid.ColumnDefinitions>
                                             <ListView x:Name="lv_InjectDlls" Grid.Row="0" Grid.ColumnSpan="2" MinHeight="120" ItemsSource="{Binding Path=DLLs}">
                                             </ListView>
-                                            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Right">
+                                            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left">
                                                 <Button x:Name="bt_AddDll" Content="Add DLL" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_AddDll_Click" />
                                                 <Button x:Name="bt_RemDll" Content="Remove DLL" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_RemDll_Click" />
                                             </StackPanel>
                                         </Grid>
                                     </Expander>
-                                    <Expander ToolTip="Configure Hotkeys for quick Clientcontrol">
+                                    <Expander ToolTip="Configure Hotkeys for quick Clientcontrol" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="Resources/Icons/multitab.png" Height="22"/>
@@ -630,7 +633,7 @@
                                             </DockPanel>
                                         </StackPanel>
                                     </Expander>
-                                    <Expander ToolTip="Settings for Geeks.">
+                                    <Expander ToolTip="Settings for Geeks." Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Image Source="Resources/Icons/feature.png" Height="22"/>
@@ -889,7 +892,7 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
-                            <RowDefinition Height="75"/>
+                            <RowDefinition Height="90"/>
                             <RowDefinition Height="24"/>
                             <RowDefinition Height="30*"/>
                         </Grid.RowDefinitions>
@@ -897,7 +900,7 @@
                         <Button ToolTip="Create a custom launcher UI with an animated slideshow or video background" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
                         <DockPanel Margin="0,5,0,0" Grid.Row="2">
                             <RadioButton x:Name="rb_cinemaslideshowmode" Content="Slideshow Mode" DockPanel.Dock="Left" Checked="rb_slideshowmode" IsChecked="True" FontWeight="Bold" FontSize="14" ToolTip="Use the slideshow version of the cinemamode." HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <RadioButton x:Name="rb_cinemavideomode" Content="Video Mode" DockPanel.Dock="Right" Checked="rb_videomode" Margin="5,0,0,0" FontSize="14" FontWeight="Bold" ToolTip="Use the video mode of cinemamode" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <RadioButton x:Name="rb_cinemavideomode" Content="Video Mode" DockPanel.Dock="Left" Checked="rb_videomode" Margin="5,0,0,0" FontSize="14" FontWeight="Bold" ToolTip="Use the video mode of cinemamode" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </DockPanel >
                         <StackPanel Grid.Row="1" Margin="0,3">
                             <Separator/>
@@ -920,8 +923,8 @@
                                     <ColumnDefinition Width="50*"/>
                                     <ColumnDefinition Width="50*"/>
                                 </Grid.ColumnDefinitions>
-                                <Button Content="Set Loginwindow Image" Grid.Column="1" x:Name="bt_setloginwindow" Click="bt_setloginwindow_Click" MaxWidth="200" ToolTip="Change the appeareance of the loginwindow frame &#x0a;in cinemamode." HorizontalAlignment="Center" />
-                                <Label x:Name="lab_loginwindowpath"  Grid.Column="0" Content="Current Loginwindow: Default" FontWeight="Bold"/>
+                                <Button Content="Set Loginwindow Image" Grid.Column="1" x:Name="bt_setloginwindow" Click="bt_setloginwindow_Click" MaxWidth="200" ToolTip="Change the appeareance of the loginwindow frame &#x0a;in cinemamode." HorizontalAlignment="Center" Height="30"/>
+                                <Label x:Name="lab_loginwindowpath"  Grid.Column="0" Content="Current Loginwindow: Default" FontWeight="Bold" VerticalAlignment="Center"/>
                             </Grid>
                             <Separator Margin="0,5,0,0"/>
                         </StackPanel>

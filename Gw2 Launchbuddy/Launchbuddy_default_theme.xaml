@@ -162,6 +162,12 @@
         <Setter Property="FontSize" Value="12"/>
     </Style>
 
+    <Style x:Key="Bordered" TargetType="{x:Type Expander}">
+        <Setter Property="BorderBrush" Value="LightGray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Margin" Value="0,1,0,1"/>
+    </Style>
+
     <Style TargetType="{x:Type Label}">
         <Setter Property="Foreground" Value="{StaticResource Text_Foreground}"/>
     </Style>

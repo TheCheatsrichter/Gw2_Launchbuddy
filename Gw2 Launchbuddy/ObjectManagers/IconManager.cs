@@ -82,11 +82,19 @@ namespace Gw2_Launchbuddy.ObjectManagers
         }
         public static void RemIcon(Icon icon)
         {
-            if(Icons.Contains(icon))
+            if (Icons.Contains(icon))
             {
                 Icons.Remove(icon);
-                File.Delete(icon.Name);
+                try
+                {
+                    File.Delete(icon.Name);
+                }
+                catch
+                {
+
+                }
             }
+
         }
 
         private static byte[] ImageToByte2(Bitmap img)
