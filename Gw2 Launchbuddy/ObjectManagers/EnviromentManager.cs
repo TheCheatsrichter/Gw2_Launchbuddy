@@ -46,6 +46,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static string GwLocaldatPath = GwAppdataPath + "Local.dat";
         public static string GwLocaldatBakPath = GwAppdataPath + "Local.dat.bak";
 
+        public static string GwCacheFoldersPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Temp\";
+
         public static string LBLocaldatsPath = LBAppdataPath +"Loginfiles\\";
 
 
@@ -82,6 +84,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             //Cleanup Plugin folder
             PluginManager.RemoveUninstalledPlugins();
+
+            //Cleanup CacheFolder
+            CacheCleaner.Clean();
 
         }
 

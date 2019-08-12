@@ -190,6 +190,7 @@
     <Compile Include="Helpers\WindowSpacer.xaml.cs">
       <DependentUpon>WindowSpacer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Modifiers\CacheCleaner.cs" />
     <Compile Include="Modifiers\DLLInjector.cs" />
     <Compile Include="Extensions\ProcessExtensions.cs" />
     <Compile Include="Extensions\XmlTextReaderExtensions.cs" />
