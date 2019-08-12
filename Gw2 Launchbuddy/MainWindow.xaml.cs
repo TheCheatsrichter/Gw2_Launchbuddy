@@ -1,25 +1,19 @@
 ﻿using Gw2_Launchbuddy.ObjectManagers;
-using IWshRuntimeLibrary;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Xml;
 using Gw2_Launchbuddy.Modifiers;
 using System.Windows.Navigation;
 
@@ -43,7 +37,6 @@ namespace Gw2_Launchbuddy
 
         private bool cinemamode = false;
         private bool slideshowthread_isrunning = false;
-
         private int reso_x, reso_y;
         
         public class CinemaImage
@@ -1644,6 +1637,14 @@ namespace Gw2_Launchbuddy
             }
         }
 
+        public void RemTabPlugin(PluginContracts.LBPlugin plugin)
+        {
+            if (plugin.UIContent != null)
+            {
+                tab_options.Items.Remove(plugin.UIContent);
+            }
+        }
+
         private void AddPlugin()
         {
             PluginManager.AddPluginWithDialog();
@@ -1659,9 +1660,15 @@ namespace Gw2_Launchbuddy
             PluginManager.RemovePlugin(((sender as Button).DataContext as Plugin_Wrapper).Plugin);
         }
 
+        private void cb_autoupdateplugins_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.Save();
+        }
+
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)
         {
-            PluginManager.UpdatePlugin(((sender as Button).DataContext as Plugin_Wrapper).Plugin);
+            PluginManager.UpdatePlugin(((sender as Button).DataContext as Plugin_Wrapper).Plugin,true);
+           
         }
 
 

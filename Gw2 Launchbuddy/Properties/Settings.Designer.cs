@@ -323,12 +323,36 @@ namespace Gw2_Launchbuddy.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Generic.List<System.String> plugins_toinstall {
+        public global::System.Collections.Generic.List<(System.String, System.String)> plugins_toinstall {
             get {
-                return ((global::System.Collections.Generic.List<System.String>)(this["plugins_toinstall"]));
+                return ((global::System.Collections.Generic.List<(System.String, System.String)>)(this["plugins_toinstall"]));
             }
             set {
                 this["plugins_toinstall"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string plugins_toupdate {
+            get {
+                return ((string)(this["plugins_toupdate"]));
+            }
+            set {
+                this["plugins_toupdate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool plugins_autoupdate {
+            get {
+                return ((bool)(this["plugins_autoupdate"]));
+            }
+            set {
+                this["plugins_autoupdate"] = value;
             }
         }
     }

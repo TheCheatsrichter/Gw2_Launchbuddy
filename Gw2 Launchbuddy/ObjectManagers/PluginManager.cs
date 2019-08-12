@@ -11,6 +11,7 @@ using System.Windows;
 using System.Security.Cryptography;
 using System.Diagnostics;
 using System.ComponentModel;
+using System.Threading;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -26,14 +27,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
+        public Assembly assembly { set; get; }
 
         private IPlugin plugin;
         public IPlugin Plugin { get { return plugin; } }
 
-        public Plugin_Wrapper(IPlugin plugin)
+        public Plugin_Wrapper(IPlugin plugin,Assembly ass)
         {
             this.plugin = plugin;
             filehash = CalcFileHash();
+            this.assembly = ass;
         }
 
         private string filehash;
@@ -57,6 +60,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
             foreach (byte b in bytes) result += b.ToString("x2");
             return result;
         }
+
+        public bool UpdateNeeded { get { return !plugin.IsUpToDate; } }
     }
 
     public static class PluginManager
@@ -81,6 +86,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 try
                 {
+                    AppDomain dom = AppDomain.CreateDomain("Plugins");
                     AssemblyName an = AssemblyName.GetAssemblyName(dllFile);
                     Assembly assembly = Assembly.Load(an);
                     assemblies.Add(assembly);
@@ -94,6 +100,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             Type pluginType = typeof(IPlugin);
             ICollection<Type> pluginTypes = new List<Type>();
+            InstalledPlugins = new ObservableCollection<Plugin_Wrapper>();
             foreach (Assembly assembly in assemblies)
             {
                 if (assembly != null)
@@ -111,7 +118,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             {
                                 if (type.GetInterface(pluginType.FullName) != null)
                                 {
-                                    pluginTypes.Add(type);
+                                    IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+                                    InstalledPlugins.Add(new Plugin_Wrapper(plugin,assembly));
                                 }
                             }
                         }
@@ -122,13 +130,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     }
 
                 }
-            }
-
-            InstalledPlugins = new ObservableCollection<Plugin_Wrapper>();
-            foreach (Type type in pluginTypes)
-            {
-                IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
-                InstalledPlugins.Add(new Plugin_Wrapper(plugin));
             }
         }
 
@@ -230,7 +231,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                                 if(plugin.Verify)
                                 {
                                     File.Copy(path, EnviromentManager.LBPluginsPath + plugin.PluginInfo.Name+".dll");
-                                    InstalledPlugins.Add(new Plugin_Wrapper(plugin));
+                                    InstalledPlugins.Add(new Plugin_Wrapper(plugin,assembly));
                                     InitPlugin(plugin);
                                     return;
                                 }
@@ -283,7 +284,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
-        public static void UpdatePlugin(IPlugin plugin)
+        public static void UpdatePlugin(IPlugin plugin,bool reboot=false)
         {
             string location=plugin.Update();
             if(File.Exists(location))
@@ -293,15 +294,17 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     MessageBox.Show($"{plugin.PluginInfo.Name} did not download a .dll file. Updatefunction of the plugin might is broken.\nPlease contact {plugin.PluginInfo.Author} on {plugin.PluginInfo.Url} for further information.");
                     return;
                 }
+
                 string path = EnviromentManager.LBPluginsPath + plugin.PluginInfo.Name + ".dll";
-                if (File.Exists(path)) File.Delete(path);
-                AddPlugin(location);
+                if (Properties.Settings.Default.plugins_toinstall == null)
+                {
+                    Properties.Settings.Default.plugins_toinstall = new List<(string, string)>();
+                }
+                Properties.Settings.Default.plugins_toinstall.Add((path,location));
+                Properties.Settings.Default.Save();
             }
-        }
 
-        public static void SwapUpdatedPlugins()
-        {
-
+            if (reboot) EnviromentManager.Reboot();
         }
 
         public static void RemoveUninstalledPlugins()
@@ -311,7 +314,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 Properties.Settings.Default.plugins_toremove = new List<string>();
             }
             List<string> removed_plugins = new List<string>();
-            foreach(string path in Properties.Settings.Default.plugins_toremove)
+
+            foreach(string path in Properties.Settings.Default.plugins_toremove as List<string>)
             {
                 if (File.Exists(path)) File.Delete(path);
                 removed_plugins.Add(path);
@@ -322,6 +326,52 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
 
             Properties.Settings.Default.Save();
+        }
+
+        public static void AddToInstallPlugins()
+        {
+            if (Properties.Settings.Default.plugins_toinstall == null)
+            {
+                Properties.Settings.Default.plugins_toinstall = new List<(string,string)>();
+            }
+            List<(string, string)> added_plugins = new List<(string, string)>();
+
+            foreach ((string,string) paths in Properties.Settings.Default.plugins_toinstall as List<(string,string)>)
+            {
+                if (File.Exists(paths.Item1)) File.Delete(paths.Item1);
+                if (File.Exists(paths.Item2)) File.Copy(paths.Item2,paths.Item1);
+                added_plugins.Add(paths);
+            }
+            foreach ((string,string) plugin in added_plugins)
+            {
+                Properties.Settings.Default.plugins_toinstall.Remove(plugin);
+            }
+
+            Properties.Settings.Default.Save();
+        }
+
+
+        public static void AutoUpdatePlugins()
+        {
+            if(Properties.Settings.Default.plugins_autoupdate)
+            {
+                UpdateAllPlugins();
+            }
+        }
+
+        public static void UpdateAllPlugins()
+        {
+            bool updated = false;
+            foreach(Plugin_Wrapper plugin in InstalledPlugins.Where(a=>!a.Plugin.IsUpToDate))
+            {            
+                updated = true;
+                Action waitforlaunch = () => UpdatePlugin(plugin.Plugin);
+                Helpers.BlockerInfo.Run("Plugin Update", $"Launchbuddy is automatically updating {plugin.Plugin.PluginInfo.Name}. To disable this feature visit the plugin section.", waitforlaunch);
+            }
+            if (updated)
+            {
+                EnviromentManager.Reboot();
+            }
         }
 
         public static void OnLBStart(EventArgs args)

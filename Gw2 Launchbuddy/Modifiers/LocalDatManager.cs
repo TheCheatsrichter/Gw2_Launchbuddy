@@ -95,6 +95,8 @@ namespace Gw2_Launchbuddy.Modifiers
                 //Is Valid?
                 if (!file.Valid) MessageBox.Show("Invalid Login file " + file.Name + " please recreate this file in the account Manager.");
 
+                WaitForFileAccess();
+
                 //Create Backup of Local dat
                 if (!IsSymbolic(EnviromentManager.GwLocaldatPath))
                 {
@@ -115,6 +117,30 @@ namespace Gw2_Launchbuddy.Modifiers
                 throw new Exception("An error occured while swaping the Login file." + e.Message);
             }
 
+        }
+
+        private static void WaitForFileAccess()
+        {
+            int i = 0;
+            while(i<=100)
+            {
+                try
+                {
+                    using (Stream stream = new FileStream(EnviromentManager.GwLocaldatPath, FileMode.Open))
+                    {
+                        // File/Stream manipulating code here
+                        break;
+                    }
+                }
+                catch
+                {
+                    //check here why it failed and ask user to retry if the file is in use.
+                }
+                i++;
+                Thread.Sleep(100);
+            }
+
+            if (i == 100) throw new Exception("Could not acces Localdat file. Make sure no other Gw2 instance is running.");
         }
 
         public static void ToDefault()

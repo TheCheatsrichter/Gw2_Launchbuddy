@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Gw2_Launchbuddy"
         xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" x:Class="Gw2_Launchbuddy.MainWindow"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:properties="clr-namespace:Gw2_Launchbuddy.Properties"
         x:Name="myWindow"
         ShowInTaskbar="true"
 
@@ -767,6 +768,7 @@
                     </TabItem.Header>
                     <DockPanel>
                         <Button Name="bt_addplugin" Content="Add Plugin" Click="bt_addplugin_Click" DockPanel.Dock="Top"/>
+                        <CheckBox Name="cb_autoupdateplugins" Content="Autoupdate plugins" DockPanel.Dock="Top" Margin="0,5" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=plugins_autoupdate}" Click="cb_autoupdateplugins_Click"/>
                         <ListView x:Name="lv_plugins">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
@@ -820,7 +822,7 @@
                                                     </StackPanel>
                                                 </StackPanel>
                                                 <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right">
-                                                    <!--Button Name="bt_updateplugin" Content="Update" Click="bt_updateplugin_Click" DockPanel.Dock="Right" Width="100"/-->
+                                                    <Button Name="bt_updateplugin" Content="Update" Click="bt_updateplugin_Click" DockPanel.Dock="Right" Width="100" IsEnabled="{Binding Path=UpdateNeeded}"/>
                                                     <Button Name="bt_remplugin" Click="bt_remplugin_Click" Content="Uninstall" DockPanel.Dock="Right" Width="100" IsEnabled="{Binding Path=WillBeUninstalled , Converter={StaticResource NegBool}}"/>
                                                 </StackPanel>
                                             </DockPanel>

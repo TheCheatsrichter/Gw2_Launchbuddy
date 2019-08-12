@@ -84,6 +84,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             //Cleanup Plugin folder
             PluginManager.RemoveUninstalledPlugins();
+            PluginManager.AddToInstallPlugins();
 
             //Cleanup CacheFolder
             CacheCleaner.Clean();
@@ -95,6 +96,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             UpdateAccounts();
             PluginManager.LoadPlugins();
             PluginManager.InitPlugins();
+            PluginManager.AutoUpdatePlugins();
             PluginManager.OnLBStart(null);
         }
 
@@ -106,6 +108,17 @@ namespace Gw2_Launchbuddy.ObjectManagers
             LocalDatManager.CleanUp();
 
             PluginManager.OnLBClose(null);
+        }
+
+        public static void Reboot()
+        {
+            ProcessStartInfo Info = new ProcessStartInfo();
+            Info.Arguments = "/C ping 127.0.0.1 -n 2 && \"" + System.Reflection.Assembly.GetEntryAssembly().Location + "\"";
+            Info.WindowStyle = ProcessWindowStyle.Hidden;
+            Info.CreateNoWindow = true;
+            Info.FileName = "cmd.exe";
+            Process.Start(Info);
+            Application.Current.MainWindow.Close();
         }
 
         private static void UpdateAccounts()
