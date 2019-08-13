@@ -102,10 +102,12 @@ namespace Gw2_Launchbuddy.Modifiers
                 {
                     if (File.Exists(EnviromentManager.GwLocaldatBakPath)) File.Delete(EnviromentManager.GwLocaldatBakPath);
                     File.Copy(EnviromentManager.GwLocaldatPath, EnviromentManager.GwLocaldatBakPath);
+                    WaitForFileAccess();
                 }
                 //Delete Local.dat
                 if (File.Exists(EnviromentManager.GwLocaldatPath)) File.Delete(EnviromentManager.GwLocaldatPath);
                 //Create Symlink Replacer
+                WaitForFileAccess();
                 CreateSymbolLink(file.Path);
                 //Remember last used file for ToDefault()
                 CurrentFile = file;
@@ -126,6 +128,8 @@ namespace Gw2_Launchbuddy.Modifiers
             {
                 try
                 {
+                    if (!File.Exists(EnviromentManager.GwLocaldatPath)) return;
+
                     using (Stream stream = new FileStream(EnviromentManager.GwLocaldatPath, FileMode.Open))
                     {
                         // File/Stream manipulating code here
