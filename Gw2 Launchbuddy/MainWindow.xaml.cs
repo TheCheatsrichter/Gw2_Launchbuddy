@@ -631,7 +631,6 @@ namespace Gw2_Launchbuddy
             Properties.Settings.Default.instance_win_X = EnviromentManager.LBInstanceGUI.Left;
             Properties.Settings.Default.instance_win_Y = EnviromentManager.LBInstanceGUI.Top;
             Properties.Settings.Default.Save();
-            AccountManager.SaveAccounts();
             Environment.Exit(Environment.ExitCode);
         }
 
@@ -705,8 +704,8 @@ namespace Gw2_Launchbuddy
         private void bt_close_Click(object sender, RoutedEventArgs e)
         {
             Mainwin_SaveSetup();
-            EnviromentManager.Close();
             Properties.Settings.Default.Save();
+            EnviromentManager.Close();
             Application.Current.Shutdown();
         }
         private void bt_minimize_Click(object sender, RoutedEventArgs e)

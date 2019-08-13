@@ -5,59 +5,89 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gw2_Launchbuddy"
         mc:Ignorable="d"
-        Title="Game Instances" Height="300" Width="160" ResizeMode="CanResize" WindowStartupLocation="Manual" Topmost="True" WindowStyle="None" Loaded="Window_Loaded" AllowsTransparency="True" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown" Initialized="Window_Initialized" Icon="launchbuddy.ico">
+        Name="myWindow"
+        Title="Game Instances" Height="300" ResizeMode="CanResizeWithGrip" Width="160" WindowStartupLocation="Manual" Topmost="True" WindowStyle="None" Loaded="Window_Loaded" AllowsTransparency="True" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown" Initialized="Window_Initialized" Icon="launchbuddy.ico">
 
-    <Grid Background="Black">
-        <Grid.OpacityMask>
-            <ImageBrush ImageSource="Resources/loginwindow.png" Opacity="0.85" >
-                <ImageBrush.RelativeTransform>
-                    <TransformGroup>
-                        <ScaleTransform CenterY="0.5" CenterX="0.5"/>
-                        <SkewTransform CenterY="0.5" CenterX="0.5"/>
-                        <RotateTransform CenterY="0.5" CenterX="0.5"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </ImageBrush.RelativeTransform>
-                <ImageBrush.Transform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleX="1.15" ScaleY="1.8"/>
-                        <SkewTransform/>
-                        <RotateTransform/>
-                        <TranslateTransform X="-10" Y="-150"/>
-                    </TransformGroup>
-                </ImageBrush.Transform>
-            </ImageBrush>
-        </Grid.OpacityMask>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="100*" />
-        </Grid.RowDefinitions>
-        <Label Content="Game Instances" FontSize="12" FontStyle="Italic" Foreground="White" VerticalAlignment="Center"/>
-        <Button x:Name="bt_close" Grid.Row="0" BorderThickness="1" Width="45" Margin="2" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="bt_close_Click"  Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" BorderBrush="#FF919191">
-            Close
-        </Button>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="MouseEnter">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation To="1.0" Duration="0:0:0.5" 
+                             Storyboard.TargetName="myWindow"
+                             Storyboard.TargetProperty="Opacity"
+                             />
+                    </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="MouseLeave">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation To="0.6" Duration="0:0:0.5" 
+                             Storyboard.TargetName="myWindow"
+                             Storyboard.TargetProperty="Opacity"
+                             />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation From="1.5" To="0.6" Duration="0:0:1" 
+                             Storyboard.TargetName="myWindow"
+                             Storyboard.TargetProperty="Opacity"
+                             />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+    
+    <Border BorderThickness="2" Background="Black" CornerRadius="10" BorderBrush="Black">
+        <Grid Background="Black" >
+            <Grid.OpacityMask>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0.887"/>
+                    <GradientStop Offset="1" Color="#66FFFFFF"/>
+                </LinearGradientBrush>
+            </Grid.OpacityMask>
+            <Grid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="6"/>
+                </TransformGroup>
+            </Grid.RenderTransform>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="100*" />
+            </Grid.RowDefinitions>
+            <Label Content="Game Instances" FontSize="12" FontStyle="Italic" Foreground="White" VerticalAlignment="Top"/>
+            <Button x:Name="bt_close" Grid.Row="0" BorderThickness="1" Width="45" Margin="2" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="bt_close_Click"  Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" BorderBrush="#FF919191">
+                Hide
+            </Button>
 
-        <ListView x:Name="lv_instances" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2" Grid.Row="1" SelectionChanged="lv_gfx_SelectionChanged"  Background="Transparent" BorderThickness="0" Margin="2,0" >
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <DockPanel Height="50" Background="#33FFFFFF" LastChildFill="False">
-                        <Image MaxWidth="45" MaxHeight="45" Source="{Binding Path=Account.Settings.Icon.Image}" DockPanel.Dock="Left"></Image>
-                        <TextBlock Text="{Binding Path=Account.Nickname}" ToolTip="{Binding Path=Account.Nickname}" MaxWidth="120" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Foreground="#FFDDDDDD" DockPanel.Dock="Left" FontSize="18" FontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                        <ToolBar Width="15" DockPanel.Dock="Right" Background="#FF040404" Foreground="White" Header="" HorizontalAlignment="Center">
-                            <Button x:Name="bt_closeinstance" Click="bt_closeinstance_Click" Content="Close"/>
-                            <Button Name="bt_suspend" Content="Suspend" Click="bt_suspend_Click"/>
-                            <Button Name="bt_resume" Content="Resume" Click="bt_resume_Click"/>
-                        </ToolBar>
-                    </DockPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            <ListView x:Name="lv_instances" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2" Grid.Row="1" SelectionChanged="lv_gfx_SelectionChanged"  Background="Transparent" BorderThickness="0" Margin="2,0" >
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel Height="50" Background="#33FFFFFF" LastChildFill="False">
+                            <Image MaxWidth="45" MaxHeight="45" Source="{Binding Path=Account.Settings.Icon.Image}" DockPanel.Dock="Left"></Image>
+                            <TextBlock Text="{Binding Path=Account.Nickname}" ToolTip="{Binding Path=Account.Nickname}" MaxWidth="120" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Foreground="#FFDDDDDD" DockPanel.Dock="Left" FontSize="18" FontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                            <ToolBar Width="15" DockPanel.Dock="Right" Background="#FF040404" Foreground="White" Header="" HorizontalAlignment="Center">
+                                <Button x:Name="bt_closeinstance" Click="bt_closeinstance_Click" Content="Close"/>
+                                <Button Name="bt_suspend" Content="Suspend" Click="bt_suspend_Click"/>
+                                <Button Name="bt_resume" Content="Resume" Click="bt_resume_Click"/>
+                            </ToolBar>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
-    </Grid>
+        </Grid>
+    </Border>
 </Window>
