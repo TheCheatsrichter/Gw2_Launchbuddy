@@ -355,5 +355,16 @@ namespace Gw2_Launchbuddy.Properties {
                 this["plugins_autoupdate"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public (double, double, double, double) instancegui_windowsettings {
+            get {
+                return (((double, double, double, double))(this["instancegui_windowsettings"]));
+            }
+            set {
+                this["instancegui_windowsettings"] = value;
+            }
+        }
     }
 }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Gw2_Launchbuddy"
         mc:Ignorable="d"
         Name="myWindow"
-        Title="Game Instances" Height="300" ResizeMode="CanResizeWithGrip" Width="160" WindowStartupLocation="Manual" Topmost="True" WindowStyle="None" Loaded="Window_Loaded" AllowsTransparency="True" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown" Initialized="Window_Initialized" Icon="launchbuddy.ico">
+        Title="Game Instances" Height="300" MinHeight="160" MinWidth="160" ResizeMode="CanResizeWithGrip" Width="160" WindowStartupLocation="Manual" Topmost="True" WindowStyle="None" Loaded="Window_Loaded" AllowsTransparency="True" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown" Icon="launchbuddy.ico" SizeChanged="myWindow_SizeChanged">
 
     <Window.Triggers>
         <EventTrigger RoutedEvent="MouseEnter">

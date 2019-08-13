@@ -16,13 +16,27 @@ namespace Gw2_Launchbuddy
         public GUI_ApplicationManager()
         {
             InitializeComponent();
-            this.Left = Properties.Settings.Default.instance_win_X;
-            this.Top = Properties.Settings.Default.instance_win_Y;
+            var windowsettings = Properties.Settings.Default.instancegui_windowsettings;
+            if (windowsettings.Equals((0, 0, 0, 0)))
+            {
+                Properties.Settings.Default.instancegui_windowsettings = (0, 0, 160, 300);
+                Properties.Settings.Default.Save();
+            }
+            Left = windowsettings.Item1;
+            Top = windowsettings.Item2;
+            Width = windowsettings.Item3;
+            Height = windowsettings.Item4;
         }
 
         private void bt_close_Click(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
+        }
+
+        private void SaveWindowSettings()
+        {
+            Properties.Settings.Default.instancegui_windowsettings = (Left, Top, ActualWidth, ActualHeight);
+            Properties.Settings.Default.Save();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -53,10 +67,7 @@ namespace Gw2_Launchbuddy
         private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             this.DragMove();
-        }
-
-        private void Window_Initialized(object sender, EventArgs e)
-        {
+            SaveWindowSettings();
         }
 
         private void bt_suspend_Click(object sender, RoutedEventArgs e)
@@ -67,6 +78,11 @@ namespace Gw2_Launchbuddy
         private void bt_resume_Click(object sender, RoutedEventArgs e)
         {
             ((sender as Button).DataContext as Client).Resume();
+        }
+
+        private void myWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            SaveWindowSettings();
         }
     }
 }
