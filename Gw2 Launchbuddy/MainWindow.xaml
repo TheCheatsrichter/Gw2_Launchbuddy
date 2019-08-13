@@ -383,7 +383,7 @@
                                         <Image Height="32" Source="Resources/Icons/injection.png" Visibility="{Binding Path=Settings.HasDlls, Converter={StaticResource BoolToVis}}" ToolTip="Uses Injected Software" DockPanel.Dock="Right"/>
                                         <Image Height="32" Source="Resources/Icons/feature.png" Visibility="{Binding Path=Settings.HasAdvancedSettings, Converter={StaticResource BoolToVis}}" ToolTip="Uses Advanced Settings" DockPanel.Dock="Right"/>
                                         <Image Height="32" Source="Resources/Icons/account.png" Visibility="{Binding Path=Settings.HasLoginCredentials, Converter={StaticResource BoolToVis}}" ToolTip="Uses Autologin" DockPanel.Dock="Right"/>
-                                        <Label Content="{Binding Path=Nickname}" BorderThickness="0" Margin="0,2,0,0" FontSize="18" FontWeight="Bold"/>
+                                        <Label Content="{Binding Path=Nickname}" BorderThickness="0" Margin="0" FontSize="18" FontWeight="Bold"/>
                                     </DockPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
@@ -1168,8 +1168,8 @@
                             <ListView x:Name="lv_lbversions" Grid.Row="0" Grid.RowSpan="2" SelectionChanged="ListView_SelectionChanged" IsSynchronizedWithCurrentItem="True">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding Name}"/>
-                                        <GridViewColumn Header="Version" Width="75" DisplayMemberBinding="{Binding Version}"/>
+                                        <GridViewColumn Header="Name" Width="265" DisplayMemberBinding="{Binding Name}"/>
+                                        <GridViewColumn Header="Version" Width="100" DisplayMemberBinding="{Binding Version}"/>
                                         <GridViewColumn Header="Releasedate" Width="100" DisplayMemberBinding="{Binding Date}"/>
                                     </GridView>
                                 </ListView.View>

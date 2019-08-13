@@ -103,6 +103,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static void Close()
         {
             AddOnManager.SaveAddons(LBAddonPath);
+            AccountManager.SaveAccounts();
             Hotkeys.UnregisterAll();
             //Local Dat Cleanup
             LocalDatManager.CleanUp();
@@ -117,6 +118,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Info.WindowStyle = ProcessWindowStyle.Hidden;
             Info.CreateNoWindow = true;
             Info.FileName = "cmd.exe";
+            Close();
             Process.Start(Info);
             Application.Current.MainWindow.Close();
         }
