@@ -172,14 +172,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void AddPluginWithDialog()
         {
-            System.Windows.Forms.OpenFileDialog fd = new System.Windows.Forms.OpenFileDialog();
-            fd.DefaultExt = ".dll";
-            fd.ShowDialog();
-
-            if (fd.FileName != null)
-            {
-                if (System.IO.File.Exists(fd.FileName)) AddPlugin(fd.FileName);
-            }
+            Builders.FileDialog.DefaultExt(".dll")
+               .Filter("dll Files(*.dll)|*.dll")
+               .EnforceExt(".dll")
+               .ShowDialog((Helpers.FileDialog fileDialog) =>
+               {
+                   if (fileDialog.FileName != null)
+                   {
+                       if (System.IO.File.Exists(fileDialog.FileName)) AddPlugin(fileDialog.FileName);
+                   }
+               });
         }
 
         public static void AddPlugin(string path)

@@ -370,7 +370,6 @@
     <Resource Include="Resources\Icons\focus.png" />
     <Resource Include="Resources\donate.png" />
     <Resource Include="Resources\glasses.png" />
-    <Resource Include="Resources\header_background.png" />
     <Resource Include="Resources\header_dragonhead.png" />
     <Resource Include="Resources\launchbuddy_header.png" />
     <Resource Include="Resources\Launchbuddy_logo.png" />
@@ -434,7 +433,8 @@
     <Resource Include="Resources\Icons\save.png" />
     <Resource Include="Resources\Icons\feature.png" />
     <Resource Include="Resources\acc_opacitymask.png" />
-    <None Include="Resources\plugin.png" />
+    <Resource Include="Resources\plugin.png" />
+    <Resource Include="Resources\header_background.png" />
     <Content Include="Resources\Update Helper.exe" />
   </ItemGroup>
   <ItemGroup>

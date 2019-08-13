@@ -181,6 +181,7 @@ namespace Gw2_Launchbuddy.Modifiers
                     pro.Kill();
                     Action waitforlock = () => WaitForLoginfileRelease(file);
                     Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to save the updated loginfile.", waitforlock);
+                    WaitForFileAccess();
                     ToDefault();
                     file.gw2build = Api.ClientBuild;
                 }

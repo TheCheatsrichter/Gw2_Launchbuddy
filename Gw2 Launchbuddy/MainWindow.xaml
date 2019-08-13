@@ -218,8 +218,7 @@
             </Canvas>
         </Canvas>
         <Grid Grid.Row="0" Grid.ColumnSpan="2" x:Name="WindowHeaderGrid">
-            <Image Source="Resources/header_background.png" Opacity="0.7" Stretch="UniformToFill"/>
-            <Image Source="Resources/header_dragonhead.png" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5">
+            <Image Source="Resources/header_background.png" Opacity="0.9" Stretch="UniformToFill" RenderTransformOrigin="0.5,0.5" >
                 <Image.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="-1"/>
@@ -229,7 +228,17 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy V1.9 Dev" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Image Source="Resources/header_dragonhead.png" HorizontalAlignment="Left"  RenderTransformOrigin="0.5,0.5">
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleX="-1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy V2.0" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
@@ -334,7 +343,7 @@
                             </Button>
                             -->
 
-                            
+
                             <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
                                 <Label x:Name="label" Content="Gw2 Client Details:" HorizontalAlignment="Left" Grid.ColumnSpan="2" Style="{StaticResource H1}" Width="152"/>
                                 <Label x:Name="lab_version" Content="Build Version:" ToolTip="The current Guild Wars 2 build your system is using." />
@@ -469,7 +478,7 @@
                                                         </StackPanel>
                                                     </DockPanel>
                                                 </Expander>
-                                                
+
                                             </StackPanel>
 
 
@@ -503,7 +512,7 @@
                                             </DockPanel>
                                             <StackPanel Orientation="Horizontal" Margin="0,5">
                                                 <Button Name="bt_addicon" Content="Add Icon" Width="100" Click="bt_addicon_Click"/>
-                                                    <Button Name="bt_remicon" Content="Delete Icon" Width="100" Click="bt_remicon_Click"/>
+                                                <Button Name="bt_remicon" Content="Delete Icon" Width="100" Click="bt_remicon_Click"/>
                                                 <Button Name="bt_noicon" Content="No Icon" Width="100" Click="bt_noicon_Click" />
                                             </StackPanel>
                                         </StackPanel>
@@ -762,13 +771,14 @@
                 <TabItem Name="tab_plugins" >
                     <TabItem.Header>
                         <StackPanel>
-                            <Image Height="20" Source="Resources/plugin.png"/>
+                            <Image Height="20" Source="Resources/plugin.png" />
                             <Label FontSize="10" Margin="0,-5,0,-7">Plug-Ins</Label>
                         </StackPanel>
                     </TabItem.Header>
                     <DockPanel>
-                        <Button Name="bt_addplugin" Content="Add Plugin" Click="bt_addplugin_Click" DockPanel.Dock="Top"/>
+                        <Label Content="Plugins:" Style="{StaticResource H1}" DockPanel.Dock="Top"/>
                         <CheckBox Name="cb_autoupdateplugins" Content="Autoupdate plugins" DockPanel.Dock="Top" Margin="0,5" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=plugins_autoupdate}" Click="cb_autoupdateplugins_Click"/>
+                        <Button Name="bt_addplugin" Content="Add Plugin" Click="bt_addplugin_Click" DockPanel.Dock="Top" Width="100" HorizontalAlignment="Left"/>
                         <ListView x:Name="lv_plugins">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
