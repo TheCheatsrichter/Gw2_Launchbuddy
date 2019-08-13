@@ -257,6 +257,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             if (EnviromentManager.LBUseClientGUI)
             {
                 if (LBInstanceGUI.IsLoaded == false) LBInstanceGUI = new GUI_ApplicationManager();
+                if (LBInstanceGUI.WindowState == WindowState.Minimized) LBInstanceGUI.WindowState = WindowState.Normal;
                 LBInstanceGUI.Show();
             }
         }
