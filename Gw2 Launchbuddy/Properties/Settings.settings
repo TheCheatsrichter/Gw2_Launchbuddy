@@ -71,13 +71,13 @@
     <Setting Name="mainwin_size_y" Type="System.Double" Scope="User">
       <Value Profile="(Default)">-1</Value>
     </Setting>
-    <Setting Name="plugins_toremove" Type="System.Collection.Generic.List&lt;System.String&gt;" Scope="User">
+    <Setting Name="plugins_toremove" Type="System.Collections.Generic.List&lt;System.String&gt;" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="plugins_todelete" Type="System.Collection.Generic.List&lt;System.String&gt;" Scope="User">
+    <Setting Name="plugins_todelete" Type="System.Collections.Generic.List&lt;System.String&gt;" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="plugins_toinstall" Type="System.Collection.Generic.List&lt;System.String&gt;" Scope="User">
+    <Setting Name="plugins_toinstall" Type="System.Collections.Generic.List&lt;System.String&gt;" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="plugins_toupdate" Type="System.String" Scope="User">

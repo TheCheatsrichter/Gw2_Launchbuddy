@@ -291,6 +291,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             string location=plugin.Update();
             if(File.Exists(location))
             {
+                /*
                 if(Path.GetExtension(location)!=".dll")
                 {
                     MessageBox.Show($"{plugin.PluginInfo.Name} did not download a .dll file. Updatefunction of the plugin might is broken.\nPlease contact {plugin.PluginInfo.Author} on {plugin.PluginInfo.Url} for further information.");
@@ -304,6 +305,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 }
                 Properties.Settings.Default.plugins_toinstall.Add((path,location));
                 Properties.Settings.Default.Save();
+                */
             }
 
             if (reboot) EnviromentManager.Reboot();
@@ -332,6 +334,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void AddToInstallPlugins()
         {
+            /*
             if (Properties.Settings.Default.plugins_toinstall == null)
             {
                 Properties.Settings.Default.plugins_toinstall = new List<(string,string)>();
@@ -350,6 +353,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
 
             Properties.Settings.Default.Save();
+            */
         }
 
 

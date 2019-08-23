@@ -323,9 +323,9 @@ namespace Gw2_Launchbuddy.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Generic.List<(System.String, System.String)> plugins_toinstall {
+        public global::System.Collections.Generic.List<System.String> plugins_toinstall {
             get {
-                return ((global::System.Collections.Generic.List<(System.String, System.String)>)(this["plugins_toinstall"]));
+                return ((global::System.Collections.Generic.List<System.String>)(this["plugins_toinstall"]));
             }
             set {
                 this["plugins_toinstall"] = value;
@@ -358,9 +358,10 @@ namespace Gw2_Launchbuddy.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public (double, double, double, double) instancegui_windowsettings {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int instancegui_windowsettings {
             get {
-                return (((double, double, double, double))(this["instancegui_windowsettings"]));
+                return ((int)(this["instancegui_windowsettings"]));
             }
             set {
                 this["instancegui_windowsettings"] = value;

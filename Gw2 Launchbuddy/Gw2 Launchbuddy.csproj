@@ -435,6 +435,8 @@
     <Resource Include="Resources\acc_opacitymask.png" />
     <Resource Include="Resources\plugin.png" />
     <Resource Include="Resources\header_background.png" />
+    <Resource Include="Resources\Icons\pin.png" />
+    <Resource Include="Resources\Icons\pinned.png" />
     <Content Include="Resources\Update Helper.exe" />
   </ItemGroup>
   <ItemGroup>

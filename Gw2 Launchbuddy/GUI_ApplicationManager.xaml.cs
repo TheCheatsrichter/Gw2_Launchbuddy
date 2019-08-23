@@ -2,6 +2,10 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 
 namespace Gw2_Launchbuddy
 {
@@ -10,6 +14,10 @@ namespace Gw2_Launchbuddy
     /// </summary>
     public partial class GUI_ApplicationManager : Window
     {
+
+        (double,double) drag_diff = (0,0);
+        bool ispinned = false;
+
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
 
@@ -17,6 +25,7 @@ namespace Gw2_Launchbuddy
         {
             InitializeComponent();
             var windowsettings = Properties.Settings.Default.instancegui_windowsettings;
+            /*
             if (windowsettings.Equals((0, 0, 0, 0)))
             {
                 Properties.Settings.Default.instancegui_windowsettings = (0, 0, 160, 300);
@@ -26,6 +35,7 @@ namespace Gw2_Launchbuddy
             Top = windowsettings.Item2;
             Width = windowsettings.Item3;
             Height = windowsettings.Item4;
+            */
         }
 
         private void bt_close_Click(object sender, RoutedEventArgs e)
@@ -35,8 +45,10 @@ namespace Gw2_Launchbuddy
 
         private void SaveWindowSettings()
         {
+            /*
             Properties.Settings.Default.instancegui_windowsettings = (Left, Top, ActualWidth, ActualHeight);
             Properties.Settings.Default.Save();
+            */
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -80,9 +92,59 @@ namespace Gw2_Launchbuddy
             ((sender as Button).DataContext as Client).Resume();
         }
 
-        private void myWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void bt_pin_Click(object sender, RoutedEventArgs e)
+        {
+            ispinned = !ispinned;
+            if(ispinned)
+            {
+                bt_pin.OpacityMask = new ImageBrush(new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/pinned.png")));
+            }
+            else
+            {
+                bt_pin.OpacityMask = new ImageBrush(new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/pin.png")));
+            }
+        }
+
+        private void Thumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+        {
+            if (ActualWidth > MinWidth)
+            {
+                MaxWidth += (e.HorizontalChange-drag_diff.Item1);
+                Width = MaxWidth;
+            }
+            else
+            {
+                MaxWidth = MinWidth+4;
+                Width = MaxWidth;
+                (sender as Thumb).ReleaseMouseCapture();
+            }
+
+            if (ActualHeight> MinHeight)
+            {
+                MaxHeight += (e.VerticalChange-drag_diff.Item2);
+                Height = MaxHeight;
+            }
+            else
+            {
+                MaxHeight = MinHeight+4;
+                Height = MaxHeight;
+                (sender as Thumb).ReleaseMouseCapture();
+            }
+        }
+
+        private void Thumb_DragCompleted(object sender, DragCompletedEventArgs e)
         {
             SaveWindowSettings();
+        }
+
+        private void myWindow_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if(!ispinned) BeginStoryboard((Storyboard)Resources["anim_show"]);
+        }
+
+        private void myWindow_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (!ispinned) BeginStoryboard((Storyboard)Resources["anim_collapse"]);
         }
     }
 }
