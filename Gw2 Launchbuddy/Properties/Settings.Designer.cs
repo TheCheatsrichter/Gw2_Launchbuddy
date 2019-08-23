@@ -310,10 +310,9 @@ namespace Gw2_Launchbuddy.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string plugins_toupdate {
+        public global::System.Collections.Generic.List<System.String> plugins_toupdate {
             get {
-                return ((string)(this["plugins_toupdate"]));
+                return ((global::System.Collections.Generic.List<System.String>)(this["plugins_toupdate"]));
             }
             set {
                 this["plugins_toupdate"] = value;

@@ -74,7 +74,7 @@
     <Setting Name="plugins_toinstall" Type="System.Collections.Generic.List&lt;System.String&gt;" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="plugins_toupdate" Type="System.String" Scope="User">
+    <Setting Name="plugins_toupdate" Type="System.Collections.Generic.List&lt;System.String&gt;" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="plugins_autoupdate" Type="System.Boolean" Scope="User">
