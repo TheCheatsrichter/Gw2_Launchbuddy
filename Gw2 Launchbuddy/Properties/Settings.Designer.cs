@@ -170,30 +170,6 @@ namespace Gw2_Launchbuddy.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public double instance_win_X {
-            get {
-                return ((double)(this["instance_win_X"]));
-            }
-            set {
-                this["instance_win_X"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public double instance_win_Y {
-            get {
-                return ((double)(this["instance_win_Y"]));
-            }
-            set {
-                this["instance_win_Y"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int counter_launches {
             get {
                 return ((int)(this["counter_launches"]));
@@ -358,13 +334,25 @@ namespace Gw2_Launchbuddy.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int instancegui_windowsettings {
+        [global::System.Configuration.DefaultSettingValueAttribute("0,0,150,300")]
+        public string instancegui_windowsettings {
             get {
-                return ((int)(this["instancegui_windowsettings"]));
+                return ((string)(this["instancegui_windowsettings"]));
             }
             set {
                 this["instancegui_windowsettings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool instancegui_ispinned {
+            get {
+                return ((bool)(this["instancegui_ispinned"]));
+            }
+            set {
+                this["instancegui_ispinned"] = value;
             }
         }
     }

@@ -38,12 +38,6 @@
     <Setting Name="cinema_slideshowendscale" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1.205</Value>
     </Setting>
-    <Setting Name="instance_win_X" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="instance_win_Y" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
     <Setting Name="counter_launches" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
@@ -86,8 +80,11 @@
     <Setting Name="plugins_autoupdate" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="instancegui_windowsettings" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+    <Setting Name="instancegui_windowsettings" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0,0,150,300</Value>
+    </Setting>
+    <Setting Name="instancegui_ispinned" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

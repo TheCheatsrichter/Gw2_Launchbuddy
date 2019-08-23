@@ -291,7 +291,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
             string location=plugin.Update();
             if(File.Exists(location))
             {
-                /*
                 if(Path.GetExtension(location)!=".dll")
                 {
                     MessageBox.Show($"{plugin.PluginInfo.Name} did not download a .dll file. Updatefunction of the plugin might is broken.\nPlease contact {plugin.PluginInfo.Author} on {plugin.PluginInfo.Url} for further information.");
@@ -301,11 +300,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 string path = EnviromentManager.LBPluginsPath + plugin.PluginInfo.Name + ".dll";
                 if (Properties.Settings.Default.plugins_toinstall == null)
                 {
-                    Properties.Settings.Default.plugins_toinstall = new List<(string, string)>();
+                    Properties.Settings.Default.plugins_toinstall = new List<string>();
                 }
-                Properties.Settings.Default.plugins_toinstall.Add((path,location));
+                Properties.Settings.Default.plugins_toinstall.Add(path+";"+location);
                 Properties.Settings.Default.Save();
-                */
             }
 
             if (reboot) EnviromentManager.Reboot();
@@ -334,26 +332,26 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void AddToInstallPlugins()
         {
-            /*
             if (Properties.Settings.Default.plugins_toinstall == null)
             {
-                Properties.Settings.Default.plugins_toinstall = new List<(string,string)>();
+                Properties.Settings.Default.plugins_toinstall = new List<string>();
             }
-            List<(string, string)> added_plugins = new List<(string, string)>();
+            List<string> added_plugins = new List<string>();
 
-            foreach ((string,string) paths in Properties.Settings.Default.plugins_toinstall as List<(string,string)>)
+            foreach (string paths in Properties.Settings.Default.plugins_toinstall as List<string>)
             {
-                if (File.Exists(paths.Item1)) File.Delete(paths.Item1);
-                if (File.Exists(paths.Item2)) File.Copy(paths.Item2,paths.Item1);
+                string[] paths_splited = paths.Split(';');
+
+                if (File.Exists(paths_splited[0])) File.Delete(paths_splited[0]);
+                if (File.Exists(paths_splited[1])) File.Copy(paths_splited[1], paths_splited[0]);
                 added_plugins.Add(paths);
             }
-            foreach ((string,string) plugin in added_plugins)
+            foreach (string plugin in added_plugins)
             {
                 Properties.Settings.Default.plugins_toinstall.Remove(plugin);
             }
 
             Properties.Settings.Default.Save();
-            */
         }
 
 

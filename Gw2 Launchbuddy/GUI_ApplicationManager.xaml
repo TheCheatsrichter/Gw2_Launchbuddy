@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:Gw2_Launchbuddy"
         mc:Ignorable="d"
         Name="myWindow"
-        Title="Game Instances" MaxHeight="300" MaxWidth="160" Width="160" Height="300" MinWidth="24" MinHeight="40"  WindowStartupLocation="Manual" Topmost="True" WindowStyle="None" Loaded="Window_Loaded" AllowsTransparency="True" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown" Icon="launchbuddy.ico" MouseEnter="myWindow_MouseEnter" MouseLeave="myWindow_MouseLeave" StateChanged="myWindow_StateChanged">
+        Title="Game Instances" MaxHeight="300" MaxWidth="160" Width="160" Height="300" MinWidth="24" MinHeight="40"  WindowStartupLocation="Manual" Topmost="True" WindowStyle="None" Loaded="Window_Loaded" AllowsTransparency="True" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown" Icon="launchbuddy.ico" MouseEnter="myWindow_MouseEnter" MouseLeave="myWindow_MouseLeave">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -50,7 +50,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Border BorderThickness="2" BorderBrush="#CC3A3A3A" CornerRadius="5">
+    <Border BorderThickness="3" BorderBrush="#CC3A3A3A" CornerRadius="5">
         <Grid Background="Black" >
             <Grid.OpacityMask>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
