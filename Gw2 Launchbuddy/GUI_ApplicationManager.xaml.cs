@@ -54,6 +54,7 @@ namespace Gw2_Launchbuddy
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             lv_instances.ItemsSource = ClientManager.ActiveClients;
+            if (!ispinned) BeginStoryboard((Storyboard)Resources["anim_collapse"]);
         }
 
         private void lv_gfx_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -78,7 +79,9 @@ namespace Gw2_Launchbuddy
 
         private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            myWindow.ResizeMode = ResizeMode.NoResize;
             this.DragMove();
+            myWindow.ResizeMode = ResizeMode.CanResize;
             SaveWindowSettings();
         }
 
@@ -145,6 +148,23 @@ namespace Gw2_Launchbuddy
         private void myWindow_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             if (!ispinned) BeginStoryboard((Storyboard)Resources["anim_collapse"]);
+        }
+
+        private void myWindow_StateChanged(object sender, EventArgs e)
+        {
+            Console.WriteLine(myWindow.WindowState);
+        }
+
+        private void bt_settings_Click(object sender, RoutedEventArgs e)
+        {
+            if (row_settings.Height.Value == 0)
+            {
+                row_settings.Height = new GridLength(150);
+            } else
+            {
+                row_settings.Height = new GridLength(0);
+            }
+
         }
     }
 }
