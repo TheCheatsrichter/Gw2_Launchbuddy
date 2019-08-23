@@ -15,24 +15,24 @@
                 <ResourceDictionary Source="Launchbuddy_default_theme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <Storyboard x:Key="anim_show">
-                <DoubleAnimation From="{Binding ElementName=myWindow,Path=ActualHeight}" To="{Binding ElementName=myWindow,Path=MaxHeight}" Duration="0:0:0.5" 
+                <DoubleAnimation  To="{Binding ElementName=myWindow,Path=MaxHeight}" Duration="0:0:0.5" 
                              Storyboard.TargetName="myWindow"
                              Storyboard.TargetProperty="Height"
                              FillBehavior="Stop"
                                      >
                     <DoubleAnimation.EasingFunction>
-                        <ExponentialEase Exponent="6" EasingMode="EaseIn"/>
+                        <PowerEase Power="2"/>
                     </DoubleAnimation.EasingFunction>
                 </DoubleAnimation>
             </Storyboard>
             <Storyboard x:Key="anim_collapse">
-                <DoubleAnimation From="{Binding ElementName=myWindow,Path=ActualHeight}" To="{Binding ElementName=myWindow,Path=MinHeight}" Duration="0:0:0.5" 
+                <DoubleAnimation To="{Binding ElementName=myWindow,Path=MinHeight}" Duration="0:0:0.5" 
                              Storyboard.TargetName="myWindow"
                              Storyboard.TargetProperty="Height"
                              FillBehavior="Stop"
                              >
                     <DoubleAnimation.EasingFunction>
-                        <ExponentialEase Exponent="6" EasingMode="EaseOut"/>
+                        <PowerEase Power="2"/>
                     </DoubleAnimation.EasingFunction>
                 </DoubleAnimation>
             </Storyboard>
