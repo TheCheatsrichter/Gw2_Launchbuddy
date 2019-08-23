@@ -378,6 +378,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public bool HasAdvancedSettings { get { if (ProcessPriority != ProcessPriorityClass.Normal || RelaunchesMax > 0) { return true; } return false; } set { } }
         [XmlIgnore]
         public bool HasWindowConfig { get { return WinConfig != null; } }
+        [XmlIgnore]
+        public bool LoginfileOutdated {get { if(Loginfile != null)return Loginfile.IsOutdated; return false;}}
 
 
         public void SetLoginFile()

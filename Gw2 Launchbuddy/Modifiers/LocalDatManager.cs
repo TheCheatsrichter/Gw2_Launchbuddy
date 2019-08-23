@@ -344,7 +344,7 @@ namespace Gw2_Launchbuddy.Modifiers
         public string Name { get { return System.IO.Path.GetFileNameWithoutExtension(Path); } }
         public string Gw2Build { get { return gw2build; } }
         public bool IsUpToDate { get { return Gw2Build == EnviromentManager.GwClientVersion; } }
-        public bool IsOutdated { get { return !(IsUpToDate); } }
+        public bool IsOutdated { get { return !(IsUpToDate && Valid); } }
         public bool Valid = false;
         public string MD5HASH {  get { return CalculateMD5(Path); } }
 
