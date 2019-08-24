@@ -1628,7 +1628,7 @@ namespace Gw2_Launchbuddy
 
         #region Plugins
 
-        public void AddTabPlugin(PluginContracts.LBPlugin plugin)
+        public void AddTabPlugin(PluginContracts.ILBPlugin plugin)
         {
             if(plugin.UIContent !=null)
             {
@@ -1636,7 +1636,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        public void RemTabPlugin(PluginContracts.LBPlugin plugin)
+        public void RemTabPlugin(PluginContracts.ILBPlugin plugin)
         {
             if (plugin.UIContent != null)
             {

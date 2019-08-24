@@ -19,11 +19,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildProcess", "BuildProces
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginContracts", "PluginContracts\PluginContracts.csproj", "{521929DC-7CAD-4CEE-BC99-F3A41E5E397C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LBPlugin", "LBPlugin\LBPlugin.csproj", "{276061EF-202D-4750-B7BF-52EA5FA55ED9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LBPlugin", "Plugins\LBPlugin\LBPlugin.csproj", "{276061EF-202D-4750-B7BF-52EA5FA55ED9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{07186744-D472-4281-AE56-EA3E50616FC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LBPluginTemplate", "LBPluginTemplate\LBPluginTemplate.csproj", "{0381938E-E261-48C0-B098-716E9EAE4D02}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LBPluginTemplate", "Plugins\LBPluginTemplate\LBPluginTemplate.csproj", "{0381938E-E261-48C0-B098-716E9EAE4D02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

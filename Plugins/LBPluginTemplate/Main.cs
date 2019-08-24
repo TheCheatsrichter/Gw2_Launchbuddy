@@ -11,7 +11,7 @@ using PluginContracts.EventArguments;
 
 namespace LBPluginTemplate
 {
-    public class Plugin : PluginContracts.LBPlugin
+    public class Plugin : ILBPlugin
     {
         //Your Plugin Information
         PluginInfo plugininfo = new PluginInfo

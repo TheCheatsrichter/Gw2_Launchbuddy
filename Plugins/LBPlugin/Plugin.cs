@@ -11,25 +11,20 @@ using PluginContracts.EventArguments;
 
 namespace LBPlugin
 {
-    public class Plugin : PluginContracts.LBPlugin
+    public class Plugin : ILBPlugin
     {
-        //Your Plugin Information
-        PluginInfo plugininfo = new PluginInfo
+        public PluginInfo PluginInfo { get; } = new PluginInfo
         {
             Name = "Plugin UI Limits",                                                 //Name of your plugin
-            Version = new Version(1,0,0),                                           //Version of your plugin
+            Version = new Version(1, 0, 0),                                           //Version of your plugin
             Author = "TheCheatsrichter",                                         //Your name ;)
             Url = new Uri("https://google.com"),                                 //The URL associated with your plugin-> website/ githubpage etc.
             Description = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla aliquam dapibus imperdiet. Aliquam erat volutpat. Nullam non dolor non odio commodo posuere. Vestibulum viverra ligula odio, quis tincidunt augue molestie ac. Fusce est ipsum, tristique vitae ipsum ultrices, dictum scelerisque risus. Aliquam feugiat erat non est interdum pulvinar. Donec id semper sapien. Proin consequat tortor vitae nunc tincidunt, vitae ullamcorper dui mollis. Morbi at laoreet magna. Sed varius sed tellus vel facilisis. Nam sagittis rhoncus est eget suscipit. Mauris sit amet bibendum diam."
         };
 
-        public PluginInfo PluginInfo { get { return plugininfo; } }
-
-        //General LB Data
-        private ObservableCollection<IAcc> accs;
         private IEnviroment enviroment;
 
-        public ObservableCollection<IAcc> Accounts{set{ accs = value; } get { return accs; } }
+        public ObservableCollection<IAcc> Accounts { set; get; }
         public IEnviroment Enviroment { set { Enviroment = value; } get { return enviroment; } }
 
         //Your Plugin Handling
@@ -65,25 +60,17 @@ namespace LBPlugin
             System.Windows.Forms.MessageBox.Show($"{e.ID} status changed to: {e.Status}");
         }
 
-        //#############################################
-        //UI Stuff
-        //#############################################
-
-
-        //TabItem Instance
-        private TabItem UI = new TabItem();
-
         //Return UI for Interface, return if none is needed
-        public TabItem UIContent { get { return UI; } }
+        public TabItem UIContent { get; } = new TabItem();
 
         //Set Up UI
         private void UI_Init()
         {
-            UI.Header = "LBTestPlugin";
+            UIContent.Header = "LBTestPlugin";
             Grid content = new Grid();
             Button bt = new Button { Content = "Useless Button" };
             content.Children.Add(bt);
-            UI.Content = content;
+            UIContent.Content = content;
         }
     }
 }

@@ -48,9 +48,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PluginContracts\PluginContracts.csproj">
+    <ProjectReference Include="..\..\PluginContracts\PluginContracts.csproj">
       <Project>{521929dc-7cad-4cee-bc99-f3a41e5e397c}</Project>
       <Name>PluginContracts</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

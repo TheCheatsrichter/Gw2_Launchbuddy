@@ -155,9 +155,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 return;
             }
 
-            if (plugin is LBPlugin)
+            if (plugin is ILBPlugin)
             {
-                LBPlugin lbplugin = plugin as LBPlugin;
+                ILBPlugin lbplugin = plugin as ILBPlugin;
 
                 HandlerLBStart += lbplugin.OnLBStart;
                 HandlerLBClose += lbplugin.OnLBClose;

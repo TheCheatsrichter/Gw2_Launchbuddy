@@ -25,7 +25,7 @@ namespace PluginContracts
         string Update();
     }
 
-    public interface LBPlugin : IPlugin
+    public interface ILBPlugin : IPlugin
     {
         TabItem UIContent { get; }
 
