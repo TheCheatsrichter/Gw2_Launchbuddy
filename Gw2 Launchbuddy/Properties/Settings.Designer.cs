@@ -170,30 +170,6 @@ namespace Gw2_Launchbuddy.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public double instance_win_X {
-            get {
-                return ((double)(this["instance_win_X"]));
-            }
-            set {
-                this["instance_win_X"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public double instance_win_Y {
-            get {
-                return ((double)(this["instance_win_Y"]));
-            }
-            set {
-                this["instance_win_Y"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int counter_launches {
             get {
                 return ((int)(this["counter_launches"]));
@@ -323,9 +299,9 @@ namespace Gw2_Launchbuddy.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Generic.List<(System.String, System.String)> plugins_toinstall {
+        public global::System.Collections.Generic.List<System.String> plugins_toinstall {
             get {
-                return ((global::System.Collections.Generic.List<(System.String, System.String)>)(this["plugins_toinstall"]));
+                return ((global::System.Collections.Generic.List<System.String>)(this["plugins_toinstall"]));
             }
             set {
                 this["plugins_toinstall"] = value;
@@ -334,10 +310,9 @@ namespace Gw2_Launchbuddy.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string plugins_toupdate {
+        public global::System.Collections.Generic.List<System.String> plugins_toupdate {
             get {
-                return ((string)(this["plugins_toupdate"]));
+                return ((global::System.Collections.Generic.List<System.String>)(this["plugins_toupdate"]));
             }
             set {
                 this["plugins_toupdate"] = value;
@@ -358,12 +333,25 @@ namespace Gw2_Launchbuddy.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public (double, double, double, double) instancegui_windowsettings {
+        [global::System.Configuration.DefaultSettingValueAttribute("0,0,150,300")]
+        public string instancegui_windowsettings {
             get {
-                return (((double, double, double, double))(this["instancegui_windowsettings"]));
+                return ((string)(this["instancegui_windowsettings"]));
             }
             set {
                 this["instancegui_windowsettings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool instancegui_ispinned {
+            get {
+                return ((bool)(this["instancegui_ispinned"]));
+            }
+            set {
+                this["instancegui_ispinned"] = value;
             }
         }
     }

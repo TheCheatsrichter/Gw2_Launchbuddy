@@ -628,8 +628,6 @@ namespace Gw2_Launchbuddy
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Properties.Settings.Default.instance_win_X = EnviromentManager.LBInstanceGUI.Left;
-            Properties.Settings.Default.instance_win_Y = EnviromentManager.LBInstanceGUI.Top;
             Properties.Settings.Default.Save();
             Environment.Exit(Environment.ExitCode);
         }

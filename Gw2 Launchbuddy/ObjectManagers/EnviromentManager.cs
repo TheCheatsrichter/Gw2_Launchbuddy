@@ -19,7 +19,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class EnviromentManager
     {
-        public static Version LBVersion = new Version("1.9.3");
+        public static Version LBVersion = new Version("2.0.0");
         public static LaunchOptions LaunchOptions;
 
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
@@ -243,7 +243,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 Process pro = new Process();
                 pro.StartInfo = new ProcessStartInfo { FileName=EnviromentManager.GwClientExePath, Arguments = "-image" };
                 pro.Start();
-                pro.WaitForExit();
+                Modifiers.ModuleReader.WaitForModule("WINNSI.dll",pro);
+                Thread.Sleep(3000); //Buffer to not land between launcher update/ game update
+                Action waitforlaunch = () => pro.WaitForExit();
+                Helpers.BlockerInfo.Run("Game Update", "Launchbuddy waits for your game to be updated", waitforlaunch);
                 EnviromentManager.GwClientVersion = Api.ClientBuild;
             }
             else

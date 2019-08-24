@@ -3,45 +3,54 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:Gw2_Launchbuddy"
         mc:Ignorable="d"
         Name="myWindow"
-        Title="Game Instances" Height="300" MinHeight="160" MinWidth="160" ResizeMode="CanResizeWithGrip" Width="160" WindowStartupLocation="Manual" Topmost="True" WindowStyle="None" Loaded="Window_Loaded" AllowsTransparency="True" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown" Icon="launchbuddy.ico" SizeChanged="myWindow_SizeChanged">
+        Title="Game Instances" MaxHeight="300" MaxWidth="160" Width="160" Height="300" MinWidth="24" MinHeight="40"  WindowStartupLocation="Manual" Topmost="True" WindowStyle="None" Loaded="Window_Loaded" AllowsTransparency="True" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown" Icon="launchbuddy.ico" MouseEnter="myWindow_MouseEnter" MouseLeave="myWindow_MouseLeave">
 
-    <Window.Triggers>
-        <EventTrigger RoutedEvent="MouseEnter">
-            <BeginStoryboard>
-                <Storyboard>
-                    <DoubleAnimation To="1.0" Duration="0:0:0.5" 
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Launchbuddy_default_theme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Storyboard x:Key="anim_show">
+                <DoubleAnimation  To="{Binding ElementName=myWindow,Path=MaxHeight}" Duration="0:0:0.5" 
                              Storyboard.TargetName="myWindow"
-                             Storyboard.TargetProperty="Opacity"
-                             />
-                    </Storyboard>
-            </BeginStoryboard>
-        </EventTrigger>
-        <EventTrigger RoutedEvent="MouseLeave">
-            <BeginStoryboard>
-                <Storyboard>
-                    <DoubleAnimation To="0.6" Duration="0:0:0.5" 
+                             Storyboard.TargetProperty="Height"
+                             FillBehavior="Stop"
+                                     >
+                    <DoubleAnimation.EasingFunction>
+                        <PowerEase Power="2"/>
+                    </DoubleAnimation.EasingFunction>
+                </DoubleAnimation>
+            </Storyboard>
+            <Storyboard x:Key="anim_collapse">
+                <DoubleAnimation To="{Binding ElementName=myWindow,Path=MinHeight}" Duration="0:0:0.5" 
                              Storyboard.TargetName="myWindow"
-                             Storyboard.TargetProperty="Opacity"
-                             />
-                </Storyboard>
-            </BeginStoryboard>
-        </EventTrigger>
-        <EventTrigger RoutedEvent="Loaded">
-            <BeginStoryboard>
-                <Storyboard>
-                    <DoubleAnimation From="1.5" To="0.6" Duration="0:0:1" 
-                             Storyboard.TargetName="myWindow"
-                             Storyboard.TargetProperty="Opacity"
-                             />
-                </Storyboard>
-            </BeginStoryboard>
-        </EventTrigger>
-    </Window.Triggers>
-    
-    <Border BorderThickness="2" Background="Black" CornerRadius="10" BorderBrush="Black">
+                             Storyboard.TargetProperty="Height"
+                             FillBehavior="Stop"
+                             >
+                    <DoubleAnimation.EasingFunction>
+                        <PowerEase Power="2"/>
+                    </DoubleAnimation.EasingFunction>
+                </DoubleAnimation>
+            </Storyboard>
+            <Storyboard x:Key="anim_show_settings">
+                <DoubleAnimation To="100" Duration="0:0:0.5" 
+                             Storyboard.TargetName="row_settings"
+                             Storyboard.TargetProperty="Height"
+                             FillBehavior="Stop"
+                             >
+                    <DoubleAnimation.EasingFunction>
+                        <ExponentialEase Exponent="6" EasingMode="EaseOut"/>
+                    </DoubleAnimation.EasingFunction>
+                </DoubleAnimation>
+            </Storyboard>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border BorderThickness="3" BorderBrush="#CC3A3A3A" CornerRadius="5">
         <Grid Background="Black" >
             <Grid.OpacityMask>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
@@ -49,28 +58,46 @@
                     <GradientStop Offset="1" Color="#66FFFFFF"/>
                 </LinearGradientBrush>
             </Grid.OpacityMask>
-            <Grid.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform Y="6"/>
-                </TransformGroup>
-            </Grid.RenderTransform>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30" />
+                <RowDefinition Height="0" x:Name="row_settings"/>
                 <RowDefinition Height="100*" />
+                <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
+            <Slider Grid.Row="1" Maximum="1.0" Minimum="0.1" Value="{Binding ElementName=myWindow,Path=Opacity}"/>
+            <Thumb Grid.Row="3" DragDelta="Thumb_DragDelta" HorizontalAlignment="Right" Margin="1" Width="30" Cursor="SizeNWSE" Opacity="0" DragCompleted="Thumb_DragCompleted"/>
             <Label Content="Game Instances" FontSize="12" FontStyle="Italic" Foreground="White" VerticalAlignment="Top"/>
-            <Button x:Name="bt_close" Grid.Row="0" BorderThickness="1" Width="45" Margin="2" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="bt_close_Click"  Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" BorderBrush="#FF919191">
-                Hide
-            </Button>
-
-            <ListView x:Name="lv_instances" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2" Grid.Row="1" SelectionChanged="lv_gfx_SelectionChanged"  Background="Transparent" BorderThickness="0" Margin="2,0" >
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
+                <Button x:Name="bt_settings" Style="{StaticResource WindowButtonLite}" Click="bt_settings_Click" Visibility="Collapsed">
+                    <Button.OpacityMask>
+                        <ImageBrush ImageSource="Resources/Icons/settings.png"/>
+                    </Button.OpacityMask>
+                    <Button.ToolTip>Pin</Button.ToolTip>
+                </Button>
+                <Button x:Name="bt_close" Style="{StaticResource WindowButtonLite}" Click="bt_close_Click" >
+                    <Button.OpacityMask>
+                        <ImageBrush ImageSource="Resources/Icons/minimize.png"/>
+                    </Button.OpacityMask>
+                    <Button.ToolTip>Hide</Button.ToolTip>
+                </Button>
+                <Button x:Name="bt_pin" Style="{StaticResource WindowButtonLite}" Click="bt_pin_Click" >
+                    <Button.OpacityMask>
+                        <ImageBrush ImageSource="Resources/Icons/pin.png"/>
+                    </Button.OpacityMask>
+                    <Button.ToolTip>Pin</Button.ToolTip>
+                </Button>
+            </StackPanel>
+            <ListView x:Name="lv_instances" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.ColumnSpan="2" Grid.Row="2" SelectionChanged="lv_gfx_SelectionChanged"  Background="Transparent" BorderThickness="0" Margin="2,0" >
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                         <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Style.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" 
+                                 Color="Red"/>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                                 Color="Transparent"/>
+                        </Style.Resources>
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
@@ -86,6 +113,9 @@
                         </DockPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
+                <ListView.Triggers>
+
+                </ListView.Triggers>
             </ListView>
 
         </Grid>
