@@ -250,6 +250,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public ObservableCollection<AccountHotkey> AccHotkeys { set; get; }
         public LocalDatFile Loginfile { set; get; }
         public WindowConfig WinConfig { set { winconfig = value; OnPropertyChanged("HasWindowConfig"); } get { return winconfig; } }
+        public AccountInformation AccountInformation { set; get; }
 
         //Adavanced Settings
         [XmlIgnore]
@@ -273,6 +274,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             if (DLLs == null) DLLs = new ObservableCollection<string>();
             if (AccHotkeys == null) AccHotkeys = new ObservableCollection<AccountHotkey>();
             if (RelaunchesMax == null) RelaunchesMax = 0;
+            if (AccountInformation == null) this.AccountInformation = new AccountInformation();
             RelaunchesLeft = RelaunchesMax;
         }
 
@@ -424,5 +426,26 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
 
         #endregion Plugininterface
+    }
+
+    public class AccountInformation
+    {
+        public DateTime LastLogin { get; private set; }
+        public DateTime LastClose { get; private set; }
+        public TimeSpan Playtime { get; private set; }
+
+        public AccountInformation()
+        {
+            LastLogin = DateTime.MinValue;
+            LastClose = DateTime.MinValue;
+        }
+
+        public void SetLastLogin() { LastLogin = DateTime.Now; }
+        public void SetLastClose()
+        {
+            LastClose = DateTime.Now;
+            if (LastLogin != DateTime.MinValue) Playtime += LastClose - LastLogin;
+        }
+
     }
 }

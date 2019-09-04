@@ -1188,23 +1188,9 @@
                     </StackPanel>
                 </TabItem>
                 <TabItem Visibility="Hidden" Height="10"/>
-
             </TabControl>
-
-
         </Grid>
-
-
-
-
     </Grid>
-
-
-
-
-
-
-
 </Window>
 
 
