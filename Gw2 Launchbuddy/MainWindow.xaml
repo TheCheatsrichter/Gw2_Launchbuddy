@@ -376,6 +376,7 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <DockPanel ToolTip="{Binding Path=Client.Status}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" LastChildFill="False" IsEnabled="{Binding Path=Settings.Loginfile.IsUpToDate}">
+                                        <Label Height="32" Foreground="Green" Content="{Binding Path=Settings.AccountInformation.LastLogin}" DockPanel.Dock="Right"/>
                                         <Label Height="32" Visibility="{Binding Path=Settings.LoginfileOutdated, Converter={StaticResource BoolToVis}}" ToolTip="Loginfile is outdated" Foreground="Red" Content="UPDATE REQUIRED" DockPanel.Dock="Right"/>
                                         <Image Height="32" Source="{Binding Path=Settings.Icon.Image}" DockPanel.Dock="Left"/>
                                         <Image Height="32" Source="{Binding Path=Client.StatusToIcon}" DockPanel.Dock="Right"/>

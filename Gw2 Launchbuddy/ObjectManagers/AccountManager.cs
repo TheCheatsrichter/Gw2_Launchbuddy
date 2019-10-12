@@ -430,9 +430,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public class AccountInformation
     {
-        public DateTime LastLogin { get; private set; }
-        public DateTime LastClose { get; private set; }
-        public TimeSpan Playtime { get; private set; }
+        public DateTime LastLogin { get; set; }
+        public DateTime LastClose { get; set; }
+        public TimeSpan Playtime { get; set; }
 
         public AccountInformation()
         {

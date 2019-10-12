@@ -338,6 +338,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 Account.Settings.RelaunchesLeft--;
                 Launch();
             }
+            account.Settings.AccountInformation.SetLastClose();
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -630,6 +631,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             Status = ClientStatus.Running;
                             try { Focus(); } catch { }
                             try {if(account.Settings.WinConfig!=null)new Thread(Window_Init).Start();} catch { }
+                            account.Settings.AccountInformation.SetLastLogin();
                             break;
                     }
                 }
