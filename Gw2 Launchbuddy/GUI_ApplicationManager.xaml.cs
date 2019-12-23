@@ -28,7 +28,7 @@ namespace Gw2_Launchbuddy
             string loaded_windowsettings = Properties.Settings.Default.instancegui_windowsettings;
             double[] windowsettings;
             try{
-                windowsettings= Array.ConvertAll(loaded_windowsettings.Split(','), Double.Parse); ;
+                windowsettings= Array.ConvertAll(loaded_windowsettings.Split(';'), Double.Parse); ;
             }
             catch
             {
@@ -59,7 +59,7 @@ namespace Gw2_Launchbuddy
 
         private void SaveWindowSettings()
         {
-            Properties.Settings.Default.instancegui_windowsettings = String.Join(",",new string[] { Left.ToString(), Top.ToString(), MaxWidth.ToString(), MaxHeight.ToString() });
+            Properties.Settings.Default.instancegui_windowsettings = String.Join(";",new string[] { Left.ToString(), Top.ToString(), MaxWidth.ToString(), MaxHeight.ToString() });
             Properties.Settings.Default.instancegui_ispinned = ispinned;
             Properties.Settings.Default.Save();
         }

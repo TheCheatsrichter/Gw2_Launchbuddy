@@ -73,7 +73,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             bool test = GetWindowRect(new HandleRef(pro,pro.MainWindowHandle), out rct);
             if (!GetWindowRect(new HandleRef(this, pro.MainWindowHandle), out rct))
             {
-                MessageBox.Show("ERROR");
+                MessageBox.Show("ERROR Windowdimensions could not be read. Undefined windowstate. \nError: " + Marshal.GetLastWin32Error());
                 return null;
             }
             return rct;
