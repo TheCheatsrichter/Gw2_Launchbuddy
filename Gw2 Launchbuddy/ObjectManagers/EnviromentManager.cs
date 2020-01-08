@@ -139,8 +139,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
             if (!Gw2_Launchbuddy.Modifiers.LocalDatManager.CreateSymbolicLink(LBAppdataPath+"LinkTest", LBRightTestPath, LocalDatManager.SymbolicLink.Unprivileged))
             {
                 System.Diagnostics.Process.Start("https://docs.microsoft.com/en-us/windows/uwp/get-started/enable-your-device-for-development");
+                System.Diagnostics.Process.Start("ms-settings:developers");
                 File.Delete(LBRightTestPath);
-                MessageBox.Show("Launchbuddy requires additional rights to work properly. Please run Launchbuddy as Admin OR activate Windows Developer Options!");
+                MessageBox.Show("Launchbuddy requires additional rights to work properly. Please run Launchbuddy as Admin OR activate Windows Developer Mode!");
             }
 
             try

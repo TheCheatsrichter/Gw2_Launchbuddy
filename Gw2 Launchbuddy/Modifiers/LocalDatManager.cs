@@ -53,7 +53,8 @@ namespace Gw2_Launchbuddy.Modifiers
                 if (!CreateSymbolicLink( EnviromentManager.GwLocaldatPath, sourcefile, SymbolicLink.Unprivileged))
                 {
                     System.Diagnostics.Process.Start("https://docs.microsoft.com/en-us/windows/uwp/get-started/enable-your-device-for-development");
-                    throw new Exception("Could not create Symbolic link. Please activate Windows Developer Options or run Launchbuddy as Admin!");
+                    System.Diagnostics.Process.Start("ms-settings:developers");
+                    throw new Exception("Could not create Symbolic link. Please activate Windows Developer Mode or run Launchbuddy as Admin!");
                 }
             }
             else
