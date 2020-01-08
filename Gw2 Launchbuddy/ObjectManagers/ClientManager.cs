@@ -455,10 +455,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
             //Add Server Options
             if (ServerManager.SelectedAssetserver != null)
                 if(ServerManager.SelectedAssetserver.Enabled)
-                args += "-assetserver " + ServerManager.SelectedAssetserver.ToArgument;
+                args += "-assetsrv " + ServerManager.SelectedAssetserver.ToArgument;
             if (ServerManager.SelectedAuthserver != null)
                 if (ServerManager.SelectedAuthserver.Enabled)
-                    args += "-authserver " + ServerManager.SelectedAuthserver.ToArgument;
+                    args += "-authsrv " + ServerManager.SelectedAuthserver.ToArgument;
+            if(ServerManager.clientport!="")
+            {
+                args += "-clientport " + ServerManager.clientport;
+            }
 
             Process.StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath, Arguments=args };
         }
