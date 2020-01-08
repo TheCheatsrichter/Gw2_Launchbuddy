@@ -19,7 +19,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class EnviromentManager
     {
-        public static Version LBVersion = new Version("2.0.2");
+        public static Version LBVersion = new Version("2.1.0");
         public static LaunchOptions LaunchOptions;
 
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
@@ -27,6 +27,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static string LBIconsPath = LBAppdataPath + "Icons\\";
         public static string LBAccPath = LBAppdataPath + "Accs.xml";
         public static string LBPluginsPath = LBAppdataPath + "Plugins\\";
+        private static string LBRightTestPath = LBAppdataPath + "RightTest.txt";
 
         public static bool LBUseClientGUI = Properties.Settings.Default.useinstancegui;
         public static bool LBUseLoadingGUI = Properties.Settings.Default.useloadingui;
@@ -64,6 +65,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
             DirectorySetup();
             LoadGwClientInfo();
             CheckGwClientVersion();
+
+            //Rights Check :P
+            CheckApplicationRights();
 
             //Updater Network Protocol
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
@@ -126,6 +130,28 @@ namespace Gw2_Launchbuddy.ObjectManagers
         private static void UpdateAccounts()
         {
             AccountManager.UpdateAccountFiles();
+        }
+
+        public static void CheckApplicationRights()
+        {
+            if (File.Exists(LBRightTestPath)) File.Delete(LBRightTestPath);
+            File.WriteAllText(LBRightTestPath," ");
+            if (!Gw2_Launchbuddy.Modifiers.LocalDatManager.CreateSymbolicLink(LBAppdataPath+"LinkTest", LBRightTestPath, LocalDatManager.SymbolicLink.Unprivileged))
+            {
+                System.Diagnostics.Process.Start("https://docs.microsoft.com/en-us/windows/uwp/get-started/enable-your-device-for-development");
+                File.Delete(LBRightTestPath);
+                MessageBox.Show("Launchbuddy requires additional rights to work properly. Please run Launchbuddy as Admin OR activate Windows Developer Options!");
+            }
+
+            try
+            {
+                File.Delete(LBAppdataPath + "LinkTest");
+                File.Delete(LBRightTestPath);
+            }
+            catch
+            {
+
+            }
         }
 
         private static void DirectorySetup()

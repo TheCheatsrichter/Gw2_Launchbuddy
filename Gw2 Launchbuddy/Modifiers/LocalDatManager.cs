@@ -37,21 +37,23 @@ namespace Gw2_Launchbuddy.Modifiers
         }
 
         [DllImport("kernel32.dll")]
-        static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, SymbolicLink dwFlags);
+        public static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, SymbolicLink dwFlags);
 
-        private enum SymbolicLink
+        public enum SymbolicLink
         {
             File = 0x0,
-            Directory = 0x1
+            Directory = 0x1,
+            Unprivileged = 0x2
         }
 
         private static void CreateSymbolLink(string sourcefile)
         {
             if (File.Exists(sourcefile) && !File.Exists(EnviromentManager.GwLocaldatPath))
             {
-                if (!CreateSymbolicLink( EnviromentManager.GwLocaldatPath, sourcefile, 0x0))
+                if (!CreateSymbolicLink( EnviromentManager.GwLocaldatPath, sourcefile, SymbolicLink.Unprivileged))
                 {
-                    throw new Exception("Could not create Symbolic link. Not running as Admin?");
+                    System.Diagnostics.Process.Start("https://docs.microsoft.com/en-us/windows/uwp/get-started/enable-your-device-for-development");
+                    throw new Exception("Could not create Symbolic link. Please activate Windows Developer Options or run Launchbuddy as Admin!");
                 }
             }
             else
