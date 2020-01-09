@@ -48,19 +48,27 @@ namespace Gw2_Launchbuddy.Modifiers
 
         private static void CreateSymbolLink(string sourcefile)
         {
-            if (File.Exists(sourcefile) && !File.Exists(EnviromentManager.GwLocaldatPath))
+            try
             {
-                if (!CreateSymbolicLink( EnviromentManager.GwLocaldatPath, sourcefile, SymbolicLink.Unprivileged))
+                if (File.Exists(sourcefile) && !File.Exists(EnviromentManager.GwLocaldatPath))
                 {
-                    System.Diagnostics.Process.Start("https://docs.microsoft.com/en-us/windows/uwp/get-started/enable-your-device-for-development");
-                    System.Diagnostics.Process.Start("ms-settings:developers");
-                    throw new Exception("Could not create Symbolic link. Please activate Windows Developer Mode or run Launchbuddy as Admin!");
+                    if (!CreateSymbolicLink(EnviromentManager.GwLocaldatPath, sourcefile, SymbolicLink.Unprivileged))
+                    {
+                        System.Diagnostics.Process.Start("https://docs.microsoft.com/en-us/windows/uwp/get-started/enable-your-device-for-development");
+                        System.Diagnostics.Process.Start("ms-settings:developers");
+                        throw new Exception("Could not create Symbolic link. Please activate Windows Developer Mode or run Launchbuddy as Admin!");
+                    }
+                }
+                else
+                {
+                    throw new Exception("Provided Local.dat file does not exist or Linkfile is already created.");
                 }
             }
-            else
+            catch(Exception e)
             {
-                throw new Exception("Provided Local.dat file does not exist or Linkfile is already created.");
+                throw new Exception("Could not create Symbolic Local dat link.\n" +e.Message,e);
             }
+
         }
 
         private static bool IsSymbolic(string path)
@@ -103,8 +111,22 @@ namespace Gw2_Launchbuddy.Modifiers
                 //Create Backup of Local dat
                 if (!IsSymbolic(EnviromentManager.GwLocaldatPath))
                 {
-                    if (File.Exists(EnviromentManager.GwLocaldatBakPath)) File.Delete(EnviromentManager.GwLocaldatBakPath);
-                    File.Copy(EnviromentManager.GwLocaldatPath, EnviromentManager.GwLocaldatBakPath);
+                    try
+                    {
+                        if (File.Exists(EnviromentManager.GwLocaldatBakPath)) File.Delete(EnviromentManager.GwLocaldatBakPath);
+                    }catch(Exception e)
+                    {
+                        throw new Exception("Could not delete Bakup Local.dat.\n" + e.Message,e);
+                    }
+                    
+                    try
+                    {
+                        File.Copy(EnviromentManager.GwLocaldatPath, EnviromentManager.GwLocaldatBakPath);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception("Could not create Bakup Local.dat.\n" + e.Message, e);
+                    }
                     WaitForFileAccess();
                 }
                 //Delete Local.dat
@@ -119,7 +141,7 @@ namespace Gw2_Launchbuddy.Modifiers
             catch (Exception e)
             {
                 Repair();
-                throw new Exception("An error occured while swaping the Login file." + e.Message);
+                throw new Exception("An error occured while swaping the Login file. Pleas make sure that all Gameclients were launched with Launchbuddy!" + e.Message,e);
             }
 
         }
@@ -135,7 +157,7 @@ namespace Gw2_Launchbuddy.Modifiers
 
                     using (Stream stream = new FileStream(EnviromentManager.GwLocaldatPath, FileMode.Open))
                     {
-                        // File/Stream manipulating code here
+                        //stream.Close();
                         break;
                     }
                 }
@@ -147,7 +169,7 @@ namespace Gw2_Launchbuddy.Modifiers
                 Thread.Sleep(100);
             }
 
-            if (i == 100) throw new Exception("Could not acces Localdat file. Make sure no other Gw2 instance is running.");
+            if (i == 100) throw new Exception("Could not access Localdat file. Make sure no other Gw2 instance is running.");
         }
 
         public static void ToDefault()
@@ -166,11 +188,19 @@ namespace Gw2_Launchbuddy.Modifiers
 
         private static void Repair()
         {
-            if (!File.Exists(EnviromentManager.GwLocaldatPath) && File.Exists(EnviromentManager.GwLocaldatBakPath))
+            try
             {
-                File.Move(EnviromentManager.GwLocaldatBakPath, EnviromentManager.GwLocaldatPath);
+                if (!File.Exists(EnviromentManager.GwLocaldatPath) && File.Exists(EnviromentManager.GwLocaldatBakPath))
+                {
+                    File.Move(EnviromentManager.GwLocaldatBakPath, EnviromentManager.GwLocaldatPath);
+                }
+                if (File.Exists(EnviromentManager.GwLocaldatBakPath)) File.Delete(EnviromentManager.GwLocaldatBakPath);
             }
-            if (File.Exists(EnviromentManager.GwLocaldatBakPath)) File.Delete(EnviromentManager.GwLocaldatBakPath);
+            catch
+            {
+                
+            }
+
         }
 
         public static void UpdateLocalDat(LocalDatFile file)
