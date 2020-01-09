@@ -238,7 +238,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy V2.1" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy V2.1.1" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
@@ -1183,9 +1183,13 @@
 
                         </Grid>
                         <Separator Margin="-3,15,0,10"/>
-                        <Label Content="Bug Report:" Style="{StaticResource H2}"></Label>
-
-                        <Button x:Name="bt_bugreport" Content="Report a Bug"  Click="bt_bugreport_Click" Height="30" MaxWidth="100" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                        <StackPanel>
+                            <Label Content="Bug Report:" Style="{StaticResource H2}"></Label>
+                            <Button x:Name="bt_bugreport" Content="Report a Bug"  Click="bt_bugreport_Click" Height="30" MaxWidth="250" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                            <Label Content="Settings:" Style="{StaticResource H2}"></Label>
+                            <Button x:Name="bt_resetpropertysettings" Content="Reset ALL LB Settings"  Height="30" MaxWidth="250" HorizontalAlignment="Left" Margin="10,0,0,0" Click="Bt_resetpropertysettings_Click"/>
+                            <Button x:Name="bt_resetinstanceguisettings" Content="Reset Game Instance Manager Settings"  Height="30" MaxWidth="250" HorizontalAlignment="Left" Margin="10,0,0,0" Click="Bt_resetinstanceguisettings_Click"/>
+                        </StackPanel>
                     </StackPanel>
                 </TabItem>
                 <TabItem Visibility="Hidden" Height="10"/>

@@ -85,7 +85,6 @@ namespace Gw2_Launchbuddy
         public void Init()
         {
 #if !DEBUG
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionReport);
 
             //LB statistics
             Properties.Settings.Default.counter_launches += 1;
@@ -179,12 +178,6 @@ namespace Gw2_Launchbuddy
                 lv_lbversions.ItemsSource = VersionSwitcher.Releaselist;
                 bt_downloadrelease.Content = "Download";
             }));
-        }
-
-        private static void UnhandledExceptionReport(object sender, UnhandledExceptionEventArgs args)
-        {
-            Exception e = (Exception)args.ExceptionObject;
-            CrashReporter.ReportCrashToAll(e);
         }
 
         private void slideshow_diashow(string imagespath)
@@ -1660,6 +1653,19 @@ namespace Gw2_Launchbuddy
         private void cb_autoupdateplugins_Click(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.Save();
+        }
+
+        private void Bt_resetpropertysettings_Click(object sender, RoutedEventArgs e)
+        {
+            EnviromentManager.ResetPropertySettings();
+        }
+
+        private void Bt_resetinstanceguisettings_Click(object sender, RoutedEventArgs e)
+        {
+            if(EnviromentManager.LBInstanceGUI !=null)
+            {
+                EnviromentManager.LBInstanceGUI.ResetWindowSettings();
+            }
         }
 
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)

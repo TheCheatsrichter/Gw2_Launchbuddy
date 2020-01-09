@@ -16,40 +16,64 @@ namespace Gw2_Launchbuddy
     public partial class GUI_ApplicationManager : Window
     {
 
-        (double,double) drag_diff = (0,0);
+        double drag_diff_x = 0, drag_diff_y = 0;
         bool ispinned = Properties.Settings.Default.instancegui_ispinned;
-
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
 
         public GUI_ApplicationManager()
         {
             InitializeComponent();
             string loaded_windowsettings = Properties.Settings.Default.instancegui_windowsettings;
-            double[] windowsettings;
-            try{
-                windowsettings= Array.ConvertAll(loaded_windowsettings.Split(';'), Double.Parse); ;
-            }
-            catch
+            double[] windowsettings = { 0, 0, 160, 300 };
+            try
             {
-                windowsettings = new double[] { 0, 0, myWindow.Width, myWindow.Height };
-                Properties.Settings.Default.instancegui_windowsettings = $"0,0,{myWindow.Width},{myWindow.Height}";
-                Properties.Settings.Default.Save();
+                windowsettings = Array.ConvertAll(loaded_windowsettings.Split(';'), Double.Parse);
             }
-            
-            if (Enumerable.SequenceEqual(windowsettings, new double[]{0,0,0,0}))
+            catch (Exception e)
             {
-                Properties.Settings.Default.instancegui_windowsettings = "0, 0, 160, 300";
-                Properties.Settings.Default.Save();
+                windowsettings = new double[] { 0, 0, 160, 300 };
+                ResetWindowSettings();
             }
-            Left = windowsettings[0];
-            Top = windowsettings[1];
-            MaxWidth = windowsettings[2];
-            MaxHeight = windowsettings[3];
-            Width = MaxWidth;
-            Height = MaxHeight;
+
+            try
+            {
+                if (Enumerable.SequenceEqual(windowsettings, new double[] { 0, 0, 0, 0 }))
+                {
+                    ResetWindowSettings();
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("An error by defaulting GUI Instance dimension occured. If this is not the first time please report this bug under the Settings Tab.\n" +e.Message);
+            }
+
+            try
+            {
+                Left = windowsettings[0];
+                Top = windowsettings[1];
+                MaxWidth = windowsettings[2];
+                MaxHeight = windowsettings[3];
+                Width = MaxWidth;
+                Height = MaxHeight;
+            }
+            catch(Exception e)
+            {
+                Left = 0;
+                Top = 0;
+                MaxWidth = 160;
+                MaxHeight = 300;
+                Width = MaxWidth;
+                Height = MaxHeight;
+                ResetWindowSettings();
+                MessageBox.Show("Could not set Instange Manager Postion and Size. Reverting back to defaults.\n" + e.Message);
+            }
 
             UpdateUIButtons();
+        }
+
+        public void ResetWindowSettings()
+        {
+            Properties.Settings.Default.instancegui_windowsettings = "0;0;160;300";
+            Properties.Settings.Default.Save();
         }
 
         private void bt_close_Click(object sender, RoutedEventArgs e)
@@ -59,7 +83,7 @@ namespace Gw2_Launchbuddy
 
         private void SaveWindowSettings()
         {
-            Properties.Settings.Default.instancegui_windowsettings = String.Join(";",new string[] { Left.ToString(), Top.ToString(), MaxWidth.ToString(), MaxHeight.ToString() });
+            Properties.Settings.Default.instancegui_windowsettings = String.Join(";", new string[] { Left.ToString(), Top.ToString(), MaxWidth.ToString(), MaxHeight.ToString() });
             Properties.Settings.Default.instancegui_ispinned = ispinned;
             Properties.Settings.Default.Save();
         }
@@ -72,8 +96,8 @@ namespace Gw2_Launchbuddy
 
         private void lv_gfx_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var client=lv_instances.SelectedItem as Client;
-            if(client!=null)client.Focus();
+            var client = lv_instances.SelectedItem as Client;
+            if (client != null) client.Focus();
         }
 
         private void bt_closeinstance_Click(object sender, RoutedEventArgs e)
@@ -119,24 +143,24 @@ namespace Gw2_Launchbuddy
         {
             if (ActualWidth > MinWidth)
             {
-                MaxWidth += (e.HorizontalChange-drag_diff.Item1);
+                MaxWidth += (e.HorizontalChange - drag_diff_x);
                 Width = MaxWidth;
             }
             else
             {
-                MaxWidth = MinWidth+4;
+                MaxWidth = MinWidth + 4;
                 Width = MaxWidth;
                 (sender as Thumb).ReleaseMouseCapture();
             }
 
-            if (ActualHeight> MinHeight)
+            if (ActualHeight > MinHeight)
             {
-                MaxHeight += (e.VerticalChange-drag_diff.Item2);
+                MaxHeight += (e.VerticalChange - drag_diff_y);
                 Height = MaxHeight;
             }
             else
             {
-                MaxHeight = MinHeight+4;
+                MaxHeight = MinHeight + 4;
                 Height = MaxHeight;
                 (sender as Thumb).ReleaseMouseCapture();
             }
@@ -149,7 +173,7 @@ namespace Gw2_Launchbuddy
 
         private void myWindow_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            if(!ispinned) BeginStoryboard((Storyboard)Resources["anim_show"]);
+            if (!ispinned) BeginStoryboard((Storyboard)Resources["anim_show"]);
         }
 
         private void myWindow_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
@@ -162,7 +186,8 @@ namespace Gw2_Launchbuddy
             if (row_settings.Height.Value == 0)
             {
                 row_settings.Height = new GridLength(150);
-            } else
+            }
+            else
             {
                 row_settings.Height = new GridLength(0);
             }
@@ -171,13 +196,20 @@ namespace Gw2_Launchbuddy
 
         private void UpdateUIButtons()
         {
-            if (ispinned)
+            try
             {
-                bt_pin.OpacityMask = new ImageBrush(new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/pinned.png")));
+                if (ispinned)
+                {
+                    bt_pin.OpacityMask = new ImageBrush(new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/pinned.png")));
+                }
+                else
+                {
+                    bt_pin.OpacityMask = new ImageBrush(new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/pin.png")));
+                }
             }
-            else
+            catch
             {
-                bt_pin.OpacityMask = new ImageBrush(new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/pin.png")));
+                MessageBox.Show("ERROR: GUI Instance Manager pinned.png could not be loaded");
             }
         }
     }

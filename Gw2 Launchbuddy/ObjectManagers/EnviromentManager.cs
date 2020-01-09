@@ -19,7 +19,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class EnviromentManager
     {
-        public static Version LBVersion = new Version("2.1.0");
+        public static Version LBVersion = new Version("2.1.1");
         public static LaunchOptions LaunchOptions;
 
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
@@ -32,7 +32,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static bool LBUseClientGUI = Properties.Settings.Default.useinstancegui;
         public static bool LBUseLoadingGUI = Properties.Settings.Default.useloadingui;
 
-        public static GUI_ApplicationManager LBInstanceGUI = new GUI_ApplicationManager();
+        public static GUI_ApplicationManager LBInstanceGUI;
         public static LoadingScreen LBLoadingGUI = new LoadingScreen();
 
         public static string GwAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Guild Wars 2\";
@@ -61,6 +61,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void Init()
         {
+            LBInstanceGUI = new GUI_ApplicationManager();
+
             //Path Setup
             DirectorySetup();
             LoadGwClientInfo();
@@ -172,6 +174,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     }
                 }
             }
+        }
+
+        public static void ResetPropertySettings()
+        {
+            Properties.Settings.Default.Reset();
+            Properties.Settings.Default.Save();
         }
 
 

@@ -27,6 +27,11 @@ namespace Gw2_Launchbuddy
 
         public static void RunParsed(LaunchOptions options)
         {
+            //CrashReporter
+#if !DEBUG
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionReport);
+#endif
+
             EnviromentManager.Init();
 
             EnviromentManager.LaunchOptions = options;
@@ -37,6 +42,12 @@ namespace Gw2_Launchbuddy
                 app.InitializeComponent();
                 app.Run();
             }
+        }
+
+        private static void UnhandledExceptionReport(object sender, UnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception)args.ExceptionObject;
+            CrashReporter.ReportCrashToAll(e);
         }
     }
 }
