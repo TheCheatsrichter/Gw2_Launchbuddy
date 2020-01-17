@@ -9,7 +9,7 @@ using System.Windows;
 using System.Xml;
 using System.Net;
 using System.Reflection;
-using CommandLine;
+//using CommandLine;
 using Gw2_Launchbuddy.Modifiers;
 using System.Threading;
 
@@ -19,8 +19,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class EnviromentManager
     {
-        public static Version LBVersion = new Version("2.1.1");
-        public static LaunchOptions LaunchOptions;
+        public static Version LBVersion = new Version("2.1.2");
+        //public static LaunchOptions LaunchOptions;
 
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
         public static string LBActiveClientsPath = LBAppdataPath + "lbac.txt";
@@ -312,7 +312,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
     }
-
+    /*
     public class LaunchOptions
     {
         [Option('q', "silent", HelpText = "Run Launchbuddy silently.")]
@@ -336,6 +336,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         [Option("delaymutex", HelpText = "Delay in milliseconds between mutex close attempts. Higher values increase the time between retries. (Up to 9 retries will be attempted)", Hidden = true)]
         public int? Delay { get; set; }
     }
+    */
 
     #region Plugin
 
