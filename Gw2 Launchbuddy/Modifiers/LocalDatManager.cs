@@ -169,7 +169,7 @@ namespace Gw2_Launchbuddy.Modifiers
                     //check here why it failed and ask user to retry if the file is in use.
                 }
                 i++;
-                Thread.Sleep(100);
+                Thread.Sleep(50);
             }
 
             if (i == 100) throw new Exception("Could not access Localdat file. Make sure no other Gw2 instance is running.");
@@ -230,8 +230,6 @@ namespace Gw2_Launchbuddy.Modifiers
                 Action waitforlock = () => WaitForLoginfileRelease(file);
                 Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to save the updated loginfile.", waitforlock);
 
-                Thread.Sleep(100);
-
                 if (oldhash == file.MD5HASH)
                 {
                     MessageBox.Show($"INFO: Loginfile for {file.Name} did not change between the updates. If this error persist pls reenter Login data.");
@@ -268,10 +266,10 @@ namespace Gw2_Launchbuddy.Modifiers
         private static void WaitForLoginfileRelease(LocalDatFile file)
         {
             int i = 0;
-            while (LoginFileIsLocked(file) && i < 20)
+            while (LoginFileIsLocked(file) && i < 50)
             {
                 i++;
-                Thread.Sleep(250);
+                Thread.Sleep(50);
 #if DEBUG
                 Console.WriteLine("WaitForLoginfileRelease Try: " + i.ToString());
 #endif

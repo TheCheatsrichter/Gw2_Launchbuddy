@@ -170,7 +170,7 @@ namespace Gw2_Launchbuddy
 
            try
             {
-                if (!File.Exists(path)) File.Create(path);
+                if (!File.Exists(path)) File.Create(path).Close();
                 long crashlogs_size = new FileInfo(path).Length / 1000000;
 
                 if (crashlogs_size > 10)
