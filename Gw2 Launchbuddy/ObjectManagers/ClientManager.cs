@@ -459,7 +459,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             if (ServerManager.SelectedAuthserver != null)
                 if (ServerManager.SelectedAuthserver.Enabled)
                     args += "-authsrv " + ServerManager.SelectedAuthserver.ToArgument;
-            if(ServerManager.clientport!="")
+            if(ServerManager.clientport!=null)
             {
                 args += "-clientport " + ServerManager.clientport;
             }
@@ -469,7 +469,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private void SetProcessPriority()
         {
-            if (Account.Settings.ProcessPriority != null)
+            if (Account.Settings.ProcessPriority != ProcessPriorityClass.Normal)
             {
                 try
                 {
