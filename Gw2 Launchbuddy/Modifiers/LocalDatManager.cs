@@ -1,4 +1,5 @@
-﻿using Gw2_Launchbuddy.ObjectManagers;
+﻿
+using Gw2_Launchbuddy.ObjectManagers;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -39,6 +40,7 @@ namespace Gw2_Launchbuddy.Modifiers
         [DllImport("kernel32.dll")]
         public static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, SymbolicLink dwFlags);
 
+        [Flags]
         public enum SymbolicLink
         {
             File = 0x0,
@@ -52,21 +54,30 @@ namespace Gw2_Launchbuddy.Modifiers
             {
                 if (File.Exists(sourcefile) && !File.Exists(EnviromentManager.GwLocaldatPath))
                 {
-                    if (!CreateSymbolicLink(EnviromentManager.GwLocaldatPath, sourcefile, SymbolicLink.Unprivileged))
+                    if(System.Environment.OSVersion.Version.Major>=10)
                     {
-                        System.Diagnostics.Process.Start("https://docs.microsoft.com/en-us/windows/uwp/get-started/enable-your-device-for-development");
-                        System.Diagnostics.Process.Start("ms-settings:developers");
-                        throw new Exception("Could not create Symbolic link. Please activate Windows Developer Mode or run Launchbuddy as Admin!");
+                        if (!CreateSymbolicLink(EnviromentManager.GwLocaldatPath, sourcefile, SymbolicLink.Unprivileged | SymbolicLink.File))
+                        {
+                            throw new Exception("Could not create Symbolic link. Please activate Windows Developer Mode or run Launchbuddy as Admin!");
+                        }
+                    }else
+                    {
+                        if (!CreateSymbolicLink(EnviromentManager.GwLocaldatPath, sourcefile, SymbolicLink.File))
+                        {
+                            throw new Exception("Could not create Symbolic link. Please run Launchbuddy as Admin!");
+                        }
                     }
+
                 }
                 else
                 {
+                    Repair();
                     throw new Exception("Provided Local.dat file does not exist or Linkfile is already created.");
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                throw new Exception("Could not create Symbolic Local dat link.\n" +e.Message,e);
+                throw new Exception("Could not create Symbolic Local dat link.\n" + e.Message, e);
             }
 
         }
@@ -80,7 +91,7 @@ namespace Gw2_Launchbuddy.Modifiers
         public static void CleanUp()
         {
             ObservableCollection<LocalDatFile> tmp_datfiles = new ObservableCollection<LocalDatFile>();
-            foreach(Account acc in AccountManager.Accounts)
+            foreach (Account acc in AccountManager.Accounts)
             {
                 tmp_datfiles.Add(acc.Settings.Loginfile);
             }
@@ -99,57 +110,49 @@ namespace Gw2_Launchbuddy.Modifiers
 
         public static void Apply(LocalDatFile file)
         {
-            try
+            Repair();
+
+            //Is Valid?
+            if (!file.Valid) MessageBox.Show("Invalid Login file " + file.Name + " please recreate this file in the account Manager.");
+
+            WaitForFileAccess();
+
+            //Create Backup of Local dat
+            if (!IsSymbolic(EnviromentManager.GwLocaldatPath))
             {
-                Repair();
-
-                //Is Valid?
-                if (!file.Valid) MessageBox.Show("Invalid Login file " + file.Name + " please recreate this file in the account Manager.");
-
-                WaitForFileAccess();
-
-                //Create Backup of Local dat
-                if (!IsSymbolic(EnviromentManager.GwLocaldatPath))
+                try
                 {
-                    try
-                    {
-                        if (File.Exists(EnviromentManager.GwLocaldatBakPath)) File.Delete(EnviromentManager.GwLocaldatBakPath);
-                    }catch(Exception e)
-                    {
-                        throw new Exception("Could not delete Bakup Local.dat.\n" + e.Message,e);
-                    }
-                    
-                    try
-                    {
-                        File.Copy(EnviromentManager.GwLocaldatPath, EnviromentManager.GwLocaldatBakPath);
-                    }
-                    catch (Exception e)
-                    {
-                        throw new Exception("Could not create Bakup Local.dat.\n" + e.Message, e);
-                    }
-                    WaitForFileAccess();
+                    if (File.Exists(EnviromentManager.GwLocaldatBakPath)) File.Delete(EnviromentManager.GwLocaldatBakPath);
                 }
-                //Delete Local.dat
-                if (File.Exists(EnviromentManager.GwLocaldatPath)) File.Delete(EnviromentManager.GwLocaldatPath);
-                //Create Symlink Replacer
-                WaitForFileAccess();
-                CreateSymbolLink(file.Path);
-                //Remember last used file for ToDefault()
-                CurrentFile = file;
-            }
+                catch (Exception e)
+                {
+                    throw new Exception("Could not delete Bakup Local.dat.\n" + e.Message, e);
+                }
 
-            catch (Exception e)
-            {
-                Repair();
-                throw new Exception("An error occured while swaping the Login file. Pleas make sure that all Gameclients were launched with Launchbuddy!" + e.Message,e);
-            }
+                try
+                {
+                    File.Copy(EnviromentManager.GwLocaldatPath, EnviromentManager.GwLocaldatBakPath);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Could not create Bakup Local.dat.\n" + e.Message, e);
+                }
 
+            }
+            //Delete Local.dat
+            if (File.Exists(EnviromentManager.GwLocaldatPath)) File.Delete(EnviromentManager.GwLocaldatPath);
+            //Create Symlink Replacer
+            WaitForFileAccess();
+            WaitForLoginfileRelease(file);
+            CreateSymbolLink(file.Path);
+            //Remember last used file for ToDefault()
+            CurrentFile = file;
         }
 
         private static void WaitForFileAccess()
         {
             int i = 0;
-            while(i<=100)
+            while (i <= 100)
             {
                 try
                 {
@@ -157,7 +160,7 @@ namespace Gw2_Launchbuddy.Modifiers
 
                     using (Stream stream = new FileStream(EnviromentManager.GwLocaldatPath, FileMode.Open))
                     {
-                        //stream.Close();
+                        stream.Close();
                         break;
                     }
                 }
@@ -174,7 +177,8 @@ namespace Gw2_Launchbuddy.Modifiers
 
         public static void ToDefault()
         {
-            if (File.Exists(EnviromentManager.GwLocaldatPath)) File.Delete(EnviromentManager.GwLocaldatPath);
+            WaitForFileAccess();
+            if (File.Exists(EnviromentManager.GwLocaldatPath) && IsSymbolic(EnviromentManager.GwLocaldatPath)) File.Delete(EnviromentManager.GwLocaldatPath);
             if (File.Exists(EnviromentManager.GwLocaldatBakPath))
             {
                 File.Copy(EnviromentManager.GwLocaldatBakPath, EnviromentManager.GwLocaldatPath);
@@ -182,7 +186,15 @@ namespace Gw2_Launchbuddy.Modifiers
             }
             else
             {
-                File.Copy(CurrentFile.Path, EnviromentManager.GwLocaldatPath);
+                try
+                {
+                    File.Copy(CurrentFile.Path, EnviromentManager.GwLocaldatPath);
+                }
+                catch
+                {
+
+                }
+                
             }
         }
 
@@ -198,35 +210,39 @@ namespace Gw2_Launchbuddy.Modifiers
             }
             catch
             {
-                
+
             }
 
         }
 
-        public static void UpdateLocalDat(LocalDatFile file)
+        public static void UpdateLocalDat(LocalDatFile file, bool forced = false)
         {
-            try
+
+            if (!file.IsUpToDate || forced)
             {
-                if (!file.IsUpToDate)
+                string oldhash = file.MD5HASH;
+                Apply(file);
+                Process pro = new Process { StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath, Arguments= "-image" } }; // -image????
+                pro.Start();
+                pro.Refresh();
+                Action waitforlaunch = () => pro.WaitForExit();
+                Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating an outdated Loginfile", waitforlaunch);
+                Action waitforlock = () => WaitForLoginfileRelease(file);
+                Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to save the updated loginfile.", waitforlock);
+
+                Thread.Sleep(100);
+
+                if (oldhash == file.MD5HASH)
                 {
-                    Apply(file);
-                    Process pro = new Process { StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } };
-                    pro.Start();
-                    pro.WaitForInputIdle();
-                    Action waitforlaunch = () => ModuleReader.WaitForModule("WINNSI.DLL", pro);
-                    Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating an outdated Loginfile", waitforlaunch);
-                    pro.Kill();
-                    Action waitforlock = () => WaitForLoginfileRelease(file);
-                    Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to save the updated loginfile.", waitforlock);
-                    WaitForFileAccess();
-                    ToDefault();
-                    file.gw2build = Api.ClientBuild;
+                    MessageBox.Show($"INFO: Loginfile for {file.Name} did not change between the updates. If this error persist pls reenter Login data.");
                 }
+
+#if !DEBUG
+                file.gw2build = Api.ClientBuild;
+#endif
+                ToDefault();
             }
-            catch(Exception e)
-            {
-                throw new Exception("An error occured when Updating the Login file. " +e.Message);
-            }
+
         }
 
         private static bool LoginFileIsLocked(LocalDatFile file)
@@ -234,7 +250,8 @@ namespace Gw2_Launchbuddy.Modifiers
             FileStream stream = null;
             try
             {
-                stream = File.Open(file.Path,FileMode.Open, FileAccess.Read, FileShare.None);
+                stream = File.Open(file.Path, FileMode.Open, FileAccess.ReadWrite);
+                stream.Close();
             }
             catch (IOException)
             {
@@ -251,14 +268,17 @@ namespace Gw2_Launchbuddy.Modifiers
         private static void WaitForLoginfileRelease(LocalDatFile file)
         {
             int i = 0;
-            while (LoginFileIsLocked(file)&& i < 5)
+            while (LoginFileIsLocked(file) && i < 20)
             {
                 i++;
-                Thread.Sleep(1000);
+                Thread.Sleep(250);
+#if DEBUG
+                Console.WriteLine("WaitForLoginfileRelease Try: " + i.ToString());
+#endif
             }
         }
 
-        public static LocalDatFile CreateNewFileAutomated(string filename,string email,string passwd)
+        public static LocalDatFile CreateNewFileAutomated(string filename, string email, string passwd)
         {
             LocalDatFile datfile = new LocalDatFile();
 
@@ -272,7 +292,7 @@ namespace Gw2_Launchbuddy.Modifiers
             Helpers.BlockerInfo.Run("Loginfile Creation", "LB is recreating your loginfile", blockefunc);
             if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with caution.");
             Thread.Sleep(100);
-            Loginfiller.Login(email,passwd,pro,true);
+            Loginfiller.Login(email, passwd, pro, true);
             Thread.Sleep(250);
 
             blockefunc = () => ModuleReader.WaitForModule("DPAPI.dll", pro, null);
@@ -325,11 +345,11 @@ namespace Gw2_Launchbuddy.Modifiers
 
             Process pro = new Process { StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath) };
             pro.Start();
-            Action blockefunc = () => ModuleReader.WaitForModule("DPAPI.dll", pro,null);
-            Helpers.BlockerInfo.Run("Loginfile Creation","Please check remember email/password and press the login and play button. This window will be closed automatically on success.", blockefunc);
+            Action blockefunc = () => ModuleReader.WaitForModule("DPAPI.dll", pro, null);
+            Helpers.BlockerInfo.Run("Loginfile Creation", "Please check remember email/password and press the login and play button. This window will be closed automatically on success.", blockefunc);
             if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with caution.");
             Thread.Sleep(100);
-          
+
             int ct = 0;
             bool exists = true;
             while (exists && ct < 100)
@@ -379,14 +399,15 @@ namespace Gw2_Launchbuddy.Modifiers
         public bool IsUpToDate { get { return Gw2Build == EnviromentManager.GwClientVersion; } }
         public bool IsOutdated { get { return !(IsUpToDate && Valid); } }
         public bool Valid = false;
-        public string MD5HASH {  get { return CalculateMD5(Path); } }
+        public string MD5HASH { get { return CalculateMD5(Path); } }
 
         ~LocalDatFile()
         {
             try
             {
                 LocalDatManager.DataCollection.Remove(this);
-            }catch
+            }
+            catch
             {
 #if DEBUG
                 Console.WriteLine("Tried to remove non registered Local.dat File");

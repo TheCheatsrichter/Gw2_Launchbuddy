@@ -138,12 +138,23 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             if (File.Exists(LBRightTestPath)) File.Delete(LBRightTestPath);
             File.WriteAllText(LBRightTestPath," ");
-            if (!Gw2_Launchbuddy.Modifiers.LocalDatManager.CreateSymbolicLink(LBAppdataPath+"LinkTest", LBRightTestPath, LocalDatManager.SymbolicLink.Unprivileged))
+            if(System.Environment.OSVersion.Version.Major >=10)
             {
-                System.Diagnostics.Process.Start("https://docs.microsoft.com/en-us/windows/uwp/get-started/enable-your-device-for-development");
-                System.Diagnostics.Process.Start("ms-settings:developers");
-                File.Delete(LBRightTestPath);
-                MessageBox.Show("Launchbuddy requires additional rights to work properly. Please run Launchbuddy as Admin OR activate Windows Developer Mode!");
+                if (!Gw2_Launchbuddy.Modifiers.LocalDatManager.CreateSymbolicLink(LBAppdataPath + "LinkTest", LBRightTestPath, LocalDatManager.SymbolicLink.Unprivileged | LocalDatManager.SymbolicLink.File))
+                {
+                    System.Diagnostics.Process.Start("ms-settings:developers");
+                    System.Diagnostics.Process.Start("https://docs.microsoft.com/en-us/windows/uwp/get-started/enable-your-device-for-development");
+                    File.Delete(LBRightTestPath);
+                    MessageBox.Show("Launchbuddy requires additional rights to work properly. Please run Launchbuddy as Admin OR activate Windows Developer Mode!");
+                }
+            }else
+            {
+                if (!Gw2_Launchbuddy.Modifiers.LocalDatManager.CreateSymbolicLink(LBAppdataPath + "LinkTest", LBRightTestPath, LocalDatManager.SymbolicLink.File))
+                {
+                    File.Delete(LBRightTestPath);
+                    MessageBox.Show("Launchbuddy requires additional rights to work properly. Please run Launchbuddy as Admin!");
+                }
+
             }
 
             try
@@ -155,6 +166,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
 
             }
+
         }
 
         private static void DirectorySetup()
