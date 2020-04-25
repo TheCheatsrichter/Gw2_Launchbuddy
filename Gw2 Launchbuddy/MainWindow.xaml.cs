@@ -154,6 +154,7 @@ namespace Gw2_Launchbuddy
         {
             cb_lbupdatescheck.IsChecked = Properties.Settings.Default.notifylbupdate;
             cb_useinstancegui.IsChecked = Properties.Settings.Default.useinstancegui;
+            cb_autoupdatedatfiles.IsChecked = Properties.Settings.Default.autoupdatedatfiles;
         }
 
         private void DonatePopup()
