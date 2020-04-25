@@ -100,6 +100,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static void AfterUI_Inits()
         {
             UpdateAccounts();
+            if (Properties.Settings.Default.autoupdatedatfiles)
+            {
+                UpdateAccounts();
+            }
             PluginManager.LoadPlugins();
             PluginManager.InitPlugins();
             PluginManager.AutoUpdatePlugins();
