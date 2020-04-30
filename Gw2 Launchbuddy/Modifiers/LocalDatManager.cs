@@ -235,9 +235,7 @@ namespace Gw2_Launchbuddy.Modifiers
                     MessageBox.Show($"INFO: Loginfile for {file.Name} did not change between the updates. If this error persist pls reenter Login data.");
                 }
 
-#if !DEBUG
                 file.gw2build = Api.ClientBuild;
-#endif
                 ToDefault();
             }
 
