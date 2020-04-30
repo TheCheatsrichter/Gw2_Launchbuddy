@@ -154,6 +154,7 @@ namespace Gw2_Launchbuddy
         {
             cb_lbupdatescheck.IsChecked = Properties.Settings.Default.notifylbupdate;
             cb_useinstancegui.IsChecked = Properties.Settings.Default.useinstancegui;
+            cb_autoupdatedatfiles.IsChecked = Properties.Settings.Default.autoupdatedatfiles;
         }
 
         private void DonatePopup()
@@ -1214,6 +1215,12 @@ namespace Gw2_Launchbuddy
             Properties.Settings.Default.Save();
         }
 
+        private void cb_autoupdatedatfiles_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.autoupdatedatfiles = (bool)cb_autoupdatedatfiles.IsChecked;
+            Properties.Settings.Default.Save();
+        }
+
         private void bt_manualauthserver_Click(object sender, RoutedEventArgs e)
         {
             ServerManager.AddAuthServer(tb_manualauthserver.Text);
@@ -1538,6 +1545,11 @@ namespace Gw2_Launchbuddy
         private void cb_useinstancegui_Checked(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.useinstancegui = (bool)(sender as CheckBox).IsChecked;
+        }
+
+        private void cb_autoupdatedatfiles_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.autoupdatedatfiles = (bool)(sender as CheckBox).IsChecked;
         }
 
 

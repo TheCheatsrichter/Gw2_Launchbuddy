@@ -1154,6 +1154,8 @@
                         <Separator Margin="3"/>
                         <CheckBox x:Name="cb_lbupdatescheck" Content="Automatically Check for Launchbuddy Updates" Margin="5" Click="cb_lbupdatescheck_Click" ToolTip="Choose if Launchbuddy should automatically search for updates on startup."/>
                         <CheckBox x:Name="cb_useinstancegui" Content="Use Game Instance GUI" Margin="5" Click="cb_useinstancegui_Click" ToolTip="Choose if the instance manager should be launched whenever you launch gw2." Checked="cb_useinstancegui_Checked"/>
+                        <CheckBox x:Name="cb_autoupdatedatfiles" Content="Automatically update .dat files" Margin="5" Click="cb_autoupdatedatfiles_Click" ToolTip="Choose if your .dat files should be automatically updated at launch when a new patch has been released." Checked="cb_autoupdatedatfiles_Checked"/>
+
                         <Label Content="Launchbuddy Releases" Style="{StaticResource H2}"/>
                         <Grid Height="250" Margin="3">
                             <Grid.ColumnDefinitions>
