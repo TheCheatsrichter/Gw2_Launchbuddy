@@ -115,7 +115,7 @@ namespace Gw2_Launchbuddy.Modifiers
             //Is Valid?
             if (!file.Valid) MessageBox.Show("Invalid Login file " + file.Name + " please recreate this file in the account Manager.");
 
-            WaitForFileAccess();
+            //WaitForFileAccess();
 
             //Create Backup of Local dat
             if (!IsSymbolic(EnviromentManager.GwLocaldatPath))
@@ -142,7 +142,7 @@ namespace Gw2_Launchbuddy.Modifiers
             //Delete Local.dat
             if (File.Exists(EnviromentManager.GwLocaldatPath)) File.Delete(EnviromentManager.GwLocaldatPath);
             //Create Symlink Replacer
-            WaitForFileAccess();
+            //WaitForFileAccess();
             WaitForLoginfileRelease(file);
             CreateSymbolLink(file.Path);
             //Remember last used file for ToDefault()
@@ -177,7 +177,7 @@ namespace Gw2_Launchbuddy.Modifiers
 
         public static void ToDefault()
         {
-            WaitForFileAccess();
+            //WaitForFileAccess();
             if (File.Exists(EnviromentManager.GwLocaldatPath) && IsSymbolic(EnviromentManager.GwLocaldatPath)) File.Delete(EnviromentManager.GwLocaldatPath);
             if (File.Exists(EnviromentManager.GwLocaldatBakPath))
             {
