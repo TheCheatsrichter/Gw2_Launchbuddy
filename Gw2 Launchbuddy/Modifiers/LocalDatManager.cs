@@ -56,11 +56,17 @@ namespace Gw2_Launchbuddy.Modifiers
                 {
                     if(System.Environment.OSVersion.Version.Major>=10)
                     {
-                        if (!CreateSymbolicLink(EnviromentManager.GwLocaldatPath, sourcefile, SymbolicLink.Unprivileged | SymbolicLink.File))
+                        if(!CreateSymbolicLink(EnviromentManager.GwLocaldatPath, sourcefile, SymbolicLink.File))
                         {
-                            throw new Exception("Could not create Symbolic link. Please activate Windows Developer Mode or run Launchbuddy as Admin!");
+                            if (!CreateSymbolicLink(EnviromentManager.GwLocaldatPath, sourcefile, SymbolicLink.Unprivileged | SymbolicLink.File))
+                            {
+                                {
+                                    throw new Exception("Could not create Symbolic link. Please run Launchbuddy as Admin!");
+                                }
+                            }
                         }
-                    }else
+                    }
+                    else
                     {
                         if (!CreateSymbolicLink(EnviromentManager.GwLocaldatPath, sourcefile, SymbolicLink.File))
                         {
