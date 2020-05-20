@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using System.Diagnostics;
 using System.ComponentModel;
 using System.Threading;
+using PluginContracts.ObjectInterfaces;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -164,12 +165,27 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
                 HandlerClientStatusChanged += lbplugin.OnClientStatusChanged;
                 lbplugin.Accounts = AccountManager.IAccs;
+                lbplugin.Environment = new EnvironmentInfo
+                {
+                    LB_PluginsPath = EnviromentManager.LBPluginsPath,
+                    GwClient_Version = EnviromentManager.GwClientVersion,
+                    GwClient_UpToDate = EnviromentManager.GwClientUpToDate ?? false,
+                    LB_LocaldatsPath = EnviromentManager.LBLocaldatsPath
+                };
                 lbplugin.Init();
 
                 if(lbplugin.UIContent != null)EnviromentManager.MainWin.AddTabPlugin(lbplugin);
             }
         }
 
+        private class EnvironmentInfo : IEnvironment
+        {
+            public string LB_PluginsPath { get; set; }
+            public string GwClient_Version { get; set; }
+            public bool GwClient_UpToDate { get; set; }
+            public string LB_LocaldatsPath { get; set; }
+        }
+        
         public static void AddPluginWithDialog()
         {
             Builders.FileDialog.DefaultExt(".dll")

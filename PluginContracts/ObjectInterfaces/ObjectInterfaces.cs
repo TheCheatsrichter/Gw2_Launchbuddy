@@ -38,7 +38,7 @@ namespace PluginContracts.ObjectInterfaces
         Crash = 0x01 << 7
     };
 
-    public interface IEnviroment
+    public interface IEnvironment
     {
         string LB_PluginsPath {get;}
         string GwClient_Version { get; set; }

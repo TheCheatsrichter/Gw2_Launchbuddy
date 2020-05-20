@@ -22,10 +22,10 @@ namespace LBPlugin
             Description = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla aliquam dapibus imperdiet. Aliquam erat volutpat. Nullam non dolor non odio commodo posuere. Vestibulum viverra ligula odio, quis tincidunt augue molestie ac. Fusce est ipsum, tristique vitae ipsum ultrices, dictum scelerisque risus. Aliquam feugiat erat non est interdum pulvinar. Donec id semper sapien. Proin consequat tortor vitae nunc tincidunt, vitae ullamcorper dui mollis. Morbi at laoreet magna. Sed varius sed tellus vel facilisis. Nam sagittis rhoncus est eget suscipit. Mauris sit amet bibendum diam."
         };
 
-        private IEnviroment enviroment;
+        private IEnvironment environment;
 
         public ObservableCollection<IAcc> Accounts { set; get; }
-        public IEnviroment Enviroment { set { Enviroment = value; } get { return enviroment; } }
+        public IEnvironment Environment { set { Environment = value; } get { return environment; } }
 
         //Your Plugin Handling
 
