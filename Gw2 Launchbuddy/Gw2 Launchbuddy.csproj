@@ -219,6 +219,7 @@
     <Compile Include="Modifiers\HandleManager.cs" />
     <Compile Include="ObjectManagers\EnviromentManager.cs" />
     <Compile Include="ObjectManagers\IconManager.cs" />
+    <Compile Include="ObjectManagers\Patreon.cs" />
     <Compile Include="ObjectManagers\PluginManager.cs" />
     <Compile Include="ObjectManagers\ServerManager.cs" />
     <Compile Include="ObjectManagers\WindowConfig.cs" />

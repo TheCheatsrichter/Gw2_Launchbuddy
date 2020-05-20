@@ -1680,6 +1680,16 @@ namespace Gw2_Launchbuddy
             }
         }
 
+        private void bt_patreon_Click(object sender, MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Process.Start("www.patreon.com/gw2launchbuddy");
+        }
+
+        private void bt_donate_Click(object sender, MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WKHYFSBMK6TQE&source=url");
+        }
+
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)
         {
             PluginManager.UpdatePlugin(((sender as Button).DataContext as Plugin_Wrapper).Plugin,true);

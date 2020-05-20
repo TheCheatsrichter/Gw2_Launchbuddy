@@ -17,6 +17,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_donate_Click(object sender, RoutedEventArgs e)
         {
+            /*
             string url = "";
 
             string business = "thecheatsrichter@gmx.at";  // your paypal email
@@ -32,6 +33,8 @@ namespace Gw2_Launchbuddy
                 "&bn=" + "PP%2dDonationsBF";
 
             System.Diagnostics.Process.Start(url);
+            */
+            System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WKHYFSBMK6TQE&source=url");
         }
 
         private void bt_patreon_Click(object sender, RoutedEventArgs e)

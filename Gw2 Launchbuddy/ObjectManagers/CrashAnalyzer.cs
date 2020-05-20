@@ -179,7 +179,7 @@ namespace Gw2_Launchbuddy
                     MessageBoxResult win = MessageBox.Show("Your crashlog file has an overall size of " + crashlogs_size+ " Mb! (est. " + Math.Round((crashlogs_size*1000/12.288),0) + " Crashlogs!)\nUsing crashlogs this big could decrease performance drastically!\n Should launchbuddy reduce its size?", "Crashlog File too big", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (win.ToString() == "Yes")
                     {
-                        string[] lines =File.ReadLines(path).Take(50000).ToArray();
+                        string[] lines =File.ReadLines(path).Take(5000).ToArray();
                         File.Delete(path);
                         File.WriteAllLines(path,lines);
                     }
@@ -217,6 +217,8 @@ namespace Gw2_Launchbuddy
             catch (Exception e)
             {
                 System.Windows.Forms.MessageBox.Show("Could not open Crashlog!\n"+ e.Message);
+                if(File.Exists(path))File.Delete(path);
+                File.Create(path).Close();
             }
         }
     }
