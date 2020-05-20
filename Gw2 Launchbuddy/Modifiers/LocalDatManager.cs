@@ -150,6 +150,8 @@ namespace Gw2_Launchbuddy.Modifiers
                     Process pro = new Process { StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } };
                     pro.Start();
                     pro.WaitForInputIdle();
+                    Thread.Sleep(500);
+                    pro.Refresh();
                     Action waitforlaunch = () => ModuleReader.WaitForModule("WINNSI.DLL", pro);
                     Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating an outdated Loginfile", waitforlaunch);
                     pro.Kill();
@@ -204,6 +206,8 @@ namespace Gw2_Launchbuddy.Modifiers
 
             Process pro = new Process { StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath) };
             pro.Start();
+            Thread.Sleep(500);
+            pro.Refresh();
             Action blockefunc = () => ModuleReader.WaitForModule("WINNSI.DLL", pro, null);
             Helpers.BlockerInfo.Run("Loginfile Creation", "LB is recreating your loginfile", blockefunc);
             if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with caution.");
@@ -261,6 +265,8 @@ namespace Gw2_Launchbuddy.Modifiers
 
             Process pro = new Process { StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath) };
             pro.Start();
+            Thread.Sleep(250);
+            pro.Refresh();
             Action blockefunc = () => ModuleReader.WaitForModule("DPAPI.dll", pro, null);
             Helpers.BlockerInfo.Run("Loginfile Creation", "Please check remember email/password and press the login and play button. This window will be closed automatically on success.", blockefunc);
             if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with caution.");

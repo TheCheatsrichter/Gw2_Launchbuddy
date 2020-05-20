@@ -18,6 +18,7 @@ namespace Gw2_Launchbuddy.Modifiers
 
         public static void Login(string email,string passwd,Process pro, bool clearfields = false)
         {
+            pro.Refresh();
             ModuleReader.WaitForModule("WINNSI.DLL",pro);
             //SetForegroundWindow(pro.MainWindowHandle);
             Thread.Sleep(1000);
