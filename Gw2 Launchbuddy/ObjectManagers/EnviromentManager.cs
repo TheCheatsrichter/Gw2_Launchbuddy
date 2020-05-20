@@ -152,6 +152,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void CheckApplicationRights()
         {
+            /*
             if (File.Exists(LBRightTestPath)) File.Delete(LBRightTestPath);
             File.WriteAllText(LBRightTestPath," ");
             if(System.Environment.OSVersion.Version.Major >=10)
@@ -182,6 +183,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
 
             }
+            */
 
         }
 
