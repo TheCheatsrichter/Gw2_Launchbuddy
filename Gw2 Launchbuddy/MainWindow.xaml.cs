@@ -669,6 +669,7 @@ namespace Gw2_Launchbuddy
             sview.SortDescriptions.Add(new SortDescription("Ping", ListSortDirection.Ascending));
         }
 
+        /*
         private void bt_donate_Click(object sender, RoutedEventArgs e)
         {
             string url = "";
@@ -692,6 +693,7 @@ namespace Gw2_Launchbuddy
         {
             System.Diagnostics.Process.Start(@"www.patreon.com/gw2launchbuddy");
         }
+        */
 
         private void bt_close_Click(object sender, RoutedEventArgs e)
         {
@@ -1629,6 +1631,16 @@ namespace Gw2_Launchbuddy
 
         }
 
+        private void bt_patreon_Click(object sender, MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Process.Start("www.patreon.com/gw2launchbuddy");
+        }
+
+        private void bt_donate_Click(object sender, MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WKHYFSBMK6TQE&source=url");
+        }
+
         #region Plugins
 
         public void AddTabPlugin(PluginContracts.ILBPlugin plugin)
@@ -1678,16 +1690,6 @@ namespace Gw2_Launchbuddy
             {
                 EnviromentManager.LBInstanceGUI.ResetWindowSettings();
             }
-        }
-
-        private void bt_patreon_Click(object sender, MouseButtonEventArgs e)
-        {
-            System.Diagnostics.Process.Start("www.patreon.com/gw2launchbuddy");
-        }
-
-        private void bt_donate_Click(object sender, MouseButtonEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WKHYFSBMK6TQE&source=url");
         }
 
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)
