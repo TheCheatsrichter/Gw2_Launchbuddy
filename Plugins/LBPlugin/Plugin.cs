@@ -25,7 +25,7 @@ namespace LBPlugin
         private IEnvironment environment;
 
         public ObservableCollection<IAcc> Accounts { set; get; }
-        public IEnvironment Environment { set { Environment = value; } get { return environment; } }
+        public IEnvironment Environment { set { environment = value; } get { return environment; } }
 
         //Your Plugin Handling
 

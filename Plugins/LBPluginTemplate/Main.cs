@@ -27,10 +27,10 @@ namespace LBPluginTemplate
 
         //General LB Data
         private ObservableCollection<IAcc> accs;
-        private IEnvironment enviroment;
+        private IEnvironment environment;
 
         public ObservableCollection<IAcc> Accounts { set { accs = value; } get { return accs; } }   //A collection of all Accounts in LB with various functions
-        public IEnvironment Environment { set { Environment = value; } get { return enviroment; } }    //Important LB folder,filepaths and client information
+        public IEnvironment Environment { set { environment = value; } get { return environment; } }    //Important LB folder,filepaths and client information
 
         //Your Plugin Handling
 
