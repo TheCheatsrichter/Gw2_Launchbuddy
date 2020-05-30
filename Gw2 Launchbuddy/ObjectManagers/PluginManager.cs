@@ -150,12 +150,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 return;
             }
 
-            if (!plugin.Init())
-            {
-                System.Windows.Forms.MessageBox.Show($"Could not initialize plugin {plugin.PluginInfo.Name}");
-                return;
-            }
-
             if (plugin is ILBPlugin)
             {
                 ILBPlugin lbplugin = plugin as ILBPlugin;

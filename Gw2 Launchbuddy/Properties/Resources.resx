@@ -190,9 +190,6 @@
   <data name="user" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\icons\user.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Update_Helper" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Update Helper.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="donate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\donate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -376,34 +373,7 @@
   <data name="pinned" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\icons\pinned.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CommandLine" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CommandLine.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="CrashReporter_NET" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CrashReporter.NET.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="NHotkey" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\NHotkey.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="NHotkey_Wpf" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\NHotkey.Wpf.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="PluginContracts" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PluginContracts.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Xceed_Wpf_AvalonDock" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Xceed.Wpf.AvalonDock.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Xceed_Wpf_AvalonDock_Themes_Aero" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Xceed.Wpf.AvalonDock.Themes.Aero.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Xceed_Wpf_AvalonDock_Themes_Metro" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Xceed.Wpf.AvalonDock.Themes.Metro.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Xceed_Wpf_AvalonDock_Themes_VS2010" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Xceed.Wpf.AvalonDock.Themes.VS2010.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Xceed_Wpf_Toolkit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Xceed.Wpf.Toolkit.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="Update_Helper" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Update Helper.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

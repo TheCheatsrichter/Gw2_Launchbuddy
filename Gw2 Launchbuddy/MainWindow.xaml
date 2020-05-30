@@ -238,7 +238,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy V2.1.5" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 2.2" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
@@ -389,6 +389,7 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
+
                     </DockPanel>
                 </TabItem>
 
@@ -526,6 +527,10 @@
                                             </StackPanel>
                                         </Expander.Header>
                                         <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="100*"/>
+                                                <RowDefinition Height="30"/>
+                                            </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="50*"/>
                                                 <ColumnDefinition Width="50*"/>
@@ -549,6 +554,9 @@
                                                 <Label x:Name="lab_descr" Content="Description:" Style="{StaticResource H3}"/>
                                                 <TextBlock x:Name="textblock_descr" Background="White" TextWrapping="Wrap" MinHeight="50"/>
                                             </StackPanel>
+                                            <!--StackPanel Grid.Row="1">
+                                                <CheckBox Content="Use Mumble Link (TACO)" VerticalAlignment="Center" FontSize="16" IsEnabled="False" FontWeight="Bold" HorizontalAlignment="Left" Grid.Row="4" Margin="0,4.36"/>
+                                            </-->
                                         </Grid>
                                     </Expander>
                                     <Expander ToolTip="Set up a custom Graphic Configuration for this account" Style="{StaticResource Bordered}">

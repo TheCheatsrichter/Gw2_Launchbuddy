@@ -411,16 +411,6 @@ namespace Gw2_Launchbuddy.Properties {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
-        /// </summary>
-        internal static byte[] CommandLine {
-            get {
-                object obj = ResourceManager.GetObject("CommandLine", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap copy {
@@ -437,16 +427,6 @@ namespace Gw2_Launchbuddy.Properties {
             get {
                 object obj = ResourceManager.GetObject("crashfix", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
-        /// </summary>
-        internal static byte[] CrashReporter_NET {
-            get {
-                object obj = ResourceManager.GetObject("CrashReporter_NET", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         
@@ -701,26 +681,6 @@ namespace Gw2_Launchbuddy.Properties {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
-        /// </summary>
-        internal static byte[] NHotkey {
-            get {
-                object obj = ResourceManager.GetObject("NHotkey", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
-        /// </summary>
-        internal static byte[] NHotkey_Wpf {
-            get {
-                object obj = ResourceManager.GetObject("NHotkey_Wpf", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap noimg {
@@ -817,16 +777,6 @@ namespace Gw2_Launchbuddy.Properties {
             get {
                 object obj = ResourceManager.GetObject("plugin", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
-        /// </summary>
-        internal static byte[] PluginContracts {
-            get {
-                object obj = ResourceManager.GetObject("PluginContracts", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         
@@ -967,56 +917,6 @@ namespace Gw2_Launchbuddy.Properties {
             get {
                 object obj = ResourceManager.GetObject("user", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
-        /// </summary>
-        internal static byte[] Xceed_Wpf_AvalonDock {
-            get {
-                object obj = ResourceManager.GetObject("Xceed_Wpf_AvalonDock", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
-        /// </summary>
-        internal static byte[] Xceed_Wpf_AvalonDock_Themes_Aero {
-            get {
-                object obj = ResourceManager.GetObject("Xceed_Wpf_AvalonDock_Themes_Aero", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
-        /// </summary>
-        internal static byte[] Xceed_Wpf_AvalonDock_Themes_Metro {
-            get {
-                object obj = ResourceManager.GetObject("Xceed_Wpf_AvalonDock_Themes_Metro", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
-        /// </summary>
-        internal static byte[] Xceed_Wpf_AvalonDock_Themes_VS2010 {
-            get {
-                object obj = ResourceManager.GetObject("Xceed_Wpf_AvalonDock_Themes_VS2010", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].
-        /// </summary>
-        internal static byte[] Xceed_Wpf_Toolkit {
-            get {
-                object obj = ResourceManager.GetObject("Xceed_Wpf_Toolkit", resourceCulture);
-                return ((byte[])(obj));
             }
         }
     }

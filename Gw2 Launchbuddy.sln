@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2015
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gw2 Launchbuddy", "Gw2 Launchbuddy\Gw2 Launchbuddy.csproj", "{DA3CD129-9A83-4254-AC82-274EDF63CB1A}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -24,6 +24,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{07186744-D472-4281-AE56-EA3E50616FC6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LBPluginTemplate", "Plugins\LBPluginTemplate\LBPluginTemplate.csproj", "{0381938E-E261-48C0-B098-716E9EAE4D02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LBTacoPlugin", "..\Gw2LBPluginTemplates\LBPluginTemplate\LBTacoPlugin.csproj", "{C923141C-95F9-4F83-B36F-87F5F7C2B385}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,6 +97,18 @@ Global
 		{0381938E-E261-48C0-B098-716E9EAE4D02}.Release|x64.Build.0 = Release|Any CPU
 		{0381938E-E261-48C0-B098-716E9EAE4D02}.Release|x86.ActiveCfg = Release|Any CPU
 		{0381938E-E261-48C0-B098-716E9EAE4D02}.Release|x86.Build.0 = Release|Any CPU
+		{C923141C-95F9-4F83-B36F-87F5F7C2B385}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C923141C-95F9-4F83-B36F-87F5F7C2B385}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C923141C-95F9-4F83-B36F-87F5F7C2B385}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C923141C-95F9-4F83-B36F-87F5F7C2B385}.Debug|x64.Build.0 = Debug|Any CPU
+		{C923141C-95F9-4F83-B36F-87F5F7C2B385}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C923141C-95F9-4F83-B36F-87F5F7C2B385}.Debug|x86.Build.0 = Debug|Any CPU
+		{C923141C-95F9-4F83-B36F-87F5F7C2B385}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C923141C-95F9-4F83-B36F-87F5F7C2B385}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C923141C-95F9-4F83-B36F-87F5F7C2B385}.Release|x64.ActiveCfg = Release|Any CPU
+		{C923141C-95F9-4F83-B36F-87F5F7C2B385}.Release|x64.Build.0 = Release|Any CPU
+		{C923141C-95F9-4F83-B36F-87F5F7C2B385}.Release|x86.ActiveCfg = Release|Any CPU
+		{C923141C-95F9-4F83-B36F-87F5F7C2B385}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,6 +117,7 @@ Global
 		{AA506F83-ED5F-4492-BCBD-43852ABE445C} = {32978191-907B-4139-92FD-A7ADA1B15256}
 		{276061EF-202D-4750-B7BF-52EA5FA55ED9} = {07186744-D472-4281-AE56-EA3E50616FC6}
 		{0381938E-E261-48C0-B098-716E9EAE4D02} = {07186744-D472-4281-AE56-EA3E50616FC6}
+		{C923141C-95F9-4F83-B36F-87F5F7C2B385} = {07186744-D472-4281-AE56-EA3E50616FC6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B3CD33ED-79D5-46F5-8AA8-F81376EE17C4}
