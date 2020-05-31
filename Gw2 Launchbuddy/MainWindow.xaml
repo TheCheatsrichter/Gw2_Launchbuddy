@@ -385,6 +385,7 @@
                                         <Image Height="32" Source="Resources/Icons/feature.png" Visibility="{Binding Path=Settings.HasAdvancedSettings, Converter={StaticResource BoolToVis}}" ToolTip="Uses Advanced Settings" DockPanel.Dock="Right"/>
                                         <Image Height="32" Source="Resources/Icons/account.png" Visibility="{Binding Path=Settings.HasLoginCredentials, Converter={StaticResource BoolToVis}}" ToolTip="Uses Autologin" DockPanel.Dock="Right"/>
                                         <Label Content="{Binding Path=Nickname}" BorderThickness="0" Margin="0" FontSize="18" FontWeight="Bold"/>
+                                        <Image Height="32" Source="Resources/Icons/taco_black.png" x:Name="bt_launchtaco" Visibility="{Binding Path=Settings.TacoValid, Converter={StaticResource BoolToVis}}" ToolTip="Add TacO" DockPanel.Dock="Right" MouseDown="bt_launchtaco_MouseDown"/>
                                     </DockPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
@@ -901,6 +902,29 @@
                             <Button x:Name="bt_RemAddon" Content="Remove" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_RemAddon_Click"/>
                         </StackPanel>
                     </Grid>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Image Height="20" Source="Resources/Icons/taco_black.png"/>
+                            <Label FontSize="10" Margin="0,-5,0,-7">TacO</Label>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel Margin="10">
+                        <Label Style="{StaticResource H1}" Content="Native Gw2 Taco Multiboxing by Launchbuddy"/>
+                        <Separator/>
+                        <Label Style="{StaticResource H1}" Content="Instructions:"/>
+                        <StackPanel Margin="10,0,0,0">
+                            <TextBlock Text="1. Set the path to your TacO.exe file in the settings area below." ></TextBlock>
+                            <TextBlock Text="2. Start your desired accounts from the Launchbuddy Home screen."></TextBlock>
+                            <TextBlock Text="3. You will now see a new TacO button on each account. Press the 'Add TacO' button to start TacO for the according account."></TextBlock>
+                        </StackPanel>
+                        <Label Style="{StaticResource H1}" Content="Settings:"/>
+                        <DockPanel >
+                            <Button x:Name="bt_settacopath" Content="Set TacO Path" Width="100" Height="30" Click="bt_settacopath_Click"/>
+                            <TextBox IsEnabled="False" MinWidth="450" x:Name="tb_tacopath"/>
+                        </DockPanel>
+                    </StackPanel>
                 </TabItem>
                 <!-- END DELETE ON 1.9 -->
                 <TabItem>

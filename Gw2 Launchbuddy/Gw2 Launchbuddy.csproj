@@ -210,6 +210,8 @@
     <Compile Include="Modifiers\Loginfiller.cs" />
     <Compile Include="Modifiers\ModuleReader.cs" />
     <Compile Include="ObjectManagers\Hotkeys.cs" />
+    <Compile Include="ObjectManagers\LBConfiguration.cs" />
+    <Compile Include="ObjectManagers\LBTacO.cs" />
     <Compile Include="ObjectManagers\MusicManager.cs" />
     <Compile Include="ObjectManagers\AccountManager.cs" />
     <Compile Include="ObjectManagers\AddOnManager.cs" />
@@ -455,6 +457,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Update Helper.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\taco_black.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">

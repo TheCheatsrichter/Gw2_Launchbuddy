@@ -28,7 +28,6 @@ namespace PluginContracts
     public interface ILBPlugin : IPlugin
     {
         TabItem UIContent { get; }
-
         ObservableCollection<IAcc> Accounts { get; set; }
         IEnvironment Environment { get; set; }
 

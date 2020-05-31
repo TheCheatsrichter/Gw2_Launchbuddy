@@ -106,7 +106,7 @@ namespace Gw2_Launchbuddy
             checkver.Start();*/
 
             LoadEnviromentUI();
-
+            TacoUISetup();
             cinema_setup();
 
             Mainwin_LoadSetup(); //do this after cinema setup!
@@ -121,6 +121,11 @@ namespace Gw2_Launchbuddy
                 checklbver.Start();
             }
 
+        }
+
+        private void TacoUISetup()
+        {
+            tb_tacopath.Text = LBTacO.TacoPath;
         }
 
         private void LoadEnviromentUI()
@@ -1643,11 +1648,11 @@ namespace Gw2_Launchbuddy
 
         #region Plugins
 
-        public void AddTabPlugin(PluginContracts.ILBPlugin plugin)
+        public void AddTabPlugin(TabItem UIContent)
         {
-            if(plugin.UIContent !=null)
+            if(UIContent !=null)
             {
-                tab_options.Items.Add(plugin.UIContent);
+                tab_options.Items.Add(UIContent);
             }
         }
 
@@ -1656,6 +1661,14 @@ namespace Gw2_Launchbuddy
             if (plugin.UIContent != null)
             {
                 tab_options.Items.Remove(plugin.UIContent);
+            }
+        }
+
+        public void AddHomePlugin(StackPanel UIContent)
+        {
+            if (UIContent != null)
+            {
+                
             }
         }
 
@@ -1690,6 +1703,18 @@ namespace Gw2_Launchbuddy
             {
                 EnviromentManager.LBInstanceGUI.ResetWindowSettings();
             }
+        }
+
+        private void bt_settacopath_Click(object sender, RoutedEventArgs e)
+        {
+            LBTacO.SetPath();
+            tb_tacopath.Text = LBTacO.TacoPath;
+        }
+
+        private void bt_launchtaco_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var acc = (sender as Image).DataContext as Account;
+            LBTacO.LaunchTacoInstance(acc);
         }
 
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)

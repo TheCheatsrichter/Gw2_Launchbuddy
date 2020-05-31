@@ -149,7 +149,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 System.Windows.Forms.MessageBox.Show($"{plugin.PluginInfo.Name} verifycation failed. Please reinstall/update this plugin.");
                 return;
             }
-
             if (plugin is ILBPlugin)
             {
                 ILBPlugin lbplugin = plugin as ILBPlugin;
@@ -168,7 +167,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 };
                 lbplugin.Init();
 
-                if(lbplugin.UIContent != null)EnviromentManager.MainWin.AddTabPlugin(lbplugin);
+                if(lbplugin.UIContent != null)EnviromentManager.MainWin.AddTabPlugin(lbplugin.UIContent);
             }
         }
 

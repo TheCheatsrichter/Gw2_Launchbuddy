@@ -121,6 +121,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
             PluginManager.InitPlugins();
             PluginManager.AutoUpdatePlugins();
             PluginManager.OnLBStart(null);
+
+            LBTacO.Init();
         }
 
         public static void Close()

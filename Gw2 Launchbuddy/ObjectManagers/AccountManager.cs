@@ -382,6 +382,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public bool HasWindowConfig { get { return WinConfig != null; } }
         [XmlIgnore]
         public bool LoginfileOutdated {get { if(Loginfile != null)return Loginfile.IsOutdated; return false;}}
+        [XmlIgnore]
+        public bool TacoValid { get { return LBTacO.IsValid; } }
 
 
         public void SetLoginFile()
