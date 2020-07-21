@@ -16,26 +16,24 @@ Graphics: Arenanet, TheCheatsrichter
 Additonal Thanks to : WoodenPotatoes, Wonders Frostfire and all the guys on reddit who spent their time giving constructive feedback.
 
 
-**How to use it:**
-
-General usage:
+**General usage:**
 
 Gw2 Launchbuddy automatically uses the path of the last GW2 executable which was launched on your computer.  First make sure that your installation path is pointing to the right directory!
 After checking your path you can choose all available options for launching Gw2 which are located mostly on the lefthand side of the General tab.
 If your game stopped working, use the Crashes tab on the left to help diagnose any issues.
 
-Choosing servers:
+**Choosing servers:**
 
 Network Settings **>** Wait for Gw2 Launchbuddy to load all available servers. How long it takes to load depends on your internet connection!
 After the lists are loaded choose one server by selecting it in the list and checking the "Use Authentication Server: x.x.x.x" box. If needed change the Server Port by editing the text next to it.
 
-Multiboxing:
+**Multiboxing:**
 
 There are two ways to multibox. The first method envolves the usage of the account manager (autologin, see below). The second method is to simply press "Launch Gw2" twice. After both instances are launched you
 can login normaly. Multiboxing can drastically decrease your games perfomance as two clients have to read from the same .dat file. This bottleneck can be greatly reduced by using a SSD. It is also recommended to choose the "-windowed" argument on low-mid range PCs.
 
 
-Using autologin:
+**Using autologin:**
 
 Account Settings **>** Add **>** Type in a name for the account
 
