@@ -11,7 +11,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("TheCheatsrichter")]
 [assembly: AssemblyProduct("Gw2 Launchbuddy")]
-[assembly: AssemblyCopyright("Copyright ©  2019 TheCheatsrichter")]
+[assembly: AssemblyCopyright("Copyright ©  2020 TheCheatsrichter")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
