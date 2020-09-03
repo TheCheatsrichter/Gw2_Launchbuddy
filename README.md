@@ -52,7 +52,6 @@ Invalid account information leads to a game freeze with white or blackscreen. Tw
 
 - Is multiboxing bannable? - Multiboxing is legal as long the rule "1 Input = 1 Action" isn't broken. Compare it to people with multiple accounts and multiple computers, they basically run two instances of the game at once. 
 
-- Does it need admin privileges? - The current version of Launchbuddy should not require admin privledges, however if problems are experienced with multiboxing, running as admin may fix the problem.
 
 - Why does this program need internet access? - Internet access is needed to report a crash and to fetch the Gw2 server lists.
 
