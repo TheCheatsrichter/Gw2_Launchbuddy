@@ -29,7 +29,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void Init()
         {
-            path = Properties.Settings.Default.taco_path;
+            path = LBConfiguration.Config.taco_path;
         }
 
         public static void SetPath()
@@ -44,8 +44,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
                                     path = fileDialog.FileName;
                                 }
                             });
-            Properties.Settings.Default.taco_path = path;
-            Properties.Settings.Default.Save();
+            LBConfiguration.Config.taco_path = path;
+            LBConfiguration.Save();
         }
 
         public static void LaunchTacoInstance(Account acc)

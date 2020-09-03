@@ -282,13 +282,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     }
                 }
             }
-            Properties.Settings.Default.Save();
+            LBConfiguration.Save();
         }
 
         private static void UninstallPlugin(IPlugin pluginentry)
         {
             PluginInfo plugininfo = pluginentry.PluginInfo;
-            (Properties.Settings.Default.plugins_toremove as List<string>).Add(EnviromentManager.LBPluginsPath + plugininfo.Name + ".dll");
+            (LBConfiguration.Config.plugins_toremove as List<string>).Add(EnviromentManager.LBPluginsPath + plugininfo.Name + ".dll");
             foreach (Plugin_Wrapper plug in InstalledPlugins.Where(a => a.Plugin == pluginentry))
             {
                 plug.WillBeUninstalled = true;
@@ -307,12 +307,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 }
 
                 string path = EnviromentManager.LBPluginsPath + plugin.PluginInfo.Name + ".dll";
-                if (Properties.Settings.Default.plugins_toinstall == null)
+                if (LBConfiguration.Config.plugins_toinstall == null)
                 {
-                    Properties.Settings.Default.plugins_toinstall = new List<string>();
+                    LBConfiguration.Config.plugins_toinstall = new List<string>();
                 }
-                Properties.Settings.Default.plugins_toinstall.Add(path+";"+location);
-                Properties.Settings.Default.Save();
+                LBConfiguration.Config.plugins_toinstall.Add(path+";"+location);
+                LBConfiguration.Save();
             }
 
             if (reboot) EnviromentManager.Reboot();
@@ -320,34 +320,34 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void RemoveUninstalledPlugins()
         {
-            if (Properties.Settings.Default.plugins_toremove ==null)
+            if (LBConfiguration.Config.plugins_toremove ==null)
             {
-                Properties.Settings.Default.plugins_toremove = new List<string>();
+                LBConfiguration.Config.plugins_toremove = new List<string>();
             }
             List<string> removed_plugins = new List<string>();
 
-            foreach(string path in Properties.Settings.Default.plugins_toremove as List<string>)
+            foreach(string path in LBConfiguration.Config.plugins_toremove as List<string>)
             {
                 if (File.Exists(path)) File.Delete(path);
                 removed_plugins.Add(path);
             }
             foreach(string plugin in removed_plugins)
             {
-                Properties.Settings.Default.plugins_toremove.Remove(plugin);
+                LBConfiguration.Config.plugins_toremove.Remove(plugin);
             }
 
-            Properties.Settings.Default.Save();
+            LBConfiguration.Save();
         }
 
         public static void AddToInstallPlugins()
         {
-            if (Properties.Settings.Default.plugins_toinstall == null)
+            if (LBConfiguration.Config.plugins_toinstall == null)
             {
-                Properties.Settings.Default.plugins_toinstall = new List<string>();
+                LBConfiguration.Config.plugins_toinstall = new List<string>();
             }
             List<string> added_plugins = new List<string>();
 
-            foreach (string paths in Properties.Settings.Default.plugins_toinstall as List<string>)
+            foreach (string paths in LBConfiguration.Config.plugins_toinstall as List<string>)
             {
                 string[] paths_splited = paths.Split(';');
 
@@ -357,16 +357,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             foreach (string plugin in added_plugins)
             {
-                Properties.Settings.Default.plugins_toinstall.Remove(plugin);
+                LBConfiguration.Config.plugins_toinstall.Remove(plugin);
             }
 
-            Properties.Settings.Default.Save();
+            LBConfiguration.Save();
         }
 
 
         public static void AutoUpdatePlugins()
         {
-            if(Properties.Settings.Default.plugins_autoupdate)
+            if(LBConfiguration.Config.plugins_autoupdate)
             {
                 UpdateAllPlugins();
             }

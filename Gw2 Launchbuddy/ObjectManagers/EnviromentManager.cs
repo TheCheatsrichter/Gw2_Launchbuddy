@@ -27,11 +27,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static string LBActiveClientsPath = LBAppdataPath + "lbac.txt";
         public static string LBIconsPath = LBAppdataPath + "Icons\\";
         public static string LBAccPath = LBAppdataPath + "Accs.xml";
+        public static string LBConfigPath = LBAppdataPath + "LBConfig.xml";
         public static string LBPluginsPath = LBAppdataPath + "Plugins\\";
         private static string LBRightTestPath = LBAppdataPath + "RightTest.txt";
 
-        public static bool LBUseClientGUI = Properties.Settings.Default.useinstancegui;
-        public static bool LBUseLoadingGUI = Properties.Settings.Default.useloadingui;
+        //public static bool LBUseClientGUI = LBConfiguration.Config.useinstancegui;
+        //public static bool LBUseLoadingGUI = Properties.Settings.Default.useloadingui;
 
         private static GUI_ApplicationManager lbInstanceGUI;
 
@@ -78,6 +79,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             //Path Setup
             DirectorySetup();
+            LoadLBConfig();
             LoadGwClientInfo();
             CheckGwClientVersion();
 
@@ -113,7 +115,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static void AfterUI_Inits()
         {
             UpdateAccounts();
-            if (Properties.Settings.Default.autoupdatedatfiles)
+            if (LBConfiguration.Config.autoupdatedatfiles)
             {
                 UpdateAccounts();
             }
@@ -190,6 +192,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         }
 
+        private static void LoadLBConfig()
+        {
+            LBConfiguration.Load();
+        }
+
         private static void DirectorySetup()
         {
             if (!Directory.Exists(LBAppdataPath)) Directory.CreateDirectory(LBAppdataPath);
@@ -211,8 +218,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void ResetPropertySettings()
         {
-            Properties.Settings.Default.Reset();
-            Properties.Settings.Default.Save();
+            LBConfiguration.Reset();
+            LBConfiguration.Save();
         }
 
 
@@ -327,7 +334,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void Show_LBInstanceGUI()
         {
-            if (EnviromentManager.LBUseClientGUI)
+            if (LBConfiguration.Config.useinstancegui)
             {
                 if (LBInstanceGUI.IsLoaded == false) LBInstanceGUI = new GUI_ApplicationManager();
                 if (LBInstanceGUI.WindowState == WindowState.Minimized) LBInstanceGUI.WindowState = WindowState.Normal;

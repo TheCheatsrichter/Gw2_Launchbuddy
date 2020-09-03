@@ -17,12 +17,12 @@ namespace Gw2_Launchbuddy
     {
 
         double drag_diff_x = 0, drag_diff_y = 0;
-        bool ispinned = Properties.Settings.Default.instancegui_ispinned;
+        bool ispinned = LBConfiguration.Config.instancegui_ispinned;
 
         public GUI_ApplicationManager()
         {
             InitializeComponent();
-            string loaded_windowsettings = Properties.Settings.Default.instancegui_windowsettings;
+            string loaded_windowsettings = LBConfiguration.Config.instancegui_windowsettings;
             double[] windowsettings = { 0, 0, 160, 300 };
             try
             {
@@ -72,8 +72,8 @@ namespace Gw2_Launchbuddy
 
         public void ResetWindowSettings()
         {
-            Properties.Settings.Default.instancegui_windowsettings = "0;0;160;300";
-            Properties.Settings.Default.Save();
+            LBConfiguration.Config.instancegui_windowsettings = "0;0;160;300";
+            LBConfiguration.Save();
         }
 
         private void bt_close_Click(object sender, RoutedEventArgs e)
@@ -83,9 +83,9 @@ namespace Gw2_Launchbuddy
 
         private void SaveWindowSettings()
         {
-            Properties.Settings.Default.instancegui_windowsettings = String.Join(";", new string[] { Left.ToString(), Top.ToString(), MaxWidth.ToString(), MaxHeight.ToString() });
-            Properties.Settings.Default.instancegui_ispinned = ispinned;
-            Properties.Settings.Default.Save();
+            LBConfiguration.Config.instancegui_windowsettings = String.Join(";", new string[] { Left.ToString(), Top.ToString(), MaxWidth.ToString(), MaxHeight.ToString() });
+            LBConfiguration.Config.instancegui_ispinned = ispinned;
+            LBConfiguration.Save();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
