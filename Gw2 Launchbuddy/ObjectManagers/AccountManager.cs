@@ -250,6 +250,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         [XmlIgnore]
         private WindowConfig winconfig;
 
+
         public event PropertyChangedEventHandler PropertyChanged;
         public Arguments Arguments { get; set; }
         public GFXConfig GFXFile { get; set; }
