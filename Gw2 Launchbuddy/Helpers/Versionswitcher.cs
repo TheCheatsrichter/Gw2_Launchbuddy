@@ -17,6 +17,11 @@ namespace Gw2_Launchbuddy
         private static string Repo_User, Repo_Name;
         public static ObservableCollection<Release> Releaselist = new ObservableCollection<Release>();
 
+        public static bool ShouldCheckForUpdate()
+        {
+            return LBConfiguration.Config.notifylbupdate;
+        }
+
         public static void CheckForUpdate()
         {
             if (Releaselist.Count == 0)
