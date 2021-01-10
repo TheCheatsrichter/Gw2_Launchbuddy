@@ -48,22 +48,23 @@ namespace Gw2_Launchbuddy.ObjectManagers
             LBConfiguration.Save();
         }
 
-        public static void LaunchTacoInstance(Account acc)
+        public static void LaunchBlishInstance(Account acc)
         {
             if(IsValid)
             {
                 ProcessStartInfo proinfo = new ProcessStartInfo();
                 proinfo.FileName = path;
                 proinfo.WorkingDirectory = Path.GetDirectoryName(path);
-                if(ClientManager.ActiveClients.Count>1) proinfo.Arguments = $"-mumble GW2MumbleLink{acc.ID} -forcenewinstance";
+                if (ClientManager.ActiveClients.Count > 1 || acc.Settings.AlwaysUseCustomMumbleLink) proinfo.Arguments = $"--mumble GW2MumbleLink{acc.ID}";
+                else proinfo.Arguments = $"--pid {acc.Client?.Process?.Id}";
                 Process.Start(proinfo);
 
                 Action sleep = () => Thread.Sleep(1500);
-                Helpers.BlockerInfo.Run("TacO Launch", $"TacO is launched for account {acc.Nickname}.", sleep);
+                Helpers.BlockerInfo.Run("BlishHUD Launch", $"BlishHUD is launched for account {acc.Nickname}.", sleep);
             }
             else
             {
-                MessageBox.Show("TacO .exe file location seems to have changed or was not set correctly! Please reconfigure the path in the TacO Tab.");
+                MessageBox.Show("Blish HUD .exe file location seems to have changed or was not set correctly! Please reconfigure the path in the TacO Tab.");
             }
 
         }

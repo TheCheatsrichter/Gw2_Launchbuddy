@@ -394,6 +394,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public bool LoginfileOutdated {get { if(Loginfile != null)return Loginfile.IsOutdated; return false;}}
         [XmlIgnore]
         public bool TacoValid { get { return LBTacO.IsValid; } }
+        [XmlIgnore]
+        public bool BlishValid { get { return LBBlish.IsValid; } }
 
 
         public void SetLoginFile()

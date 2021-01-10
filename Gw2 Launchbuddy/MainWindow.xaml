@@ -919,7 +919,7 @@
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Image Height="20" Source="Resources/Icons/taco_black.png"/>
-                                <Image Height="20" Source="Resources/Icons/blish_black.png"/>
+                                <Image Height="20" Source="Resources/Icons/blish_black.png" Margin="3,0,0,0"/>
                             </StackPanel>
                             <Label FontSize="10" Margin="-22,-5,-25,-7">TacO / BlishHUD</Label>
                         </StackPanel>

@@ -38,7 +38,7 @@ namespace Gw2_Launchbuddy
         private bool cinemamode = false;
         private bool slideshowthread_isrunning = false;
         private int reso_x, reso_y;
-        
+
         public class CinemaImage
         {
             public string Name
@@ -126,6 +126,7 @@ namespace Gw2_Launchbuddy
         private void TacoUISetup()
         {
             tb_tacopath.Text = LBTacO.TacoPath;
+            tb_blishpath.Text = LBBlish.BlishPath;
         }
 
         private void LoadEnviromentUI()
@@ -342,10 +343,10 @@ namespace Gw2_Launchbuddy
             {
                 //Cinema Mode
 
-                
+
                 WindowHeaderGrid.Visibility = Visibility.Hidden;
                 myWindow.WindowState = WindowState.Maximized;
-                
+
 
                 //Notes: Login frame = 560x300
                 //Test resolutions here!
@@ -650,7 +651,7 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show("Invalid Authserver Port");
                 tb_authport.Focus();
             }
-            
+
         }
 
         private void tb_assetsport_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
@@ -1373,7 +1374,7 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        
+
         private void tb_email_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
             string email = tb_email.Text;
@@ -1407,7 +1408,7 @@ namespace Gw2_Launchbuddy
                 tb_passw.Focus();
             }
         }
-        
+
 
         private void checkb_clientport_Checked(object sender, RoutedEventArgs e)
         {
@@ -1668,7 +1669,7 @@ namespace Gw2_Launchbuddy
         {
             if (UIContent != null)
             {
-                
+
             }
         }
 
@@ -1711,16 +1712,28 @@ namespace Gw2_Launchbuddy
             tb_tacopath.Text = LBTacO.TacoPath;
         }
 
+        private void bt_setblishpath_Click(object sender, RoutedEventArgs e)
+        {
+            LBBlish.SetPath();
+            tb_blishpath.Text = LBBlish.BlishPath;
+        }
+
         private void bt_launchtaco_MouseDown(object sender, MouseButtonEventArgs e)
         {
             var acc = (sender as Image).DataContext as Account;
             LBTacO.LaunchTacoInstance(acc);
         }
 
+        private void bt_launchblish_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var acc = (sender as Image).DataContext as Account;
+            LBBlish.LaunchBlishInstance(acc);
+        }
+
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)
         {
             PluginManager.UpdatePlugin(((sender as Button).DataContext as Plugin_Wrapper).Plugin,true);
-           
+
         }
 
 

@@ -589,6 +589,9 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\taco_black.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\blish_black.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
     <ItemGroup>
