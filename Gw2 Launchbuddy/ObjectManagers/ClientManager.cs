@@ -431,6 +431,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 args += arg.ToString() + " ";
             }
             args += "-shareArchive ";
+            account.CustomMumbleLink = false;
             if (ClientManager.ActiveClients.Count != 0 || account.Settings.AlwaysUseCustomMumbleLink)
             {
                 args += $"-mumble GW2MumbleLink{account.ID} ";
