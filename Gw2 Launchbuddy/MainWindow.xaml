@@ -629,6 +629,32 @@
                                             </StackPanel>
                                         </Grid>
                                     </Expander>
+                                    <Expander ToolTip="Add 3rd Party injected software for this account" Style="{StaticResource Bordered}">
+                                        <Expander.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="Resources/Icons/taco_black.png" Height="22"/>
+                                                <Label Style="{StaticResource H2}">TacO + BlishHUD</Label>
+                                            </StackPanel>
+                                        </Expander.Header>
+                                        <ScrollViewer>
+                                            <StackPanel>
+                                                <DockPanel>
+                                                    <Label Content="Start TacO automatically with this account" VerticalAlignment="Center"/>
+                                                    <DockPanel  DockPanel.Dock="Right">
+                                                        <CheckBox Name="cb_tacO" Width="40" VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Right" IsChecked="{Binding Path=Settings.StartTaco}" Click="cb_taco_Click"/>
+                                                        <Label Content="Start TacO:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+                                                    </DockPanel>
+                                                </DockPanel>
+                                                <DockPanel>
+                                                    <Label Content="Start BlishHUD automatically with this account" VerticalAlignment="Center"/>
+                                                    <DockPanel  DockPanel.Dock="Right">
+                                                        <CheckBox Name="cb_blish" Width="40" VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Right" IsChecked="{Binding Path=Settings.StartBlish}" Click="cb_blish_Click"/>
+                                                        <Label Content="Start Blish:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+                                                    </DockPanel>
+                                                </DockPanel>
+                                            </StackPanel>
+                                        </ScrollViewer>
+                                    </Expander>
                                     <Expander ToolTip="Configure Hotkeys for quick Clientcontrol" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">

@@ -68,6 +68,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 acc.Client.Launch();
                 acc.Settings.RelaunchesLeft = acc.Settings.RelaunchesMax;
+
+                if (acc.Settings.StartTaco) LBTacO.LaunchTacoInstance(acc);
+                if (acc.Settings.StartBlish) LBBlish.LaunchBlishInstance(acc);
             }
         }
         public static void LaunchAccounts(ObservableCollection<Account> accs)
@@ -266,6 +269,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         private uint relaunchesmax;
         public uint RelaunchesMax { set { relaunchesmax = value; RelaunchesLeft = value; } get { return relaunchesmax; } }
         public bool AlwaysUseCustomMumbleLink { get; set; }
+        public bool StartTaco { get; set; }
+        public bool StartBlish { get; set; }
         [XmlIgnore]
         private uint relaunchesleft;
         [XmlIgnore]
