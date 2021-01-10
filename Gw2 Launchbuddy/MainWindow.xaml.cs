@@ -1309,6 +1309,7 @@ namespace Gw2_Launchbuddy
                 gr_acceditor.Visibility = Visibility.Visible;
                 sp_acclistbuttons.IsEnabled = true;
                 tb_passw.Clear();
+                cb_cmumble.IsChecked = acc.Settings.AlwaysUseCustomMumbleLink;
             }
             else
             {
@@ -1540,6 +1541,11 @@ namespace Gw2_Launchbuddy
         {
             textinput_onlyint(sender as TextBox);
             ((sender as TextBox).DataContext as AccountSettings).SetRelaunched(UInt32.Parse((sender as TextBox).Text));
+        }
+
+        private void cb_cmumble_Click(object sender, RoutedEventArgs e)
+        {
+            ((sender as CheckBox).DataContext as AccountSettings).AlwaysUseCustomMumbleLink = (sender as CheckBox).IsChecked.Value;
         }
 
         private void textinput_onlyint(TextBox tb)

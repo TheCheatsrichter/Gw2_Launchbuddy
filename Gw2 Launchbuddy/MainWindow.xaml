@@ -386,7 +386,7 @@
                                         <Image Height="32" Source="Resources/Icons/account.png" Visibility="{Binding Path=Settings.HasLoginCredentials, Converter={StaticResource BoolToVis}}" ToolTip="Uses Autologin" DockPanel.Dock="Right"/>
                                         <Label Content="{Binding Path=Nickname}" BorderThickness="0" Margin="0" FontSize="18" FontWeight="Bold"/>
                                         <Image Height="32" Source="Resources/Icons/taco_black.png" x:Name="bt_launchtaco" Visibility="{Binding Path=Settings.TacoValid, Converter={StaticResource BoolToVis}}" ToolTip="Add TacO" DockPanel.Dock="Right" MouseDown="bt_launchtaco_MouseDown"/>
-                                        <Image Height="32" Source="Resources/Icons/blish_black.png" x:Name="bt_launchblish" Visibility="{Binding Path=Settings.BlishValid, Converter={StaticResource BoolToVis}}" ToolTip="Add BlishHUD" DockPanel.Dock="Right" MouseDown="bt_launchtaco_MouseDown"/>
+                                        <Image Height="32" Source="Resources/Icons/blish_black.png" x:Name="bt_launchblish" Visibility="{Binding Path=Settings.BlishValid, Converter={StaticResource BoolToVis}}" ToolTip="Add BlishHUD" DockPanel.Dock="Right" MouseDown="bt_launchblish_MouseDown"/>
                                     </DockPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
@@ -689,7 +689,7 @@
                                                 <DockPanel>
                                                     <Label Content="This will force every client to use a custom mumble-link" VerticalAlignment="Center"/>
                                                     <DockPanel  DockPanel.Dock="Right">
-                                                        <CheckBox Width="80" VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Right" IsChecked="{Binding Path=Settings.AlwaysUseCustomMumbleLink, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <CheckBox Name="cb_cmumble" Width="80" VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Right" IsChecked="{Binding Path=Settings.AlwaysUseCustomMumbleLink}" Click="cb_cmumble_Click"/>
                                                         <Label Content="Use Custom Mumble-Link:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
                                                     </DockPanel>
                                                 </DockPanel>
