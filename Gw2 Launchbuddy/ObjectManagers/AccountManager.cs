@@ -68,9 +68,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 acc.Client.Launch();
                 acc.Settings.RelaunchesLeft = acc.Settings.RelaunchesMax;
-
-                if (acc.Settings.StartTaco) LBTacO.LaunchTacoInstance(acc);
-                if (acc.Settings.StartBlish) LBBlish.LaunchBlishInstance(acc);
             }
         }
         public static void LaunchAccounts(ObservableCollection<Account> accs)
@@ -199,6 +196,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public string Nickname { get; set; }
         [XmlIgnore]
         public bool IsEnabled = false;
+        [XmlIgnore]
+        public bool CustomMumbleLink = false;
         public AccountSettings Settings { get; set; }
 
         private void CreateAccount(string nickname = null)

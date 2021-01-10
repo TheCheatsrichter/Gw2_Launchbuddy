@@ -55,8 +55,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 ProcessStartInfo proinfo = new ProcessStartInfo();
                 proinfo.FileName = path;
                 proinfo.WorkingDirectory = Path.GetDirectoryName(path);
-                if (ClientManager.ActiveClients.Count > 1 || acc.Settings.AlwaysUseCustomMumbleLink) proinfo.Arguments = $"--mumble GW2MumbleLink{acc.ID}";
-                else proinfo.Arguments = $"--pid {acc.Client?.Process?.Id}";
+                proinfo.Arguments = acc.CustomMumbleLink ? $"--mumble GW2MumbleLink{acc.ID}" : $"--pid {acc.Client?.Process?.Id}";
                 Process.Start(proinfo);
 
                 Action sleep = () => Thread.Sleep(1500);

@@ -401,7 +401,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             Window_MoveTo_Default();
             Window_ScaleTo_Default();
-            
+
             int i = 0;
             while (i<3 && account.Settings.WinConfig.IsConfigured(Process)!=true)
             {
@@ -415,7 +415,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 Thread.Sleep(500);
                 i++;
             }
-            
+
 
         }
 
@@ -431,14 +431,18 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 args += arg.ToString() + " ";
             }
             args += "-shareArchive ";
-            if(ClientManager.ActiveClients.Count!=0 || account.Settings.AlwaysUseCustomMumbleLink)args += $"-mumble GW2MumbleLink{account.ID} ";
+            if (ClientManager.ActiveClients.Count != 0 || account.Settings.AlwaysUseCustomMumbleLink)
+            {
+                args += $"-mumble GW2MumbleLink{account.ID} ";
+                account.CustomMumbleLink = true;
+            }
 
 
             if (account.Settings.WinConfig != null && !args.Contains("-windowed")) args += "-windowed ";
 
             //Add Login Credentials
             /*
-            
+
             if (account.Settings.HasLoginCredentials)
             {
                 args += "-nopatchui -autologin ";
@@ -446,7 +450,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 args += "-password \"" + account.Settings.Password + "\" ";
             }
             */
-            
+
             if(account.Settings.Loginfile!=null && account.Settings.Loginfile.Gw2Build==EnviromentManager.GwClientVersion)
             {
                 args += "-autologin ";
@@ -636,6 +640,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             try { Focus(); } catch { }
                             try {if(account.Settings.WinConfig!=null)new Thread(Window_Init).Start();} catch { }
                             account.Settings.AccountInformation.SetLastLogin();
+
+                            // Launch TacO & BlisH
+                            try
+                            {
+                                if (account.Settings.StartBlish) LBBlish.LaunchBlishInstance(account);
+                                if (account.Settings.StartTaco) LBTacO.LaunchTacoInstance(account);
+                            } catch { }
                             break;
                     }
                 }
