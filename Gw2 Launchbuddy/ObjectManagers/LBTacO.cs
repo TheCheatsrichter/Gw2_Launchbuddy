@@ -52,12 +52,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             if(IsValid)
             {
-                string args = "";
                 ProcessStartInfo proinfo = new ProcessStartInfo();
                 proinfo.FileName = path;
                 proinfo.WorkingDirectory = Path.GetDirectoryName(path);
-                if(acc.CustomMumbleLink) args += $"-mumble GW2MumbleLink{acc.ID} ";
-                if(ClientManager.ActiveClients.Count > 1) args += $"-forcenewinstance ";
+                string args = "-forcenewinstance";
+                if (acc.CustomMumbleLink) args += $" -mumble GW2MumbleLink{acc.ID}";
                 proinfo.Arguments = args;
                 Process.Start(proinfo);
 
