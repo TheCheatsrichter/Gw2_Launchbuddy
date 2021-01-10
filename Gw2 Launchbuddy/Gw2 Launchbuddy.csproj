@@ -338,6 +338,7 @@
     <Compile Include="Modifiers\ModuleReader.cs" />
     <Compile Include="ObjectManagers\Hotkeys.cs" />
     <Compile Include="ObjectManagers\LBConfiguration.cs" />
+    <Compile Include="ObjectManagers\LBBlish.cs" />
     <Compile Include="ObjectManagers\LBTacO.cs" />
     <Compile Include="ObjectManagers\MusicManager.cs" />
     <Compile Include="ObjectManagers\AccountManager.cs" />

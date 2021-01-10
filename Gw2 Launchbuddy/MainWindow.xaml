@@ -10,19 +10,19 @@
         x:Name="myWindow"
         ShowInTaskbar="true"
 
-    
+
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
         Title="Gw2 Launchbuddy V 2.3" MinHeight="700" MinWidth="900" Height="700" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None">
     <Window.Resources>
         <Storyboard x:Key="anim_imgfadeout">
-            <DoubleAnimation 
+            <DoubleAnimation
         		Storyboard.TargetName="img_slideshow"
         		Storyboard.TargetProperty="Opacity"
         		From ="1" To="0" Duration="0:0:1"
                         />
         </Storyboard>
         <Storyboard x:Key="anim_imgfadein">
-            <DoubleAnimation 
+            <DoubleAnimation
         		Storyboard.TargetName="img_slideshow"
         		Storyboard.TargetProperty="Opacity"
         		From ="0" To="1" Duration="0:0:1"
@@ -126,7 +126,7 @@
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
             <BeginStoryboard>
                 <Storyboard>
-                    <DoubleAnimation 
+                    <DoubleAnimation
                         Storyboard.TargetName="myWindow"
                         Storyboard.TargetProperty="Opacity"
                         From="0.0" To="1.0" Duration="0:0:1"
@@ -386,6 +386,7 @@
                                         <Image Height="32" Source="Resources/Icons/account.png" Visibility="{Binding Path=Settings.HasLoginCredentials, Converter={StaticResource BoolToVis}}" ToolTip="Uses Autologin" DockPanel.Dock="Right"/>
                                         <Label Content="{Binding Path=Nickname}" BorderThickness="0" Margin="0" FontSize="18" FontWeight="Bold"/>
                                         <Image Height="32" Source="Resources/Icons/taco_black.png" x:Name="bt_launchtaco" Visibility="{Binding Path=Settings.TacoValid, Converter={StaticResource BoolToVis}}" ToolTip="Add TacO" DockPanel.Dock="Right" MouseDown="bt_launchtaco_MouseDown"/>
+                                        <Image Height="32" Source="Resources/Icons/blish_black.png" x:Name="bt_launchblish" Visibility="{Binding Path=Settings.BlishValid, Converter={StaticResource BoolToVis}}" ToolTip="Add BlishHUD" DockPanel.Dock="Right" MouseDown="bt_launchtaco_MouseDown"/>
                                     </DockPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
@@ -685,6 +686,16 @@
                                                         <Label Content="Priority:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
                                                     </DockPanel>
                                                 </DockPanel>
+                                                <DockPanel>
+                                                    <Label Content="This will force every client to use a custom mumble-link" VerticalAlignment="Center"/>
+                                                    <DockPanel  DockPanel.Dock="Right">
+                                                        <CheckBox Width="80" VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Right" IsChecked="{Binding Path=Settings.AlwaysUseCustomMumbleLink, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <Label Content="Use Custom Mumble-Link:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+                                                    </DockPanel>
+                                                </DockPanel>
+                                                <DockPanel>
+                                                    <Label Content="(Caution: This can cause problems with other applications that use the Gw2 Mumble Link.)" VerticalAlignment="Top" Foreground="Red" HorizontalAlignment="Left" Margin="0,-12,0,0"/>
+                                                </DockPanel>
                                             </StackPanel>
                                         </ScrollViewer>
                                     </Expander>
@@ -906,24 +917,44 @@
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel>
-                            <Image Height="20" Source="Resources/Icons/taco_black.png"/>
-                            <Label FontSize="10" Margin="0,-5,0,-7">TacO</Label>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Height="20" Source="Resources/Icons/taco_black.png"/>
+                                <Image Height="20" Source="Resources/Icons/blish_black.png"/>
+                            </StackPanel>
+                            <Label FontSize="10" Margin="-22,-5,-25,-7">TacO / BlishHUD</Label>
                         </StackPanel>
                     </TabItem.Header>
                     <StackPanel Margin="10">
-                        <Label Style="{StaticResource H1}" Content="Native Gw2 Taco Multiboxing by Launchbuddy"/>
+                        <Label Style="{StaticResource H1}" Content="Native Gw2 Mumble Multiboxing by Launchbuddy"/>
                         <Separator/>
                         <Label Style="{StaticResource H1}" Content="Instructions:"/>
                         <StackPanel Margin="10,0,0,0">
-                            <TextBlock Text="1. Set the path to your TacO.exe file in the settings area below." ></TextBlock>
+                            <TextBlock Text="1. Set the path to your TacO.exe / Blish HUD.exe file in the settings area below." ></TextBlock>
                             <TextBlock Text="2. Start your desired accounts from the Launchbuddy Home screen."></TextBlock>
-                            <TextBlock Text="3. You will now see a new TacO button on each account. Press the 'Add TacO' button to start TacO for the according account."></TextBlock>
+                            <TextBlock Text="3. You will now see a new TacO / Blish button on each account."></TextBlock>
+                            <TextBlock Text="    Press the button to start the application for the according account."></TextBlock>
                         </StackPanel>
                         <Label Style="{StaticResource H1}" Content="Settings:"/>
-                        <DockPanel >
-                            <Button x:Name="bt_settacopath" Content="Set TacO Path" Width="100" Height="30" Click="bt_settacopath_Click"/>
-                            <TextBox IsEnabled="False" MinWidth="450" x:Name="tb_tacopath"/>
-                        </DockPanel>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Height="20" Source="Resources/Icons/taco_black.png"/>
+                                <Label Style="{StaticResource H1}" Content="TacO:"/>
+                            </StackPanel>
+                            <DockPanel >
+                                <Button x:Name="bt_settacopath" Content="Set TacO Path" Width="100" Height="30" Click="bt_settacopath_Click"/>
+                                <TextBox IsEnabled="False" MinWidth="450" x:Name="tb_tacopath"/>
+                            </DockPanel>
+                        </StackPanel>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Height="20" Source="Resources/Icons/blish_black.png"/>
+                                <Label Style="{StaticResource H1}" Content="Blish HUD:"/>
+                            </StackPanel>
+                            <DockPanel >
+                                <Button x:Name="bt_setblishpath" Content="Set Blish Path" Width="100" Height="30" Click="bt_setblishpath_Click"/>
+                                <TextBox IsEnabled="False" MinWidth="450" x:Name="tb_blishpath"/>
+                            </DockPanel>
+                        </StackPanel>
                     </StackPanel>
                 </TabItem>
                 <!-- END DELETE ON 1.9 -->
@@ -1180,7 +1211,7 @@
                             <CheckBox Content="Use Graphical Gameinstance Manager" />
                             <CheckBox Content="Search for new versions of Launchbuddy on Start"/>
                         </StackPanel>
-                        
+
                         <Separator Margin="5"/>
                         -->
                         <Separator Margin="3"/>

@@ -431,7 +431,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 args += arg.ToString() + " ";
             }
             args += "-shareArchive ";
-            if(ClientManager.ActiveClients.Count!=0)args += $"-mumble GW2MumbleLink{account.ID} ";
+            if(ClientManager.ActiveClients.Count!=0 || account.Settings.AlwaysUseCustomMumbleLink)args += $"-mumble GW2MumbleLink{account.ID} ";
 
 
             if (account.Settings.WinConfig != null && !args.Contains("-windowed")) args += "-windowed ";

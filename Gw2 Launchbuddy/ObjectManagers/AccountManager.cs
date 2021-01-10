@@ -265,6 +265,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         [XmlIgnore]
         private uint relaunchesmax;
         public uint RelaunchesMax { set { relaunchesmax = value; RelaunchesLeft = value; } get { return relaunchesmax; } }
+        public bool AlwaysUseCustomMumbleLink { get; set; }
         [XmlIgnore]
         private uint relaunchesleft;
         [XmlIgnore]
