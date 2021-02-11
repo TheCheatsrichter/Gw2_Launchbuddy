@@ -196,6 +196,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public string Nickname { get; set; }
         [XmlIgnore]
         public bool IsEnabled = false;
+        [XmlIgnore]
+        public bool CustomMumbleLink = false;
         public AccountSettings Settings { get; set; }
 
         private void CreateAccount(string nickname = null)
@@ -265,6 +267,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
         [XmlIgnore]
         private uint relaunchesmax;
         public uint RelaunchesMax { set { relaunchesmax = value; RelaunchesLeft = value; } get { return relaunchesmax; } }
+        public bool AlwaysUseCustomMumbleLink { get; set; }
+        public bool StartTaco { get; set; }
+        public bool StartBlish { get; set; }
         [XmlIgnore]
         private uint relaunchesleft;
         [XmlIgnore]
@@ -393,6 +398,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public bool LoginfileOutdated {get { if(Loginfile != null)return Loginfile.IsOutdated; return false;}}
         [XmlIgnore]
         public bool TacoValid { get { return LBTacO.IsValid; } }
+        [XmlIgnore]
+        public bool BlishValid { get { return LBBlish.IsValid; } }
 
 
         public void SetLoginFile()

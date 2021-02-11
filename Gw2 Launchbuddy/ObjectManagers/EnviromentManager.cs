@@ -125,6 +125,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             PluginManager.OnLBStart(null);
 
             LBTacO.Init();
+            LBBlish.Init();
         }
 
         public static void Close()
@@ -342,8 +343,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
     }
-    
-    
+
+
     public class LaunchOptions
     {
         [Option('q', "silent", HelpText = "Run Launchbuddy silently.")]
@@ -367,7 +368,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         [Option("delaymutex", HelpText = "Delay in milliseconds between mutex close attempts. Higher values increase the time between retries. (Up to 9 retries will be attempted)", Hidden = true)]
         public int? Delay { get; set; }
     }
-    
+
 
     #region Plugin
 

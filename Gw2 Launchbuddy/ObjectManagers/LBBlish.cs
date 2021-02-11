@@ -11,10 +11,10 @@ using System.Windows;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
-    public static class LBTacO
+    public static class LBBlish
     {
         static string path = "";
-        public static string TacoPath
+        public static string BlishPath
         {
             get { return path; }
         }
@@ -29,7 +29,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void Init()
         {
-            path = LBConfiguration.Config.taco_path;
+            path = LBConfiguration.Config.blish_path;
         }
 
         public static void SetPath()
@@ -44,28 +44,28 @@ namespace Gw2_Launchbuddy.ObjectManagers
                                     path = fileDialog.FileName;
                                 }
                             });
-            LBConfiguration.Config.taco_path = path;
+            LBConfiguration.Config.blish_path = path;
             LBConfiguration.Save();
         }
 
-        public static void LaunchTacoInstance(Account acc)
+        public static void LaunchBlishInstance(Account acc)
         {
             if(IsValid)
             {
                 ProcessStartInfo proinfo = new ProcessStartInfo();
                 proinfo.FileName = path;
                 proinfo.WorkingDirectory = Path.GetDirectoryName(path);
-                string args = "-forcenewinstance";
-                if (acc.CustomMumbleLink) args += $" -mumble GW2MumbleLink{acc.ID}";
+                string args = $"--pid {acc.Client?.Process?.Id}";
+                if (acc.CustomMumbleLink) args += $" --mumble GW2MumbleLink{acc.ID}";
                 proinfo.Arguments = args;
                 Process.Start(proinfo);
 
                 Action sleep = () => Thread.Sleep(1500);
-                Helpers.BlockerInfo.Run("TacO Launch", $"TacO is launched for account {acc.Nickname}.", sleep);
+                Helpers.BlockerInfo.Run("BlishHUD Launch", $"BlishHUD is launched for account {acc.Nickname}.", sleep);
             }
             else
             {
-                MessageBox.Show("TacO .exe file location seems to have changed or was not set correctly! Please reconfigure the path in the TacO Tab.");
+                MessageBox.Show("Blish HUD .exe file location seems to have changed or was not set correctly! Please reconfigure the path in the TacO Tab.");
             }
 
         }

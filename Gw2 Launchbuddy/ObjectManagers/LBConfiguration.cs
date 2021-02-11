@@ -104,5 +104,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public bool instancegui_ispinned =false;
         public bool autoupdatedatfiles =true;
         public string taco_path;
+        public string blish_path;
     }
 }
