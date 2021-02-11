@@ -89,7 +89,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
             //Updater Network Protocol
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             VersionSwitcher.DeleteUpdater();
-            VersionSwitcher.CheckForUpdate();
 
             //Account Import Export
             AccountManager.ImportAccounts();

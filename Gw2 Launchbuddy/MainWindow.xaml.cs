@@ -115,7 +115,7 @@ namespace Gw2_Launchbuddy
             lv_accs.ItemsSource = AccountManager.Accounts;
             lv_accssettings.ItemsSource = AccountManager.Accounts;
             SettingsTabSetup();
-            if (LBConfiguration.Config.notifylbupdate)
+            if (VersionSwitcher.ShouldCheckForUpdate())
             {
                 Thread checklbver = new Thread(checklbversion);
                 checklbver.Start();
