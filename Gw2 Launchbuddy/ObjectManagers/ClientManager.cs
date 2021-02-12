@@ -43,7 +43,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                       ActiveClients.Remove(client);
                   }));
             }
-            if (!ActiveClients.Contains(client) && (client.Status >= ActiveStatus_Threshold))
+            if (!ActiveClients.Contains(client) && (client.Status.HasFlag(ActiveStatus_Threshold)))
             {
                 Application.Current.Dispatcher.BeginInvoke(
                 DispatcherPriority.Background,
@@ -193,7 +193,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 status = status | value;
                 if (value == ClientStatus.None || value == ClientStatus.Closed)
-                    status = ClientStatus.None;
+                { status = ClientStatus.None; }
                 OnStatusChanged(EventArgs.Empty);
             }
             get { return status; }

@@ -126,7 +126,7 @@ namespace Gw2_Launchbuddy.Modifiers
             }
             catch
             {
-                MessageBox.Show("Gameclient got closed unexpectedly. Could not collect Modules");
+                //MessageBox.Show("Gameclient got closed unexpectedly. Could not collect Modules");
             }
 
 
