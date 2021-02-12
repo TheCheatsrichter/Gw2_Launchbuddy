@@ -123,6 +123,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
             PluginManager.AutoUpdatePlugins();
             PluginManager.OnLBStart(null);
 
+            if(ClientManager.ActiveClients.Count>0 && LBConfiguration.Config.useinstancegui)
+            {
+                LBInstanceGUI.Show();
+            }
+
             LBTacO.Init();
             LBBlish.Init();
         }
