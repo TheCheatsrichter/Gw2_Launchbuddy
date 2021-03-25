@@ -498,7 +498,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private void CloseMutex()
         {
-            for (var i = 0; i < 10; i++)
+            for (var i = 0; i < 20; i++)
             {
 #if DEBUG
                 System.Diagnostics.Debug.Print("Mutex Kill Attempt Nr" + i);
