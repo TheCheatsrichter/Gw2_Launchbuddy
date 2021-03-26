@@ -303,7 +303,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 if (GwClientUpToDate == null && Api.Online)
                 {
-                    GwClientUpToDate = Api.ClientBuild == GwClientVersion;
+                    try
+                    {
+                        Debug.WriteLine($"API Buildversion:{Api.ClientBuild} Local version:{GwClientVersion}");
+                        GwClientUpToDate = int.Parse(Api.ClientBuild) <= int.Parse(GwClientVersion);
+                    }
+                    catch
+                    {
+                        GwClientUpToDate = Api.ClientBuild.ToLower() == GwClientVersion.ToLower();
+                    }
+                    
                     if (!(bool)GwClientUpToDate)
                     {
                         UpdateGwClient();
@@ -326,10 +335,18 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 Thread.Sleep(1000);
                 pro.Refresh();
                 Modifiers.ModuleReader.WaitForModule("WINNSI.dll",pro);
-                Thread.Sleep(3000); //Buffer to not land between launcher update/ game update
+                Thread.Sleep(1000); //Buffer to not land between launcher update/ game update
+                pro.Refresh();
                 Action waitforlaunch = () => { while (!pro.HasExited) { } } ;
                 Helpers.BlockerInfo.Run("Game Update", "Launchbuddy waits for your game to be updated", waitforlaunch);
+
+                //Overwrite xml file because -image does not update xml file
+                string xmldata = File.ReadAllText(EnviromentManager.GwClientXmlPath);
+                xmldata= xmldata.Replace(EnviromentManager.GwClientVersion, Api.ClientBuild);
+                File.WriteAllText(EnviromentManager.GwClientXmlPath, xmldata);
+
                 EnviromentManager.GwClientVersion = Api.ClientBuild;
+                
             }
             else
             {

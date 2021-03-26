@@ -90,6 +90,19 @@ namespace Gw2_Launchbuddy.Modifiers
         {
             try
             {
+                WaitForLoginfileRelease(EnviromentManager.GwLocaldatPath);
+
+                
+                if(LoginFileIsLocked(EnviromentManager.GwLocaldatPath))
+                {
+                    try
+                    {
+                        HandleManager.ClearFileLock(EnviromentManager.GwClientExeName, EnviromentManager.GwLocaldatPath);
+                    }
+                    catch { }
+                }
+                
+
                 Repair();
 
                 //Is Valid?
@@ -99,10 +112,15 @@ namespace Gw2_Launchbuddy.Modifiers
                 if (!IsSymbolic(EnviromentManager.GwLocaldatPath))
                 {
                     if (File.Exists(EnviromentManager.GwLocaldatBakPath)) File.Delete(EnviromentManager.GwLocaldatBakPath);
+                    
                     File.Copy(EnviromentManager.GwLocaldatPath, EnviromentManager.GwLocaldatBakPath);
                 }
                 //Delete Local.dat
                 if (File.Exists(EnviromentManager.GwLocaldatPath)) File.Delete(EnviromentManager.GwLocaldatPath);
+
+                /*
+                */
+
                 //Create Symlink Replacer
                 CreateSymbolLink(file.Path);
                 //Remember last used file for ToDefault()
@@ -139,7 +157,6 @@ namespace Gw2_Launchbuddy.Modifiers
             }
             if (File.Exists(EnviromentManager.GwLocaldatBakPath)) File.Delete(EnviromentManager.GwLocaldatBakPath);
         }
-
         public static void UpdateLocalDat(LocalDatFile file)
         {
             try
@@ -186,6 +203,25 @@ namespace Gw2_Launchbuddy.Modifiers
             return false;
         }
 
+        private static bool LoginFileIsLocked(string filepath)
+        {
+            FileStream stream = null;
+            try
+            {
+                stream = File.Open(filepath, FileMode.Open, FileAccess.Read, FileShare.None);
+            }
+            catch (IOException)
+            {
+                return true;
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
+            }
+            return false;
+        }
+
         private static void WaitForLoginfileRelease(LocalDatFile file)
         {
             int i = 0;
@@ -193,6 +229,16 @@ namespace Gw2_Launchbuddy.Modifiers
             {
                 i++;
                 Thread.Sleep(1000);
+            }
+        }
+
+        private static void WaitForLoginfileRelease(string filepath)
+        {
+            int i = 0;
+            while (LoginFileIsLocked(filepath) && i < 20)
+            {
+                i++;
+                Thread.Sleep(250);
             }
         }
 

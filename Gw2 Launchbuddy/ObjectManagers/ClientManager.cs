@@ -151,6 +151,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         protected virtual void OnStatusChanged(EventArgs e)
         {
+            account.Settings.ClientStatusChanged();
             OnPropertyChanged("StatusToIcon");
 #if DEBUG
             Console.WriteLine("Account: " + account + " Status: " + Status);
@@ -498,7 +499,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private void CloseMutex()
         {
-            for (var i = 0; i < 20; i++)
+            for (var i = 0; i < 10; i++)
             {
 #if DEBUG
                 System.Diagnostics.Debug.Print("Mutex Kill Attempt Nr" + i);

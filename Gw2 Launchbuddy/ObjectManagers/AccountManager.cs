@@ -332,6 +332,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
             AccountID = acc.ID;
         }
 
+        public void  ClientStatusChanged()
+        {
+            //Should be Event in future
+            OnPropertyChanged("TacoValid");
+            OnPropertyChanged("BlishValid");
+        }
+
         public Icon Icon { get { return icon; } set { icon = value; OnPropertyChanged("Icon"); } }
         [XmlIgnore]
         public ObservableCollection<Icon> Icons { get { return IconManager.Icons; } }
@@ -397,9 +404,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
         [XmlIgnore]
         public bool LoginfileOutdated {get { if(Loginfile != null)return Loginfile.IsOutdated; return false;}}
         [XmlIgnore]
-        public bool TacoValid { get { return LBTacO.IsValid; } }
+        public bool TacoValid { get { return LBTacO.IsValid && account.Client.Status.HasFlag(Client.ClientStatus.Running); } }
         [XmlIgnore]
-        public bool BlishValid { get { return LBBlish.IsValid; } }
+        public bool BlishValid { get { return LBBlish.IsValid && account.Client.Status.HasFlag(Client.ClientStatus.Running); } }
 
 
         public void SetLoginFile()
