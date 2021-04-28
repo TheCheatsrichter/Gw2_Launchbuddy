@@ -585,6 +585,7 @@ namespace Gw2_Launchbuddy
             }
             else
             {
+                AccountManager.SaveAccounts();
                 EnviromentManager.Show_LBInstanceGUI();
                 AccountManager.LaunchAccounts();
                 if (addonflag)

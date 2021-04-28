@@ -72,13 +72,7 @@ namespace Gw2_Launchbuddy
             string path = EnviromentManager.TMP_GFXConfig;
             ToXml(path, config);
 
-            int timeout = 0;
-            while(IsGFXLocked() && timeout < 10)
-            {
-                timeout++;
-                System.Threading.Thread.Sleep(1000);
-            }
-            if (timeout > 9) throw new System.Exception("GFX file is locked. Make sure that all game instances are launched correctly.");
+            WaitForGFXLock();
 
             if (!File.Exists(path))
             {
@@ -93,6 +87,17 @@ namespace Gw2_Launchbuddy
                 }
                 File.Move(path, EnviromentManager.GwClientXmlPath);
             }
+        }
+
+        static void WaitForGFXLock()
+        {
+            int timeout = 0;
+            while (IsGFXLocked() && timeout < 50)
+            {
+                timeout++;
+                System.Threading.Thread.Sleep(200);
+            }
+            if (timeout >= 50) throw new System.Exception("GFX file is locked. Make sure that all game instances are launched correctly.");
         }
 
         static bool IsGFXLocked()
@@ -116,6 +121,7 @@ namespace Gw2_Launchbuddy
 
         public static void RestoreDefault()
         {
+            WaitForGFXLock();
             if (File.Exists(EnviromentManager.TMP_BackupGFXConfig))
             {
                 if (File.Exists(EnviromentManager.GwClientXmlPath)) File.Delete(EnviromentManager.GwClientXmlPath);

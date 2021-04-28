@@ -581,6 +581,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             try
             {
+                Helpers.FileWatchDog localdatwatcher = new Helpers.FileWatchDog(EnviromentManager.GwLocaldatPath,4,count_negativeflank:true);
+                //localdatwatcher.StartWatching();
+
                 while (Status < ClientStatus.Running)
             {
 
@@ -599,6 +602,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                                 Status = ClientStatus.Crash;
                             }
                         }
+
 
                     switch (Status)
                     {
@@ -649,6 +653,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                                 if (account.Settings.StartBlish) LBBlish.LaunchBlishInstance(account);
                                 if (account.Settings.StartTaco) LBTacO.LaunchTacoInstance(account);
                             } catch { }
+                            
                             break;
                     }
                 }
