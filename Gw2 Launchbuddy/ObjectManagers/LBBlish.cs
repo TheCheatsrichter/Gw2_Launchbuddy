@@ -48,6 +48,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
             LBConfiguration.Save();
         }
 
+        public static void ResetPath()
+        {
+            path = "";
+            LBConfiguration.Config.blish_path = path;
+            LBConfiguration.Save();
+            
+        }
+
         public static void LaunchBlishInstance(Account acc)
         {
             if(IsValid)

@@ -1750,6 +1750,18 @@ namespace Gw2_Launchbuddy
             LBBlish.LaunchBlishInstance(acc);
         }
 
+        private void bt_resetblishpath_Click(object sender, RoutedEventArgs e)
+        {
+            LBBlish.ResetPath();
+            tb_blishpath.Text = LBBlish.BlishPath;
+        }
+
+        private void bt_resettacopath_Click(object sender, RoutedEventArgs e)
+        {
+            LBTacO.ResetPath();
+            tb_tacopath.Text = LBTacO.TacoPath;
+        }
+
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)
         {
             PluginManager.UpdatePlugin(((sender as Button).DataContext as Plugin_Wrapper).Plugin,true);

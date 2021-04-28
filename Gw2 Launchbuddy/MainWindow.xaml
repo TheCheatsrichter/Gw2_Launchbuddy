@@ -968,6 +968,7 @@
                             </StackPanel>
                             <DockPanel >
                                 <Button x:Name="bt_settacopath" Content="Set TacO Path" Width="100" Height="30" Click="bt_settacopath_Click"/>
+                                <Button x:Name="bt_resettacopath" Content="X" Width="30" Height="30" Click="bt_resettacopath_Click"/>
                                 <TextBox IsEnabled="False" MinWidth="450" x:Name="tb_tacopath"/>
                             </DockPanel>
                         </StackPanel>
@@ -978,6 +979,7 @@
                             </StackPanel>
                             <DockPanel >
                                 <Button x:Name="bt_setblishpath" Content="Set Blish Path" Width="100" Height="30" Click="bt_setblishpath_Click"/>
+                                <Button x:Name="bt_resetblishpath" Content="X" Width="30" Height="30" Click="bt_resetblishpath_Click"/>
                                 <TextBox IsEnabled="False" MinWidth="450" x:Name="tb_blishpath"/>
                             </DockPanel>
                         </StackPanel>

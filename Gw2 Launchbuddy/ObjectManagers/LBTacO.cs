@@ -48,6 +48,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
             LBConfiguration.Save();
         }
 
+        public static void ResetPath()
+        {
+            path = "";
+            LBConfiguration.Config.taco_path = path;
+            LBConfiguration.Save();
+        }
+
         public static void LaunchTacoInstance(Account acc)
         {
             if(IsValid)
