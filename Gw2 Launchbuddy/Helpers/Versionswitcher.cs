@@ -74,7 +74,14 @@ namespace Gw2_Launchbuddy
 
         public static void DeleteUpdater()
         {
-            if (File.Exists("Updater.exe")) File.Delete("Updater.exe");
+            try
+            {
+                if (File.Exists("Updater.exe")) File.Delete("Updater.exe");
+            }
+            catch
+            {
+
+            }
         }
 
         public static void GetReleaseList()

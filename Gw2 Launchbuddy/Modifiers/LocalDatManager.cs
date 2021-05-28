@@ -96,27 +96,34 @@ namespace Gw2_Launchbuddy.Modifiers
 
                 string OldHash = String.Copy(file.MD5HASH);
 
-                Process pro = new Process { StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } };
-                pro.Start();
-                Thread.Sleep(500);
-                pro.Refresh();
-                Action waitforlaunch = () => ModuleReader.WaitForModule("WINNSI.DLL", pro);
-                Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating a Loginfile. This window should automatically close when the launcher login is ready.", waitforlaunch);
-
-                if (!pro.CloseMainWindow())
+                try
                 {
-                    try { pro.Close(); } catch { }
-                    try { pro.Kill(); } catch { }
+                    Process pro = new Process { StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } };
+                    pro.Start();
+                    Thread.Sleep(500);
+                    pro.Refresh();
+                    Action waitforlaunch = () => ModuleReader.WaitForModule("WINNSI.DLL", pro);
+                    Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating a Loginfile. This window should automatically close when the launcher login is ready.", waitforlaunch);
+
+                    if (!pro.CloseMainWindow())
+                    {
+                        try { pro.Close(); } catch { }
+                        try { pro.Kill(); } catch { }
+                    }
+
+                    Action waitAction = () => WaitForProcessClose(pro);
+                    Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to be closed.", waitAction);
+
+                    waitAction = () => WaitForLoginfileRelease(file);
+                    Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to save the updated loginfile.", waitAction);
+
+                    waitAction = () => WaitForLoginfileRelease(EnviromentManager.GwLocaldatPath);
+                    Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to release the loginfile.", waitAction);
                 }
-
-                Action waitAction = () => WaitForProcessClose(pro);
-                Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to be closed.", waitAction);
-
-                waitAction = () => WaitForLoginfileRelease(file);
-                Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to save the updated loginfile.", waitAction);
-
-                waitAction = () => WaitForLoginfileRelease(EnviromentManager.GwLocaldatPath);
-                Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to release the loginfile.", waitAction);
+                catch (Exception e)
+                {
+                    throw new Exception("An error occured while updating the loginfile.\n"+EnviromentManager.Create_Environment_Report()+e.Message);
+                }
 
                 ToDefault(file);
 
