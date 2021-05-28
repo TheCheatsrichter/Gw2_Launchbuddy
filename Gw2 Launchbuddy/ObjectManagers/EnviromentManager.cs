@@ -339,10 +339,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 Action waitforlaunch = () => { while (!pro.HasExited) { } } ;
                 Helpers.BlockerInfo.Run("Game Update", "Launchbuddy waits for your game to be updated", waitforlaunch);
 
+                /*
                 //Overwrite xml file because -image does not update xml file
                 string xmldata = File.ReadAllText(EnviromentManager.GwClientXmlPath);
                 xmldata= xmldata.Replace(EnviromentManager.GwClientVersion, Api.ClientBuild);
                 File.WriteAllText(EnviromentManager.GwClientXmlPath, xmldata);
+                */
 
                 EnviromentManager.GwClientVersion = Api.ClientBuild;
                 

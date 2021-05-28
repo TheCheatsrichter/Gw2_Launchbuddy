@@ -105,10 +105,17 @@ namespace Gw2_Launchbuddy.Modifiers
                     Action waitforlaunch = () => ModuleReader.WaitForModule("WINNSI.DLL", pro);
                     Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating a Loginfile. This window should automatically close when the launcher login is ready.", waitforlaunch);
 
-                    if (!pro.CloseMainWindow())
+                    try
                     {
-                        try { pro.Close(); } catch { }
-                        try { pro.Kill(); } catch { }
+                        if (!pro.CloseMainWindow())
+                        {
+                            try { pro.Close(); } catch { }
+                            try { pro.Kill(); } catch { }
+                        }
+                    }
+                    catch
+                    {
+
                     }
 
                     Action waitAction = () => WaitForProcessClose(pro);
@@ -174,10 +181,17 @@ namespace Gw2_Launchbuddy.Modifiers
                 Thread.Sleep(100);
             }
 
-            if(!pro.CloseMainWindow())
+            try
             {
-                try { pro.Close(); } catch { }
-                try { pro.Kill(); } catch { }
+                if (!pro.CloseMainWindow())
+                {
+                    try { pro.Close(); } catch { }
+                    try { pro.Kill(); } catch { }
+                }
+            }
+            catch
+            {
+
             }
 
             Action waitAction = () => WaitForProcessClose(pro);
@@ -199,6 +213,7 @@ namespace Gw2_Launchbuddy.Modifiers
         private static bool WaitForProcessClose(Process pro)
         {
             int i = 0;
+            if (pro == null) return true;
             while (i < 10 && !pro.HasExited)
             {
                 Thread.Sleep(100);
@@ -297,17 +312,25 @@ namespace Gw2_Launchbuddy.Modifiers
 
         private string CalculateMD5(string filename)
         {
-            if (File.Exists(filename))
+            try
             {
-                using (var md5 = MD5.Create())
+                if (File.Exists(filename))
                 {
-                    using (var stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    using (var md5 = MD5.Create())
                     {
-                        var hash = md5.ComputeHash(stream);
-                        return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+                        using (var stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        {
+                            var hash = md5.ComputeHash(stream);
+                            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+                        }
                     }
                 }
             }
+            catch
+            {
+                return null;
+            }
+
             return null;
         }
 
