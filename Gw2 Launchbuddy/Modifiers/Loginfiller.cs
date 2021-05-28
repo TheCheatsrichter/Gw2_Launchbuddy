@@ -18,27 +18,37 @@ namespace Gw2_Launchbuddy.Modifiers
 
         public static void Login(string email,string passwd,Process pro, bool clearfields = false)
         {
-            pro.Refresh();
-            ModuleReader.WaitForModule("WINNSI.DLL",pro);
-            //SetForegroundWindow(pro.MainWindowHandle);
-            Thread.Sleep(1000);
-            for(int i =0;i<100;i++)PressKeyDown(Keys.Back,pro,false); //Very unclean method, but modifiers onyl work on focus
-            Thread.Sleep(50);
-            TypeString(email, pro);
-            PressKeyDown(Keys.Tab, pro);
-            TypeString(passwd, pro);
-            PressKeyDown(Keys.Tab, pro);
-            PressKeyDown(Keys.Tab, pro);
-            PressKeyDown(Keys.Tab, pro);
-            PressKeyDown(Keys.Enter, pro);
+            try
+            {
+                pro.Refresh();
+                ModuleReader.WaitForModule("WINNSI.DLL", pro);
+                //SetForegroundWindow(pro.MainWindowHandle);
+                Thread.Sleep(1000);
+                for (int i = 0; i < 100; i++) PressKeyDown(Keys.Back, pro, false); //Very unclean method, but modifiers onyl work on focus
+                Thread.Sleep(50);
+                TypeString(email, pro);
+                PressKeyDown(Keys.Tab, pro);
+                TypeString(passwd, pro);
+                PressKeyDown(Keys.Tab, pro);
+                PressKeyDown(Keys.Tab, pro);
+                PressKeyDown(Keys.Tab, pro);
+                PressKeyDown(Keys.Enter, pro);
+            }catch (InvalidOperationException e)
+            {
+                MessageBox.Show("Could not perfom automated login. Gameclient seems to have crashed / be closed before the login data could be filled in." + e.Message);
+            }
+
         }
 
         public static void PressLoginButton(Account acc)
         {
             ModuleReader.WaitForModule("WINNSI.DLL", acc.Client.Process);
             Thread.Sleep(1500);
-            PressKeyDown(Keys.Enter,acc.Client.Process);
-            PressKeyUp(Keys.Enter, acc.Client.Process);
+            if(!acc.Client.Process.HasExited)
+            {
+                PressKeyDown(Keys.Enter, acc.Client.Process);
+                PressKeyUp(Keys.Enter, acc.Client.Process);
+            }
         }
 
         private static void PressKeyDown(Keys key, Process pro,bool delay=true)
