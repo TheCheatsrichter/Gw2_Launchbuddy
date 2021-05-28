@@ -130,8 +130,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     try
                     {
                         Process addon_pro = new Process { StartInfo = addon.Info };
-                        addon.ChildProcess.Add(addon_pro);
-                        addon_pro.Start();
+
+                        if(File.Exists(addon.Info.FileName))
+                        {
+                            addon.ChildProcess.Add(addon_pro);
+                            addon_pro.Start();
+                        }else
+                        {
+                            MessageBox.Show($"Application {addon.Name} could not be found at: {addon.Info.FileName}. Please set the new path or delete this application in the Addon tab.");
+                        }
+
                     }
                     catch (Exception e)
                     {
