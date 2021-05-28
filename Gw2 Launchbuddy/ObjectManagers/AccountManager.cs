@@ -422,7 +422,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public void RecreateLoginFile()
         {
             if (HasLoginBackupData)
-                Loginfile = LocalDatManager.CreateNewFileAutomated(AccountID.ToString(), Email, Password);
+                Loginfile = LocalDatManager.CreateNewFile(AccountID.ToString(), Email, Password);
         }
 
 

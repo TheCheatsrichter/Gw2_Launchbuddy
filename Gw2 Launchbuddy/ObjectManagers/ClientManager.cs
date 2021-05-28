@@ -634,7 +634,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             if (Account.Settings.Loginfile != null)
                             {
                                 PressLoginButton();
-                                LocalDatManager.ToDefault();
+                                LocalDatManager.ToDefault(account.Settings.Loginfile);
                             }
                             Status = ClientStatus.Login;
                             break;

@@ -113,7 +113,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void AfterUI_Inits()
         {
-            UpdateAccounts();
             if (LBConfiguration.Config.autoupdatedatfiles)
             {
                 UpdateAccounts();
