@@ -20,7 +20,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class EnviromentManager
     {
-        public static Version LBVersion = new Version("2.3.1");
+        public static Version LBVersion = new Version("2.3.2");
         public static LaunchOptions LaunchOptions;
 
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
@@ -362,6 +362,39 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 if (LBInstanceGUI.WindowState == WindowState.Minimized) LBInstanceGUI.WindowState = WindowState.Normal;
                 LBInstanceGUI.Show();
             }
+        }
+
+        public static string Create_Environment_Report()
+        {
+            string report = "";
+
+            report += "\n\n########LB Folder########\n";
+            report += "Path:" + LBAppdataPath+"\n";
+            report += DirectoryFilesToString(LBAppdataPath);
+            report += "#########################\n";
+
+            report += "########GW Folder########\n";
+            report += "Path:" + GwAppdataPath + "\n";
+            report += DirectoryFilesToString(GwAppdataPath);
+            report += "#########################\n\n";
+            return report;
+        }
+
+        private static string DirectoryFilesToString(string path)
+        {
+            string report = "";
+            if (Directory.Exists(path))
+            {
+                foreach (string file in Directory.GetFiles(path))
+                {
+                    report += "\t-" + file+"\n";
+                }
+            }
+            else
+            {
+                report += $"Folder does not exist! Tried to find it at: {path}\n";
+            }
+            return report;
         }
     }
 

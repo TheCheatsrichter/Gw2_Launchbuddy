@@ -60,7 +60,7 @@ namespace Gw2_Launchbuddy.Modifiers
             }
             else
             {
-                throw new Exception("Provided Local.dat file does not exist or Linkfile is already created.");
+                throw new Exception($"Provided Local.dat file does not exist or Linkfile is already created. Source:{sourcefile} Exists:{File.Exists(sourcefile)}, Target:{EnviromentManager.GwLocaldatPath} Exists:{File.Exists(EnviromentManager.GwLocaldatPath)}");
             }
         }
 
@@ -127,8 +127,13 @@ namespace Gw2_Launchbuddy.Modifiers
 
             catch (Exception e)
             {
-                Repair();
-                throw new Exception("An error occured while swaping the Login file." + e.Message);
+                try
+                {
+                    Repair();
+                }
+                catch { throw new Exception("An error occured while swaping the Login file." + EnviromentManager.Create_Environment_Report() + "\n\n" + e.Message); }
+                
+                throw new Exception("An error occured while swaping the Login file." +EnviromentManager.Create_Environment_Report()+"\n\n" + e.Message);
             }
 
         }
