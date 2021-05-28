@@ -73,6 +73,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                    .ShowDialog((Helpers.FileDialog fileDialog) =>
                    {
                        string name = Path.GetFileName(fileDialog.FileName);
+                       if (String.IsNullOrEmpty(name)) return;
                        if (!File.Exists(EnviromentManager.LBIconsPath+name))
                        {
                            File.Copy(fileDialog.FileName, EnviromentManager.LBIconsPath + name);
