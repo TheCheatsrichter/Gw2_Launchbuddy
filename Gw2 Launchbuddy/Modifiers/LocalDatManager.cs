@@ -94,8 +94,16 @@ namespace Gw2_Launchbuddy.Modifiers
             {
                 Apply(file);
 
-                string OldHash = String.Copy(file.MD5HASH);
-
+                string OldHash;
+                
+                try
+                {
+                    OldHash = String.Copy(file.MD5HASH);
+                }catch
+                {
+                    OldHash = "";
+                }
+                
                 try
                 {
                     Process pro = new Process { StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } };
@@ -212,15 +220,22 @@ namespace Gw2_Launchbuddy.Modifiers
 
         private static bool WaitForProcessClose(Process pro)
         {
-            int i = 0;
-            if (pro == null) return true;
-            while (i < 10 && !pro.HasExited)
+            try
             {
-                Thread.Sleep(100);
-                pro.Refresh();
-                i++;
+                int i = 0;
+                if (pro == null) return true;
+                while (i < 10 && !pro.HasExited)
+                {
+                    Thread.Sleep(100);
+                    pro.Refresh();
+                    i++;
+                }
+                return i < 10;
             }
-            return i < 10;
+            catch
+            {
+                return true;
+            }
         }
 
         private static bool LoginFileIsLocked(LocalDatFile file)
