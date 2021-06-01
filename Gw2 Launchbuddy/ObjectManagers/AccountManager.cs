@@ -68,6 +68,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 acc.Client.Launch();
                 acc.Settings.RelaunchesLeft = acc.Settings.RelaunchesMax;
+                Thread.Sleep(3000);
             }
         }
         public static void LaunchAccounts(ObservableCollection<Account> accs)

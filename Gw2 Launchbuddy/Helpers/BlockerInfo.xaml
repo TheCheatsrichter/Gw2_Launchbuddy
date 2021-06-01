@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gw2_Launchbuddy.Helpers"
         mc:Ignorable="d"
-        Title="BlockerInfo" Height="150" Width="350" Icon="/Gw2 Launchbuddy;component/launchbuddy.ico" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" Background="Black" WindowStartupLocation="CenterScreen" >
+        Title="BlockerInfo" Height="150" Width="350" Icon="/Gw2 Launchbuddy;component/launchbuddy.ico" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" Background="Black" WindowStartupLocation="CenterScreen" Closing="Window_Closing" >
     <Window.OpacityMask>
         <ImageBrush ImageSource="/Gw2 Launchbuddy;component/Resources/acc_opacitymask.png"/>
     </Window.OpacityMask>

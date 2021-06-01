@@ -24,6 +24,7 @@ namespace Gw2_Launchbuddy.Helpers
         public static bool Done = false;
         private static Action function = null;
         static BlockerInfo blockerinfo;
+        static Thread blocker_thread;
 
         private BlockerInfo()
         {
@@ -38,7 +39,7 @@ namespace Gw2_Launchbuddy.Helpers
             function = blockerfunction;
             blockerinfo.Topmost = topmost;
             Done = false;
-            Thread blocker_thread = new Thread(new ThreadStart(WaitForFunction));
+            blocker_thread = new Thread(new ThreadStart(WaitForFunction));
             blocker_thread.Start();
             blockerinfo.ShowDialog();
             blockerinfo.Focus();
@@ -58,6 +59,18 @@ namespace Gw2_Launchbuddy.Helpers
         private void bt_cancel_Click(object sender, RoutedEventArgs e)
         {
             blockerinfo.Close();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Console.WriteLine("Aborting wait thread.");
+            blocker_thread.Suspend();
+            blocker_thread.Abort();
+            blocker_thread = null;
+            function = null;
+            Thread.Sleep(50);
+            Console.WriteLine("Wait Thread aborted");
+            GC.Collect();
         }
     }
 }

@@ -68,6 +68,7 @@ namespace Gw2_Launchbuddy.Modifiers
 
                 ToDefault(file);
 
+
                 if (File.Exists(EnviromentManager.GwLocaldatPath)) File.Move(EnviromentManager.GwLocaldatPath, EnviromentManager.GwLocaldatBakPath);
 
                 if (!CreateSymbolicLinkExtended(EnviromentManager.GwLocaldatPath, file.Path, SymbolicLink.File))
@@ -76,13 +77,17 @@ namespace Gw2_Launchbuddy.Modifiers
                     throw new Exception("Could not create symbolic link");
                 }
 
+
+
                 WaitForLoginfileRelease(EnviromentManager.GwLocaldatPath);
                 WaitForLoginfileRelease(file);
+                GC.Collect();
             }
             catch (Exception e)
             {
                 ToDefault(file);
-                throw new Exception("An error occured while swaping the Login file." + e.Message);
+                GC.Collect();
+                throw new Exception("An error occured while swaping the Login file.\n" + EnviromentManager.Create_Environment_Report() + e.Message);
             }
         }
 
@@ -143,6 +148,7 @@ namespace Gw2_Launchbuddy.Modifiers
                 ToDefault(file);
 
                 success = file.ValidateUpdate(OldHash);
+                GC.Collect();
             }
         }
 
@@ -151,7 +157,7 @@ namespace Gw2_Launchbuddy.Modifiers
             ToDefault(null);
 
             //Copy Loginfile to Backup Location because Localdat will be overwritten
-            File.Copy(EnviromentManager.GwLocaldatPath, EnviromentManager.GwLocaldatBakPath);
+            File.Copy(EnviromentManager.GwLocaldatPath, EnviromentManager.GwLocaldatBakPath,true);
 
             LocalDatFile datfile = new LocalDatFile();
 
@@ -214,7 +220,7 @@ namespace Gw2_Launchbuddy.Modifiers
             datfile.ValidateUpdate(null);
 
             ToDefault(null);
-
+            GC.Collect();
             return datfile;
         }
 
@@ -363,8 +369,8 @@ namespace Gw2_Launchbuddy.Modifiers
                 }
             }
             gw2build = EnviromentManager.GwClientVersion;
-            Valid = true;
-            return true;
+            Valid = File.Exists(EnviromentManager.LBLocaldatsPath+Name+".dat");
+            return Valid;
         }
 
         public LocalDatFile() { }
