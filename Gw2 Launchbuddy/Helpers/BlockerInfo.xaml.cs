@@ -63,14 +63,24 @@ namespace Gw2_Launchbuddy.Helpers
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Console.WriteLine("Aborting wait thread.");
-            blocker_thread.Suspend();
-            blocker_thread.Abort();
-            blocker_thread = null;
-            function = null;
-            Thread.Sleep(50);
-            Console.WriteLine("Wait Thread aborted");
-            GC.Collect();
+            try
+            {
+                Console.WriteLine("Aborting wait thread.");
+                blocker_thread.Suspend();
+                blocker_thread.Abort();
+                blocker_thread = null;
+                function = null;
+                Thread.Sleep(50);
+                Console.WriteLine("Wait Thread aborted");
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                GC.Collect();
+            }
         }
     }
 }

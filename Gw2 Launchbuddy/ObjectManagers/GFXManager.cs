@@ -48,6 +48,7 @@ namespace Gw2_Launchbuddy
 
         private static List<string> GetHeader()
         {
+            IORepeater.WaitForFileAvailability(EnviromentManager.GwClientXmlPath);
             List<string> header = new List<string>();
             string[] lines = System.IO.File.ReadAllLines(EnviromentManager.GwClientXmlPath);
             foreach (string line in lines)
@@ -61,6 +62,7 @@ namespace Gw2_Launchbuddy
 
         private static List<string> GetFoot()
         {
+            IORepeater.WaitForFileAvailability(EnviromentManager.GwClientXmlPath);
             List<string> foot = new List<string>();
             foot.Add("</GAMESETTINGS>");
             foot.Add("</GSA_SDK>");
@@ -72,7 +74,7 @@ namespace Gw2_Launchbuddy
             string path = EnviromentManager.TMP_GFXConfig;
             ToXml(path, config);
 
-            WaitForGFXLock();
+            IORepeater.WaitForFileAvailability(EnviromentManager.GwClientXmlPath);
 
             if (!File.Exists(path))
             {
@@ -89,39 +91,9 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        static void WaitForGFXLock()
-        {
-            int timeout = 0;
-            while (IsGFXLocked() && timeout < 50)
-            {
-                timeout++;
-                System.Threading.Thread.Sleep(200);
-            }
-            if (timeout >= 50) throw new System.Exception("GFX file is locked. Make sure that all game instances are launched correctly.");
-        }
-
-        static bool IsGFXLocked()
-        {
-            FileStream stream = null;
-            try
-            {
-                stream = File.Open(EnviromentManager.GwClientXmlPath,FileMode.Open, FileAccess.ReadWrite, FileShare.None);
-            }
-            catch (IOException)
-            {
-                return true;
-            }
-            finally
-            {
-                if (stream != null)
-                    stream.Close();
-            }
-            return false;
-        }
-
         public static void RestoreDefault()
         {
-            WaitForGFXLock();
+            IORepeater.WaitForFileAvailability(EnviromentManager.GwClientXmlPath);
             if (File.Exists(EnviromentManager.TMP_BackupGFXConfig))
             {
                 if (File.Exists(EnviromentManager.GwClientXmlPath)) File.Delete(EnviromentManager.GwClientXmlPath);
