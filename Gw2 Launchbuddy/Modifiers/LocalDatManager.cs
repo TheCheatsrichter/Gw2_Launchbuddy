@@ -56,6 +56,7 @@ namespace Gw2_Launchbuddy.Modifiers
 
         public static void Apply(LocalDatFile file)
         {
+            int step = 0;
             if (!file.Valid)
             {
                 MessageBox.Show("Invalid Login file " + file.Name + " please recreate this file in the account Manager.");
@@ -63,31 +64,34 @@ namespace Gw2_Launchbuddy.Modifiers
             }
             try
             {
+                step++;
                 IORepeater.WaitForFileAvailability(EnviromentManager.GwLocaldatPath);
                 IORepeater.WaitForFileAvailability(file.Path);
 
+                step++;
                 ToDefault(file);
 
-
+                step++;
                 if (File.Exists(EnviromentManager.GwLocaldatPath)) IORepeater.FileMove(EnviromentManager.GwLocaldatPath, EnviromentManager.GwLocaldatBakPath);
 
+                step++;
                 if (!CreateSymbolicLinkExtended(EnviromentManager.GwLocaldatPath, file.Path, SymbolicLink.File))
                 {
                     ToDefault(file);
                     throw new Exception("Could not create symbolic link");
                 }
 
-
-
+                step++;
                 IORepeater.WaitForFileAvailability(EnviromentManager.GwLocaldatPath);
                 IORepeater.WaitForFileAvailability(file.Path);
+                step++;
                 GC.Collect();
             }
             catch (Exception e)
             {
                 ToDefault(file);
                 GC.Collect();
-                throw new Exception("An error occured while swaping the Login file.\n" + EnviromentManager.Create_Environment_Report() + e.Message);
+                throw new Exception($"An error occured while swaping the Login file. Errorcode {step}\n" + EnviromentManager.Create_Environment_Report() + e.Message);
             }
         }
 

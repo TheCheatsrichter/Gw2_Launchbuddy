@@ -59,6 +59,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static void Clone(Account acc)
         {
             Account newacc = new Account(GenerateName(acc.Nickname + " Clone"), acc);
+            SaveAccounts();
+            ImportAccounts();
         }
 
         public static void LaunchAccounts()
@@ -68,7 +70,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 acc.Client.Launch();
                 acc.Settings.RelaunchesLeft = acc.Settings.RelaunchesMax;
-                Thread.Sleep(3000);
             }
         }
         public static void LaunchAccounts(ObservableCollection<Account> accs)
@@ -113,22 +114,25 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void SaveAccounts()
         {
-
             System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(Accounts.GetType());
             FileStream file = File.Create(EnviromentManager.LBAccPath);
             writer.Serialize(file, Accounts);
             file.Close();
-
         }
         public static void ImportAccounts()
         {
+            Accounts.Clear();
             try
             {
                 if (File.Exists(EnviromentManager.LBAccPath))
                 {
                     Stream xmlInputStream = File.OpenRead(EnviromentManager.LBAccPath);
                     XmlSerializer deserializer = new XmlSerializer(typeof(ObservableCollection<Account>));
-                    Accounts = (ObservableCollection<Account>)deserializer.Deserialize(xmlInputStream);
+
+                    foreach(Account acc in (ObservableCollection<Account>)deserializer.Deserialize(xmlInputStream))
+                    {
+                        //Do not add accs as they get added on Init!
+                    }
                     xmlInputStream.Close();
                 }
                 AddIDToOlderVersions();
