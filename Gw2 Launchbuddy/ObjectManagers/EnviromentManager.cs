@@ -20,7 +20,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class EnviromentManager
     {
-        public static Version LBVersion = new Version("2.3.8");
+        public static Version LBVersion = new Version("2.3.9");
         public static LaunchOptions LaunchOptions;
 
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
@@ -378,6 +378,20 @@ namespace Gw2_Launchbuddy.ObjectManagers
             report += "Path:" + GwAppdataPath + "\n";
             report += DirectoryFilesToString(GwAppdataPath);
             report += "#########################\n\n";
+
+            try
+            {
+                report += FileUtil.WhoIsLockingAsString(GwLocaldatPath);
+                report += FileUtil.WhoIsLockingAsString(GwLocaldatBakPath);
+                report += FileUtil.WhoIsLockingAsString(GwClientXmlPath);
+                report += FileUtil.WhoIsLockingAsString(GwClientPath);
+            }catch
+            {
+                report += "Could not fetch file handle protocol.";
+                report += "#########################\n\n";
+            }
+
+
             return report;
         }
 

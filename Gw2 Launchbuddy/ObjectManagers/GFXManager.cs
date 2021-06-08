@@ -1,4 +1,5 @@
 ﻿using Gw2_Launchbuddy.ObjectManagers;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -71,35 +72,52 @@ namespace Gw2_Launchbuddy
 
         public static void UseGFX(GFXConfig config)
         {
-            string path = EnviromentManager.TMP_GFXConfig;
-            ToXml(path, config);
-
-            IORepeater.WaitForFileAvailability(EnviromentManager.GwClientXmlPath);
-
-            if (!File.Exists(path))
+            try
             {
-                MessageBox.Show("GFX Setting could not be created! Please check GFX settings!");
-            }
-            if (File.Exists(path))
-            {
-                if (File.Exists(EnviromentManager.GwClientXmlPath))
+                IORepeater.WaitForFileAvailability(EnviromentManager.GwClientXmlPath);
+                string path = EnviromentManager.TMP_GFXConfig;
+                ToXml(path, config);
+
+                IORepeater.WaitForFileAvailability(EnviromentManager.GwClientXmlPath);
+
+                if (!File.Exists(path))
                 {
-                    File.Delete(EnviromentManager.TMP_BackupGFXConfig);
-                    File.Move(EnviromentManager.GwClientXmlPath, EnviromentManager.TMP_BackupGFXConfig);
+                    MessageBox.Show("GFX Setting could not be created! Please check GFX settings!");
                 }
-                File.Move(path, EnviromentManager.GwClientXmlPath);
+                if (File.Exists(path))
+                {
+                    if (File.Exists(EnviromentManager.GwClientXmlPath))
+                    {
+                        IORepeater.FileDelete(EnviromentManager.TMP_BackupGFXConfig);
+                        IORepeater.FileMove(EnviromentManager.GwClientXmlPath, EnviromentManager.TMP_BackupGFXConfig);
+                    }
+                    IORepeater.FileMove(path, EnviromentManager.GwClientXmlPath);
+                }
             }
+            catch (Exception e)
+            {
+                throw new Exception(EnviromentManager.Create_Environment_Report() + "\n" + e.Message);
+            }
+
         }
 
         public static void RestoreDefault()
         {
-            IORepeater.WaitForFileAvailability(EnviromentManager.GwClientXmlPath);
-            if (File.Exists(EnviromentManager.TMP_BackupGFXConfig))
+            try
             {
-                if (File.Exists(EnviromentManager.GwClientXmlPath)) File.Delete(EnviromentManager.GwClientXmlPath);
-                File.Move(EnviromentManager.TMP_BackupGFXConfig, EnviromentManager.GwClientXmlPath);
+                IORepeater.WaitForFileAvailability(EnviromentManager.GwClientXmlPath);
+                if (File.Exists(EnviromentManager.TMP_BackupGFXConfig))
+                {
+                    if (File.Exists(EnviromentManager.GwClientXmlPath)) IORepeater.FileDelete(EnviromentManager.GwClientXmlPath);
+                    IORepeater.FileMove(EnviromentManager.TMP_BackupGFXConfig, EnviromentManager.GwClientXmlPath);
+                }
+                if (File.Exists(EnviromentManager.TMP_GFXConfig)) IORepeater.FileDelete(EnviromentManager.TMP_GFXConfig);
             }
-            if (File.Exists(EnviromentManager.TMP_GFXConfig)) File.Delete(EnviromentManager.TMP_GFXConfig);
+
+            catch (Exception e)
+            {
+                throw new Exception(EnviromentManager.Create_Environment_Report() + "\n" + e.Message);
+            }
         }
 
         public static string[] ToXml(string dest,GFXConfig GFXConfig)

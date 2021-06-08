@@ -91,6 +91,7 @@ namespace Gw2_Launchbuddy.Modifiers
             {
                 ToDefault(file);
                 GC.Collect();
+
                 throw new Exception($"An error occured while swaping the Login file. Errorcode {step}\n" + EnviromentManager.Create_Environment_Report() + e.Message);
             }
         }

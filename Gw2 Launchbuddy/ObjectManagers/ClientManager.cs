@@ -203,11 +203,21 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public void SetProcess(Process pro, ClientStatus prostatus)
         {
             Process = pro;
-            Process.EnableRaisingEvents = true;
-            Process.Exited += OnClientClose;
-            status = status | prostatus;
-            if (prostatus == ClientStatus.None || prostatus == ClientStatus.Closed)
-                status = ClientStatus.None;
+            try
+            {
+                if (pro == null) return;
+                if (pro.HasExited) return;
+                Process.EnableRaisingEvents = true;
+                Process.Exited += OnClientClose;
+                status = status | prostatus;
+                if (prostatus == ClientStatus.None || prostatus == ClientStatus.Closed)
+                    status = ClientStatus.None;
+            }
+            catch
+            {
+                status = ClientStatus.Crash;
+            }
+
         }
 
         public Client(Account acc)

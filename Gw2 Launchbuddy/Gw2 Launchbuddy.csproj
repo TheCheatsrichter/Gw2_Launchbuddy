@@ -317,6 +317,7 @@
     <Compile Include="Helpers\BlockerInfo.xaml.cs">
       <DependentUpon>BlockerInfo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\FileUtil.cs" />
     <Compile Include="Helpers\FileWatchDog.cs" />
     <Compile Include="Modifiers\IORepeater.cs" />
     <Compile Include="Helpers\WindowInfo_Grabber.xaml.cs">
