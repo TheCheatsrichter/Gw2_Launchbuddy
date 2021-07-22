@@ -100,6 +100,23 @@ namespace Gw2_Launchbuddy.Modifiers
         {
             bool success = false;
 
+            //Catch threads / processes spawned by gameclient which could block the loginfile
+            Action waitforprocessclose = () =>
+            {
+                int i = 0;
+                while (Process.GetProcessesByName("*Gw2*.exe").Length == 1 && i<=50)
+                {
+                    Thread.Sleep(100);
+                    i++;
+                }
+                if(i==50)
+                {
+                    MessageBox.Show("An unexpected Guild Wars 2 gameclient still is running. Please wait for the gameclient to update / close. Overwise close the gameclient manually");
+                }
+            };
+
+            Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy waits for the gameclient to be closed.", waitforprocessclose);
+
             while (!success)
             {
                 Apply(file);
@@ -118,7 +135,6 @@ namespace Gw2_Launchbuddy.Modifiers
                 {
                     Process pro = new Process { StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } };
                     pro.Start();
-                    Thread.Sleep(500);
                     pro.Refresh();
                     Action waitforlaunch = () => ModuleReader.WaitForModule("WINNSI.DLL", pro);
                     Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating a Loginfile. This window should automatically close when the launcher login is ready.", waitforlaunch);
@@ -233,9 +249,14 @@ namespace Gw2_Launchbuddy.Modifiers
         {
             try
             {
+                pro.Refresh();
                 int i = 0;
-                if (pro == null) return true;
-                while (i < 10 && !pro.HasExited)
+                if (pro == null)
+                {
+                    Console.WriteLine("Process was null");
+                    return true;
+                }
+                while (i < 1000 && !pro.HasExited)
                 {
                     Thread.Sleep(100);
                     pro.Refresh();
@@ -317,7 +338,7 @@ namespace Gw2_Launchbuddy.Modifiers
         public string Name { get { return System.IO.Path.GetFileNameWithoutExtension(Path); } }
         public string Gw2Build { get { return gw2build; } }
         public bool IsUpToDate { get { return Gw2Build == EnviromentManager.GwClientVersion; } }
-        public bool IsOutdated { get { return !(IsUpToDate) & Valid; } }
+        public bool IsOutdated { get { return !(IsUpToDate) && Valid; } }
         public bool Valid = false;
         public string MD5HASH { get { return CalculateMD5(Path); } }
 

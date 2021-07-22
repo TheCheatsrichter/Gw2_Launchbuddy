@@ -165,7 +165,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             catch
             {
-                MessageBox.Show($"Hotkey did not execute successfully.\n");
+                MessageBox.Show($"Hotkey did not execute successfuly.\n");
             }
         }
     }

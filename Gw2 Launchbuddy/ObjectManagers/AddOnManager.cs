@@ -20,7 +20,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             AddOnCollection = new ObservableCollection<AddOn>(addOnCollection);
         }
 
-        public static void Add(string name, string[] args, bool IsMultilaunch, bool IsLbAddon)
+        public static void Add(string name, string[] args, bool IsMultilaunch, bool IsLbAddon,bool runAsAdmin=true)
         {
             if (name != "")
             {
@@ -34,7 +34,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             ProInfo.FileName = fileDialog.FileName;
                             ProInfo.Arguments = String.Join(" ", args);
                             ProInfo.WorkingDirectory = Path.GetDirectoryName(fileDialog.FileName);
-                            addOnCollection.Add(new AddOn(name, ProInfo, IsMultilaunch, IsLbAddon));
+                            addOnCollection.Add(new AddOn(name, ProInfo, IsMultilaunch, IsLbAddon,runAsAdmin));
                         }
                     });
             }
@@ -131,7 +131,17 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     {
                         Process addon_pro = new Process { StartInfo = addon.Info };
 
-                        if(File.Exists(addon.Info.FileName))
+                        bool addon_exists = false;
+
+                        if(addon.RunAsAdmin)
+                        {
+                            addon_exists = File.Exists(addon.Info.FileName);
+                        }else
+                        {
+                            addon_exists = File.Exists(addon.Info.Arguments);
+                        }
+
+                        if(addon_exists)
                         {
                             addon.ChildProcess.Add(addon_pro);
                             addon_pro.Start();
@@ -200,6 +210,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
     {
         [System.Xml.Serialization.XmlElement("Name")]
         public string Name { set; get; }
+        [System.Xml.Serialization.XmlElement("RunAsAdmin")]
+        public bool RunAsAdmin { set; get; }
 
         [XmlIgnore]
         public ProcessStartInfo Info
@@ -207,12 +219,23 @@ namespace Gw2_Launchbuddy.ObjectManagers
             set { }
             get
             {
-                return new ProcessStartInfo
+                if(RunAsAdmin)
                 {
-                    Arguments = Args,
-                    FileName = Path,
-                    WorkingDirectory = new FileInfo(Path).Directory.FullName
-                };
+                    return new ProcessStartInfo
+                    {
+                        Arguments = Args,
+                        FileName = Path,
+                        WorkingDirectory = new FileInfo(Path).Directory.FullName
+                    };
+                }else
+                {
+                    return new ProcessStartInfo
+                    {
+                        Arguments = Path + Args,
+                        FileName = "explorer",
+                        WorkingDirectory = new FileInfo(Path).Directory.FullName
+                    };
+                }
             }
         }
 
@@ -231,7 +254,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         [XmlIgnore]
         public List<Process> ChildProcess = new List<Process>();
 
-        public AddOn(string Name, ProcessStartInfo Info, bool IsMultilaunch, bool IsLbAddon)
+
+        public AddOn(string Name, ProcessStartInfo Info, bool IsMultilaunch, bool IsLbAddon,bool RunAsAdmin)
         {
             this.Name = Name;
             this.Info = Info;
@@ -239,6 +263,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             this.IsLbAddon = IsLbAddon;
             Args = Info.Arguments;
             Path = Info.FileName;
+            this.RunAsAdmin = RunAsAdmin;
         }
 
         public AddOn()

@@ -47,7 +47,14 @@ namespace Gw2_Launchbuddy.Helpers
 
         private static void WaitForFunction()
         {
-            function();
+            try
+            {
+                function();
+            }catch
+            {
+                Console.WriteLine("Waiter crashed");
+            }
+            
             try
             {
                 Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => blockerinfo.Close()));

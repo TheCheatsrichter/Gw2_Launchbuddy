@@ -458,7 +458,7 @@
                                             <StackPanel>
                                                 <DockPanel>
                                                     <Button DockPanel.Dock="Left" Name="bt_loginfile" Height="22" Width="120" Click="bt_loginfile_Click">Set Loginfile</Button>
-                                                    <Label Foreground="Green" Content="Loginfile successfully configured" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" />
+                                                    <Label Foreground="Green" Content="Loginfile successfuly configured" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" />
                                                 </DockPanel>
                                                 <Button DockPanel.Dock="Left" Name="bt_loginfileupdate" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" Height="22" Width="120" HorizontalAlignment="Left" Click="bt_loginfileupdate_Click" ToolTip="Manually repair your Loginfile if the automated Update did not work">Repair Loginfile</Button>
                                                 <Expander DockPanel.Dock="Top" Margin="5,0,0,0" >
@@ -476,7 +476,7 @@
                                                             <Button Name="bt_recerateloginfile" MinWidth="200" Content="Recreate Loginfile" Margin="0,20,0,0" Visibility="{Binding Path=HasLoginBackupData, Converter={StaticResource BoolToVis}}" HorizontalAlignment="Left" Click="bt_recerateloginfile_Click"/>
                                                         </StackPanel>
                                                         <StackPanel DockPanel.Dock="Right">
-                                                            <TextBlock Text=" ATTENTION: Before using recreation make sure that remember email and remember password was checked on the last successfull login!" Foreground="Red" DockPanel.Dock="Right" TextWrapping="Wrap" Margin="20,0,20,20"/>
+                                                            <TextBlock Text=" ATTENTION: Before using recreation make sure that remember email and remember password was checked on the last successful login!" Foreground="Red" DockPanel.Dock="Right" TextWrapping="Wrap" Margin="20,0,20,20"/>
                                                             <Label Content="Description:" Style="{StaticResource H3}" DockPanel.Dock="Top" Margin="15,0,0,0"/>
                                                             <TextBlock DockPanel.Dock="Right" Text="Some Gw2 Game updates can corrupt your Loginfile to an unrepairable state. To easily recreate a loginfile you can optionaly backup your login data here." TextWrapping="Wrap" Margin="20,0,20,20"/>
                                                         </StackPanel>
@@ -921,6 +921,9 @@
                                     <GridViewColumn Width="80" DisplayMemberBinding="{Binding IsLbAddon}">
                                         <GridViewColumnHeader Tag="IsLbAddon" Content="Start with LB"/>
                                     </GridViewColumn>
+                                    <GridViewColumn Width="80" DisplayMemberBinding="{Binding RunAsAdmin}">
+                                        <GridViewColumnHeader Tag="RunAsAdmin" Content="Run as Admin"/>
+                                    </GridViewColumn>
                                     <GridViewColumn  DisplayMemberBinding="{Binding Path}">
                                         <GridViewColumnHeader Tag="Path" Content="Path"/>
                                     </GridViewColumn>
@@ -930,9 +933,10 @@
                         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2" Margin="0,5">
                             <Label Content="Name:"/>
                             <TextBox x:Name="tb_AddonName" Width="100" Height="23"/>
-                            <Label Content="Parameters"/>
+                            <Label Content="Arguments"/>
                             <TextBox x:Name="tb_AddonArgs" Width="100" Height="23"/>
                             <CheckBox x:Name="cb_AddonOnLB" Content="Start with LB" VerticalAlignment="Center" Margin="5,0" />
+                            <CheckBox x:Name="cb_AddonRunAsAdmin" Content="Run As Admin" VerticalAlignment="Center" Margin="5,0" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1"  HorizontalAlignment="Right">
                             <Button x:Name="bt_AddAddon" Content="Add" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_AddAddon_Click"/>

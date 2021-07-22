@@ -300,18 +300,26 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             if (GwClientVersion != null)
             {
-                if (GwClientUpToDate == null && Api.Online)
+                //GwClientUpToDate defaults to null on startup
+                if (GwClientUpToDate == null)
                 {
-                    try
+                    if(Api.Online)
                     {
-                        Debug.WriteLine($"API Buildversion:{Api.ClientBuild} Local version:{GwClientVersion}");
-                        GwClientUpToDate = int.Parse(Api.ClientBuild) <= int.Parse(GwClientVersion);
-                    }
-                    catch
+                        try
+                        {
+                            Debug.WriteLine($"API Buildversion:{Api.ClientBuild} Local version:{GwClientVersion}");
+                            GwClientUpToDate = int.Parse(Api.ClientBuild) <= int.Parse(GwClientVersion);
+                        }
+                        catch
+                        {
+                            GwClientUpToDate = Api.ClientBuild.ToLower() == GwClientVersion.ToLower();
+                        }
+                    }else
                     {
-                        GwClientUpToDate = Api.ClientBuild.ToLower() == GwClientVersion.ToLower();
+                        MessageBox.Show("Guild Wars 2 API is not reachable. Therefore Launchbuddy defaults to updating the game client.");
+                        GwClientUpToDate = false;
                     }
-                    
+             
                     if (!(bool)GwClientUpToDate)
                     {
                         UpdateGwClient();
@@ -320,38 +328,52 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             else
             {
-                LoadGwClientInfo();
+                
+                MessageBox.Show("Could not read current Guild Wars2 client version. Please manually check the Guild Wars 2 gameclient for updates and only then proceed with usgae of Launchbuddy");
             }
         }
 
         private static void UpdateGwClient()
         {
-            if (Process.GetProcessesByName("*Gw2*.exe").Length == 0)
-            {
-                Process pro = new Process();
-                pro.StartInfo = new ProcessStartInfo { FileName=EnviromentManager.GwClientExePath, Arguments = "-image" };
-                pro.Start();
-                Thread.Sleep(1000);
-                pro.Refresh();
-                Modifiers.ModuleReader.WaitForModule("WINNSI.dll",pro);
-                Thread.Sleep(1000); //Buffer to not land between launcher update/ game update
-                pro.Refresh();
-                Action waitforlaunch = () => { while (!pro.HasExited) { } } ;
-                Helpers.BlockerInfo.Run("Game Update", "Launchbuddy waits for your game to be updated", waitforlaunch);
-
-                /*
-                //Overwrite xml file because -image does not update xml file
-                string xmldata = File.ReadAllText(EnviromentManager.GwClientXmlPath);
-                xmldata= xmldata.Replace(EnviromentManager.GwClientVersion, Api.ClientBuild);
-                File.WriteAllText(EnviromentManager.GwClientXmlPath, xmldata);
-                */
-
-                EnviromentManager.GwClientVersion = Api.ClientBuild;
-                
-            }
-            else
+            while (Process.GetProcessesByName("*Gw2*.exe").Length == 1)
             {
                 MessageBox.Show("Please close all running Guild Wars 2 game instances to update the game.");
+            }
+
+            Process pro = new Process();
+            pro.StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath, Arguments = "-image" };
+            pro.Start();
+            pro.Refresh();
+            Action waitforlaunch = () => {
+                try
+                {
+                    while (!pro.HasExited)
+                    {
+                        Console.WriteLine(pro.HasExited);
+                    }
+                }catch
+                {
+                    Console.WriteLine("Waiter crashed");
+                }
+
+            };
+            Helpers.BlockerInfo.Run("Game Update", "Launchbuddy waits for your game to be updated", waitforlaunch);
+
+            /*
+            //Overwrite xml file because -image does not update xml file
+            string xmldata = File.ReadAllText(EnviromentManager.GwClientXmlPath);
+            xmldata= xmldata.Replace(EnviromentManager.GwClientVersion, Api.ClientBuild);
+            File.WriteAllText(EnviromentManager.GwClientXmlPath, xmldata);
+            */
+
+            string oldbuild = EnviromentManager.GwClientVersion;
+
+            //Reimport xml file
+            LoadGwClientInfo();
+            if(int.Parse(oldbuild)>= int.Parse(EnviromentManager.GwClientVersion))
+            {
+                MessageBox.Show($"The gameclient did not change its version when updating (Previous Version:{oldbuild} New Version: {EnviromentManager.GwClientVersion})." +
+                    $" Was the gameupdate successful? Please update Gw2 manually and only then proceed with Launchbuddys usage.");
             }
         }
 

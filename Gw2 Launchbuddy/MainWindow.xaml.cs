@@ -1586,7 +1586,7 @@ namespace Gw2_Launchbuddy
         public bool addonflag = true;
         private void bt_AddAddon_Click(object sender, RoutedEventArgs e)
         {
-            AddOnManager.Add(tb_AddonName.Text,tb_AddonArgs.Text.Split('-'), false,(bool)cb_AddonOnLB.IsChecked);
+            AddOnManager.Add(tb_AddonName.Text,tb_AddonArgs.Text.Split('-'), false,(bool)cb_AddonOnLB.IsChecked,(bool)cb_AddonRunAsAdmin.IsChecked);
         }
 
         private void bt_RemAddon_Click(object sender, RoutedEventArgs e)

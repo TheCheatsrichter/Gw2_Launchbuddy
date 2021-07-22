@@ -237,7 +237,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                                 IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
                                 
 
-                                //if(!plugin.Install())  MessageBox.Show($"Plugin {assembly.FullName} could not be installed successfully. Proceed with cation.");
+                                //if(!plugin.Install())  MessageBox.Show($"Plugin {assembly.FullName} could not be installed successfuly. Proceed with cation.");
 
                                 if(plugin.Verify)
                                 {
