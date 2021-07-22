@@ -256,7 +256,7 @@ namespace Gw2_Launchbuddy.Modifiers
                     Console.WriteLine("Process was null");
                     return true;
                 }
-                while (i < 1000 && !pro.HasExited)
+                while (i < 1800 && !pro.HasExited)
                 {
                     Thread.Sleep(100);
                     pro.Refresh();
