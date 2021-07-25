@@ -161,6 +161,7 @@ namespace Gw2_Launchbuddy
             cb_lbupdatescheck.IsChecked = LBConfiguration.Config.notifylbupdate;
             cb_useinstancegui.IsChecked = LBConfiguration.Config.useinstancegui;
             cb_autoupdatedatfiles.IsChecked = LBConfiguration.Config.autoupdatedatfiles;
+            cb_forcegameclientupdate.IsChecked = LBConfiguration.Config.forcegameclientupdate;
         }
 
         private void DonatePopup()
@@ -1760,6 +1761,17 @@ namespace Gw2_Launchbuddy
         {
             LBTacO.ResetPath();
             tb_tacopath.Text = LBTacO.TacoPath;
+        }
+
+        private void cb_forcegameclientupdate_Checked(object sender, RoutedEventArgs e)
+        {
+            LBConfiguration.Config.forcegameclientupdate = (bool)(sender as CheckBox).IsChecked;
+        }
+
+        private void cb_forcegameclientupdate_Click(object sender, RoutedEventArgs e)
+        {
+            LBConfiguration.Config.forcegameclientupdate = (bool)cb_forcegameclientupdate.IsChecked;
+            LBConfiguration.Save();
         }
 
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)

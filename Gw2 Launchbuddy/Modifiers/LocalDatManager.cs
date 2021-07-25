@@ -249,6 +249,7 @@ namespace Gw2_Launchbuddy.Modifiers
         {
             try
             {
+                uint timeout_repeats = 1800;
                 pro.Refresh();
                 int i = 0;
                 if (pro == null)
@@ -256,13 +257,18 @@ namespace Gw2_Launchbuddy.Modifiers
                     Console.WriteLine("Process was null");
                     return true;
                 }
-                while (i < 1800 && !pro.HasExited)
+                while (i <= timeout_repeats && !pro.HasExited)
                 {
                     Thread.Sleep(100);
                     pro.Refresh();
                     i++;
                 }
-                return i < 10;
+                if(i>=timeout_repeats)
+                {
+                    MessageBox.Show("Gameclient timeout of 3 minutes was reached. If your game client still is updating / processing something please wait for completion. Only then press continue.");
+                }
+
+                return i < timeout_repeats;
             }
             catch
             {

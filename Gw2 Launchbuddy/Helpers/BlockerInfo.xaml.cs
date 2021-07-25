@@ -31,7 +31,7 @@ namespace Gw2_Launchbuddy.Helpers
             InitializeComponent();
         }
 
-        public static void Run(string Title,string Message, Action blockerfunction,bool topmost=false)
+        public static void Run(string Title,string Message, Action blockerfunction,bool topmost=true)
         {
             blockerinfo = new BlockerInfo();
             blockerinfo.Title = Title;
@@ -42,7 +42,7 @@ namespace Gw2_Launchbuddy.Helpers
             blocker_thread = new Thread(new ThreadStart(WaitForFunction));
             blocker_thread.Start();
             blockerinfo.ShowDialog();
-            blockerinfo.Focus();
+            //blockerinfo.Focus();
         }
 
         private static void WaitForFunction()
@@ -52,15 +52,16 @@ namespace Gw2_Launchbuddy.Helpers
                 function();
             }catch
             {
-                Console.WriteLine("Waiter crashed");
+                Console.WriteLine("Blockerinfo crashed on function execution");
             }
             
             try
             {
-                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => blockerinfo.Close()));
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => blockerinfo.Close()));
                 Done = true;
             }
-            catch { }
+            catch (Exception e) {
+            }
         }
 
         private void bt_cancel_Click(object sender, RoutedEventArgs e)

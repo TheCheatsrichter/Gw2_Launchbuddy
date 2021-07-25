@@ -105,5 +105,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public bool autoupdatedatfiles =true;
         public string taco_path;
         public string blish_path;
+        // Defaultvalue should be changed to false when API works again
+        public bool forcegameclientupdate = true;
     }
 }

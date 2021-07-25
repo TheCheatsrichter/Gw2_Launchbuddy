@@ -20,7 +20,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class EnviromentManager
     {
-        public static Version LBVersion = new Version("2.3.9");
+        public static Version LBVersion = new Version("2.4.0");
         public static LaunchOptions LaunchOptions;
 
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
@@ -81,7 +81,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
             DirectorySetup();
             LoadLBConfig();
             LoadGwClientInfo();
-            CheckGwClientVersion();
 
             //Rights Check :P
             CheckApplicationRights();
@@ -113,6 +112,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void AfterUI_Inits()
         {
+            CheckGwClientVersion();
+
             if (LBConfiguration.Config.autoupdatedatfiles)
             {
                 UpdateAccounts();
@@ -298,6 +299,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
         }
         public static void CheckGwClientVersion()
         {
+            if (LBConfiguration.Config.forcegameclientupdate)
+            {
+                UpdateGwClient(true);
+                return;
+            }
+
             if (GwClientVersion != null)
             {
                 //GwClientUpToDate defaults to null on startup
@@ -333,7 +340,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
-        private static void UpdateGwClient()
+        private static void UpdateGwClient(bool isforced=false)
         {
             while (Process.GetProcessesByName("*Gw2*.exe").Length == 1)
             {
@@ -344,20 +351,22 @@ namespace Gw2_Launchbuddy.ObjectManagers
             pro.StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath, Arguments = "-image" };
             pro.Start();
             pro.Refresh();
+            
             Action waitforlaunch = () => {
-                try
+            try
+            {
+                while (Process.GetProcessById(pro.Id) != null)
                 {
-                    while (!pro.HasExited)
-                    {
-                        Console.WriteLine(pro.HasExited);
-                    }
-                }catch
-                {
-                    Console.WriteLine("Waiter crashed");
                 }
-
+            }
+            catch
+            {
+                //GetProcess crashes when process is null
+            }
             };
+            
             Helpers.BlockerInfo.Run("Game Update", "Launchbuddy waits for your game to be updated", waitforlaunch);
+
 
             /*
             //Overwrite xml file because -image does not update xml file
@@ -366,14 +375,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
             File.WriteAllText(EnviromentManager.GwClientXmlPath, xmldata);
             */
 
-            string oldbuild = EnviromentManager.GwClientVersion;
-
-            //Reimport xml file
-            LoadGwClientInfo();
-            if(int.Parse(oldbuild)>= int.Parse(EnviromentManager.GwClientVersion))
+            if (!isforced)
             {
-                MessageBox.Show($"The gameclient did not change its version when updating (Previous Version:{oldbuild} New Version: {EnviromentManager.GwClientVersion})." +
-                    $" Was the gameupdate successful? Please update Gw2 manually and only then proceed with Launchbuddys usage.");
+                string oldbuild = EnviromentManager.GwClientVersion;
+                //Reimport xml file
+                LoadGwClientInfo();
+                if (int.Parse(oldbuild) >= int.Parse(EnviromentManager.GwClientVersion))
+                {
+                    MessageBox.Show($"The gameclient did not change its version when updating (Previous Version:{oldbuild} New Version: {EnviromentManager.GwClientVersion})." +
+                        $" Was the gameupdate successful? Please update Gw2 manually and only then proceed with Launchbuddys usage.");
+                }
             }
         }
 
