@@ -133,13 +133,17 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
                         bool addon_exists = false;
 
+                        /*
                         if(addon.RunAsAdmin)
                         {
-                            addon_exists = File.Exists(addon.Info.FileName);
-                        }else
+                        */
+                        addon_exists = File.Exists(addon.Info.FileName);
+
+                        /*}else
                         {
                             addon_exists = File.Exists(addon.Info.Arguments);
                         }
+                        */
 
                         if(addon_exists)
                         {
@@ -219,23 +223,22 @@ namespace Gw2_Launchbuddy.ObjectManagers
             set { }
             get
             {
+                /*
                 if(RunAsAdmin)
                 {
+                */
                     return new ProcessStartInfo
                     {
                         Arguments = Args,
                         FileName = Path,
                         WorkingDirectory = new FileInfo(Path).Directory.FullName
                     };
-                }else
+                /*}
+                else
                 {
-                    return new ProcessStartInfo
-                    {
-                        Arguments = Path + Args,
-                        FileName = "explorer",
-                        WorkingDirectory = new FileInfo(Path).Directory.FullName
-                    };
+                    //NO Admin support currently removed as it triggered several Antivrus flags.
                 }
+                */
             }
         }
 

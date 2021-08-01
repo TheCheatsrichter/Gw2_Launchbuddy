@@ -86,6 +86,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 if(!acc.Settings.Loginfile.IsUpToDate)LocalDatManager.UpdateLocalDat(acc.Settings.Loginfile);
             }
+            SaveAccounts();
         }
 
         public static void UpdateAccountFilesSelectedOnly()

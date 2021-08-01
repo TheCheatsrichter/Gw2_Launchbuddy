@@ -20,7 +20,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class EnviromentManager
     {
-        public static Version LBVersion = new Version("2.4.0");
+        public static Version LBVersion = new Version("2.4.2");
         public static LaunchOptions LaunchOptions;
 
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
@@ -386,6 +386,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                         $" Was the gameupdate successful? Please update Gw2 manually and only then proceed with Launchbuddys usage.");
                 }
             }
+            LoadGwClientInfo();
         }
 
         public static void Show_LBInstanceGUI()
