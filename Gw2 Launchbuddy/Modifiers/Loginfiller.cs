@@ -43,8 +43,14 @@ namespace Gw2_Launchbuddy.Modifiers
         public static void PressLoginButton(Account acc)
         {
             ModuleReader.WaitForModule("WINNSI.DLL", acc.Client.Process);
-            Thread.Sleep(1500);
+            Thread.Sleep(1800+(750*ClientManager.ActiveClients.Count));
             if(!acc.Client.Process.HasExited)
+            {
+                PressKeyDown(Keys.Enter, acc.Client.Process);
+                PressKeyUp(Keys.Enter, acc.Client.Process);
+            }
+            Thread.Sleep(1800);
+            if (!acc.Client.Process.HasExited)
             {
                 PressKeyDown(Keys.Enter, acc.Client.Process);
                 PressKeyUp(Keys.Enter, acc.Client.Process);
