@@ -59,6 +59,15 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static void Clone(Account acc)
         {
             Account newacc = new Account(GenerateName(acc.Nickname + " Clone"), acc);
+            newacc.Settings.Loginfile = new LocalDatFile
+            {
+                Path = EnviromentManager.LBLocaldatsPath + newacc.ID + ".dat",
+                gw2build = acc.Settings.Loginfile.Gw2Build,
+                Valid = acc.Settings.Loginfile.Valid,
+            };
+
+            File.Copy(acc.Settings.Loginfile.Path, newacc.Settings.Loginfile.Path);
+            
             SaveAccounts();
             ImportAccounts();
         }
