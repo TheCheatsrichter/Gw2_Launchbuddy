@@ -141,6 +141,19 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
                     foreach(Account acc in (ObservableCollection<Account>)deserializer.Deserialize(xmlInputStream))
                     {
+                        Arguments tempArguments = new Arguments();
+                        foreach (var argmt in tempArguments)
+                        {
+                            try
+                            {
+                                argmt.IsActive = acc.Settings.Arguments.First(a => a.Flag == argmt.Flag).IsActive;
+                            }
+                            catch (Exception e)
+                            {
+                                // Pass this. Probably use FirstOrDefault here.
+                            }
+                        }
+                        acc.Settings.Arguments = tempArguments;
                         //Do not add accs as they get added on Init!
                     }
                     xmlInputStream.Close();

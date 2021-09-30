@@ -27,6 +27,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Add(new Argument("-windowed", "Forces Guild Wars 2 to run in windowed mode. In game, you can switch to windowed mode by pressing Alt + Enter or clicking the window icon in the upper right corner.", false));
             Add(new Argument("-umbra gpu", "Forces the use of umbra's GPU accelerated culling. In most cases, using this results in higher cpu usage and lower gpu usage decreasing the frame-rate.", false));
             Add(new Argument("-maploadinfo", "Shows diagnostic information during map loads, including load percentages and elapsed time.", false));
+            Add(new Argument("-dx9", "Forces the game to run using the DirectX 9 renderer.", false));
+            Add(new Argument("-dx11", "Forces the game to run using the beta DirectX 11 renderer.", false));
         }
 
         private Arguments() { }
