@@ -14,10 +14,18 @@ namespace Gw2_Launchbuddy.ObjectManagers
         static Api()
         {
             WebClient api = new WebClient();
-            Regex filter = new Regex(@"\d*\d");
+            Regex filter_officialapi = new Regex(@"\d*\d");
             try
             {
-                ClientBuild = filter.Match(api.DownloadString("https://api.guildwars2.com/v2/build")).Value;
+                ClientBuild = filter_officialapi.Match(api.DownloadString("https://api.guildwars2.com/v2/build")).Value;
+
+                if(ClientBuild == "115267")
+                {
+                    Regex filter_assetserver = new Regex(@"\d+");
+                    ClientBuild = filter_assetserver.Match(api.DownloadString("http://assetcdn.101.arenanetworks.com/latest64/101")).Value;
+                    
+                }
+
                 Online = true;
             }
             catch
