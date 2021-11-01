@@ -27,8 +27,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Add(new Argument("-windowed", "Forces Guild Wars 2 to run in windowed mode. In game, you can switch to windowed mode by pressing Alt + Enter or clicking the window icon in the upper right corner.", false));
             Add(new Argument("-umbra gpu", "Forces the use of umbra's GPU accelerated culling. In most cases, using this results in higher cpu usage and lower gpu usage decreasing the frame-rate.", false));
             Add(new Argument("-maploadinfo", "Shows diagnostic information during map loads, including load percentages and elapsed time.", false));
-            Add(new Argument("-dx9", "Forces the game to run using the DirectX 9 renderer.", false));
-            Add(new Argument("-dx11", "Forces the game to run using the beta DirectX 11 renderer.", false));
+            Add(new Argument("-dx9", "Forces the game to run using the DirectX 9 renderer. Keep in mind that injected Dlls have to work with DirectX 9! (Guild Wars 2 default)", false));
+            Add(new Argument("-dx11", "Forces the game to run using the beta DirectX 11 renderer. Keep in mind that injected Dlls have to work with DirectX 11!", false));
         }
 
         private Arguments() { }
@@ -37,6 +37,18 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public void SetActive(string arg, bool active) => this.First<Argument>(a => a.Flag == arg).IsActive = active;
 
         public ObservableCollection<Argument> GetActive() => new ObservableCollection<Argument>(this.Where<Argument>(a => a.IsActive));
+
+        public void CheckCompatibility ()
+        {
+            Argument dx9arg= this.First<Argument>(a => a.Flag == "-dx9");
+            Argument dx11arg = this.First<Argument>(a => a.Flag == "-dx11");
+
+            if(dx9arg.IsActive == dx11arg.IsActive)
+            {
+                dx9arg.IsActive = false;
+                dx11arg.IsActive = false;
+            }
+        }
     }
     [Serializable]
     public class Argument

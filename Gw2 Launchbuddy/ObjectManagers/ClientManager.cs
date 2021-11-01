@@ -437,6 +437,18 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Process.Exited += OnClientClose;
 
             string args = "";
+
+
+            Argument dx9arg = account.Settings.Arguments.FirstOrDefault(x => x.ToString() == "-dx9");
+            Argument dx11arg = account.Settings.Arguments.FirstOrDefault(x => x.ToString() == "-dx11");
+
+            if ( dx9arg.IsActive && dx11arg.IsActive)
+            {
+                MessageBox.Show($"On account {account.Nickname} both DirectX 9 and DirectX 11 was enabled. Please disable one of both options in the future. This setting got reset to DirectX 9 for this account.");
+                dx11arg.IsActive = false;
+            }
+
+
             foreach (Argument arg in account.Settings.Arguments.GetActive())
             {
                 args += arg.ToString() + " ";
