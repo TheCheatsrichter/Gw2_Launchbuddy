@@ -68,6 +68,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 ClientBuild = newest_build.ToString();
             }else
             {
+                LBConfiguration.Config.forcegameclientupdate = true;
                 MessageBox.Show("The official Guild Wars 2 API is unreachable or down and the asset servers not reachable! Launchbuddy can't make sure that your game client is up to date.\nPlease keep your game manually up to date to avoid crashes!");
             }
         }
