@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -12,7 +15,7 @@ namespace Gw2_Launchbuddy
 {
     public static class VersionSwitcher
     {
-        private static string URL_Releases = @"https://github.com/TheCheatsrichter/Gw2_Launchbuddy/releases";
+        private static string URL_Releases = @"https://api.github.com/repos/TheCheatsrichter/Gw2_Launchbuddy/releases";
         private static List<string> URL_Versions = new List<string>();
         private static string Repo_User, Repo_Name;
         public static ObservableCollection<Release> Releaselist = new ObservableCollection<Release>();
@@ -22,11 +25,11 @@ namespace Gw2_Launchbuddy
             return LBConfiguration.Config.notifylbupdate;
         }
 
-        public static void CheckForUpdate()
+        public async static void CheckForUpdate()
         {
             if (Releaselist.Count == 0)
             {
-                GetReleaseList();
+                await GetReleaseList();
             }
             Version newest_version = new Version();
             Release newest_release = new Release();
@@ -84,64 +87,85 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        public static void GetReleaseList()
+        private static async System.Threading.Tasks.Task GetReleaseList()
         {
+            /*
             Match Repomatches = Regex.Match(URL_Releases, @"github.com\/(?<User>\w+|\d)\/(?<Name>\w+)\/");
 
             Repo_User = Repomatches.Groups["User"].Value;
             Repo_Name = Repomatches.Groups["Name"].Value;
+            */
 
-            string HTML_Raw = "";
-            using (WebClient downloader = new WebClient())
+
+            Octokit.GitHubClient client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("Gw2Launchbuddy"));
+            IReadOnlyList<Octokit.Release> raw_releases = await client.Repository.Release.GetAll("TheCheatsrichter", "Gw2_Launchbuddy");
+
+            ObservableCollection<Release> fetched_releases = new ObservableCollection<Release>();
+
+            foreach (var version in raw_releases)
             {
                 try
                 {
-                    HTML_Raw = downloader.DownloadString(URL_Releases);
+                    fetched_releases.Add(new Release(version));
                 }
                 catch
                 {
-                    System.Windows.Forms.MessageBox.Show("Unable to check for Launchbuddy Updates.\n Please check your internet connection");
-                    return;
+                    Console.WriteLine("Unable to parse github release");
                 }
             }
-            Regex filter = new Regex(@"<div class=""release-entry"">(\s|\S)+?<\/div><!-- \/.release -->");
-            MatchCollection releases_raw = filter.Matches(HTML_Raw);
+            Releaselist = fetched_releases;
 
-            ObservableCollection<Release> releases = new ObservableCollection<Release>();
 
-            string repoprefix = @"\/" + Repo_User + @"\/" + Repo_Name;
-            //Filters
-            //string example = @"@"<h1 class=""release-title"">\s.*"">(?<Name>.*)<\/a>"";
-            string datefilter = @"<relative-time datetime=""((?<Date>\d+-\d+-\d+).*)"">.*<\/relative-time>";
-            string namefilter = @"<a href=""\/TheCheatsrichter\/Gw2_Launchbuddy\/releases\/tag\/(.*)"">(?<Name>.*)<\/a>";
-            string versionfilter = @"<a href=""" + repoprefix + @"\/releases\/tag\/(?<Version>\d+.\d+.*)"">";
-            versionfilter = @"<a href=""" + repoprefix + @"\/releases\/tag\/(?<Version>\d+.\d+.*)"">";
-            string downloadurlfilter = @"<a href="".*\/releases\/download\/.+\/(?<Exename>.*\.exe).*rel=""nofollow""";
-            string descriptionfilter = @"<div class=""markdown-body"">\s*?(?<Description>\s|\S)+?<\/div>";
+                /*
+                Regex filter = new Regex(@"<div class=""release-entry"">(\s|\S)+?<\/div><!-- \/.release -->");
+                filter = new Regex(@"<div class=""d-flex flex-column flex-md-row my-5 flex-justify-center"">(\s|\S)+?<div class=""comment-reactions"); // temp test
 
-            foreach (Match version in releases_raw)
-            {
-                try
+
+                MatchCollection releases_raw = filter.Matches(HTML_Raw);
+
+                ObservableCollection<Release> releases = new ObservableCollection<Release>();
+
+
+                string repoprefix = @"\/" + Repo_User + @"\/" + Repo_Name;
+                //Filters
+                //string example = @"@"<h1 class=""release-title"">\s.*"">(?<Name>.*)<\/a>"";
+                /*
+                        string datefilter = @"<relative-time datetime=""((?<Date>\d+-\d+-\d+).*)"">.*<\/relative-time>";
+                        string namefilter = @"<a href=""\/TheCheatsrichter\/Gw2_Launchbuddy\/releases\/tag\/(.*)"">(?<Name>.*)<\/a>";
+                        string versionfilter = @"<a href=""" + repoprefix + @"\/releases\/tag\/(?<Version>\d+.\d+.*)"">";
+                        versionfilter = @"<a href=""" + repoprefix + @"\/releases\/tag\/(?<Version>\d+.\d+.*)"">";
+                        string downloadurlfilter = @"<a href="".*\/releases\/download\/.+\/(?<Exename>.*\.exe).*rel=""nofollow""";
+                        string descriptionfilter = @"<div class=""markdown-body"">\s*?(?<Description>\s|\S)+?<\/div>";
+
+
+
+                */
+
+                /*
+                foreach (Match version in releases_raw)
                 {
-                    Release release = new Release
+                    try
                     {
-                        HTML_raw = version.Value,
-                        Date = Regex.Match(version.Value, datefilter).Groups["Date"].Value,
-                        Name = Regex.Match(version.Value, namefilter).Groups["Name"].Value,
-                        Version = new Version(Regex.Match(version.Value, versionfilter).Groups["Version"].Value),
-                        Description = "<html>\n" + Regex.Match(version.Value, descriptionfilter).Value + "\n</html>",
-                        DownloadURL = URL_Releases + "/download/" + Regex.Match(version.Value, versionfilter).Groups["Version"].Value+ "/" + Regex.Match(version.Value, downloadurlfilter).Groups["Exename"].Value,
-                    };
-                    releases.Add(release);
+                        Release release = new Release
+                        {
+                            HTML_raw = version.Value,
+                            Date = Regex.Match(version.Value, datefilter).Groups["Date"].Value,
+                            Name = Regex.Match(version.Value, namefilter).Groups["Name"].Value,
+                            Version = new Version(Regex.Match(version.Value, versionfilter).Groups["Version"].Value),
+                            Description = "<html>\n" + Regex.Match(version.Value, descriptionfilter).Value + "\n</html>",
+                            DownloadURL = URL_Releases + "/download/" + Regex.Match(version.Value, versionfilter).Groups["Version"].Value+ "/" + Regex.Match(version.Value, downloadurlfilter).Groups["Exename"].Value,
+                        };
+                        releases.Add(release);
+                    }
+                    catch
+                    {
+                        Console.Write("Skipping one release");
+                    }
+
                 }
-                catch
-                {
-                    Console.Write("Skipping one release");
-                }
-                
+                Releaselist = releases;
+                */
             }
-            Releaselist = releases;
-        }
     }
 
     public class Release
@@ -152,5 +176,17 @@ namespace Gw2_Launchbuddy
         public string Description { set; get; }
         public string DownloadURL { set; get; }
         public string Date { set; get; }
+
+        public Release (Octokit.Release release)
+        {
+            Name = release.Name;
+            Version = new Version(release.TagName);
+            Description = release.Body;
+            DownloadURL = release.Assets.First(x=>x.Name.Contains(".exe")).BrowserDownloadUrl;
+            Date = release.PublishedAt.ToString();
+        }
+
+        public Release() { }
     }
+
 }

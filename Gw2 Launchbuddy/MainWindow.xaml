@@ -1273,10 +1273,10 @@
                                     </GridView>
                                 </ListView.View>
                             </ListView>
-                            <WebBrowser x:Name="wb_releasedescr" Grid.Row="1" Grid.Column="1" Margin="3,0,0,0" />
+                            <TextBlock x:Name="wb_releasedescr" Grid.Row="1" Grid.Column="1" Margin="3,0,0,0" TextWrapping="Wrap"/>
                             <DockPanel  Grid.Row="2" Grid.ColumnSpan="2" LastChildFill="False">
                                 <Button x:Name="bt_fetchlbversions" Margin="3" Content="Check for Updates" DockPanel.Dock="Left" Click="bt_fetchlbversions_Click" ToolTip="Check for Gw2 Launchbuddy updates."/>
-                                <Button x:Name="bt_downloadrelease" Margin="3" Content="Download" Click="bt_downloadrelease_Click" IsEnabled="False" DockPanel.Dock="Left" ToolTip="Download the selected Launchbuddy version." MinWidth="80" MaxWidth="130"/>
+                                <Button x:Name="bt_downloadrelease" Margin="3" Content="Download" Click="bt_downloadrelease_Click" IsEnabled="False" DockPanel.Dock="Left" ToolTip="Download the selected Launchbuddy version." MinWidth="80" MaxWidth="200"/>
                             </DockPanel>
 
                         </Grid>

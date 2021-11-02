@@ -80,6 +80,8 @@ namespace Gw2_Launchbuddy
 
             //Plugin List
             lv_plugins.ItemsSource = PluginManager.InstalledPlugins;
+
+
         }
 
         public void Init()
@@ -1180,7 +1182,8 @@ namespace Gw2_Launchbuddy
         {
             bt_downloadrelease.IsEnabled = true;
             bt_downloadrelease.Content = "Download and use Release V" + (lv_lbversions.SelectedItem as Release).Version;
-            wb_releasedescr.NavigateToString((lv_lbversions.SelectedItem as Release).Description);
+            //wb_releasedescr.NavigateToString((lv_lbversions.SelectedItem as Release).Description);
+            wb_releasedescr.Text = (lv_lbversions.SelectedItem as Release).Description;
         }
 
         private void bt_downloadrelease_Click(object sender, RoutedEventArgs e)
