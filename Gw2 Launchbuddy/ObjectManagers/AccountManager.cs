@@ -65,9 +65,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 gw2build = acc.Settings.Loginfile.Gw2Build,
                 Valid = acc.Settings.Loginfile.Valid,
             };
+            newacc.Settings.AccountID = newacc.ID;
 
             File.Copy(acc.Settings.Loginfile.Path, newacc.Settings.Loginfile.Path);
-            
+
             SaveAccounts();
             ImportAccounts();
         }
@@ -317,7 +318,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 if (GFXFile == null) GFXFile = GFXManager.LoadFile(EnviromentManager.GwClientXmlPath);
             }
             catch { MessageBox.Show("LB could not find any default graphic settings file. Launch gw2 at least once to fix this issue."); }
-            
+
             if (DLLs == null) DLLs = new ObservableCollection<string>();
             if (AccHotkeys == null) AccHotkeys = new ObservableCollection<AccountHotkey>();
             if (RelaunchesMax == null) RelaunchesMax = 0;
