@@ -607,11 +607,14 @@ namespace Gw2_Launchbuddy
                 .EnforceExt(".exe")
                 .ShowDialog((Helpers.FileDialog fileDialog) =>
                 {
-                    if (fileDialog.FileName != "")
+                    foreach( var file in fileDialog.FileNames)
                     {
-                        EnviromentManager.GwClientPath = Path.GetDirectoryName(fileDialog.FileName) + @"\";
-                        EnviromentManager.GwClientExeName = Path.GetFileName(fileDialog.Fi‌​leName);
-                        lab_path.Content = EnviromentManager.GwClientPath + EnviromentManager.GwClientExePath;
+                        if( !String.IsNullOrEmpty(file))
+                        {
+                            EnviromentManager.GwClientPath = Path.GetDirectoryName(file) + @"\";
+                            EnviromentManager.GwClientExeName = Path.GetFileName(file);
+                            lab_path.Content = EnviromentManager.GwClientPath + EnviromentManager.GwClientExePath;
+                        }
                     }
                 });
         }
@@ -1269,11 +1272,15 @@ namespace Gw2_Launchbuddy
             AccountSettings accsettings = (sender as Button).DataContext as AccountSettings;
             Builders.FileDialog.DefaultExt(".dll")
                 .Filter("DLL Files(*.dll)|*.dll")
+                .Multiselect(true)
                 .ShowDialog((Helpers.FileDialog fileDialog) =>
                 {
-                    if (fileDialog.FileName != "" && !accsettings.DLLs.Contains(fileDialog.FileName))
+                    foreach( string file in fileDialog.FileNames )
                     {
-                        accsettings.DLLs.Add(fileDialog.FileName);
+                        if( !String.IsNullOrEmpty(file) && !accsettings.DLLs.Contains(file))
+                        {
+                            accsettings.DLLs.Add(file);
+                        }
                     }
                 });
         }
@@ -1342,7 +1349,10 @@ namespace Gw2_Launchbuddy
         private void bt_RemDll_Click(object sender, RoutedEventArgs e)
         {
             AccountSettings accsett = (sender as Button).DataContext as AccountSettings;
-            accsett.DLLs.Remove(lv_InjectDlls.SelectedItem as string);
+            for( int i = lv_InjectDlls.SelectedItems.Count -1; i >= 0; i--)
+            {
+                accsett.DLLs.Remove(lv_InjectDlls.SelectedItems[i] as string);
+            }
         }
 
         private void lv_accicon_SelectionChanged(object sender, SelectionChangedEventArgs e)
