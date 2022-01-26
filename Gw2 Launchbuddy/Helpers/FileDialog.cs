@@ -14,7 +14,7 @@ namespace Gw2_Launchbuddy.Helpers
             fileDialog = new OpenFileDialog();
             fileDialog.FileOk += delegate (object sender, CancelEventArgs e)
             {
-                if (String.IsNullOrWhiteSpace(((OpenFileDialog)sender).FileName))
+                if( ((OpenFileDialog)sender).FileNames.All(f => String.IsNullOrEmpty(f)) )
                 {
                     MessageBox.Show("No file selected", "Error");
                     e.Cancel = true;
@@ -23,6 +23,8 @@ namespace Gw2_Launchbuddy.Helpers
         }
 
         public string FileName { get; private set; }
+
+        public string[] FileNames { get; private set; }
 
         public DialogResult Result { get; private set; }
 
@@ -180,6 +182,7 @@ namespace Gw2_Launchbuddy.Helpers
             callback = action;
             Result = fileDialog.ShowDialog();
             FileName = fileDialog.FileName;
+            FileNames = fileDialog.FileNames;
             if (!events.HasFlag(ExistingEvents.Media))
                 callback(this);
         }
