@@ -1,0 +1,282 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Gw2_Launchbuddy">
+
+
+    <!-- DARK BACKGROUND -->
+    <LinearGradientBrush x:Key="ButtonBackground" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#363636"></GradientStop>
+        <GradientStop Offset="1" Color="#525252"></GradientStop>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="LightBackground" Color="#424242" />
+
+    <SolidColorBrush x:Key="H1_Foreground" Color="#ffffff"/>
+    <SolidColorBrush x:Key="H2_Foreground" Color="#ffffff"/>
+    <SolidColorBrush x:Key="H3_Foreground" Color="#dbdbdb"/>
+    <SolidColorBrush x:Key="Text_Foreground" Color="#c4c4c4"/>
+    <SolidColorBrush x:Key="MainText_Foreground" Color="White"/>
+    <SolidColorBrush x:Key="Border_Background" Color="#bfffb3"/>
+    <SolidColorBrush x:Key="Icon_Foreground" Color="White"/>
+    <SolidColorBrush x:Key="Item_Highlight" Color="#57fa9b"/>
+
+    <SolidColorBrush x:Key="B1_Background" Color="#1c1c1c"/>
+    <SolidColorBrush x:Key="B2_Background" Color="#292828"/>
+    <SolidColorBrush x:Key="B3_Background" Color="#404040"/>
+
+    <SolidColorBrush x:Key="Enabled_False" Color="#e3e3e3"/>
+
+
+    <ControlTemplate x:Key="maskedimage_template">
+        <Image>
+            <Image.OpacityMask>
+                <ImageBrush ImageSource="{Binding ImageSource,RelativeSource={RelativeSource TemplatedParent}}"></ImageBrush>
+            </Image.OpacityMask>
+        </Image>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="button_template" TargetType="{x:Type Button}">
+        <Border Name="Border" BorderBrush="DarkGray" BorderThickness="2" CornerRadius="8,0,8,0"  Background="{StaticResource ButtonBackground}">
+            <ContentPresenter Name="contenido" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Path=Content,RelativeSource={RelativeSource TemplatedParent}}">
+            </ContentPresenter>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource B2_Background}" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource B1_Background}" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Border_Background}" />
+                <Setter Property="Foreground" Value="{StaticResource Item_Highlight}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource Enabled_False}" />
+                <Setter Property="Foreground" Value="Gray"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="launchbutton_template" TargetType="{x:Type Button}">
+        <Border Name="Border" BorderBrush="DarkGreen" BorderThickness="2" CornerRadius="8,0,8,0"  Background="{StaticResource B1_Background}">
+            <ContentPresenter Name="contenido" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Path=Content,RelativeSource={RelativeSource TemplatedParent}}">
+            </ContentPresenter>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource B1_Background}" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="DarkGreen" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource B3_Background}" />
+                <Setter Property="Foreground" Value="White"/>
+                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Item_Highlight}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="windowbutton_template" TargetType="{x:Type Button}">
+        <Border Name="Border" BorderBrush="DarkGray" BorderThickness="2" CornerRadius="8,0,8,0"  Background="Transparent">
+            <ContentPresenter Name="contenido" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Path=Content,RelativeSource={RelativeSource TemplatedParent}}">
+            </ContentPresenter>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="Gray" />
+                <Setter Property="Foreground" Value="White"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Border" Property="Background" Value="White" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="LightGray" />
+                <Setter Property="Foreground" Value="Gray"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="windowbutton_lite_template" TargetType="{x:Type Button}">
+        <ControlTemplate.Triggers>
+
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="tabitem_template" TargetType="{x:Type TabItem}">
+        <Border Name="Border" BorderThickness="1,1,1,1" BorderBrush="#525252" CornerRadius="5,0,0,5" Margin="0,1">
+            <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        ContentSource="Header"
+                                        Margin="5,2"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="#828282"/>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="False">
+                <Setter TargetName="Border" Property="Background" Value="#525252" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+
+    <ControlTemplate x:Key="tooltip_template" TargetType="{x:Type ToolTip}">
+        <Border Name="Border"
+                BorderThickness="2"
+                Width="{TemplateBinding Width}"
+                Height="{TemplateBinding Height}"
+                BorderBrush="{StaticResource B1_Background}"
+                Background="{StaticResource B2_Background}"
+                >
+            <ContentPresenter Margin="4"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="HasDropShadow"
+                   Value="true">
+                <Setter TargetName="Border"
+                    Property="SnapsToDevicePixels"
+                    Value="true" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+
+    <Style TargetType="{x:Type TabItem}">
+        <Setter Property="Template" Value="{StaticResource tabitem_template}"/>
+        <Setter Property="Foreground" Value="Black"></Setter>
+    </Style>
+
+    <Style TargetType="{x:Type Button}">
+        <Setter Property="Template" Value="{StaticResource button_template}"/>
+        <Setter Property="Foreground" Value="{StaticResource MainText_Foreground}"></Setter>
+    </Style>
+
+    <Style TargetType="{x:Type DataGrid}">
+
+    </Style>
+
+    <Style TargetType="{x:Type ListView}">
+        <Setter Property="Foreground" Value="{StaticResource MainText_Foreground}"></Setter>
+        <Setter Property="Background" Value="{StaticResource B3_Background}"></Setter>
+        <Style.Resources>
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
+        </Style.Resources>
+    </Style>
+    
+
+    <Style x:Key="WindowButton" TargetType="{x:Type Button}">
+        <Setter Property="Template" Value="{StaticResource windowbutton_template}"/>
+        <Setter Property="Foreground" Value="{StaticResource MainText_Foreground}"></Setter>
+        <Setter Property="MinHeight" Value="30"/>
+    </Style>
+
+    <Style x:Key="WindowButtonLite" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="Width" Value="20"/>
+        <Setter Property="Margin" Value="1,0"/>
+    </Style>
+
+    <Style x:Key="LaunchButton" TargetType="{x:Type Button}">
+        <Setter Property="Template" Value="{StaticResource launchbutton_template}"/>
+        <Setter Property="Foreground" Value="{StaticResource MainText_Foreground}"></Setter>
+        <Setter Property="Background" Value="{StaticResource B1_Background}"/>
+    </Style>
+
+    <Style x:Key="OptionTab" TargetType="{x:Type TabItem}">
+        <Setter Property="Template" Value="{StaticResource tabitem_template}"/>
+        <Setter Property="Foreground" Value="{StaticResource Text_Foreground}"></Setter>
+    </Style>
+
+    <Style x:Key="H1" TargetType="{x:Type Label}">
+        <Setter Property="Foreground" Value="{StaticResource H1_Foreground}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="16"/>
+    </Style>
+
+    <Style x:Key="H2" TargetType="{x:Type Label}">
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{StaticResource H2_Foreground}"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <Style x:Key="H3" TargetType="{x:Type Label}">
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{StaticResource H3_Foreground}"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
+    <Style TargetType="{x:Type Label}">
+        <Setter Property="Foreground" Value="{StaticResource Text_Foreground}"/>
+    </Style>
+
+    <Style TargetType="{x:Type ToolTip}">
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="HasDropShadow" Value="True" />
+        <Setter Property="Background" Value="{StaticResource ButtonBackground}"/>
+        <Setter Property="Template" Value="{StaticResource tooltip_template}"/>
+        <Setter Property="Foreground" Value="{StaticResource MainText_Foreground}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Opacity" Value="0.85"/>
+    </Style>
+
+    <Style TargetType="{x:Type CheckBox}">
+        <Setter Property="Foreground" Value="{StaticResource MainText_Foreground}"/>
+    </Style>
+
+
+    <Style TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="{StaticResource MainText_Foreground}"/>
+    </Style>
+
+    <Style TargetType="{x:Type GridViewColumnHeader}">
+        <Setter Property="Background" Value="{StaticResource B3_Background}"/>
+    </Style>
+
+    <Style x:Key="Bordered" TargetType="{x:Type Expander}">
+        <Setter Property="Background" Value="{StaticResource B3_Background}"/>
+        <Setter Property="Foreground" Value="{StaticResource Text_Foreground}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource B3_Background}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Margin" Value="0,2,0,2"/>
+    </Style>
+
+
+    <Style TargetType="{x:Type ListViewItem}">
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{x:Null}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource Item_Highlight}"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource B3_Background}" />
+            </Trigger>
+            <Trigger Property="Control.IsMouseOver" Value="True">
+                <Setter Property="Control.Background" Value="Transparent" />
+            </Trigger>
+        </Style.Triggers>
+        <Style.Resources>
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#00000000"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#00000000"/>
+        </Style.Resources>
+    </Style>
+
+    <Style x:Key="ListViewItem_NoFocus" TargetType="{x:Type ListViewItem}">
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{x:Null}"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource B3_Background}" />
+            </Trigger>
+            <Trigger Property="Control.IsMouseOver" Value="True">
+                <Setter Property="Control.Background" Value="Transparent" />
+            </Trigger>
+        </Style.Triggers>
+        <Setter Property="Focusable" Value="False"/>
+    </Style>
+
+
+</ResourceDictionary>

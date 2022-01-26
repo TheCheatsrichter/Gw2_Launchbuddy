@@ -59,17 +59,32 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static void Clone(Account acc)
         {
             Account newacc = new Account(GenerateName(acc.Nickname + " Clone"), acc);
-            newacc.Settings.Loginfile = new LocalDatFile
-            {
-                Path = EnviromentManager.LBLocaldatsPath + newacc.ID + ".dat",
-                gw2build = acc.Settings.Loginfile.Gw2Build,
-                Valid = acc.Settings.Loginfile.Valid,
-            };
+            newacc.UpdateAccountSettings();
 
-            File.Copy(acc.Settings.Loginfile.Path, newacc.Settings.Loginfile.Path);
-            
+            if(acc.Settings.Loginfile !=null)
+            {
+                File.Copy(acc.Settings.Loginfile.Path, newacc.Settings.Loginfile.Path);
+            }
+
+
             SaveAccounts();
             ImportAccounts();
+        }
+
+        public static void SolveIDConflict()
+        {
+            foreach(Account acc in Accounts)
+            {
+                foreach(Account acc2 in Accounts)
+                {
+                    if(acc==acc2) continue;
+                    if(acc.ID == acc2.ID)
+                    {
+                        acc.ID = GenerateID();
+                        acc.UpdateAccountSettings();
+                    }
+                }
+            }
         }
 
         public static void LaunchAccounts()
@@ -248,6 +263,22 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
+        public bool UpdateAccountSettings()
+        {
+            if(ID!= Settings.AccountID)
+            {
+                //ID Changed but did not get updated in Settings
+                Settings.AccountID = ID;
+                Settings.Loginfile = new LocalDatFile
+                {
+                    Path = EnviromentManager.LBLocaldatsPath + ID + ".dat"
+                };
+            }
+            return true;
+
+
+        }
+
         private Account() {
             CreateAccount();
         }
@@ -261,6 +292,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             this.Settings = account.Settings.GetClone();
             ID = AccountManager.GenerateID();
+            this.Settings.AccountID = ID;
             CreateAccount(nickname);
         }
 
@@ -291,7 +323,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public WindowConfig WinConfig { set { winconfig = value; OnPropertyChanged("HasWindowConfig"); } get { return winconfig; } }
         public AccountInformation AccountInformation { set; get; }
 
-        //Adavanced Settings
+        //Advanced Settings
         [XmlIgnore]
         private uint relaunchesmax;
         public uint RelaunchesMax { set { relaunchesmax = value; RelaunchesLeft = value; } get { return relaunchesmax; } }
@@ -317,7 +349,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 if (GFXFile == null) GFXFile = GFXManager.LoadFile(EnviromentManager.GwClientXmlPath);
             }
             catch { MessageBox.Show("LB could not find any default graphic settings file. Launch gw2 at least once to fix this issue."); }
-            
+
             if (DLLs == null) DLLs = new ObservableCollection<string>();
             if (AccHotkeys == null) AccHotkeys = new ObservableCollection<AccountHotkey>();
             if (RelaunchesMax == null) RelaunchesMax = 0;
@@ -491,6 +523,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public DateTime LastLogin { get; set; }
         public DateTime LastClose { get; set; }
         public TimeSpan Playtime { get; set; }
+
+        public bool HasLoginReward
+        {
+            get
+            {
+                DateTime resettime = DateTime.Today.ToUniversalTime();
+                resettime = new DateTime(resettime.Year,resettime.Month,resettime.Day,0,0,0);
+                return resettime < LastLogin.ToUniversalTime();
+            }
+        }
 
         public AccountInformation()
         {

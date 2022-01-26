@@ -16,7 +16,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static void Load()
         {
-            Config = GetDataFromFile();
+            try
+            {
+                Config = GetDataFromFile();
+            }catch
+            {
+                Config = new LBConfigDataSet();
+            }
+            
         }
 
         public static void Save()

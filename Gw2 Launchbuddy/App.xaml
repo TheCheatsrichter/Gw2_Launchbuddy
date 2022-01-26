@@ -5,6 +5,6 @@
              StartupUri="MainWindow.xaml">
 
     <Application.Resources>
-        <ResourceDictionary Source="Launchbuddy_default_theme.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="Launchbuddy_dark_theme.xaml"></ResourceDictionary>
     </Application.Resources>
 </Application>

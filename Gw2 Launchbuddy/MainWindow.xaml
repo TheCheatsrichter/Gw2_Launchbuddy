@@ -12,7 +12,7 @@
 
 
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
-        Title="Gw2 Launchbuddy V 2.4.2" MinHeight="700" MinWidth="900" Height="700" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None">
+        Title="Gw2 Launchbuddy V 2.4.2" MinHeight="700" MinWidth="900" Height="700" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None" Background="{StaticResource B1_Background}" Foreground="{StaticResource Text_Foreground}">
     <Window.Resources>
         <Storyboard x:Key="anim_imgfadeout">
             <DoubleAnimation
@@ -238,13 +238,13 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 2.4.2" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 3.0.0 Alpha" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
             <WrapPanel x:Name="VolumeControl" MouseLeave="WrapPanel_MouseLeave">
                 <Button x:Name="bt_mute" Width="40"   BorderThickness="0" Style="{StaticResource WindowButton}" Click="bt_mute_Click" MouseEnter="bt_mute_MouseEnter" >
-                    <Border Background="{StaticResource LightBackground}" Width="20" Height="25">
+                    <Border Background="{StaticResource Icon_Foreground}" Width="24" Height="24">
                         <Border.OpacityMask>
                             <ImageBrush x:Name="img_mutebutton" ImageSource="Resources/Icons/speaker_loud.png"/>
                         </Border.OpacityMask>
@@ -253,13 +253,13 @@
                 <Slider x:Name="sl_volumecontrol" Width="150" Orientation="Horizontal" Visibility="Collapsed" LargeChange="0.1" Maximum="1" ValueChanged="sl_volumecontrol_ValueChanged" SmallChange="0.05" Value="0.9"/>
             </WrapPanel>
             <Button x:Name="bt_ShowSettings" Width="30" Click="bt_ShowSettings_Click" Height="30" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource WindowButton}" >
-                <Border Background="{StaticResource LightBackground}" Width="20" Height="20">
+                <Border Background="{StaticResource Icon_Foreground}" Width="24" Height="24">
                     <Border.OpacityMask>
                         <ImageBrush ImageSource="Resources/Icons/settings.png"/>
                     </Border.OpacityMask>
                 </Border>
             </Button>
-            <Button x:Name="bt_cinema" Width="40" Click="bt_cinema_Click" BorderThickness="0" Style="{StaticResource WindowButton}" >
+            <Button x:Name="bt_cinema" Width="40" Click="bt_cinema_Click" BorderThickness="0" Style="{StaticResource WindowButton}" Visibility="Collapsed">
                 <Border Background="{StaticResource LightBackground}" Width="20" Height="20">
                     <Border.OpacityMask>
                         <ImageBrush ImageSource="Resources/Icons/film.png"/>
@@ -267,14 +267,14 @@
                 </Border>
             </Button>
             <Button x:Name="bt_minimize" Width="40" Click="bt_minimize_Click" BorderThickness="0" Style="{StaticResource WindowButton}" >
-                <Border Background="{StaticResource LightBackground}" Width="20" Height="20">
+                <Border Background="{StaticResource Icon_Foreground}" Width="20" Height="20">
                     <Border.OpacityMask>
                         <ImageBrush ImageSource="Resources/Icons/minimize.png"/>
                     </Border.OpacityMask>
                 </Border>
             </Button>
             <Button x:Name="bt_close" Width="40"  Click="bt_close_Click" BorderThickness="0" Style="{StaticResource WindowButton}" >
-                <Border Background="{StaticResource LightBackground}" Width="20" Height="20">
+                <Border Background="{StaticResource Icon_Foreground}" Width="24" Height="24">
                     <Border.OpacityMask>
                         <ImageBrush ImageSource="Resources/Icons/close.png"/>
                     </Border.OpacityMask>
@@ -283,7 +283,7 @@
         </StackPanel>
 
 
-        <Grid  x:Name="SettingsGrid" Grid.Row="1"  Grid.RowSpan="3" Grid.ColumnSpan="3" Background="White">
+        <Grid  x:Name="SettingsGrid" Grid.Row="1"  Grid.RowSpan="3" Grid.ColumnSpan="3" Background="{StaticResource B1_Background}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100*"/>
                 <RowDefinition Height="50"/>
@@ -317,11 +317,29 @@
                     </Grid>
                 </Button>
             </Grid>
-            <TabControl x:Name="tab_options" Grid.Row="0" TabStripPlacement="Left" BorderBrush="White" Background="GhostWhite">
+
+            <TabControl x:Name="tab_options" Grid.Row="0" TabStripPlacement="Left" BorderBrush="{StaticResource B3_Background}" Background="{StaticResource B2_Background}">
+                <TabItem Header="Test">
+                    <StackPanel>
+                        <ListView>
+                            <ListViewItem Content=" Test 2432"/>
+                            <ListViewItem Content=" Test 2432"/>
+                            <ListViewItem Content=" Test 2432"/>
+                            <ComboBox SelectedIndex="0">
+                                <ComboBoxItem Content="Test"/>
+                            </ComboBox>
+                        </ListView>
+                    </StackPanel>
+                </TabItem>
                 <TabItem x:Name="tab_home" MouseEnter="tab_home_MouseEnter">
                     <TabItem.Header>
                         <StackPanel>
-                            <Image Height="20" Source="Resources/Icons/home.png"/>
+                            <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="Resources/Icons/home.png"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                            <!--Image Height="20" Source="Resources/Icons/home.png"/-->
                             <Label FontSize="10" Margin="0,-5,0,-7">Home</Label>
                         </StackPanel>
                     </TabItem.Header>
@@ -334,7 +352,7 @@
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="2"/>
-                                <RowDefinition Height="80"/>
+                                <RowDefinition Height="105"/>
                             </Grid.RowDefinitions>
 
                             <!--
@@ -343,16 +361,13 @@
                             </Button>
                             -->
 
+                            <StackPanel Grid.Column="1" Grid.Row="1">
 
-                            <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
-                                <Label x:Name="label" Content="Gw2 Client Details:" HorizontalAlignment="Left" Grid.ColumnSpan="2" Style="{StaticResource H1}" Width="152"/>
-                                <Label x:Name="lab_version" Content="Build Version:" ToolTip="The current Guild Wars 2 build your system is using." />
-                                <DockPanel>
-                                    <Label x:Name="lab_path" Content="Install Path:" DockPanel.Dock="Left" Grid.Column="1" Grid.Row="1"/>
-                                    <Button x:Name="bt_installpath" DockPanel.Dock="Left" ToolTip="Set your gamefolder path if it isn't &#x0a; determined correctly by launchbuddy" Content="Set" Click="bt_installpath_Click" Width="40" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                </DockPanel>
-
+                                <Label Content="Launchbuddy News:" Style="{StaticResource H2}"/>
+                                <TextBlock x:Name="tb_newsletter" TextWrapping="Wrap"/>
                             </StackPanel>
+
+
                             <Grid Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" Width="142">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="50*"/>
@@ -365,7 +380,13 @@
 
                         </Grid>
                         <Separator Margin="3" DockPanel.Dock="Top"/>
-                        <Label Name="lb_acccountinfo" Content="Accounts:" Style="{StaticResource H1}" DockPanel.Dock="Top"/>
+                        <DockPanel DockPanel.Dock="Top" LastChildFill="False">
+                            <Label Name="lb_acccountinfo" Content="Accounts:" Style="{StaticResource H1}" DockPanel.Dock="Left"/>
+                            <Button Name="bt_selectdailylogins" Content="Daily Logins" DockPanel.Dock="Right" ToolTip="Starts all accounts which have not been launched on the current date" Click="bt_selectdailylogins_Click"/>
+                            <Button Name="bt_selectallaccs" Content="Select All" DockPanel.Dock="Right" Click="bt_selectallaccs_Click"/>
+                            <Label Content="Quick Select:" DockPanel.Dock="Right" Style="{StaticResource H2}"/>
+                        </DockPanel>
+                        
                         <ListView x:Name="lv_accs" DataContext="{Binding Path=Account}" SelectionChanged="lv_accs_SelectionChanged" SelectionMode="Multiple">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
@@ -378,15 +399,51 @@
                                     <DockPanel ToolTip="{Binding Path=Client.Status}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" LastChildFill="False" IsEnabled="{Binding Path=Settings.Loginfile.IsUpToDate}">
                                         <Label Height="32" Foreground="Green" Content="{Binding Path=Settings.AccountInformation.LastLogin}" DockPanel.Dock="Right"/>
                                         <Label Height="32" Visibility="{Binding Path=Settings.LoginfileOutdated, Converter={StaticResource BoolToVis}}" ToolTip="Loginfile is outdated" Foreground="Red" Content="UPDATE REQUIRED" DockPanel.Dock="Right"/>
-                                        <Image Height="32" Source="{Binding Path=Settings.Icon.Image}" DockPanel.Dock="Left"/>
+                                        <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}" DockPanel.Dock="Right">
+                                            <Rectangle.OpacityMask>
+                                                <ImageBrush ImageSource="{Binding Path=Client.StatusToIcon}"/>
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
+                                        <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}" DockPanel.Dock="Right" Visibility="{Binding Path=Settings.HasArguments, Converter={StaticResource BoolToVis}}" ToolTip="Uses Arguments">
+                                            <Rectangle.OpacityMask>
+                                                <ImageBrush ImageSource="Resources/Icons/settings.png"/>
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
+                                        <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}" DockPanel.Dock="Right" Visibility="{Binding Path=Settings.HasDlls, Converter={StaticResource BoolToVis}}" ToolTip="Uses Injected Software">
+                                            <Rectangle.OpacityMask>
+                                                <ImageBrush ImageSource="Resources/Icons/injection.png"/>
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
+                                        <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}" DockPanel.Dock="Right" Visibility="{Binding Path=Settings.HasAdvancedSettings, Converter={StaticResource BoolToVis}}" ToolTip="Uses Advanced Settings">
+                                            <Rectangle.OpacityMask>
+                                                <ImageBrush ImageSource="Resources/Icons/feature.png"/>
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
+                                        <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}" DockPanel.Dock="Right" Visibility="{Binding Path=Settings.HasLoginCredentials, Converter={StaticResource BoolToVis}}" ToolTip="Uses Autologin">
+                                            <Rectangle.OpacityMask>
+                                                <ImageBrush ImageSource="Resources/Icons/account.png"/>
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
+                                        <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}" x:Name="bt_launchtaco" DockPanel.Dock="Right" Visibility="{Binding Path=Settings.TacoValid, Converter={StaticResource BoolToVis}}" ToolTip="Add TacO" MouseDown="bt_launchtaco_MouseDown">
+                                            <Rectangle.OpacityMask>
+                                                <ImageBrush ImageSource="Resources/Icons/taco_black.png"/>
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
+                                        <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}" x:Name="bt_launchblish" Visibility="{Binding Path=Settings.BlishValid, Converter={StaticResource BoolToVis}}" ToolTip="Add BlishHUD" DockPanel.Dock="Right" MouseDown="bt_launchblish_MouseDown">
+                                            <Rectangle.OpacityMask>
+                                                <ImageBrush ImageSource="Resources/Icons/blish_black.png"/>
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
+                                        <Label Content="{Binding Path=Nickname}" BorderThickness="0" Margin="0" Style="{StaticResource H1}"/>
+                                        <!--Image Height="32" Source="{Binding Path=Settings.Icon.Image}" DockPanel.Dock="Left"/>
                                         <Image Height="32" Source="{Binding Path=Client.StatusToIcon}" DockPanel.Dock="Right"/>
                                         <Image Height="32" Source="Resources/Icons/settings.png" Visibility="{Binding Path=Settings.HasArguments, Converter={StaticResource BoolToVis}}" ToolTip="Uses Arguments" DockPanel.Dock="Right"/>
                                         <Image Height="32" Source="Resources/Icons/injection.png" Visibility="{Binding Path=Settings.HasDlls, Converter={StaticResource BoolToVis}}" ToolTip="Uses Injected Software" DockPanel.Dock="Right"/>
                                         <Image Height="32" Source="Resources/Icons/feature.png" Visibility="{Binding Path=Settings.HasAdvancedSettings, Converter={StaticResource BoolToVis}}" ToolTip="Uses Advanced Settings" DockPanel.Dock="Right"/>
                                         <Image Height="32" Source="Resources/Icons/account.png" Visibility="{Binding Path=Settings.HasLoginCredentials, Converter={StaticResource BoolToVis}}" ToolTip="Uses Autologin" DockPanel.Dock="Right"/>
-                                        <Label Content="{Binding Path=Nickname}" BorderThickness="0" Margin="0" FontSize="18" FontWeight="Bold"/>
+                                        
                                         <Image Height="32" Source="Resources/Icons/taco_black.png" x:Name="bt_launchtaco" Visibility="{Binding Path=Settings.TacoValid, Converter={StaticResource BoolToVis}}" ToolTip="Add TacO" DockPanel.Dock="Right" MouseDown="bt_launchtaco_MouseDown"/>
-                                        <Image Height="32" Source="Resources/Icons/blish_black.png" x:Name="bt_launchblish" Visibility="{Binding Path=Settings.BlishValid, Converter={StaticResource BoolToVis}}" ToolTip="Add BlishHUD" DockPanel.Dock="Right" MouseDown="bt_launchblish_MouseDown"/>
+                                        <Image Height="32" Source="Resources/Icons/blish_black.png" x:Name="bt_launchblish" Visibility="{Binding Path=Settings.BlishValid, Converter={StaticResource BoolToVis}}" ToolTip="Add BlishHUD" DockPanel.Dock="Right" MouseDown="bt_launchblish_MouseDown"/-->
                                     </DockPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
@@ -398,12 +455,16 @@
                 <TabItem >
                     <TabItem.Header>
                         <StackPanel>
-                            <Image Height="20" Source="Resources/Icons/accounts.png"/>
+                            <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="/Resources/Icons/accounts.png"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
                             <Label FontSize="10" Margin="0,-5,0,-7">Account Settings</Label>
                         </StackPanel>
                     </TabItem.Header>
                     <DockPanel>
-                        <DockPanel DockPanel.Dock="Left" MinWidth="120" Background="LightGray" LastChildFill="True">
+                        <DockPanel DockPanel.Dock="Left" MinWidth="120" Background="{StaticResource B2_Background}" LastChildFill="True">
                             <StackPanel DockPanel.Dock="Bottom">
                                 <Button x:Name="bt_accadd" Content="Add"  Click="bt_accadd_Click" />
                                 <StackPanel x:Name="sp_acclistbuttons"  IsEnabled="False">
@@ -439,19 +500,23 @@
                             </ListView>
                         </DockPanel>
 
-                        <DockPanel x:Name="gr_acceditor" IsEnabled="False">
-                            <TextBox x:Name="tb_accnickname" Text="{Binding Path=Nickname}" DockPanel.Dock="Top" FontSize="20" FontWeight="Bold" KeyDown="tb_accnickname_KeyDown" Background="#FFF7F7F7"/>
+                        <DockPanel x:Name="gr_acceditor" IsEnabled="False" >
+                            <TextBox x:Name="tb_accnickname" Text="{Binding Path=Nickname}" DockPanel.Dock="Top" FontSize="20" FontWeight="Bold" KeyDown="tb_accnickname_KeyDown" Background="{StaticResource B3_Background}" Foreground="{StaticResource Text_Foreground}"/>
                             <Separator  DockPanel.Dock="Top"/>
                             <ScrollViewer x:Name="sv_accsettings" Margin="2,2,0,2" VerticalScrollBarVisibility="Auto" DataContext="{Binding Path=Settings}" >
                                 <ScrollViewer.Background>
-                                    <ImageBrush ImageSource="{Binding Path=Icon.Image}" Opacity="0.03"/>
+                                    <ImageBrush ImageSource="{Binding Path=Icon.Image}" Opacity="0.05"/>
                                 </ScrollViewer.Background>
-                                <StackPanel>
+                                <StackPanel Background="{StaticResource B1_Background}">
                                     <Expander ToolTip="Set up Login Data for an automated Login" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <Image Source="Resources/Icons/account.png" Height="22"/>
-                                                <Label Style="{StaticResource H2}">Login Credentials</Label>
+                                                <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                                    <Rectangle.OpacityMask>
+                                                        <ImageBrush ImageSource="Resources/Icons/account.png"/>
+                                                    </Rectangle.OpacityMask>
+                                                </Rectangle>
+                                                <Label Style="{StaticResource H2}" >Login Credentials</Label>
                                             </StackPanel>
                                         </Expander.Header>
                                         <DockPanel>
@@ -491,7 +556,11 @@
                                     <Expander ToolTip="Choose an icon for this account" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <Image Source="Resources/Icons/picture.png" Height="22"/>
+                                                <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                                    <Rectangle.OpacityMask>
+                                                        <ImageBrush ImageSource="Resources/Icons/picture.png"/>
+                                                    </Rectangle.OpacityMask>
+                                                </Rectangle>
                                                 <Label Style="{StaticResource H2}">Icon</Label>
                                             </StackPanel>
                                         </Expander.Header>
@@ -524,7 +593,11 @@
                                     <Expander ToolTip="Choose Gw2 launch arguments" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <Image Source="Resources/Icons/settings.png" Height="22"/>
+                                                <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                                    <Rectangle.OpacityMask>
+                                                        <ImageBrush ImageSource="Resources/Icons/settings.png"/>
+                                                    </Rectangle.OpacityMask>
+                                                </Rectangle>
                                                 <Label Style="{StaticResource H2}">Arguments</Label>
                                             </StackPanel>
                                         </Expander.Header>
@@ -541,7 +614,8 @@
                                                 <Label Content="Arguments:" Style="{StaticResource H3}"/>
                                                 <ListView x:Name="lv_args" ItemsSource="{Binding Path=Arguments}">
                                                     <ListView.ItemContainerStyle>
-                                                        <Style TargetType="ListViewItem">
+                                                        <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItem_NoFocus}">
+                                                            <Setter Property="Focusable" Value="False"/>
                                                             <EventSetter Event="MouseEnter" Handler="lvitem_argument_MouseEnter" />
                                                         </Style>
                                                     </ListView.ItemContainerStyle>
@@ -554,7 +628,7 @@
                                             </StackPanel>
                                             <StackPanel Grid.Column="1">
                                                 <Label x:Name="lab_descr" Content="Description:" Style="{StaticResource H3}"/>
-                                                <TextBlock x:Name="textblock_descr" Background="White" TextWrapping="Wrap" MinHeight="50"/>
+                                                <TextBlock x:Name="textblock_descr" TextWrapping="Wrap" MinHeight="50"/>
                                             </StackPanel>
                                             <!--StackPanel Grid.Row="1">
                                                 <CheckBox Content="Use Mumble Link (TACO)" VerticalAlignment="Center" FontSize="16" IsEnabled="False" FontWeight="Bold" HorizontalAlignment="Left" Grid.Row="4" Margin="0,4.36"/>
@@ -564,7 +638,11 @@
                                     <Expander ToolTip="Set up a custom Graphic Configuration for this account" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <Image Source="Resources/Icons/gpu.png" Height="22"/>
+                                                <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                                    <Rectangle.OpacityMask>
+                                                        <ImageBrush ImageSource="Resources/Icons/gpu.png"/>
+                                                    </Rectangle.OpacityMask>
+                                                </Rectangle>
                                                 <Label Style="{StaticResource H2}">Graphic Configuration</Label>
                                             </StackPanel>
                                         </Expander.Header>
@@ -587,14 +665,14 @@
                                                 <Button x:Name="bt_resetgfx" DockPanel.Dock="Left" Content="Reset Config"  Width="100" Click="bt_resetgfx_Click" Margin="0,0,5,0" ToolTip="Resets the selected options to their old value."/>
                                             </DockPanel>
 
-                                            <ListView x:Name="lv_gfx" Grid.ColumnSpan="2" Grid.Row="1" MinHeight="64" ItemsSource="{Binding Path=GFXFile.Config}">
+                                            <ListView x:Name="lv_gfx" Grid.ColumnSpan="2" Grid.Row="1" MinHeight="64" ItemsSource="{Binding Path=GFXFile.Config}" ItemContainerStyle="{StaticResource ListViewItem_NoFocus}">
                                                 <ListView.View>
                                                     <GridView>
                                                         <GridViewColumn Header="Parameter" Width="230"  DisplayMemberBinding="{Binding Name}"/>
                                                         <GridViewColumn Header="Setup" Width="250">
                                                             <GridViewColumn.CellTemplate>
                                                                 <DataTemplate>
-                                                                    <ComboBox ItemsSource="{Binding Path=IEOptions}" SelectedValue="{Binding Path=Value}" Width="200" />
+                                                                    <ComboBox ItemsSource="{Binding Path=IEOptions}" SelectedValue="{Binding Path=Value}" Width="200" Foreground="Black"/>
                                                                 </DataTemplate>
                                                             </GridViewColumn.CellTemplate>
                                                         </GridViewColumn>
@@ -608,7 +686,11 @@
                                     <Expander ToolTip="Add 3rd Party injected software for this account" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <Image Source="Resources/Icons/injection.png" Height="22"/>
+                                                <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                                    <Rectangle.OpacityMask>
+                                                        <ImageBrush ImageSource="Resources/Icons/injection.png"/>
+                                                    </Rectangle.OpacityMask>
+                                                </Rectangle>
                                                 <Label Style="{StaticResource H2}">Injected Software</Label>
                                             </StackPanel>
                                         </Expander.Header>
@@ -632,7 +714,11 @@
                                     <Expander ToolTip="Add 3rd Party injected software for this account" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <Image Source="Resources/Icons/taco_black.png" Height="22"/>
+                                                <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                                    <Rectangle.OpacityMask>
+                                                        <ImageBrush ImageSource="Resources/Icons/taco_black.png"/>
+                                                    </Rectangle.OpacityMask>
+                                                </Rectangle>
                                                 <Label Style="{StaticResource H2}">TacO + BlishHUD</Label>
                                             </StackPanel>
                                         </Expander.Header>
@@ -658,13 +744,17 @@
                                     <Expander ToolTip="Configure Hotkeys for quick Clientcontrol" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <Image Source="Resources/Icons/multitab.png" Height="22"/>
+                                                <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                                    <Rectangle.OpacityMask>
+                                                        <ImageBrush ImageSource="Resources/Icons/multitab.png"/>
+                                                    </Rectangle.OpacityMask>
+                                                </Rectangle>
                                                 <Label Style="{StaticResource H2}">Hotkeys</Label>
                                             </StackPanel>
                                         </Expander.Header>
                                         <StackPanel>
                                             <Label Foreground="Red" Content="Changes require restart to take effect!"/>
-                                            <ListView x:Name="lv_hotkeys" ItemsSource="{Binding AccHotkeys}" Height="200" SelectionChanged="lv_hotkeys_SelectionChanged">
+                                            <ListView x:Name="lv_hotkeys"  ItemsSource="{Binding AccHotkeys}" Height="200" SelectionChanged="lv_hotkeys_SelectionChanged">
                                                 <ListView.ItemTemplate>
                                                     <DataTemplate>
                                                         <StackPanel Orientation="Horizontal">
@@ -683,7 +773,11 @@
                                     <Expander ToolTip="Settings for Geeks." Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
-                                                <Image Source="Resources/Icons/feature.png" Height="22"/>
+                                                <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                                    <Rectangle.OpacityMask>
+                                                        <ImageBrush ImageSource="Resources/Icons/feature.png"/>
+                                                    </Rectangle.OpacityMask>
+                                                </Rectangle>
                                                 <Label Style="{StaticResource H2}">Advanced Settings</Label>
                                             </StackPanel>
                                         </Expander.Header>
@@ -735,7 +829,11 @@
                 <TabItem Name="tab_server" Initialized="tab_server_Initialized">
                     <TabItem.Header>
                         <StackPanel>
-                            <Image Height="20" Source="Resources/Icons/server.png"/>
+                            <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="/Resources/Icons/server.png"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
                             <Label FontSize="10" Margin="0,-5,0,-7">Network Settings</Label>
                         </StackPanel>
                     </TabItem.Header>
@@ -818,7 +916,11 @@
                 <TabItem Name="tab_plugins" >
                     <TabItem.Header>
                         <StackPanel>
-                            <Image Height="20" Source="Resources/plugin.png" />
+                            <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="/Resources/plugin.png"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
                             <Label FontSize="10" Margin="0,-5,0,-7">Plug-Ins</Label>
                         </StackPanel>
                     </TabItem.Header>
@@ -893,7 +995,11 @@
                 <TabItem Name="tab_addons" GotFocus="tab_addons_GotFocus">
                     <TabItem.Header>
                         <StackPanel>
-                            <Image Height="20" Source="Resources/Icons/addon.png"/>
+                            <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="Resources/Icons/addon.png"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
                             <Label FontSize="10" Margin="0,-5,0,-7">Addons</Label>
                         </StackPanel>
                     </TabItem.Header>
@@ -947,11 +1053,19 @@
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Height="20" Source="Resources/Icons/taco_black.png"/>
-                                <Image Height="20" Source="Resources/Icons/blish_black.png" Margin="3,0,0,0"/>
+                            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">
+                                <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                    <Rectangle.OpacityMask>
+                                        <ImageBrush ImageSource="/Resources/Icons/taco_black.png"/>
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
+                                <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                    <Rectangle.OpacityMask>
+                                        <ImageBrush ImageSource="/Resources/Icons/blish_black.png"/>
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
                             </StackPanel>
-                            <Label FontSize="10" Margin="-22,-5,-25,-7">TacO / BlishHUD</Label>
+                            <Label FontSize="10">TacO / BlishHUD</Label>
                         </StackPanel>
                     </TabItem.Header>
                     <StackPanel Margin="10">
@@ -967,7 +1081,11 @@
                         <Label Style="{StaticResource H1}" Content="Settings:"/>
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Image Height="20" Source="Resources/Icons/taco_black.png"/>
+                                <Rectangle Height="20" Width="20" Fill="{StaticResource H1_Foreground}">
+                                    <Rectangle.OpacityMask>
+                                        <ImageBrush ImageSource="Resources/Icons/taco_black.png"/>
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
                                 <Label Style="{StaticResource H1}" Content="TacO:"/>
                             </StackPanel>
                             <DockPanel >
@@ -978,7 +1096,11 @@
                         </StackPanel>
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Image Height="20" Source="Resources/Icons/blish_black.png"/>
+                                <Rectangle Height="20" Width="20" Fill="{StaticResource H1_Foreground}">
+                                    <Rectangle.OpacityMask>
+                                        <ImageBrush ImageSource="Resources/Icons/blish_black.png"/>
+                                    </Rectangle.OpacityMask>
+                                </Rectangle>
                                 <Label Style="{StaticResource H1}" Content="Blish HUD:"/>
                             </StackPanel>
                             <DockPanel >
@@ -990,10 +1112,14 @@
                     </StackPanel>
                 </TabItem>
                 <!-- END DELETE ON 1.9 -->
-                <TabItem>
+                <TabItem Visibility="Collapsed">
                     <TabItem.Header>
                         <StackPanel>
-                            <Image Height="20" Source="Resources/Icons/film.png"/>
+                            <Rectangle Height="20" Width="20" Fill="{StaticResource H1_Foreground}">
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="Resources/Icons/film.png"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
                             <Label FontSize="10" Margin="0,-5,0,-7">Cinema Mode</Label>
                         </StackPanel>
                     </TabItem.Header>
@@ -1172,7 +1298,11 @@
                 <TabItem x:Name="tab_clientfix">
                     <TabItem.Header>
                         <StackPanel>
-                            <Image Height="20" Source="Resources/Icons/crashfix.png"/>
+                            <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="Resources/Icons/crashfix.png"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
                             <Label FontSize="10" Margin="0,-5,0,-7">Crashes</Label>
                         </StackPanel>
                     </TabItem.Header>
@@ -1225,20 +1355,26 @@
                     </Grid>
 
                 </TabItem>
+               
 
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel>
-                            <Image Height="20" Source="Resources/Icons/tools.png"/>
+                            <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="Resources/Icons/tools.png"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
                             <Label FontSize="10" Margin="0,-5,0,-7">LB Settings</Label>
                         </StackPanel>
                     </TabItem.Header>
-                    <StackPanel>
+                    <ScrollViewer>
+                        <StackPanel>
 
-                        <Label Content="Launchbuddy Settings" Style="{StaticResource H1}"/>
-                        <Button ToolTip="All non gw2 client relative settings for Launchbuddy only" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"  FontWeight="Bold" Margin="-20,-30,0,0"></Button>
+                            <Label Content="Launchbuddy Settings" Style="{StaticResource H1}"/>
+                            <Button ToolTip="All non gw2 client relative settings for Launchbuddy only" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"  FontWeight="Bold" Margin="-20,-30,0,0"></Button>
 
-                        <!-- Content="Settings" FontWeight="Bold" FontSize="14"/>
+                            <!-- Content="Settings" FontWeight="Bold" FontSize="14"/>
                         <StackPanel Margin="5">
                             <CheckBox Content="Use Graphical Gameinstance Manager" />
                             <CheckBox Content="Search for new versions of Launchbuddy on Start"/>
@@ -1246,49 +1382,59 @@
 
                         <Separator Margin="5"/>
                         -->
-                        <Separator Margin="3"/>
-                        <CheckBox x:Name="cb_lbupdatescheck" Content="Automatically Check for Launchbuddy Updates" Margin="5" Click="cb_lbupdatescheck_Click" ToolTip="Choose if Launchbuddy should automatically search for updates on startup."/>
-                        <CheckBox x:Name="cb_useinstancegui" Content="Use Game Instance GUI" Margin="5" Click="cb_useinstancegui_Click" ToolTip="Choose if the instance manager should be launched whenever you launch gw2." Checked="cb_useinstancegui_Checked"/>
-                        <CheckBox x:Name="cb_autoupdatedatfiles" Content="Automatically update .dat files" Margin="5" Click="cb_autoupdatedatfiles_Click" ToolTip="Choose if your .dat files should be automatically updated at launch when a new patch has been released." Checked="cb_autoupdatedatfiles_Checked"/>
-                        <CheckBox x:Name="cb_forcegameclientupdate" Content="Force gameclient update on startup (needed when Gw2 API is bugged)" Margin="5"  ToolTip="If the Gw2 API is bugged or not up to date please use this setting to minimize errors" Checked="cb_forcegameclientupdate_Checked" Click="cb_forcegameclientupdate_Click" />
+                            <Separator Margin="3"/>
+                            <CheckBox x:Name="cb_lbupdatescheck" Content="Automatically Check for Launchbuddy Updates" Margin="5" Click="cb_lbupdatescheck_Click" ToolTip="Choose if Launchbuddy should automatically search for updates on startup."/>
+                            <CheckBox x:Name="cb_useinstancegui" Content="Use Game Instance GUI" Margin="5" Click="cb_useinstancegui_Click" ToolTip="Choose if the instance manager should be launched whenever you launch gw2." Checked="cb_useinstancegui_Checked"/>
+                            <CheckBox x:Name="cb_autoupdatedatfiles" Content="Automatically update .dat files" Margin="5" Click="cb_autoupdatedatfiles_Click" ToolTip="Choose if your .dat files should be automatically updated at launch when a new patch has been released." Checked="cb_autoupdatedatfiles_Checked"/>
+                            <CheckBox x:Name="cb_forcegameclientupdate" Content="Force gameclient update on startup (needed when Gw2 API is bugged)" Margin="5"  ToolTip="If the Gw2 API is bugged or not up to date please use this setting to minimize errors" Checked="cb_forcegameclientupdate_Checked" Click="cb_forcegameclientupdate_Click" />
+                            <Button x:Name="bt_resetpropertysettings" Content="Reset ALL LB Settings"  Height="30" Width="250" MaxWidth="250" HorizontalAlignment="Left" Margin="10,0,0,0" Click="Bt_resetpropertysettings_Click"/>
+                            <Button x:Name="bt_resetinstanceguisettings" Content="Reset Game Instance Manager Settings" Width="250"  Height="30" MaxWidth="250" HorizontalAlignment="Left" Margin="10,0,0,0" Click="Bt_resetinstanceguisettings_Click"/>
+                            <Label Content="Launchbuddy Releases" Style="{StaticResource H2}"/>
+                            <Grid Height="250" Margin="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60*"/>
+                                    <ColumnDefinition Width="40*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="150*"/>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <Label Content="Description:" Grid.Row="0" Grid.Column="1" Style="{StaticResource H2}"/>
+                                <ListView x:Name="lv_lbversions" Grid.Row="0" Grid.RowSpan="2" SelectionChanged="ListView_SelectionChanged" IsSynchronizedWithCurrentItem="True">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="Name" Width="265" DisplayMemberBinding="{Binding Name}"/>
+                                            <GridViewColumn Header="Version" Width="100" DisplayMemberBinding="{Binding Version}"/>
+                                            <GridViewColumn Header="Releasedate" Width="100" DisplayMemberBinding="{Binding Date}"/>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                                <TextBlock x:Name="wb_releasedescr" Grid.Row="1" Grid.Column="1" Margin="3,0,0,0" TextWrapping="Wrap"/>
+                                <DockPanel  Grid.Row="2" Grid.ColumnSpan="2" LastChildFill="False">
+                                    <Button x:Name="bt_fetchlbversions" Margin="3" Content="Check for Updates" DockPanel.Dock="Left" Click="bt_fetchlbversions_Click" ToolTip="Check for Gw2 Launchbuddy updates."/>
+                                    <Button x:Name="bt_downloadrelease" Margin="3" Content="Download" Click="bt_downloadrelease_Click" IsEnabled="False" DockPanel.Dock="Left" ToolTip="Download the selected Launchbuddy version." MinWidth="80" MaxWidth="200"/>
+                                </DockPanel>
 
-                        <Label Content="Launchbuddy Releases" Style="{StaticResource H2}"/>
-                        <Grid Height="250" Margin="3">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="60*"/>
-                                <ColumnDefinition Width="40*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="150*"/>
-                                <RowDefinition Height="30"/>
-                            </Grid.RowDefinitions>
-                            <Label Content="Description:" Grid.Row="0" Grid.Column="1" Style="{StaticResource H2}"/>
-                            <ListView x:Name="lv_lbversions" Grid.Row="0" Grid.RowSpan="2" SelectionChanged="ListView_SelectionChanged" IsSynchronizedWithCurrentItem="True">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="Name" Width="265" DisplayMemberBinding="{Binding Name}"/>
-                                        <GridViewColumn Header="Version" Width="100" DisplayMemberBinding="{Binding Version}"/>
-                                        <GridViewColumn Header="Releasedate" Width="100" DisplayMemberBinding="{Binding Date}"/>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                            <TextBlock x:Name="wb_releasedescr" Grid.Row="1" Grid.Column="1" Margin="3,0,0,0" TextWrapping="Wrap"/>
-                            <DockPanel  Grid.Row="2" Grid.ColumnSpan="2" LastChildFill="False">
-                                <Button x:Name="bt_fetchlbversions" Margin="3" Content="Check for Updates" DockPanel.Dock="Left" Click="bt_fetchlbversions_Click" ToolTip="Check for Gw2 Launchbuddy updates."/>
-                                <Button x:Name="bt_downloadrelease" Margin="3" Content="Download" Click="bt_downloadrelease_Click" IsEnabled="False" DockPanel.Dock="Left" ToolTip="Download the selected Launchbuddy version." MinWidth="80" MaxWidth="200"/>
-                            </DockPanel>
+                            </Grid>
+                            <Separator/>
+                            <StackPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+                                <Label x:Name="label" Content="Gw2 Client Details:" HorizontalAlignment="Left" Grid.ColumnSpan="2" Style="{StaticResource H1}" Width="152"/>
+                                <Label x:Name="lab_version" Content="Build Version:" ToolTip="The current Guild Wars 2 build your system is using." />
+                                <DockPanel>
+                                    <Label x:Name="lab_path" Content="Install Path:" DockPanel.Dock="Left" Grid.Column="1" Grid.Row="1"/>
+                                    <Button x:Name="bt_installpath" DockPanel.Dock="Left" ToolTip="Set your gamefolder path if it isn't &#x0a; determined correctly by launchbuddy" Content="Set" Click="bt_installpath_Click" Width="40" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                </DockPanel>
 
-                        </Grid>
-                        <Separator Margin="-3,15,0,10"/>
-                        <StackPanel>
-                            <Label Content="Bug Report:" Style="{StaticResource H2}"></Label>
-                            <Button x:Name="bt_bugreport" Content="Report a Bug"  Click="bt_bugreport_Click" Height="30" MaxWidth="250" HorizontalAlignment="Left" Margin="10,0,0,0"/>
-                            <Label Content="Settings:" Style="{StaticResource H2}"></Label>
-                            <Button x:Name="bt_resetpropertysettings" Content="Reset ALL LB Settings"  Height="30" MaxWidth="250" HorizontalAlignment="Left" Margin="10,0,0,0" Click="Bt_resetpropertysettings_Click"/>
-                            <Button x:Name="bt_resetinstanceguisettings" Content="Reset Game Instance Manager Settings"  Height="30" MaxWidth="250" HorizontalAlignment="Left" Margin="10,0,0,0" Click="Bt_resetinstanceguisettings_Click"/>
+                            </StackPanel>
+                            <Separator Margin="-3,15,0,10"/>
+                            <StackPanel>
+                                <Label Content="Bug Report:" Style="{StaticResource H2}"></Label>
+                                <Button x:Name="bt_bugreport" Content="Report a Bug"  Click="bt_bugreport_Click" Height="30" MaxWidth="250" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
+                    </ScrollViewer>
+                    
                 </TabItem>
                 <TabItem Visibility="Hidden" Height="10"/>
             </TabControl>

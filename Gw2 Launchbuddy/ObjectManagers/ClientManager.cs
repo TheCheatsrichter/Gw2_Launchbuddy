@@ -607,13 +607,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 //localdatwatcher.StartWatching();
 
                 while (Status < ClientStatus.Running)
-            {
+                {
 
                     //Check if it crashed/closed in between a step
-                    if(Status > ClientStatus.Created)
+                    if (Status > ClientStatus.Injected)
                         if (!ProcessExists())
                         {
-                            MessageBoxResult win = MessageBox.Show("Client " + account.Nickname + " got closed or crashed before a clean Start. Do you want to retry to start this Client?", "Client Retry", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                            MessageBoxResult win = MessageBox.Show($"Client {account.Nickname} got closed or crashed before a clean Start (Errorcode: {Convert.ToString((int)Status, 16)}). Do you want to retry to start this Client?", "Client Retry", MessageBoxButton.YesNo, MessageBoxImage.Question);
                             if (win.ToString() == "Yes")
                             {
                                 Status = ClientStatus.None;
@@ -637,13 +637,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
                         case var expression when (Status < ClientStatus.Created):
                             Process.Start();
-                            Suspend();
                             Status = ClientStatus.Created;
                             break;
 
                         case var expression when (Status < ClientStatus.Injected):
                             InjectDlls();
-                            Resume();
                             Status = ClientStatus.Injected;
                             break;
 
@@ -696,10 +694,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
             get
             {
                 if (Status >= ClientStatus.Running)
-                    return new BitmapImage(new Uri("Resources/Icons/running.png", UriKind.Relative));
+                    return new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/running.png", UriKind.RelativeOrAbsolute));
                 if (Status > ClientStatus.None)
-                    return new BitmapImage(new Uri("Resources/Icons/loading.png", UriKind.Relative));
-                return new BitmapImage(new Uri("Resources/Icons/idle.png", UriKind.Relative));
+                    return new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/loading.png", UriKind.RelativeOrAbsolute));
+                return new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/idle.png", UriKind.RelativeOrAbsolute));
             }
             set
             {
