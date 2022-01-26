@@ -59,32 +59,18 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static void Clone(Account acc)
         {
             Account newacc = new Account(GenerateName(acc.Nickname + " Clone"), acc);
-            newacc.UpdateAccountSettings();
-
-            if(acc.Settings.Loginfile !=null)
+            newacc.Settings.Loginfile = new LocalDatFile
             {
-                File.Copy(acc.Settings.Loginfile.Path, newacc.Settings.Loginfile.Path);
-            }
+                Path = EnviromentManager.LBLocaldatsPath + newacc.ID + ".dat",
+                gw2build = acc.Settings.Loginfile.Gw2Build,
+                Valid = acc.Settings.Loginfile.Valid,
+            };
+            newacc.Settings.AccountID = newacc.ID;
 
+            File.Copy(acc.Settings.Loginfile.Path, newacc.Settings.Loginfile.Path);
 
             SaveAccounts();
             ImportAccounts();
-        }
-
-        public static void SolveIDConflict()
-        {
-            foreach(Account acc in Accounts)
-            {
-                foreach(Account acc2 in Accounts)
-                {
-                    if(acc==acc2) continue;
-                    if(acc.ID == acc2.ID)
-                    {
-                        acc.ID = GenerateID();
-                        acc.UpdateAccountSettings();
-                    }
-                }
-            }
         }
 
         public static void LaunchAccounts()
@@ -263,22 +249,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
-        public bool UpdateAccountSettings()
-        {
-            if(ID!= Settings.AccountID)
-            {
-                //ID Changed but did not get updated in Settings
-                Settings.AccountID = ID;
-                Settings.Loginfile = new LocalDatFile
-                {
-                    Path = EnviromentManager.LBLocaldatsPath + ID + ".dat"
-                };
-            }
-            return true;
-
-
-        }
-
         private Account() {
             CreateAccount();
         }
@@ -292,7 +262,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             this.Settings = account.Settings.GetClone();
             ID = AccountManager.GenerateID();
-            this.Settings.AccountID = ID;
             CreateAccount(nickname);
         }
 
@@ -323,7 +292,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public WindowConfig WinConfig { set { winconfig = value; OnPropertyChanged("HasWindowConfig"); } get { return winconfig; } }
         public AccountInformation AccountInformation { set; get; }
 
-        //Advanced Settings
+        //Adavanced Settings
         [XmlIgnore]
         private uint relaunchesmax;
         public uint RelaunchesMax { set { relaunchesmax = value; RelaunchesLeft = value; } get { return relaunchesmax; } }
@@ -523,16 +492,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public DateTime LastLogin { get; set; }
         public DateTime LastClose { get; set; }
         public TimeSpan Playtime { get; set; }
-
-        public bool HasLoginReward
-        {
-            get
-            {
-                DateTime resettime = DateTime.Today.ToUniversalTime();
-                resettime = new DateTime(resettime.Year,resettime.Month,resettime.Day,0,0,0);
-                return resettime < LastLogin.ToUniversalTime();
-            }
-        }
 
         public AccountInformation()
         {
