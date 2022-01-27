@@ -24,6 +24,7 @@ public static class MusicManager
         foreach (var playlist in GetInvalidPlaylists())
         {
             playlist.PurgeInvalidSources();
+            playlist.SaveToM3U();
         }
     }
     public static bool AllPlaylistsValid()
