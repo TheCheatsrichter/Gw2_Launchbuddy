@@ -49,6 +49,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 dx11arg.IsActive = false;
             }
         }
+
+        public void ImportCustomArguments()
+        {
+            foreach(Argument arg in LBConfiguration.Config.arguments_custom)
+            {
+                Add(arg);
+            }
+        }
     }
     [Serializable]
     public class Argument
@@ -56,14 +64,16 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public string Flag { get; set; }
         public bool IsActive { get; set; }
         public string Description { get; set; }
+        public bool DeleteAble { get; set; }
 
         private Argument() { }
 
-        public Argument(string flag,string description,bool active)
+        public Argument(string flag,string description,bool active,bool deleteable=false)
         {
             Flag = flag;
             Description = description;
             IsActive = active;
+            DeleteAble = deleteable;
         }
 
         public override string ToString()

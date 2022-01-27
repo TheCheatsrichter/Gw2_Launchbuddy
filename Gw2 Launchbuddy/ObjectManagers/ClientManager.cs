@@ -653,7 +653,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                         case var expression when (Status < ClientStatus.Login):
                             if (Account.Settings.Loginfile != null)
                             {
-                                PressLoginButton();
+                                if(LBConfiguration.Config.pushgameclientbuttons) PressLoginButton();
                                 LocalDatManager.ToDefault(account.Settings.Loginfile);
                             }
                             Status = ClientStatus.Login;

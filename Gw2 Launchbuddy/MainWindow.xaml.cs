@@ -173,6 +173,7 @@ namespace Gw2_Launchbuddy
             cb_useinstancegui.IsChecked = LBConfiguration.Config.useinstancegui;
             cb_autoupdatedatfiles.IsChecked = LBConfiguration.Config.autoupdatedatfiles;
             cb_forcegameclientupdate.IsChecked = LBConfiguration.Config.forcegameclientupdate;
+            cb_gameclientbuttonpush.IsChecked = LBConfiguration.Config.pushgameclientbuttons;
         }
 
         private void DonatePopup()
@@ -1808,6 +1809,34 @@ namespace Gw2_Launchbuddy
         private void bt_selectallaccs_Click(object sender, RoutedEventArgs e)
         {
             lv_accs.SelectAll();
+        }
+
+        private void bt_addcustomargument_Click(object sender, RoutedEventArgs e)
+        {
+            var settings= (sender as Button).DataContext as AccountSettings;
+
+            string argname = tb_customargument.Text.TrimEnd();
+
+            if(Regex.IsMatch(argname, @"-\w+"))
+            {
+                settings.Arguments.Add(new Argument(argname, "Custom argument " + tb_customargument.Text, true, true));
+            }else
+            {
+                MessageBox.Show($"Invalid Argument {argname}. Please check format ('-example')");
+            }
+        }
+
+        private void bt_argdelete_Click(object sender, RoutedEventArgs e)
+        {
+            var arg = (sender as Button).DataContext as Account;
+            throw new Exception("Delete Arg here");
+            
+        }
+
+        private void cb_gameclientbuttonpush_Checked(object sender, RoutedEventArgs e)
+        {
+            LBConfiguration.Config.pushgameclientbuttons = (bool)cb_gameclientbuttonpush.IsChecked;
+            LBConfiguration.Save();
         }
 
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)
