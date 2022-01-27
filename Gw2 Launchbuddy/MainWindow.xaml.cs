@@ -81,6 +81,9 @@ namespace Gw2_Launchbuddy
             //Plugin List
             lv_plugins.ItemsSource = PluginManager.InstalledPlugins;
 
+            //Musicplaylists
+            lv_musicplaylists.ItemsSource = MusicManager.Playlists;
+
             UpdateNewsletter();
 
             gr_acceditor.Visibility = Visibility.Collapsed;
@@ -1837,6 +1840,58 @@ namespace Gw2_Launchbuddy
         {
             LBConfiguration.Config.pushgameclientbuttons = (bool)cb_gameclientbuttonpush.IsChecked;
             LBConfiguration.Save();
+        }
+
+        private void lv_musicplaylists_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            dp_playlist.DataContext = (sender as ListView).SelectedItem as MusicPlaylist;
+
+            if(dp_playlist.DataContext == null)
+            {
+                dp_playlist.Visibility = Visibility.Collapsed;
+                dp_playlisthelp.Visibility = Visibility.Visible;
+            }else
+            {
+                dp_playlist.Visibility = Visibility.Visible;
+                dp_playlisthelp.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void ListView_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var test =(sender as ListView).DataContext;
+            int i = 0;
+        }
+
+        private void bt_addsong_Click(object sender, RoutedEventArgs e)
+        {
+            var playlist = (sender as Button).DataContext as MusicPlaylist;
+
+            Builders.FileDialog.Filter("MP3 Files(*.mp3)|*.mp3|WAV Files (*.wav)|*.wav|AAC Files (*.aac)|*.aac|All Files(*.*)|*.*").ShowDialog((Gw2_Launchbuddy.Helpers.FileDialog fileDialog) =>
+            {
+                if (fileDialog.FileName != "")
+                {
+                    foreach(string filename in fileDialog.FileNames)
+                    {
+                        playlist.Add(new MusicSource(filename));
+                    }
+                    
+                }
+            });
+
+
+            playlist.SaveToM3U();
+        }
+
+        private void bt_remsong_Click(object sender, RoutedEventArgs e)
+        {
+            var playlist = (sender as Button).DataContext as MusicPlaylist;
+
+            for(int i= lv_musicsourcelist.SelectedItems.Count-1; i>=0 ;i--)
+            {
+                playlist.Remove(lv_musicsourcelist.SelectedItems[i] as MusicSource);
+            }
+            playlist.SaveToM3U();
         }
 
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)

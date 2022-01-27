@@ -238,7 +238,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 3.0.0 Alpha" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 3.0 Alpha" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
@@ -319,18 +319,7 @@
             </Grid>
 
             <TabControl x:Name="tab_options" Grid.Row="0" TabStripPlacement="Left" BorderBrush="{StaticResource B3_Background}" Background="{StaticResource B2_Background}">
-                <TabItem Header="Test">
-                    <StackPanel>
-                        <ListView>
-                            <ListViewItem Content=" Test 2432"/>
-                            <ListViewItem Content=" Test 2432"/>
-                            <ListViewItem Content=" Test 2432"/>
-                            <ComboBox SelectedIndex="0">
-                                <ComboBoxItem Content="Test"/>
-                            </ComboBox>
-                        </ListView>
-                    </StackPanel>
-                </TabItem>
+                
                 <TabItem x:Name="tab_home" MouseEnter="tab_home_MouseEnter">
                     <TabItem.Header>
                         <StackPanel>
@@ -837,7 +826,52 @@
                     </DockPanel>
 
                 </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="Resources/Icons/musicnote.png"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                            <Label FontSize="10" Margin="0,-5,0,-7">Custom Music</Label>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <DockPanel>
+                        <ListView Name="lv_musicplaylists" DockPanel.Dock="Left" Width="120" SelectionChanged="lv_musicplaylists_SelectionChanged">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Label Content="{Binding Path=Name}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <DockPanel x:Name="dp_playlisthelp" Visibility="Visible">
+                            <TextBlock Margin="80" Text="Here you can setup custom ingame playlists. These music playlists will be triggered on different ingame events. For example when in WvW the music playlist Ambient will switch to Battle then you start fighting with an enemy. To start please select a playlist on the left." TextWrapping="Wrap" VerticalAlignment="Center"/>
+                        </DockPanel>
+                        <DockPanel x:Name="dp_playlist" DockPanel.Dock="Top" Margin="10" Visibility="Collapsed">
+                            <CheckBox Content="Enable this playlist" DockPanel.Dock="Top" IsChecked="{Binding Path=Enabled}" Visibility="{Binding Path=HasSources, Converter={StaticResource BoolToVis}}"/>
+                            <Label Content="{Binding Path=Name}" Style="{StaticResource H1}" DockPanel.Dock="Top"/>
+                            <TextBlock Text="{Binding Path=Description}" Margin="5" MinHeight="80" DockPanel.Dock="Top" TextWrapping="Wrap"/>
+                            <Label Content="Used Songs:"  Style="{StaticResource H1}" DockPanel.Dock="Top"/>
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" Height="30">
+                                <Button x:Name="bt_addsong" Content="Add Song" MaxHeight="30" MinWidth="80" Click="bt_addsong_Click"/>
+                                <Button x:Name="bt_remsong" Content="Remove Song" MaxHeight="30" MinWidth="80" Click="bt_remsong_Click"/>
+                            </StackPanel>
+                            <ListView x:Name="lv_musicsourcelist" SelectionMode="Multiple" MinHeight="150" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=DockPanel},Path=DataContext}" DockPanel.Dock="Bottom" MouseEnter="ListView_MouseEnter" >
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel>
+                                            <Label Content="{Binding Path=SourceName}"/>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
 
+                        </DockPanel>
+                    </DockPanel>
+                </TabItem>
                 <TabItem Name="tab_server" Initialized="tab_server_Initialized">
                     <TabItem.Header>
                         <StackPanel>

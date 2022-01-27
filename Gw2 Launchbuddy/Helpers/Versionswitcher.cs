@@ -29,7 +29,12 @@ namespace Gw2_Launchbuddy
         {
             if (Releaselist.Count == 0)
             {
-                await GetReleaseList();
+                try
+                {
+                    await GetReleaseList();
+                }catch
+                { //Ignore Versioncheck when API limit is reached
+                }
             }
             Version newest_version = new Version();
             Release newest_release = new Release();
@@ -97,7 +102,7 @@ namespace Gw2_Launchbuddy
             */
 
 
-            Octokit.GitHubClient client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("Gw2Launchbuddy"));
+            Octokit.GitHubClient client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue($"Gw2Launchbuddy_{Environment.UserName}"));
             IReadOnlyList<Octokit.Release> raw_releases = await client.Repository.Release.GetAll("TheCheatsrichter", "Gw2_Launchbuddy");
 
             ObservableCollection<Release> fetched_releases = new ObservableCollection<Release>();

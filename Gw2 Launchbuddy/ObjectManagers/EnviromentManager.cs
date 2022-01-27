@@ -31,6 +31,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static string LBPluginsPath = LBAppdataPath + "Plugins\\";
         private static string LBRightTestPath = LBAppdataPath + "RightTest.txt";
 
+        public static string CustomMusic_Folderpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Guild Wars 2\Music\";
+        public static string CustomMusicDisabled_Folderpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Guild Wars 2\MusicDisabled\";
+
         //public static bool LBUseClientGUI = LBConfiguration.Config.useinstancegui;
         //public static bool LBUseLoadingGUI = Properties.Settings.Default.useloadingui;
 
@@ -107,6 +110,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             //Cleanup CacheFolder
             CacheCleaner.Clean();
+
+            //Musicplaylists
+            MusicManager.Init();
 
         }
 
