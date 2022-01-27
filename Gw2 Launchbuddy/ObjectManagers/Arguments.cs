@@ -10,7 +10,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
     [Serializable]
     public class Arguments:ObservableCollection<Argument>
     {
-        public Arguments(bool import=false)
+
+        public void CreateBaseArguments(bool import=false)
         {
             Add(new Argument("-32", "Forces the game to run in 32 bit.",false));
             Add(new Argument("-bmp", "Forces the game to create lossless screenshots as .BMP files. Use for creating high-quality screenshots at the expense of much larger files.", false));
@@ -31,7 +32,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Add(new Argument("-dx11", "Forces the game to run using the beta DirectX 11 renderer. Keep in mind that injected Dlls have to work with DirectX 11!", false));
         }
 
-        private Arguments() { }
+        public Arguments() { }
 
         public void SetActive(Argument arg,bool active)=>this.First<Argument>(a => a.Flag == arg.Flag).IsActive=active;
         public void SetActive(string arg, bool active) => this.First<Argument>(a => a.Flag == arg).IsActive = active;
@@ -52,10 +53,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void ImportCustomArguments()
         {
-            foreach(Argument arg in LBConfiguration.Config.arguments_custom)
-            {
-                Add(arg);
-            }
+
         }
     }
     [Serializable]

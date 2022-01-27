@@ -116,7 +116,5 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public bool pushgameclientbuttons = true;
         // Defaultvalue should be changed to false when API works again
         public bool forcegameclientupdate = false;
-
-        public List<Argument> arguments_custom;
     }
 }

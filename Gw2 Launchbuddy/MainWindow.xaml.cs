@@ -25,7 +25,8 @@ namespace Gw2_Launchbuddy
 
         ///Gw2 Launchbuddy by TheCheatsrichter 2016
         ///
-        ///Argument generator and shortcut creator for Guild Wars 2
+        ///
+        /// generator and shortcut creator for Guild Wars 2
 
         /// Object prefix:
         ///     bt= button
@@ -1831,8 +1832,11 @@ namespace Gw2_Launchbuddy
 
         private void bt_argdelete_Click(object sender, RoutedEventArgs e)
         {
-            var arg = (sender as Button).DataContext as Account;
-            throw new Exception("Delete Arg here");
+            var arg = (sender as Button).DataContext as Argument;
+            if(arg.DeleteAble)
+            {
+                AccountManager.EditAccount.Settings.Arguments.Remove(arg);
+            }
             
         }
 

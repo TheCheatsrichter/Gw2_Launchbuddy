@@ -146,7 +146,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
                     foreach(Account acc in (ObservableCollection<Account>)deserializer.Deserialize(xmlInputStream))
                     {
-                        Arguments tempArguments = new Arguments();
+                        
+                        /*s tempArguments = new Arguments();
                         foreach (var argmt in tempArguments)
                         {
                             try
@@ -159,6 +160,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             }
                         }
                         acc.Settings.Arguments = tempArguments;
+                        */
                         //Do not add accs as they get added on Init!
                     }
                     xmlInputStream.Close();
@@ -245,6 +247,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 {
                     Settings = new AccountSettings(this);
                     Settings.Arguments = new Arguments();
+                    Settings.Arguments.CreateBaseArguments();
                 }
             }
             else
