@@ -1840,7 +1840,7 @@ namespace Gw2_Launchbuddy
             
         }
 
-        private void cb_gameclientbuttonpush_Checked(object sender, RoutedEventArgs e)
+        private void cb_gameclientbuttonpush_Click(object sender, RoutedEventArgs e)
         {
             LBConfiguration.Config.pushgameclientbuttons = (bool)cb_gameclientbuttonpush.IsChecked;
             LBConfiguration.Save();

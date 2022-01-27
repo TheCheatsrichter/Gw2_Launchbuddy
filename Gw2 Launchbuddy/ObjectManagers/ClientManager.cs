@@ -613,6 +613,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     if (Status > ClientStatus.Injected)
                         if (!ProcessExists())
                         {
+                            RestoreGameSettings();
                             MessageBoxResult win = MessageBox.Show($"Client {account.Nickname} got closed or crashed before a clean Start (Errorcode: {Convert.ToString((int)Status, 16)}). Do you want to retry to start this Client?", "Client Retry", MessageBoxButton.YesNo, MessageBoxImage.Question);
                             if (win.ToString() == "Yes")
                             {
@@ -681,11 +682,33 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             catch (Exception e)
             {
+                RestoreGameSettings();
                 MessageBox.Show("Account: "+account.Nickname+"\n\n"+ e.Message);
                 Status = ClientStatus.None;
                 CrashReporter.ReportCrashToAll(e);
             }
             if (Status.HasFlag(ClientStatus.Crash)) Status = ClientStatus.None;
+        }
+
+        void RestoreGameSettings()
+        {
+            try
+            {
+                GFXManager.RestoreDefault();
+            }
+            catch
+            {
+
+            }
+
+            try
+            {
+                LocalDatManager.ToDefault(account.Settings.Loginfile);
+            }
+            catch
+            {
+
+            }
         }
 
         //UI functions
