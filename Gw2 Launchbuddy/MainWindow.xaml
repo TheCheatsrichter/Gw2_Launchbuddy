@@ -12,7 +12,7 @@
 
 
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
-        Title="Gw2 Launchbuddy V 3.0" MinHeight="800" MinWidth="900" Height="700" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None" Background="{StaticResource B1_Background}">
+        Title="Gw2 Launchbuddy V 3.0" MinHeight="800" MinWidth="900" Height="700" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None" Background="{StaticResource B1_Background}" AllowsTransparency="True">
     <Window.Resources>
         <Storyboard x:Key="anim_imgfadeout">
             <DoubleAnimation
@@ -148,7 +148,7 @@
             <RowDefinition x:Name="OptionsHeight" Height="650"/>
             <RowDefinition x:Name="CinemaHeight" Height="100*"/>
         </Grid.RowDefinitions>
-
+        
 
         <MediaElement x:Name="Cinema_MediaPlayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual" Volume="{Binding Value, ElementName=sl_volumecontrol}" MediaEnded="Cinema_MediaPlayer_MediaEnded"/>
 
@@ -319,7 +319,6 @@
             </Grid>
 
             <TabControl x:Name="tab_options" Grid.Row="0" TabStripPlacement="Left" BorderBrush="{StaticResource B3_Background}" Background="{StaticResource B2_Background}">
-                
                 <TabItem x:Name="tab_home" MouseEnter="tab_home_MouseEnter">
                     <TabItem.Header>
                         <StackPanel>
@@ -673,7 +672,13 @@
                                                         <GridViewColumn Header="Setup" Width="250">
                                                             <GridViewColumn.CellTemplate>
                                                                 <DataTemplate>
-                                                                    <ComboBox ItemsSource="{Binding Path=IEOptions}" SelectedValue="{Binding Path=Value}" Width="200"/>
+                                                                    <ComboBox ItemsSource="{Binding Path=IEOptions}" SelectedValue="{Binding Path=Value}" Width="200">
+                                                                        <ComboBox.ItemTemplate>
+                                                                            <DataTemplate>
+                                                                                <TextBlock Foreground="Black" Text="{Binding .}"/>
+                                                                            </DataTemplate>
+                                                                        </ComboBox.ItemTemplate>
+                                                                    </ComboBox>
                                                                 </DataTemplate>
                                                             </GridViewColumn.CellTemplate>
                                                         </GridViewColumn>
