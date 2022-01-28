@@ -1871,7 +1871,7 @@ namespace Gw2_Launchbuddy
         {
             var playlist = (sender as Button).DataContext as MusicPlaylist;
 
-            Builders.FileDialog.Filter("MP3 Files(*.mp3)|*.mp3|WAV Files (*.wav)|*.wav|AAC Files (*.aac)|*.aac|All Files(*.*)|*.*").ShowDialog((Gw2_Launchbuddy.Helpers.FileDialog fileDialog) =>
+            Builders.FileDialog.Multiselect(true).Filter("MP3 Files(*.mp3)|*.mp3|WAV Files (*.wav)|*.wav|AAC Files (*.aac)|*.aac|All Files(*.*)|*.*").ShowDialog((Gw2_Launchbuddy.Helpers.FileDialog fileDialog) =>
             {
                 if (fileDialog.FileName != "")
                 {
@@ -1896,6 +1896,14 @@ namespace Gw2_Launchbuddy
                 playlist.Remove(lv_musicsourcelist.SelectedItems[i] as MusicSource);
             }
             playlist.SaveToM3U();
+        }
+
+
+
+        private void bt_previewmusicsong_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var song = (sender as System.Windows.Shapes.Rectangle).DataContext as MusicSource;
+            Process.Start(song.SourcePath);
         }
 
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)

@@ -223,6 +223,7 @@ public class MusicPlaylist : ObservableCollection<MusicSource>
         }
         get
         {
+            if (Count == 0) return false;
             return enabled;
         }
     }

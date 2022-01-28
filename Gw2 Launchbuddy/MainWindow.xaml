@@ -12,7 +12,7 @@
 
 
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
-        Title="Gw2 Launchbuddy V 3.0" MinHeight="700" MinWidth="900" Height="700" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None" Background="{StaticResource B1_Background}">
+        Title="Gw2 Launchbuddy V 3.0" MinHeight="800" MinWidth="900" Height="700" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None" Background="{StaticResource B1_Background}">
     <Window.Resources>
         <Storyboard x:Key="anim_imgfadeout">
             <DoubleAnimation
@@ -238,7 +238,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 3.0 Alpha" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 3.0 Alpha Pre" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
@@ -510,11 +510,11 @@
                                         </Expander.Header>
                                         <DockPanel>
                                             <StackPanel>
-                                                <DockPanel>
-                                                    <Button DockPanel.Dock="Left" Name="bt_loginfile" Height="22" Width="120" Click="bt_loginfile_Click">Set Loginfile</Button>
+                                                <DockPanel Margin="10">
+                                                    <Button DockPanel.Dock="Left" Name="bt_loginfile" Height="22" Width="200" Click="bt_loginfile_Click">Set Loginfile</Button>
                                                     <Label Foreground="Green" Content="Loginfile successfuly configured" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" />
                                                 </DockPanel>
-                                                <Button DockPanel.Dock="Left" Name="bt_loginfileupdate" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" Height="22" Width="120" HorizontalAlignment="Left" Click="bt_loginfileupdate_Click" ToolTip="Manually repair your Loginfile if the automated Update did not work">Repair Loginfile</Button>
+                                                <Button Margin="10" DockPanel.Dock="Left" Name="bt_loginfileupdate" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" Height="22" Width="200" HorizontalAlignment="Left" Click="bt_loginfileupdate_Click" ToolTip="Manually repair your Loginfile if the automated Update did not work">Repair Loginfile</Button>
                                                 <Expander DockPanel.Dock="Top" Margin="5,0,0,0" >
                                                     <Expander.Header>
                                                         <StackPanel Orientation="Horizontal">
@@ -569,7 +569,7 @@
                                                 </ListView>
                                                 <StackPanel DockPanel.Dock="Left" MinWidth="150">
                                                     <Label Content="Current Icon:-" Style="{StaticResource H3}"/>
-                                                    <Image MaxHeight="128" Source="{Binding Path=Icon.Image}"/>
+                                                    <Image MaxHeight="128" MinWidth="128" Source="{Binding Path=Icon.Image}"/>
                                                 </StackPanel>
                                             </DockPanel>
                                             <StackPanel Orientation="Horizontal" Margin="0,5">
@@ -673,7 +673,7 @@
                                                         <GridViewColumn Header="Setup" Width="250">
                                                             <GridViewColumn.CellTemplate>
                                                                 <DataTemplate>
-                                                                    <ComboBox ItemsSource="{Binding Path=IEOptions}" SelectedValue="{Binding Path=Value}" Width="200" Foreground="Black"/>
+                                                                    <ComboBox ItemsSource="{Binding Path=IEOptions}" SelectedValue="{Binding Path=Value}" Width="200"/>
                                                                 </DataTemplate>
                                                             </GridViewColumn.CellTemplate>
                                                         </GridViewColumn>
@@ -851,8 +851,8 @@
                             <TextBlock Margin="80" Text="Here you can setup custom ingame playlists. These music playlists will be triggered on different ingame events. For example when in WvW the music playlist Ambient will switch to Battle then you start fighting with an enemy. To start please select a playlist on the left." TextWrapping="Wrap" VerticalAlignment="Center"/>
                         </DockPanel>
                         <DockPanel x:Name="dp_playlist" DockPanel.Dock="Top" Margin="10" Visibility="Collapsed">
-                            <CheckBox Content="Enable this playlist" DockPanel.Dock="Top" IsChecked="{Binding Path=Enabled}" Visibility="{Binding Path=HasSources, Converter={StaticResource BoolToVis}}"/>
                             <Label Content="{Binding Path=Name}" Style="{StaticResource H1}" DockPanel.Dock="Top"/>
+                            <CheckBox Content="Enable this playlist" DockPanel.Dock="Top" IsChecked="{Binding Path=Enabled}"/>
                             <TextBlock Text="{Binding Path=Description}" Margin="5" MinHeight="80" DockPanel.Dock="Top" TextWrapping="Wrap"/>
                             <Label Content="Used Songs:"  Style="{StaticResource H1}" DockPanel.Dock="Top"/>
                             <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" Height="30">
@@ -862,8 +862,13 @@
                             <ListView x:Name="lv_musicsourcelist" SelectionMode="Multiple" MinHeight="150" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=DockPanel},Path=DataContext}" DockPanel.Dock="Bottom" MouseEnter="ListView_MouseEnter" >
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <DockPanel>
-                                            <Label Content="{Binding Path=SourceName}"/>
+                                        <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                            <Rectangle Name="bt_previewmusicsong" Fill="{StaticResource MainText_Foreground}" DockPanel.Dock="Left" Height="30" Width="30" MouseDown="bt_previewmusicsong_MouseDown" >
+                                                <Rectangle.OpacityMask>
+                                                    <ImageBrush ImageSource="Resources/Icons/play.png"/>
+                                                </Rectangle.OpacityMask>
+                                            </Rectangle>
+                                            <Label Content="{Binding Path=SourceName}" DockPanel.Dock="Left"/>
                                         </DockPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>

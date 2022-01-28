@@ -240,7 +240,7 @@
         <Setter Property="Foreground" Value="{StaticResource Text_Foreground}"/>
         <Setter Property="BorderBrush" Value="{StaticResource B3_Background}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Margin" Value="0,2,0,2"/>
+        <Setter Property="Margin" Value="0,3,0,3"/>
     </Style>
 
 
@@ -276,6 +276,10 @@
             </Trigger>
         </Style.Triggers>
         <Setter Property="Focusable" Value="False"/>
+    </Style>
+
+    <Style TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="Foreground" Value="Green"/>
     </Style>
 
 
