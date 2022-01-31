@@ -5,14 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gw2_Launchbuddy.Helpers"
         mc:Ignorable="d"
-        Title="BlockerInfo" Height="150" Width="350" Icon="/Gw2 Launchbuddy;component/launchbuddy.ico" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" Background="Black" WindowStartupLocation="CenterScreen" Closing="Window_Closing" >
+        Title="BlockerInfo" Height="300" Width="300" Icon="/Gw2 Launchbuddy;component/launchbuddy.ico" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Closing="Window_Closing" >
+    <Window.Background>
+        <ImageBrush ImageSource="/Gw2 Launchbuddy;component/launchbuddy.ico"/>
+    </Window.Background>
     <Window.OpacityMask>
-        <ImageBrush ImageSource="/Gw2 Launchbuddy;component/Resources/acc_opacitymask.png"/>
+        <ImageBrush ImageSource="/Gw2 Launchbuddy;component/launchbuddy.ico"/>
     </Window.OpacityMask>
     <Grid >
-        <DockPanel>
+        <DockPanel HorizontalAlignment="Center">
             <Button Content="Cancel" DockPanel.Dock="Bottom" Margin="15" Width="120" Name="bt_cancel" Click="bt_cancel_Click"/>
-            <TextBlock Name="tb_message"  Text="Launchbuddy is currently waiting for" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Width="230" TextWrapping="Wrap"/>
+            <TextBlock Name="tb_message"  Text="Launchbuddy is currently waiting for" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="230" TextWrapping="Wrap" FontSize="14" FontWeight="Bold" Background="#7F000000"/>
         </DockPanel>
 
     </Grid>

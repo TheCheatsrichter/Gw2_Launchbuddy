@@ -557,7 +557,7 @@
                                         </Expander.Header>
                                         <StackPanel>
                                             <DockPanel>
-                                                <ListView Name="lv_accicon" ItemsSource="{Binding Path=Icons}" MinWidth="200" MaxHeight="400" SelectionChanged="lv_accicon_SelectionChanged" DockPanel.Dock="Right">
+                                                <ListView Name="lv_accicon" ItemsSource="{Binding Path=Icons}" MinWidth="140" MaxHeight="400" SelectionChanged="lv_accicon_SelectionChanged" DockPanel.Dock="Right">
                                                     <ListView.ItemsPanel>
                                                         <ItemsPanelTemplate>
                                                             <UniformGrid MinWidth="128" Columns="5" HorizontalAlignment="Center" VerticalAlignment="Center"/>

@@ -229,7 +229,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             //Fixed previous ID conflicts
             string accnames = "";
 
-            foreach(Account acc in Accounts)
+            foreach(Account acc in Accounts.OrderBy(x=>x.ID))
             {
                 if(Accounts.Where(x=>x.ID==acc.ID).Count() > 1)
                 {
@@ -247,7 +247,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             if (accnames != "")
             {
-                MessageBox.Show($"Automated bugfix: Found accounts which shared the same loginfile / loginfile link was broken (link error). This issue has now automatically been resolved on following accounts:\n{accnames}");
+                MessageBox.Show($"Automated bugfix: Found accounts which shared the same loginfile / loginfile link was broken (link error). This issue has now automatically been resolved on following accounts (loginfile must be recreated):\n{accnames}");
                 AccountManager.SaveAccounts();
             }
         }
@@ -289,6 +289,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
             ID = newid;
             Settings.AccountID = ID;
             Settings.Loginfile = null;
+
+            if(File.Exists(EnviromentManager.LBLocaldatsPath+$"{ID}.dat"))
+            {
+                File.Delete(EnviromentManager.LBLocaldatsPath + $"{ID}.dat");
+            }
         }
 
         private Account() {

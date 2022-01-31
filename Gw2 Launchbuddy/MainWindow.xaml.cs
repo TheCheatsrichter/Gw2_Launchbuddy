@@ -136,6 +136,7 @@ namespace Gw2_Launchbuddy
                 checklbver.Start();
             }
 
+            this.Activate();
         }
 
         private void TacoUISetup()
@@ -1634,6 +1635,7 @@ namespace Gw2_Launchbuddy
         {
             AccountSettings settings = ((sender as Button).DataContext as AccountSettings);
             settings.SetLoginFile();
+            this.Activate();
         }
 
         private void bt_loginfileupdate_Click(object sender, RoutedEventArgs e)
