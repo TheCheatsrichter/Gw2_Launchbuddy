@@ -20,7 +20,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class EnviromentManager
     {
-        public static Version LBVersion = new Version("2.4.2");
+        public static Version LBVersion = new Version("3.0.0");
         public static LaunchOptions LaunchOptions;
 
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
@@ -94,6 +94,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             //Account Import Export
             AccountManager.ImportAccounts();
+            AccountManager.AccountSelfClean();
             ClientManager.ImportActiveClients();
             CrashAnalyzer.ReadCrashLogs();
             IconManager.Init();

@@ -808,7 +808,13 @@
                                                 <DockPanel>
                                                     <Label x:Name="cb_propriority" Content="Set Process Priority" VerticalAlignment="Center"/>
                                                     <DockPanel  DockPanel.Dock="Right">
-                                                        <ComboBox Text="0" Width="80" DockPanel.Dock="Right" VerticalAlignment="Center" ItemsSource="{Binding ProcessPriorities}" SelectedItem="{Binding ProcessPriority}"/>
+                                                        <ComboBox Text="0" Width="80" DockPanel.Dock="Right" VerticalAlignment="Center" ItemsSource="{Binding ProcessPriorities}" SelectedItem="{Binding ProcessPriority}">
+                                                            <ComboBox.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <TextBlock Foreground="Black" Text="{Binding .}"/>
+                                                                </DataTemplate>
+                                                            </ComboBox.ItemTemplate>
+                                                        </ComboBox>
                                                         <Label Content="Priority:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
                                                     </DockPanel>
                                                 </DockPanel>

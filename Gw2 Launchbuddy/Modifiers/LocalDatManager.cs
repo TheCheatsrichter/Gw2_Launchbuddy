@@ -54,13 +54,13 @@ namespace Gw2_Launchbuddy.Modifiers
             catch { }
         }
 
-        public static void Apply(LocalDatFile file)
+        public static bool Apply(LocalDatFile file)
         {
             int step = 0;
             if (!file.Valid)
             {
                 MessageBox.Show("Invalid Login file " + file.Name + " please recreate this file in the account Manager.");
-                return;
+                return false;
             }
             try
             {
@@ -93,7 +93,9 @@ namespace Gw2_Launchbuddy.Modifiers
                 GC.Collect();
 
                 throw new Exception($"An error occured while swaping the Login file. Errorcode {step}\n" + EnviromentManager.Create_Environment_Report() + e.Message);
+                return false;
             }
+            return true;
         }
 
         public static void UpdateLocalDat(LocalDatFile file)
@@ -104,12 +106,12 @@ namespace Gw2_Launchbuddy.Modifiers
             Action waitforprocessclose = () =>
             {
                 int i = 0;
-                while (Process.GetProcessesByName("*Gw2*.exe").Length == 1 && i<=50)
+                while (Process.GetProcessesByName("*Gw2*.exe").Length == 1 && i <= 50)
                 {
                     Thread.Sleep(100);
                     i++;
                 }
-                if(i==50)
+                if (i == 50)
                 {
                     MessageBox.Show("An unexpected Guild Wars 2 gameclient still is running. Please wait for the gameclient to update / close. Overwise close the gameclient manually");
                 }
@@ -117,60 +119,61 @@ namespace Gw2_Launchbuddy.Modifiers
 
             Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy waits for the gameclient to be closed.", waitforprocessclose);
 
-            while (!success)
+
+            if (!Apply(file)) return;
+
+
+            string OldHash;
+
+            try
             {
-                Apply(file);
-
-                string OldHash;
-                
-                try
-                {
-                    OldHash = String.Copy(file.MD5HASH);
-                }catch
-                {
-                    OldHash = "";
-                }
-                
-                try
-                {
-                    Process pro = new Process { StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } };
-                    pro.Start();
-                    pro.Refresh();
-                    Action waitforlaunch = () => ModuleReader.WaitForModule("WINNSI.DLL", pro);
-                    Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating a Loginfile. This window should automatically close when the launcher login is ready.", waitforlaunch);
-
-                    try
-                    {
-                        if (!pro.CloseMainWindow())
-                        {
-                            try { pro.Close(); } catch { }
-                            try { pro.Kill(); } catch { }
-                        }
-                    }
-                    catch
-                    {
-
-                    }
-
-                    Action waitAction = () => WaitForProcessClose(pro);
-                    Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to be closed.", waitAction);
-
-                    waitAction = () => IORepeater.WaitForFileAvailability(file.Path);
-                    Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to save the updated loginfile.", waitAction);
-
-                    waitAction = () => IORepeater.WaitForFileAvailability(EnviromentManager.GwLocaldatPath);
-                    Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to release the loginfile.", waitAction);
-                }
-                catch (Exception e)
-                {
-                    throw new Exception("An error occured while updating the loginfile.\n"+EnviromentManager.Create_Environment_Report()+e.Message);
-                }
-
-                ToDefault(file);
-
-                success = file.ValidateUpdate(OldHash);
-                GC.Collect();
+                OldHash = String.Copy(file.MD5HASH);
             }
+            catch
+            {
+                OldHash = "";
+            }
+
+            try
+            {
+                Process pro = new Process { StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } };
+                pro.Start();
+                pro.Refresh();
+                Action waitforlaunch = () => ModuleReader.WaitForModule("WINNSI.DLL", pro);
+                Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating a Loginfile. This window should automatically close when the launcher login is ready.", waitforlaunch);
+
+                try
+                {
+                    if (!pro.CloseMainWindow())
+                    {
+                        try { pro.Close(); } catch { }
+                        try { pro.Kill(); } catch { }
+                    }
+                }
+                catch
+                {
+
+                }
+
+                Action waitAction = () => WaitForProcessClose(pro);
+                Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to be closed.", waitAction);
+
+                waitAction = () => IORepeater.WaitForFileAvailability(file.Path);
+                Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to save the updated loginfile.", waitAction);
+
+                waitAction = () => IORepeater.WaitForFileAvailability(EnviromentManager.GwLocaldatPath);
+                Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to release the loginfile.", waitAction);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("An error occured while updating the loginfile.\n" + EnviromentManager.Create_Environment_Report() + e.Message);
+            }
+
+            ToDefault(file);
+
+            success = file.ValidateUpdate(OldHash);
+            GC.Collect();
+
         }
 
         public static LocalDatFile CreateNewFile(string filename, string email = null, string password = null)

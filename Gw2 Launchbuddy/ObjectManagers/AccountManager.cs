@@ -223,6 +223,34 @@ namespace Gw2_Launchbuddy.ObjectManagers
         static public ObservableCollection<PluginContracts.ObjectInterfaces.IAcc> IAccs {
             get {return new ObservableCollection<PluginContracts.ObjectInterfaces.IAcc>(Accounts.Select(a=>a.PluginCalls));}
         }
+
+        public static void AccountSelfClean()
+        {
+            //Fixed previous ID conflicts
+            string accnames = "";
+
+            foreach(Account acc in Accounts)
+            {
+                if(Accounts.Where(x=>x.ID==acc.ID).Count() > 1)
+                {
+                    //Duplicate
+                    acc.UpdateAccountID(GenerateID());
+                    accnames += $"\t- {acc.Nickname}\n";
+                }
+
+                if(acc.ID != acc.Settings.AccountID)
+                {
+                    //Missmatch Settings AccID, Account ID
+                    acc.UpdateAccountID(acc.ID);
+                    accnames += $"\t- {acc.Nickname}\n";
+                }
+            }
+            if (accnames != "")
+            {
+                MessageBox.Show($"Automated bugfix: Found accounts which shared the same loginfile / loginfile link was broken (link error). This issue has now automatically been resolved on following accounts:\n{accnames}");
+                AccountManager.SaveAccounts();
+            }
+        }
     }
 
     public class Account
@@ -256,20 +284,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
-        public bool UpdateAccountSettings()
+        public void UpdateAccountID(int newid)
         {
-            if (ID != Settings.AccountID)
-            {
-                //ID Changed but did not get updated in Settings
-                Settings.AccountID = ID;
-                Settings.Loginfile = new LocalDatFile
-                {
-                    Path = EnviromentManager.LBLocaldatsPath + ID + ".dat"
-                };
-            }
-            return true;
-
-
+            ID = newid;
+            Settings.AccountID = ID;
+            Settings.Loginfile = null;
         }
 
         private Account() {

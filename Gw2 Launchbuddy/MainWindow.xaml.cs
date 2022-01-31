@@ -182,7 +182,7 @@ namespace Gw2_Launchbuddy
 
         private void DonatePopup()
         {
-            if ((LBConfiguration.Config.counter_launches % 100) == 5)
+            if ((LBConfiguration.Config.counter_launches % 50) == 5)
             {
                 Popup popup = new Popup();
                 popup.Show();
