@@ -32,6 +32,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static void UpdateActiveList(object sender, EventArgs e)
         {
             Client client = sender as Client;
+
+            if(client == null)
+            {
+                return;
+            }
+
             Console.WriteLine(client.account.Nickname + " status changed to: " + client.Status + " = " + ((int)client.Status).ToString());
 
             if (ActiveClients.Contains(client) && client.Status < ActiveStatus_Threshold)
@@ -601,6 +607,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void Launch()
         {
+
             try
             {
                 Helpers.FileWatchDog localdatwatcher = new Helpers.FileWatchDog(EnviromentManager.GwLocaldatPath,4,count_negativeflank:true);
