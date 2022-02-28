@@ -1538,8 +1538,8 @@ namespace Gw2_Launchbuddy
 
         private void tab_home_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            lv_accs.ItemsSource = null;
-            lv_accs.ItemsSource = AccountManager.Accounts;
+            //lv_accs.ItemsSource = null;
+            //lv_accs.ItemsSource = AccountManager.Accounts;
         }
 
         private void bt_hotkeyrem_Click(object sender, RoutedEventArgs e)
