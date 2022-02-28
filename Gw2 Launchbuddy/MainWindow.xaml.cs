@@ -612,6 +612,7 @@ namespace Gw2_Launchbuddy
                     AddOnManager.LaunchAll();
                 }
             }
+            lv_accs.SelectedItem = null;
         }
 
         private void bt_installpath_Click(object sender, RoutedEventArgs e)
