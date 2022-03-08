@@ -1771,13 +1771,13 @@ namespace Gw2_Launchbuddy
 
         private void bt_launchtaco_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var acc = (sender as Image).DataContext as Account;
+            var acc = (sender as System.Windows.Shapes.Rectangle).DataContext as Account;
             LBTacO.LaunchTacoInstance(acc);
         }
 
         private void bt_launchblish_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var acc = (sender as Image).DataContext as Account;
+            var acc = (sender as System.Windows.Shapes.Rectangle).DataContext as Account;
             LBBlish.LaunchBlishInstance(acc);
         }
 

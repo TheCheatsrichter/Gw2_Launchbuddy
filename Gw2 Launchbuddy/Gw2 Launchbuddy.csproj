@@ -398,6 +398,22 @@
       <DependentUpon>TextBoxPopUp.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\VersionSwitcher.cs" />
+    <Page Include="ColorPalettes\Launchbuddy_bright_colorpalette.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ColorPalettes\Launchbuddy_dark_colorpalette.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ColorPalettes\Launchbuddy_pumpkin_colorpalette.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ColorPalettes\Launchbuddy_redblue_colorpalette.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="GUI_ApplicationManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -414,11 +430,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Launchbuddy_dark_theme.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Launchbuddy_default_theme.xaml">
+    <Page Include="Launchbuddy_theme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

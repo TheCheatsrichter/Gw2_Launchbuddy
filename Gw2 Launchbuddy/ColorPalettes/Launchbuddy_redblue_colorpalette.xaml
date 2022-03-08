@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <LinearGradientBrush x:Key="ButtonBackground" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Offset="0" Color="#c8daf7"></GradientStop>
+        <GradientStop Offset="1" Color="#a3c3f7"></GradientStop>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="LightBackground" Color="#c5d4ed" />
+
+    <SolidColorBrush x:Key="H1_Foreground" Color="#1a1a1a"/>
+    <SolidColorBrush x:Key="H2_Foreground" Color="#333333"/>
+    <SolidColorBrush x:Key="H3_Foreground" Color="#333333"/>
+    <SolidColorBrush x:Key="Text_Foreground" Color="#333333"/>
+    <SolidColorBrush x:Key="MainText_Foreground" Color="#333333"/>
+    <SolidColorBrush x:Key="Border_Background" Color="#cf696e"/>
+    <SolidColorBrush x:Key="Icon_Foreground" Color="#a0cefa"/>
+    <SolidColorBrush x:Key="Item_Highlight" Color="#fc536a"/>
+
+    <SolidColorBrush x:Key="B1_Background" Color="#658a9e"/>
+    <SolidColorBrush x:Key="B2_Background" Color="#def3ff"/>
+    <SolidColorBrush x:Key="B3_Background" Color="#f2fbff"/>
+
+    <SolidColorBrush x:Key="Enabled_False" Color="#577496"/>
+
+    </ResourceDictionary>

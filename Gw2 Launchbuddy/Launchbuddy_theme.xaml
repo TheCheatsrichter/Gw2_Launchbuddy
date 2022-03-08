@@ -1,29 +1,32 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Gw2_Launchbuddy">
-
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- DARK BACKGROUND -->
+    <!--  
     <LinearGradientBrush x:Key="ButtonBackground" StartPoint="0,0" EndPoint="1,1">
-        <GradientStop Offset="0" Color="#363636"></GradientStop>
-        <GradientStop Offset="1" Color="#525252"></GradientStop>
+        <GradientStop Offset="0" Color="#c8daf7"></GradientStop>
+        <GradientStop Offset="1" Color="#a3c3f7"></GradientStop>
     </LinearGradientBrush>
-    <SolidColorBrush x:Key="LightBackground" Color="#424242" />
+    <SolidColorBrush x:Key="LightBackground" Color="#c5d4ed" />
 
-    <SolidColorBrush x:Key="H1_Foreground" Color="#ffffff"/>
-    <SolidColorBrush x:Key="H2_Foreground" Color="#ffffff"/>
-    <SolidColorBrush x:Key="H3_Foreground" Color="#dbdbdb"/>
-    <SolidColorBrush x:Key="Text_Foreground" Color="#c4c4c4"/>
-    <SolidColorBrush x:Key="MainText_Foreground" Color="White"/>
-    <SolidColorBrush x:Key="Border_Background" Color="#bfffb3"/>
-    <SolidColorBrush x:Key="Icon_Foreground" Color="White"/>
-    <SolidColorBrush x:Key="Item_Highlight" Color="#57fa9b"/>
 
-    <SolidColorBrush x:Key="B1_Background" Color="#1c1c1c"/>
-    <SolidColorBrush x:Key="B2_Background" Color="#292828"/>
-    <SolidColorBrush x:Key="B3_Background" Color="#404040"/>
+    <SolidColorBrush x:Key="H1_Foreground" Color="#1a1a1a"/>
+    <SolidColorBrush x:Key="H2_Foreground" Color="#333333"/>
+    <SolidColorBrush x:Key="H3_Foreground" Color="#333333"/>
+    <SolidColorBrush x:Key="Text_Foreground" Color="#333333"/>
+    <SolidColorBrush x:Key="MainText_Foreground" Color="#333333"/>
+    <SolidColorBrush x:Key="Border_Background" Color="#cf696e"/>
+    
+    <SolidColorBrush x:Key="Icon_Foreground" Color="#a0cefa"/>
+    <SolidColorBrush x:Key="Item_Highlight" Color="#fc536a"/>
 
-    <SolidColorBrush x:Key="Enabled_False" Color="#e3e3e3"/>
+    <SolidColorBrush x:Key="B1_Background" Color="#658a9e"/>
+    <SolidColorBrush x:Key="B2_Background" Color="#def3ff"/>
+    <SolidColorBrush x:Key="B3_Background" Color="#f2fbff"/>
+    
+    <SolidColorBrush x:Key="Enabled_False" Color="#577496"/>
+-->
+
 
 
     <ControlTemplate x:Key="maskedimage_template">
@@ -56,31 +59,31 @@
     </ControlTemplate>
 
     <ControlTemplate x:Key="launchbutton_template" TargetType="{x:Type Button}">
-        <Border Name="Border" BorderBrush="DarkGreen" BorderThickness="2" CornerRadius="8,0,8,0"  Background="{StaticResource B1_Background}">
+        <Border Name="Border" BorderBrush="{StaticResource Icon_Foreground}" BorderThickness="2" CornerRadius="8,0,8,0"  Background="{StaticResource B1_Background}">
             <ContentPresenter Name="contenido" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Path=Content,RelativeSource={RelativeSource TemplatedParent}}">
             </ContentPresenter>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsKeyboardFocused" Value="True">
                 <Setter TargetName="Border" Property="Background" Value="{StaticResource B1_Background}" />
-                <Setter TargetName="Border" Property="BorderBrush" Value="DarkGreen" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Icon_Foreground}" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter TargetName="Border" Property="Background" Value="{StaticResource B3_Background}" />
                 <Setter Property="Foreground" Value="White"/>
-                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Item_Highlight}" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Icon_Foreground}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
     <ControlTemplate x:Key="windowbutton_template" TargetType="{x:Type Button}">
-        <Border Name="Border" BorderBrush="DarkGray" BorderThickness="2" CornerRadius="8,0,8,0"  Background="Transparent">
+        <Border Name="Border" BorderBrush="{StaticResource B3_Background}" BorderThickness="2" CornerRadius="8,0,8,0"  Background="{StaticResource ButtonBackground}">
             <ContentPresenter Name="contenido" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Path=Content,RelativeSource={RelativeSource TemplatedParent}}">
             </ContentPresenter>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="Border" Property="Background" Value="Gray" />
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource Item_Highlight}" />
                 <Setter Property="Foreground" Value="White"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
@@ -98,7 +101,7 @@
     </ControlTemplate>
 
     <ControlTemplate x:Key="tabitem_template" TargetType="{x:Type TabItem}">
-        <Border Name="Border" BorderThickness="1,1,1,1" BorderBrush="#525252" CornerRadius="5,0,0,5" Margin="0,1">
+        <Border Name="Border" BorderThickness="1,1,1,1" BorderBrush="{StaticResource B1_Background}" CornerRadius="5,0,0,5" Margin="0,1">
             <ContentPresenter x:Name="ContentSite"
                                         VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
@@ -107,10 +110,10 @@
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsSelected" Value="True">
-                <Setter TargetName="Border" Property="Background" Value="#828282"/>
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource B2_Background}"/>
             </Trigger>
             <Trigger Property="IsSelected" Value="False">
-                <Setter TargetName="Border" Property="Background" Value="#525252" />
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource B3_Background}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -163,7 +166,7 @@
             <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
         </Style.Resources>
     </Style>
-    
+
 
     <Style x:Key="WindowButton" TargetType="{x:Type Button}">
         <Setter Property="Template" Value="{StaticResource windowbutton_template}"/>
@@ -188,7 +191,6 @@
         <Setter Property="Template" Value="{StaticResource tabitem_template}"/>
         <Setter Property="Foreground" Value="{StaticResource Text_Foreground}"></Setter>
     </Style>
-
     <Style x:Key="H1" TargetType="{x:Type Label}">
         <Setter Property="Foreground" Value="{StaticResource H1_Foreground}"/>
         <Setter Property="FontWeight" Value="Bold"/>
@@ -296,6 +298,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
 </ResourceDictionary>

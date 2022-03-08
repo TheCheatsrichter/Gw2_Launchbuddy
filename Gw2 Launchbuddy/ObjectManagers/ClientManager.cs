@@ -438,6 +438,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private void ConfigureProcess()
         {
+
+            if (Process == null) Process = new Process();
             Process.EnableRaisingEvents = true;
             try { Process.Exited -= OnClientClose; } catch { };
             Process.Exited += OnClientClose;
@@ -445,22 +447,37 @@ namespace Gw2_Launchbuddy.ObjectManagers
             string args = "";
 
 
-            Argument dx9arg = account.Settings.Arguments.FirstOrDefault(x => x.ToString() == "-dx9");
-            Argument dx11arg = account.Settings.Arguments.FirstOrDefault(x => x.ToString() == "-dx11");
-
-            if ( dx9arg.IsActive && dx11arg.IsActive)
+            try
             {
-                MessageBox.Show($"On account {account.Nickname} both DirectX 9 and DirectX 11 was enabled. Please disable one of both options in the future. This setting got reset to DirectX 9 for this account.");
-                dx11arg.IsActive = false;
+                Argument dx9arg = account.Settings.Arguments.FirstOrDefault(x => x.ToString() == "-dx9");
+                Argument dx11arg = account.Settings.Arguments.FirstOrDefault(x => x.ToString() == "-dx11");
+
+                if (dx9arg.IsActive && dx11arg.IsActive)
+                {
+                    MessageBox.Show($"On account {account.Nickname} both DirectX 9 and DirectX 11 was enabled. Please disable one of both options in the future. This setting got reset to DirectX 9 for this account.");
+                    dx11arg.IsActive = false;
+                }
+            }catch
+            {
+                Console.WriteLine("Could not fetch direct X settings");
             }
 
 
-            foreach (Argument arg in account.Settings.Arguments.GetActive())
+            try
             {
-                args += arg.ToString() + " ";
+                foreach (Argument arg in account.Settings.Arguments.GetActive())
+                {
+                    args += arg.ToString() + " ";
+                }
             }
+            catch
+            {
+                Console.WriteLine("Account arguments corrupted");
+            }
+
             args += "-shareArchive ";
             account.CustomMumbleLink = false;
+
             if (ClientManager.ActiveClients.Count != 0 || account.Settings.AlwaysUseCustomMumbleLink)
             {
                 args += $"-mumble GW2MumbleLink{account.ID} ";
@@ -481,10 +498,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             */
 
+            /*
             if(account.Settings.Loginfile!=null && account.Settings.Loginfile.Gw2Build==EnviromentManager.GwClientVersion)
             {
                 args += "-autologin ";
             }
+            */
 
             //Add Server Options
             if (ServerManager.SelectedAssetserver != null)

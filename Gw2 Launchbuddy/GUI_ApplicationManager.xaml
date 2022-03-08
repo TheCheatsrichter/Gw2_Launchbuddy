@@ -11,9 +11,7 @@
 
     <Window.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Launchbuddy_default_theme.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
+
             <Storyboard x:Key="anim_show">
                 <DoubleAnimation  To="{Binding ElementName=myWindow,Path=MaxHeight}" Duration="0:0:0.5" 
                              Storyboard.TargetName="myWindow"
@@ -105,7 +103,7 @@
                         <DockPanel Height="50" Background="#33FFFFFF" LastChildFill="False">
                             <Image MaxWidth="45" MaxHeight="45" Source="{Binding Path=Account.Settings.Icon.Image}" DockPanel.Dock="Left"></Image>
                             <TextBlock Text="{Binding Path=Account.Nickname}" ToolTip="{Binding Path=Account.Nickname}" MaxWidth="120" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Foreground="#FFDDDDDD" DockPanel.Dock="Left" FontSize="18" FontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                            <ToolBar Width="15" DockPanel.Dock="Right" Background="#FF040404" Foreground="White" Header="" HorizontalAlignment="Center">
+                            <ToolBar Width="15" DockPanel.Dock="Right" Background="#FF939393" Foreground="White" Header="" HorizontalAlignment="Center">
                                 <Button x:Name="bt_closeinstance" Click="bt_closeinstance_Click" Content="Close"/>
                                 <Button Name="bt_suspend" Content="Suspend" Click="bt_suspend_Click"/>
                                 <Button Name="bt_resume" Content="Resume" Click="bt_resume_Click"/>

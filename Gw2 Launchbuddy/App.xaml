@@ -5,6 +5,11 @@
              StartupUri="MainWindow.xaml">
 
     <Application.Resources>
-        <ResourceDictionary Source="Launchbuddy_dark_theme.xaml"></ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Name="lb_colorpalette" Source="ColorPalettes/Launchbuddy_dark_colorpalette.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Launchbuddy_theme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
