@@ -43,10 +43,6 @@ namespace Gw2_Launchbuddy.Modifiers
         public static void PressLoginButton(Account acc)
         {
             ModuleReader.WaitForModule("WINNSI.DLL", acc.Client.Process);
-
-            //Wait between clients
-            int timetowait = 1800 + (ClientManager.ActiveClients.Count * ClientManager.ActiveClients.Count * 80);
-            Thread.Sleep(timetowait);
             if(!acc.Client.Process.HasExited)
             {
                 PressKeyDown(Keys.Enter, acc.Client.Process);

@@ -615,6 +615,53 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private void PressLoginButton()
         {
+            //Wait between clients
+
+            int timetowait = 0;
+
+            //Get all accounts which where active in the last 30 minutes
+
+            //int active_accounts = AccountManager.Accounts.Count(x => x.Settings.AccountInformation.HadLoginInPastMinutes(30) == true);
+
+            int active_accounts = 24;
+
+            if (active_accounts <= 12)
+            {
+                timetowait = 1800 + (active_accounts * active_accounts * 80);
+                Thread.Sleep(timetowait);
+            } else
+            {
+                if(active_accounts >= 36)
+                {
+                    timetowait = 120 *1000;
+                }
+                else
+                {
+                    if (active_accounts >= 31)
+                    {
+                        timetowait = 60 * 1000;
+                    }
+                    else
+                    {
+                        if (active_accounts >= 21)
+                        {
+                            timetowait = 40 * 1000;
+                        }
+                        else
+                        {
+                            if (active_accounts >= 13)
+                            {
+                                timetowait = 20 * 1000;
+                            }
+                        }
+                    }
+                }
+            }
+
+            Action loginwait = () => { Thread.Sleep(timetowait); };
+
+            Helpers.BlockerInfo.Run("Delaying Login",$"Launchbuddy currently delays the login for {timetowait / 1000} sec(s). This is a safety messurement to not trigger GW2 DDOS protection. Press cancel to skip",loginwait);
+
             Loginfiller.PressLoginButton(Account);
         }
 

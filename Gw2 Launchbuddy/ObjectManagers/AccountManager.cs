@@ -573,5 +573,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 handler(this, new PropertyChangedEventArgs(name));
             }
         }
+
+        public bool HadLoginInPastMinutes(float minutes)
+        {
+            TimeSpan timespan = DateTime.UtcNow - LastLogin.ToUniversalTime();
+            return timespan.TotalMinutes < minutes;
+        }
     }
 }

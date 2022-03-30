@@ -376,6 +376,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             Thread.Sleep(3000);
 
+            //Catch gameclient PID change. Happens when gameclient exe itself gets updated --> gets restarted under different PID
             Action waitforlaunch2 = () => {
                 try
                 {
@@ -386,7 +387,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 }
                 catch
                 {
-                    //GetProcess crashes when process is null
                 }
             };
 
