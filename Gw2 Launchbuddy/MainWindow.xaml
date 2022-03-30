@@ -345,7 +345,7 @@
                         <Separator Margin="3" DockPanel.Dock="Top"/>
                         <DockPanel DockPanel.Dock="Top" LastChildFill="False">
                             <Label Name="lb_acccountinfo" Content="Accounts:" Style="{StaticResource H1}" DockPanel.Dock="Left"/>
-                            <Button Name="bt_selectdailylogins" Content="Daily Logins" DockPanel.Dock="Right" ToolTip="Starts all accounts which have not been launched on the current date" Click="bt_selectdailylogins_Click"/>
+                            <Button Name="bt_selectdailylogins" Content="Daily Logins" DockPanel.Dock="Right" ToolTip="Selects all accounts which have not been launched on the current date" Click="bt_selectdailylogins_Click"/>
                             <Button Name="bt_selectallaccs" Content="Select All" DockPanel.Dock="Right" Click="bt_selectallaccs_Click"/>
                             <Label Content="Quick Select:" DockPanel.Dock="Right" Style="{StaticResource H2}"/>
                         </DockPanel>

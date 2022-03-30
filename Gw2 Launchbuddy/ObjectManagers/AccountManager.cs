@@ -534,7 +534,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         #endregion Plugininterface
     }
 
-    public class AccountInformation
+    public class AccountInformation:INotifyPropertyChanged
     {
         public DateTime LastLogin { get; set; }
         public DateTime LastClose { get; set; }
@@ -555,12 +555,23 @@ namespace Gw2_Launchbuddy.ObjectManagers
             LastClose = DateTime.MinValue;
         }
 
-        public void SetLastLogin() { LastLogin = DateTime.Now; }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void SetLastLogin() { LastLogin = DateTime.Now; OnPropertyChanged("LastLogin"); }
         public void SetLastClose()
         {
             LastClose = DateTime.Now;
             if (LastLogin != DateTime.MinValue) Playtime += LastClose - LastLogin;
+            OnPropertyChanged("LastClose");
         }
 
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
     }
 }

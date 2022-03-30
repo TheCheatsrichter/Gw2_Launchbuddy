@@ -1805,9 +1805,9 @@ namespace Gw2_Launchbuddy
         }
 
         private void bt_selectdailylogins_Click(object sender, RoutedEventArgs e)
-        { 
-
-            foreach(var acc in AccountManager.Accounts.Where(x => !x.Settings.AccountInformation.HasLoginReward).ToList())
+        {
+            lv_accs.SelectedItem = null;
+            foreach (var acc in AccountManager.Accounts.Where(x => !x.Settings.AccountInformation.HasLoginReward).ToList())
             {
                 lv_accs.SelectedItems.Add(acc);
             }
