@@ -71,19 +71,20 @@
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter TargetName="Border" Property="Background" Value="{StaticResource B3_Background}" />
                 <Setter Property="Foreground" Value="White"/>
-                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Icon_Foreground}" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Border_Background}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
     <ControlTemplate x:Key="windowbutton_template" TargetType="{x:Type Button}">
-        <Border Name="Border" BorderBrush="{StaticResource B3_Background}" BorderThickness="2" CornerRadius="8,0,8,0"  Background="{StaticResource ButtonBackground}">
+        <Border Name="Border" BorderBrush="{StaticResource B2_Background}" BorderThickness="2" CornerRadius="8,0,8,0"  Background="{StaticResource ButtonBackground}">
             <ContentPresenter Name="contenido" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Path=Content,RelativeSource={RelativeSource TemplatedParent}}">
             </ContentPresenter>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="Border" Property="Background" Value="{StaticResource Item_Highlight}" />
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource B2_Background}" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Border_Background}" />
                 <Setter Property="Foreground" Value="White"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">

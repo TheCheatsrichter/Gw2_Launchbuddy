@@ -374,6 +374,23 @@ namespace Gw2_Launchbuddy.ObjectManagers
             
             Helpers.BlockerInfo.Run("Game Update", "Launchbuddy waits for your game to be updated", waitforlaunch);
 
+            Thread.Sleep(3000);
+
+            Action waitforlaunch2 = () => {
+                try
+                {
+                    while (Process.GetProcessesByName("*Gw2*.exe").Length == 1)
+                    {
+                        
+                    }
+                }
+                catch
+                {
+                    //GetProcess crashes when process is null
+                }
+            };
+
+            Helpers.BlockerInfo.Run("Game Update", "Launchbuddy waits for your game to be updated", waitforlaunch2);
 
             /*
             //Overwrite xml file because -image does not update xml file

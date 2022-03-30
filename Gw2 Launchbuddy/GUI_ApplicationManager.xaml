@@ -103,10 +103,16 @@
                         <DockPanel Height="50" Background="#33FFFFFF" LastChildFill="False">
                             <Image MaxWidth="45" MaxHeight="45" Source="{Binding Path=Account.Settings.Icon.Image}" DockPanel.Dock="Left"></Image>
                             <TextBlock Text="{Binding Path=Account.Nickname}" ToolTip="{Binding Path=Account.Nickname}" MaxWidth="120" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Foreground="#FFDDDDDD" DockPanel.Dock="Left" FontSize="18" FontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                            <ToolBar Width="15" DockPanel.Dock="Right" Background="#FF939393" Foreground="White" Header="" HorizontalAlignment="Center">
-                                <Button x:Name="bt_closeinstance" Click="bt_closeinstance_Click" Content="Close"/>
-                                <Button Name="bt_suspend" Content="Suspend" Click="bt_suspend_Click"/>
-                                <Button Name="bt_resume" Content="Resume" Click="bt_resume_Click"/>
+                            <ToolBar Width="15" DockPanel.Dock="Right" Foreground="Black" Header="" HorizontalAlignment="Center">
+                                <Button x:Name="bt_closeinstance" Foreground="Black" Click="bt_closeinstance_Click">
+                                    <TextBlock Foreground="Black" Text="Close"/>
+                                </Button>
+                                <Button Name="bt_suspend" Foreground="Black" Click="bt_suspend_Click">
+                                    <TextBlock Foreground="Black" Text="Suspend"/>
+                                </Button>
+                                <Button Name="bt_resume" Foreground="Black" Click="bt_resume_Click">
+                                    <TextBlock Foreground="Black" Text="Resume"/>
+                                </Button>
                             </ToolBar>
                         </DockPanel>
                     </DataTemplate>

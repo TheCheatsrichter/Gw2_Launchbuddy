@@ -1909,6 +1909,26 @@ namespace Gw2_Launchbuddy
             Process.Start(song.SourcePath);
         }
 
+        private void debug_setcolorpalette_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Resources.MergedDictionaries.Clear();
+
+            ResourceDictionary resdir = new ResourceDictionary();
+
+            resdir.MergedDictionaries.Add(new ResourceDictionary()
+            {
+                Source = new Uri("Launchbuddy_theme.xaml", UriKind.RelativeOrAbsolute)
+            });
+
+            resdir.MergedDictionaries.Add(new ResourceDictionary()
+            {
+                Source = new Uri("ColorPalettes/Launchbuddy_redblue_colorpalette.xaml", UriKind.RelativeOrAbsolute)
+            });
+
+            Application.Current.Resources = resdir;
+
+        }
+
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)
         {
             PluginManager.UpdatePlugin(((sender as Button).DataContext as Plugin_Wrapper).Plugin,true);
