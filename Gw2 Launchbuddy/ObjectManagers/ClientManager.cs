@@ -621,9 +621,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             //Get all accounts which where active in the last 30 minutes
 
-            //int active_accounts = AccountManager.Accounts.Count(x => x.Settings.AccountInformation.HadLoginInPastMinutes(30) == true);
+            int active_accounts = AccountManager.Accounts.Count(x => x.Settings.AccountInformation.HadLoginInPastMinutes(30) == true);
 
-            int active_accounts = 24;
 
             if (active_accounts <= 12)
             {
