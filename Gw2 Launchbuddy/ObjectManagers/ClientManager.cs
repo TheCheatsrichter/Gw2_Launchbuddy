@@ -646,14 +646,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 				    break;
 			}
 
-            //Determine if the waiting time has already completed
-
-            bool recent_login = AccountManager.Accounts.Count(x => x.Settings.AccountInformation.HadLoginInPastMinutes(timetowait / 60000) == true) > 0;
-
-            if (recent_login) {
-                Action loginwait = () => { Thread.Sleep(timetowait); };
-                Helpers.BlockerInfo.Run("Delaying Login", $"Launchbuddy is currently delaying the login for {timetowait / 1000} sec(s). This is a safety measure to avoid triggering GW2 DDOS protection. Press cancel to skip.", loginwait);
-            }
+            Action loginwait = () => { Thread.Sleep(timetowait); };
+            Helpers.BlockerInfo.Run("Delaying Login", $"Launchbuddy is currently delaying the login for {timetowait / 1000} sec(s). This is a safety measure to avoid triggering GW2 DDOS protection. Press cancel to skip.", loginwait);
 
             Loginfiller.PressLoginButton(Account);
         }
