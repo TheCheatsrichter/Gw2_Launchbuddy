@@ -544,7 +544,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             get
             {
-                DateTime resettime = DateTime.Today.ToUniversalTime();
+                DateTime resettime = DateTime.UtcNow.Date;
                 resettime = new DateTime(resettime.Year, resettime.Month, resettime.Day, 0, 0, 0);
                 return resettime < LastLogin.ToUniversalTime();
             }
