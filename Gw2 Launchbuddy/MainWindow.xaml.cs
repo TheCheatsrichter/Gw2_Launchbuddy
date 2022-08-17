@@ -1815,7 +1815,13 @@ namespace Gw2_Launchbuddy
 
         private void bt_selectallaccs_Click(object sender, RoutedEventArgs e)
         {
-            lv_accs.SelectAll();
+            if (lv_accs.SelectedItems.Count != AccountManager.Accounts.Count)
+            {
+                lv_accs.SelectAll();
+            } else
+            {
+                lv_accs.UnselectAll();
+            }
         }
 
         private void bt_addcustomargument_Click(object sender, RoutedEventArgs e)
