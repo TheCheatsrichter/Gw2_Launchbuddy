@@ -5,17 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gw2_Launchbuddy.Helpers"
         mc:Ignorable="d"
-        Title="BlockerInfo" Height="300" Width="300" Icon="/Gw2 Launchbuddy;component/launchbuddy.ico" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Closing="Window_Closing" >
+        Title="BlockerInfo" Height="280" Width="280" Icon="/Gw2 Launchbuddy;component/launchbuddy.ico" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Closing="Window_Closing" MouseDown="Window_MouseDown" >
     <Window.Background>
-        <ImageBrush ImageSource="/Gw2 Launchbuddy;component/launchbuddy.ico"/>
+        <ImageBrush Opacity="0.6"  ImageSource="/Gw2 Launchbuddy;component/launchbuddy.ico"/>
     </Window.Background>
     <Window.OpacityMask>
         <ImageBrush ImageSource="/Gw2 Launchbuddy;component/launchbuddy.ico"/>
     </Window.OpacityMask>
-    <Grid >
-        <DockPanel HorizontalAlignment="Center">
-            <Button Content="Cancel" DockPanel.Dock="Bottom" Margin="15" Width="120" Name="bt_cancel" Click="bt_cancel_Click"/>
-            <TextBlock Name="tb_message"  Text="Launchbuddy is currently waiting for" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="230" TextWrapping="Wrap" FontSize="14" FontWeight="Bold" Background="#7F000000"/>
+    <Grid>
+        <DockPanel HorizontalAlignment="Center" LastChildFill="True">
+            <StackPanel Orientation="Vertical" DockPanel.Dock="Bottom" Height="80">
+                <Button Content="Hide" DockPanel.Dock="Bottom"  Width="120" Name="bt_hide" Click="bt_hide_Click"/>
+                <Button Content="Cancel" DockPanel.Dock="Bottom" Margin="2" Width="120" Name="bt_cancel" Click="bt_cancel_Click"/>
+            </StackPanel>
+            <TextBlock  Name="tb_message"  Text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="230" TextWrapping="Wrap" FontSize="14" FontWeight="Bold" Background="#7F000000"/>
         </DockPanel>
 
     </Grid>

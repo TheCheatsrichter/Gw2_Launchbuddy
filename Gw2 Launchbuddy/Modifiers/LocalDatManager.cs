@@ -119,6 +119,22 @@ namespace Gw2_Launchbuddy.Modifiers
 
             Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy waits for the gameclient to be closed.", waitforprocessclose);
 
+            Action waitforprocoherentclose = () =>
+            {
+                int i = 0;
+                while (Process.GetProcessesByName("*CoherentUI_Host*.exe").Length == 1 && i <= 50)
+                {
+                    Thread.Sleep(100);
+                    i++;
+                }
+                if (i == 50)
+                {
+                    MessageBox.Show("An unexpected Guild Wars 2 gameclient still is running. Please wait for the gameclient to update / close. Overwise close the gameclient manually");
+                }
+            };
+
+            Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy waits for the gameclient to be closed.", waitforprocoherentclose);
+
 
             if (!Apply(file)) return;
 
@@ -139,7 +155,7 @@ namespace Gw2_Launchbuddy.Modifiers
                 Process pro = new Process { StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } };
                 pro.Start();
                 pro.Refresh();
-                Action waitforlaunch = () => ModuleReader.WaitForModule("WINNSI.DLL", pro);
+                Action waitforlaunch = () => ModuleReader.WaitForModule("dwmapi.dll", pro);
                 Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating a Loginfile. This window should automatically close when the launcher login is ready.", waitforlaunch);
 
                 try
@@ -198,7 +214,7 @@ namespace Gw2_Launchbuddy.Modifiers
 #endif
             if (email != null && password != null)
             {
-                Action blockefunc = () => ModuleReader.WaitForModule("WINNSI.DLL", pro, null);
+                Action blockefunc = () => ModuleReader.WaitForModule("dwmapi.dll", pro, null);
                 Helpers.BlockerInfo.Run("Loginfile Creation", "LB is recreating your loginfile", blockefunc);
                 if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with caution.");
 

@@ -1428,7 +1428,7 @@
                             <CheckBox x:Name="cb_gameclientbuttonpush" Content="Press gameclient 'Login Button' on gamestart. (When disabled: GFX settings might not work)" Margin="5"  ToolTip="Should the gameclient loginwindow login button be pressed when an account is launched?" Click="cb_gameclientbuttonpush_Click"/>
                             <Button x:Name="bt_resetpropertysettings" Content="Reset ALL LB Settings"  Height="30" Width="250" MaxWidth="250" HorizontalAlignment="Left" Margin="10,0,0,0" Click="Bt_resetpropertysettings_Click"/>
                             <Button x:Name="bt_resetinstanceguisettings" Content="Reset Game Instance Manager Settings" Width="250"  Height="30" MaxWidth="250" HorizontalAlignment="Left" Margin="10,0,0,0" Click="Bt_resetinstanceguisettings_Click"/>
-                            <Button x:Name="debug_setcolorpalette" Content="Set colorpalette" Click="debug_setcolorpalette_Click"/>
+                            <Button x:Name="debug_setcolorpalette" Content="Set colorpalette" Click="debug_setcolorpalette_Click" Visibility="Collapsed"/>
                             <Label Content="Launchbuddy Releases" Style="{StaticResource H2}"/>
                             <Grid Height="250" Margin="3">
                                 <Grid.ColumnDefinitions>

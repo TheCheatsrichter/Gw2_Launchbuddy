@@ -90,5 +90,15 @@ namespace Gw2_Launchbuddy.Helpers
                 GC.Collect();
             }
         }
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try { this.DragMove(); } catch { }
+        }
+
+        private void bt_hide_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+            this.Topmost = false;
+        }
     }
 }

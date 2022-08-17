@@ -62,14 +62,14 @@ namespace Gw2_Launchbuddy.Modifiers
             int ct = 0;
             if(timeout!=null)
             {
-                while (!CollectModules(pro).Any<Module>(m => m.ModuleName == name) && ct < timeout)
+                while (!CollectModules(pro).Any<Module>(m => m.ModuleName == name.ToLower()) && ct < timeout)
                 {
                     Thread.Sleep(10);
                     ct++;
                 }
             }else
             {
-                while (!CollectModules(pro).Any<Module>(m => m.ModuleName == name) )
+                while (!CollectModules(pro).Any<Module>(m => m.ModuleName == name.ToLower()) )
                 {
                     Thread.Sleep(10);
                 }
@@ -143,7 +143,7 @@ namespace Gw2_Launchbuddy.Modifiers
                         StringBuilder moduleFilePath = new StringBuilder(1024);
                         Native.GetModuleFileNameEx(process.Handle, modulePointers[index], moduleFilePath, (uint)(moduleFilePath.Capacity));
 
-                        string moduleName = Path.GetFileName(moduleFilePath.ToString());
+                        string moduleName = Path.GetFileName(moduleFilePath.ToString()).ToLower();
                         Native.ModuleInformation moduleInformation = new Native.ModuleInformation();
                         Native.GetModuleInformation(process.Handle, modulePointers[index], out moduleInformation, (uint)(IntPtr.Size * (modulePointers.Length)));
 

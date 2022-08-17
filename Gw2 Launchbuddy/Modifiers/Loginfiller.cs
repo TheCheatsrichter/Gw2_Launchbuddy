@@ -21,7 +21,7 @@ namespace Gw2_Launchbuddy.Modifiers
             try
             {
                 pro.Refresh();
-                ModuleReader.WaitForModule("WINNSI.DLL", pro);
+                ModuleReader.WaitForModule("CoherentUI64.DLL", pro);
                 //SetForegroundWindow(pro.MainWindowHandle);
                 Thread.Sleep(1000);
                 for (int i = 0; i < 100; i++) PressKeyDown(Keys.Back, pro, false); //Very unclean method, but modifiers onyl work on focus
@@ -42,8 +42,9 @@ namespace Gw2_Launchbuddy.Modifiers
 
         public static void PressLoginButton(Account acc)
         {
-            ModuleReader.WaitForModule("WINNSI.DLL", acc.Client.Process);
-            if(!acc.Client.Process.HasExited)
+            ModuleReader.WaitForModule("CoherentUI64.DLL", acc.Client.Process);
+            Thread.Sleep(1000);
+            if (!acc.Client.Process.HasExited)
             {
                 PressKeyDown(Keys.Enter, acc.Client.Process);
                 PressKeyUp(Keys.Enter, acc.Client.Process);

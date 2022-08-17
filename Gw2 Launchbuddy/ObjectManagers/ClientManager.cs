@@ -148,6 +148,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public readonly Account account;
         private ClientStatus status = ClientStatus.None;
         public Process Process = new Process();
+        //public Process CoherentUIProcess;  Could be used to improve login timings; needs more testing
         public event EventHandler StatusChanged;
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -413,7 +414,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         private void Th_Window_Init()
         {
             // icm32.dll
-            ModuleReader.WaitForModule("mscms.dll", Process, null);
+            ModuleReader.WaitForModule("icm32.dll", Process, null);
             Console.WriteLine($"{account.Nickname} configuring Windowsize");
 
             Window_MoveTo_Default();
@@ -647,14 +648,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
 
             Action loginwait = () => { Thread.Sleep(timetowait); };
-            Helpers.BlockerInfo.Run("Delaying Login", $"Launchbuddy is currently delaying the login for {timetowait / 1000} sec(s). This is a safety measure to avoid triggering GW2 DDOS protection. Press cancel to skip.", loginwait);
+            Helpers.BlockerInfo.Run("Delaying Login", $"Launchbuddy is currently delaying the login for {timetowait / 1000} sec(s). This is a safety measure to avoid triggering GW2 DDOS protection. Press cancel to skip.", loginwait,false);
 
             Loginfiller.PressLoginButton(Account);
         }
 
         private void WaitForLogin()
         {
-            Action blockefunc = () => ModuleReader.WaitForModule("winbrand.dll", Process, null);
+            Action blockefunc = () => ModuleReader.WaitForModule("WINSTA.dll", Process, null);
             Helpers.BlockerInfo.Run($"{account.Nickname} Login pending", $"{account.Nickname} Login requiring additional information.", blockefunc);
         }
 
