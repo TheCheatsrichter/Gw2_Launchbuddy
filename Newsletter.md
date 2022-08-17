@@ -1,3 +1,4 @@
 Welcome to LB 3.0!
-More QoL changes and bugfixes coming soon.
-You have a feature request? Then feel free to check out the patreon page!
+Patch 3.0.5 is now available.
+This is the first patch to support the Gw2 gameclient changes for the steam release!
+More bugfixes coming soon!
