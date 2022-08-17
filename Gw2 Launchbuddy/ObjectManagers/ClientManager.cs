@@ -619,47 +619,35 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             int timetowait = 0;
 
-            //Get all accounts which where active in the last 30 minutes
+            //Get all accounts that were active in the last 4 hours
 
-            int active_accounts = AccountManager.Accounts.Count(x => x.Settings.AccountInformation.HadLoginInPastMinutes(30) == true);
+            int active_accounts = AccountManager.Accounts.Count(x => x.Settings.AccountInformation.HadLoginInPastMinutes(240) == true);
 
-
-            if (active_accounts <= 12)
+            switch (active_accounts)
             {
-                timetowait = 1800 + (active_accounts * active_accounts * 80);
-                Thread.Sleep(timetowait);
-            } else
-            {
-                if(active_accounts >= 36)
-                {
-                    timetowait = 120 *1000;
-                }
-                else
-                {
-                    if (active_accounts >= 31)
-                    {
-                        timetowait = 60 * 1000;
-                    }
-                    else
-                    {
-                        if (active_accounts >= 21)
-                        {
-                            timetowait = 40 * 1000;
-                        }
-                        else
-                        {
-                            if (active_accounts >= 13)
-                            {
-                                timetowait = 20 * 1000;
-                            }
-                        }
-                    }
-                }
+                case int _ when active_accounts >= 36:
+                    timetowait = 120 * 1000;
+                    break;
+
+                case int _ when active_accounts >= 31:
+                    timetowait = 60 * 1000;
+                    break;
+
+                case int _ when active_accounts >= 21:
+                    timetowait = 40 * 1000;
+                    break;
+
+                case int _ when active_accounts >= 13:
+                    timetowait = 20 * 1000;
+                    break;
+
+                default:
+                    timetowait = 1800 + (active_accounts * active_accounts * 80);
+                    break;
             }
 
             Action loginwait = () => { Thread.Sleep(timetowait); };
-
-            Helpers.BlockerInfo.Run("Delaying Login",$"Launchbuddy currently delays the login for {timetowait / 1000} sec(s). This is a safety messurement to not trigger GW2 DDOS protection. Press cancel to skip",loginwait);
+            Helpers.BlockerInfo.Run("Delaying Login", $"Launchbuddy is currently delaying the login for {timetowait / 1000} sec(s). This is a safety measure to avoid triggering GW2 DDOS protection. Press cancel to skip.", loginwait);
 
             Loginfiller.PressLoginButton(Account);
         }
