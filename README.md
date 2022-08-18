@@ -48,10 +48,11 @@ Invalid account information leads to a game freeze with white or blackscreen. Tw
 
 **FAQ:**
 
+- My PC says that Launchbuddy contains a virus. Should I be concerned? - Launchbuddy offers many features, some of these seem to trigger false positives in some Antivirus softwares (mainly Windows Defender). This frequently happens with new releases and will get resolved in a few days after the release, as the executable will be submitted to the Antivirus companies for a depper analysis. So either please be patient or add Launchbuddy as a exception in your Antivirus software. 
+
 - Are these options bannable? - No, all command line arguments are provided by Arenanet themself. 
 
 - Is multiboxing bannable? - Multiboxing is legal as long the rule "1 Input = 1 Action" isn't broken. Compare it to people with multiple accounts and multiple computers, they basically run two instances of the game at once. 
-
 
 - Why does this program need internet access? - Internet access is needed to report a crash and to fetch the Gw2 server lists.
 
