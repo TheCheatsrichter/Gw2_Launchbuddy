@@ -82,39 +82,41 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public string cinema_maskpath;
         public string cinema_musicpath;
 
-        public bool cinema_use =false;
-        public bool cinema_video =false;
-        public bool cinema_slideshow =true;
+        public bool cinema_use = false;
+        public bool cinema_video = false;
+        public bool cinema_slideshow = true;
 
-        public string cinema_videopath="";
-        public double mediaplayer_volume =90;
+        public string cinema_videopath = "";
+        public double mediaplayer_volume = 90;
 
-        public System.Windows.Media.Color cinema_backgroundcolor = System.Windows.Media.Color.FromRgb(0,0,0);
+        public System.Windows.Media.Color cinema_backgroundcolor = System.Windows.Media.Color.FromRgb(0, 0, 0);
         public string cinema_loginwindowpath;
-        public int cinema_slideshowendpos =30;
-        public double cinema_slideshowendscale =1.205;
-        public int counter_launches =0;
-        public bool notifylbupdate =true;
-        public bool useinstancegui =true;
-        public int ui_selectedtab =0;
-        public bool useloadingui =true;
-        public double mainwin_pos_x =-1;
-        public double mainwin_pos_y =-1;
-        public double mainwin_size_x =-1;
-        public double mainwin_size_y =-1;
+        public int cinema_slideshowendpos = 30;
+        public double cinema_slideshowendscale = 1.205;
+        public int counter_launches = 0;
+        public bool notifylbupdate = true;
+        public bool useinstancegui = true;
+        public int ui_selectedtab = 0;
+        public bool useloadingui = true;
+        public double mainwin_pos_x = -1;
+        public double mainwin_pos_y = -1;
+        public double mainwin_size_x = -1;
+        public double mainwin_size_y = -1;
         public List<string> plugins_toremove;
         public List<string> plugins_todelete;
         public List<string> plugins_toinstall;
         public List<string> plugins_toupdate;
-        public bool plugins_autoupdate =false;
-        public string instancegui_windowsettings ="0,0,150,300"; // should be Truple, kept as string for minimal compatibility impact
-        public bool instancegui_ispinned =false;
-        public bool autoupdatedatfiles =true;
+        public bool plugins_autoupdate = false;
+        public string instancegui_windowsettings = "0,0,150,300"; // should be Truple, kept as string for minimal compatibility impact
+        public bool instancegui_ispinned = false;
+        public bool autoupdatedatfiles = true;
         public string taco_path;
         public string blish_path;
 
         public bool pushgameclientbuttons = true;
+        public bool uselogindelays = true;
         // Defaultvalue should be changed to false when API works again
         public bool forcegameclientupdate = false;
     }
 }
+

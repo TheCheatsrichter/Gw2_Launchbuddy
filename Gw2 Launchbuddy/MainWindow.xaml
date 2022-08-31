@@ -12,7 +12,7 @@
 
 
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
-        Title="Gw2 Launchbuddy V 3.0.4" MinHeight="570" MinWidth="600" Height="600" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None" Background="{StaticResource B1_Background}" AllowsTransparency="True">
+        Title="Gw2 Launchbuddy V 3.0.6" MinHeight="570" MinWidth="600" Height="600" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None" Background="{StaticResource B1_Background}" AllowsTransparency="True">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="5"/>
     </WindowChrome.WindowChrome>
@@ -156,7 +156,7 @@
         <MediaElement x:Name="Cinema_MediaPlayer" Visibility="Hidden" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Row="0" Grid.Column="0" LoadedBehavior="Manual" UnloadedBehavior="Manual" Volume="{Binding Value, ElementName=sl_volumecontrol}" MediaEnded="Cinema_MediaPlayer_MediaEnded"/>
 
 
-        <Image x:Name="img_slideshow" Source="Resources/loginwindow.png" Grid.ColumnSpan="2" Grid.RowSpan="3" RenderTransformOrigin="0.5,0.5">
+        <Image x:Name="img_slideshow" Source="Resources/loginwindow.png" Grid.ColumnSpan="2" Grid.RowSpan="3" RenderTransformOrigin="0.5,0.5" Visibility="Hidden">
             <Image.OpacityMask>
                 <ImageBrush ImageSource="Resources/logo_hq_mask.png" Stretch="Uniform"/>
             </Image.OpacityMask>
@@ -241,7 +241,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 3.0.4 Alpha" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 3.0.6 Alpha" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
@@ -291,7 +291,6 @@
                 <RowDefinition Height="100*"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
-
 
             <TabControl x:Name="tab_options" Grid.Row="0" TabStripPlacement="Left"  BorderBrush="{StaticResource B3_Background}" Background="{StaticResource B2_Background}">
                 <TabItem x:Name="tab_home" MouseEnter="tab_home_MouseEnter">
@@ -1426,11 +1425,12 @@
                             <CheckBox x:Name="cb_autoupdatedatfiles" Content="Automatically update .dat files" Margin="5" Click="cb_autoupdatedatfiles_Click" ToolTip="Choose if your .dat files should be automatically updated at launch when a new patch has been released." Checked="cb_autoupdatedatfiles_Checked"/>
                             <CheckBox x:Name="cb_forcegameclientupdate" Content="Force gameclient update on startup (needed when Gw2 API is bugged)" Margin="5"  ToolTip="If the Gw2 API is bugged or not up to date please use this setting to minimize errors" Checked="cb_forcegameclientupdate_Checked" Click="cb_forcegameclientupdate_Click" />
                             <CheckBox x:Name="cb_gameclientbuttonpush" Content="Press gameclient 'Login Button' on gamestart. (When disabled: GFX settings might not work)" Margin="5"  ToolTip="Should the gameclient loginwindow login button be pressed when an account is launched?" Click="cb_gameclientbuttonpush_Click"/>
+                            <CheckBox x:Name="cb_uselogindelays" Content="Delay account logins to prevent DDOS protection triggers at login servers" Margin="5"  ToolTip="Login button press gets delayed based on the amount of launched accounts. Should be used when more than 3 accounts get launched quickly one after another" Click="cb_uselogindelays_Click" />
                             <Button x:Name="bt_resetpropertysettings" Content="Reset ALL LB Settings"  Height="30" Width="250" MaxWidth="250" HorizontalAlignment="Left" Margin="10,0,0,0" Click="Bt_resetpropertysettings_Click"/>
                             <Button x:Name="bt_resetinstanceguisettings" Content="Reset Game Instance Manager Settings" Width="250"  Height="30" MaxWidth="250" HorizontalAlignment="Left" Margin="10,0,0,0" Click="Bt_resetinstanceguisettings_Click"/>
                             <Button x:Name="debug_setcolorpalette" Content="Set colorpalette" Click="debug_setcolorpalette_Click" Visibility="Collapsed"/>
                             <Label Content="Launchbuddy Releases" Style="{StaticResource H2}"/>
-                            <Grid Height="250" Margin="3">
+                            <Grid Height="200" Margin="3">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60*"/>
                                     <ColumnDefinition Width="40*"/>
@@ -1503,6 +1503,14 @@
                     </Grid>
                 </Button>
             </DockPanel>
+            <Grid x:Name="gr_blockerpanel" Grid.RowSpan="2" Background="{StaticResource B1_Background}" Visibility="Collapsed" >
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="100">
+                    <TextBlock x:Name="tb_blockerinfotext" TextWrapping="Wrap">
+                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                    </TextBlock>
+                    <Button x:Name="bt_blockerskip" Content="Cancel" MinWidth="150"/>
+                </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

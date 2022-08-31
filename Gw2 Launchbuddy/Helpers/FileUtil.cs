@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Security.Cryptography;
 
 static public class FileUtil
 {
@@ -150,5 +152,33 @@ static public class FileUtil
             outp += $"Path: {path}+ Locked by :{pro.ProcessName} + ID:{pro.Id} + Exited:{pro.HasExited}";
         }
         return outp;
+    }
+
+    public static string GetFileHashMD5(string path)
+    {
+        try
+        {
+            if (File.Exists(path))
+            {
+                using (var md5 = MD5.Create())
+                {
+                    using (var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        var hash = md5.ComputeHash(stream);
+                        return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+                    }
+                }
+            }
+        }
+        catch(Exception e)
+        {
+#if DEBUG
+            Debug.Print(e.Message);
+            string lockert = FileUtil.WhoIsLockingAsString(path);
+#endif
+            return null;
+        }
+
+        return null;
     }
 }

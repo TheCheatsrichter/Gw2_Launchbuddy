@@ -20,7 +20,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class EnviromentManager
     {
-        public static Version LBVersion = new Version("3.0.4");
+        public static Version LBVersion = new Version("3.0.6");
         public static LaunchOptions LaunchOptions;
 
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
@@ -58,6 +58,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static string GwClientExeName;
         public static string GwClientExeNameWithoutExtension { get { return Path.GetFileNameWithoutExtension(GwClientExeName); } }
         public static string GwClientPath;
+        public static string GwClientTmpPath;
         public static string GwClientExePath { get { return GwClientPath + GwClientExeName; } }
         public static bool? GwClientUpToDate = null;
 
@@ -303,7 +304,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 MessageBox.Show("Guild Wars 2 info file not found! Please choose the directory manually!");
             }
+
+            GwClientTmpPath = GwClientPath + GwClientExeName.Replace(".exe",".tmp");
         }
+
         public static void CheckGwClientVersion()
         {
             if (LBConfiguration.Config.forcegameclientupdate)
@@ -356,13 +360,23 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             Process pro = new Process();
             pro.StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath, Arguments = "-image" };
-            pro.Start();
-            pro.Refresh();
-            
+
+            try
+            {
+                pro.Start();
+                pro.Refresh();
+            }
+            catch
+            {
+                MessageBox.Show("Launchbuddy could not find your Gw2 executable. If it has been moved please restart the game once without launchbuddy to fix this issue.");
+            }
+
+
+
             Action waitforlaunch = () => {
             try
             {
-                while (Process.GetProcessById(pro.Id) != null)
+                while (!pro.HasExited)
                 {
                 }
             }
@@ -374,15 +388,48 @@ namespace Gw2_Launchbuddy.ObjectManagers
             
             Helpers.BlockerInfo.Run("Game Update", "Launchbuddy waits for your game to be updated", waitforlaunch);
 
-            Thread.Sleep(3000);
+            //When gameclient itself updates process will be closed. New client is stored in exename.tmp and will be loaded on next startup under new pid
+
+#if DEBUG
+            var starttime = DateTime.Now;
+#endif
+
+            Action waitforclientupdate = () => {
+                try
+                {
+                    for(int i = 0; i<100;i++)
+                    {
+                        if (File.Exists(GwClientTmpPath))
+                        {
+                            Debug.Print("Gameclient tmp filesize:" + new FileInfo(GwClientTmpPath).Length);
+                            if (1 >= new FileInfo(GwClientTmpPath).Length)
+                            {
+                                break;
+                            }
+                        }
+                        Thread.Sleep(100);
+                    }
+
+                }
+                catch
+                {
+                    //GetProcess crashes when process is null
+                }
+            };
+
+            Helpers.BlockerInfo.Run("Game Update", "Launchbuddy waits for your game to be updated", waitforclientupdate);
+
+#if DEBUG
+            Debug.Print($"Gameclient exe got updated. Took:{(DateTime.Now - starttime).ToString()}");
+#endif
 
             //Catch gameclient PID change. Happens when gameclient exe itself gets updated --> gets restarted under different PID
             Action waitforlaunch2 = () => {
                 try
                 {
-                    while (Process.GetProcessesByName("*Gw2*.exe").Length == 1)
+                    while (Process.GetProcessesByName("*Gw2*.exe").Length >= 1)
                     {
-                        
+                        Debug.Print("Gamclient updat is still running.");
                     }
                 }
                 catch
@@ -410,6 +457,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                         $" Was the gameupdate successful? Please update Gw2 manually and only then proceed with Launchbuddys usage.");
                 }
             }
+            Thread.Sleep(2000);
             LoadGwClientInfo();
         }
 

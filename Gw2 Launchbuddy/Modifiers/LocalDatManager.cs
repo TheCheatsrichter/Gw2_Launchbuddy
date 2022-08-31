@@ -133,7 +133,7 @@ namespace Gw2_Launchbuddy.Modifiers
                 }
             };
 
-            Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy waits for the gameclient to be closed.", waitforprocoherentclose);
+            Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy waits for the gameclient coherentui service.", waitforprocoherentclose);
 
 
             if (!Apply(file)) return;
@@ -152,18 +152,22 @@ namespace Gw2_Launchbuddy.Modifiers
 
             try
             {
+                
                 Process pro = new Process { StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } };
                 pro.Start();
                 pro.Refresh();
+
                 Action waitforlaunch = () => ModuleReader.WaitForModule("dwmapi.dll", pro);
                 Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating a Loginfile. This window should automatically close when the launcher login is ready.", waitforlaunch);
+
+                //Needs a better way of telling when the loginwindow is actually up. dwmapi.dll gets loaded as last dll however this does not mean that the loginwindow is up!
+                Thread.Sleep(4000);
 
                 try
                 {
                     if (!pro.CloseMainWindow())
                     {
                         try { pro.Close(); } catch { }
-                        try { pro.Kill(); } catch { }
                     }
                 }
                 catch
@@ -205,6 +209,8 @@ namespace Gw2_Launchbuddy.Modifiers
             datfile.gw2build = Api.ClientBuild;
             datfile.Path = filepath;
 
+            string oldhash = FileUtil.GetFileHashMD5(EnviromentManager.GwLocaldatPath);
+
             Process pro = new Process { StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath) };
             pro.Start();
             Thread.Sleep(500);
@@ -214,6 +220,8 @@ namespace Gw2_Launchbuddy.Modifiers
 #endif
             if (email != null && password != null)
             {
+
+                // Autofiller
                 Action blockefunc = () => ModuleReader.WaitForModule("dwmapi.dll", pro, null);
                 Helpers.BlockerInfo.Run("Loginfile Creation", "LB is recreating your loginfile", blockefunc);
                 if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with caution.");
@@ -229,18 +237,32 @@ namespace Gw2_Launchbuddy.Modifiers
             }
             else
             {
+                // Manual creation
                 Action blockerfunc = () => ModuleReader.WaitForModule("DPAPI.dll", pro, null);
                 Helpers.BlockerInfo.Run("Loginfile Creation", "Please check remember email/password and press the login and play button. This window will be closed automatically on success.", blockerfunc);
                 if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with caution.");
                 Thread.Sleep(100);
             }
 
+            //Wait for loginfile to be saved
+            for (int i = 0; i<=20; i++)
+            {
+                if(oldhash != FileUtil.GetFileHashMD5(EnviromentManager.GwLocaldatPath))
+                {
+                    Debug.Print("Loginfile updated");
+                    break;
+                }
+                Debug.Print("Loginfile chage sleep 250 ms");
+                Thread.Sleep(250);
+            }
+
+
             try
             {
                 if (!pro.CloseMainWindow())
                 {
                     try { pro.Close(); } catch { }
-                    try { pro.Kill(); } catch { }
+//                    try { pro.Kill(); } catch { }
                 }
             }
             catch
@@ -289,8 +311,11 @@ namespace Gw2_Launchbuddy.Modifiers
 
                 return i < timeout_repeats;
             }
-            catch
+            catch(Exception e)
             {
+#if DEBUG
+                MessageBox.Show(e.Message);
+#endif
                 return true;
             }
         }
@@ -369,26 +394,7 @@ namespace Gw2_Launchbuddy.Modifiers
 
         private string CalculateMD5(string filename)
         {
-            try
-            {
-                if (File.Exists(filename))
-                {
-                    using (var md5 = MD5.Create())
-                    {
-                        using (var stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                        {
-                            var hash = md5.ComputeHash(stream);
-                            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                return null;
-            }
-
-            return null;
+            return FileUtil.GetFileHashMD5(filename);
         }
 
         public bool ValidateUpdate(string OldHash)

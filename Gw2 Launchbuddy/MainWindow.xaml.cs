@@ -179,6 +179,7 @@ namespace Gw2_Launchbuddy
             cb_autoupdatedatfiles.IsChecked = LBConfiguration.Config.autoupdatedatfiles;
             cb_forcegameclientupdate.IsChecked = LBConfiguration.Config.forcegameclientupdate;
             cb_gameclientbuttonpush.IsChecked = LBConfiguration.Config.pushgameclientbuttons;
+            cb_uselogindelays.IsChecked = LBConfiguration.Config.uselogindelays;
         }
 
         private void DonatePopup()
@@ -478,6 +479,7 @@ namespace Gw2_Launchbuddy
                 bt_ShowSettings.Visibility = Visibility.Collapsed;
                 Grid.SetColumnSpan(WindowOptionsColum, 1);
                 Canvas_Custom_UI.Visibility = Visibility.Collapsed;
+                myWindow.Background = this.Resources["B1_Background"] as SolidColorBrush;
             }
         }
 
@@ -605,6 +607,8 @@ namespace Gw2_Launchbuddy
             {
                 AccountManager.SaveAccounts();
                 EnviromentManager.Show_LBInstanceGUI();
+
+                // Should use embbeded blockerinfo in the future
                 AccountManager.LaunchAccounts();
                 if (addonflag)
                 {
@@ -623,9 +627,9 @@ namespace Gw2_Launchbuddy
                 .EnforceExt(".exe")
                 .ShowDialog((Helpers.FileDialog fileDialog) =>
                 {
-                    foreach( var file in fileDialog.FileNames)
+                    foreach (var file in fileDialog.FileNames)
                     {
-                        if( !String.IsNullOrEmpty(file))
+                        if (!String.IsNullOrEmpty(file))
                         {
                             EnviromentManager.GwClientPath = Path.GetDirectoryName(file) + @"\";
                             EnviromentManager.GwClientExeName = Path.GetFileName(file);
@@ -669,7 +673,8 @@ namespace Gw2_Launchbuddy
             try
             {
                 ServerManager.SelectedAuthserver.Port = tb_authport.Text;
-            } catch
+            }
+            catch
             {
                 MessageBox.Show("Invalid Authserver Port");
                 tb_authport.Focus();
@@ -1291,9 +1296,9 @@ namespace Gw2_Launchbuddy
                 .Multiselect(true)
                 .ShowDialog((Helpers.FileDialog fileDialog) =>
                 {
-                    foreach( string file in fileDialog.FileNames )
+                    foreach (string file in fileDialog.FileNames)
                     {
-                        if( !String.IsNullOrEmpty(file) && !accsettings.DLLs.Contains(file))
+                        if (!String.IsNullOrEmpty(file) && !accsettings.DLLs.Contains(file))
                         {
                             accsettings.DLLs.Add(file);
                         }
@@ -1317,10 +1322,11 @@ namespace Gw2_Launchbuddy
             {
                 acc.IsEnabled = true;
             }
-            if(accs.Count>0)
+            if (accs.Count > 0)
             {
                 lb_acccountinfo.Content = $"Accounts ({accs.Count} selected):";
-            }else
+            }
+            else
             {
                 lb_acccountinfo.Content = "Accounts:";
             }
@@ -1365,7 +1371,7 @@ namespace Gw2_Launchbuddy
         private void bt_RemDll_Click(object sender, RoutedEventArgs e)
         {
             AccountSettings accsett = (sender as Button).DataContext as AccountSettings;
-            for( int i = lv_InjectDlls.SelectedItems.Count -1; i >= 0; i--)
+            for (int i = lv_InjectDlls.SelectedItems.Count - 1; i >= 0; i--)
             {
                 accsett.DLLs.Remove(lv_InjectDlls.SelectedItems[i] as string);
             }
@@ -1413,7 +1419,7 @@ namespace Gw2_Launchbuddy
         private void tb_email_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
             string email = tb_email.Text;
-            if(!email.Contains('*'))
+            if (!email.Contains('*'))
             {
                 if (!IsValidEmail(email) && email != "" || email.Contains('*'))
                 {
@@ -1568,7 +1574,7 @@ namespace Gw2_Launchbuddy
 
         private void lv_hotkeys_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            object test=((sender as ListView).SelectedItem)as Hotkey;
+            object test = ((sender as ListView).SelectedItem) as Hotkey;
         }
 
         private void tb_relaunches_LostFocus(object sender, RoutedEventArgs e)
@@ -1616,7 +1622,7 @@ namespace Gw2_Launchbuddy
         public bool addonflag = true;
         private void bt_AddAddon_Click(object sender, RoutedEventArgs e)
         {
-            AddOnManager.Add(tb_AddonName.Text,tb_AddonArgs.Text.Split('-'), false,(bool)cb_AddonOnLB.IsChecked,(bool)cb_AddonRunAsAdmin.IsChecked);
+            AddOnManager.Add(tb_AddonName.Text, tb_AddonArgs.Text.Split('-'), false, (bool)cb_AddonOnLB.IsChecked, (bool)cb_AddonRunAsAdmin.IsChecked);
         }
 
         private void bt_RemAddon_Click(object sender, RoutedEventArgs e)
@@ -1649,7 +1655,7 @@ namespace Gw2_Launchbuddy
             }
             catch (Exception err)
             {
-                MessageBox.Show("Could not repair Loginfile. Please recreate a loginfile with Set Loginfile. \n"+err.Message);
+                MessageBox.Show("Could not repair Loginfile. Please recreate a loginfile with Set Loginfile. \n" + err.Message);
             }
         }
 
@@ -1702,7 +1708,7 @@ namespace Gw2_Launchbuddy
 
         public void AddTabPlugin(TabItem UIContent)
         {
-            if(UIContent !=null)
+            if (UIContent != null)
             {
                 tab_options.Items.Add(UIContent);
             }
@@ -1751,7 +1757,7 @@ namespace Gw2_Launchbuddy
 
         private void Bt_resetinstanceguisettings_Click(object sender, RoutedEventArgs e)
         {
-            if(EnviromentManager.LBInstanceGUI !=null)
+            if (EnviromentManager.LBInstanceGUI != null)
             {
                 EnviromentManager.LBInstanceGUI.ResetWindowSettings();
             }
@@ -1818,7 +1824,8 @@ namespace Gw2_Launchbuddy
             if (lv_accs.SelectedItems.Count != AccountManager.Accounts.Count)
             {
                 lv_accs.SelectAll();
-            } else
+            }
+            else
             {
                 lv_accs.UnselectAll();
             }
@@ -1826,14 +1833,15 @@ namespace Gw2_Launchbuddy
 
         private void bt_addcustomargument_Click(object sender, RoutedEventArgs e)
         {
-            var settings= (sender as Button).DataContext as AccountSettings;
+            var settings = (sender as Button).DataContext as AccountSettings;
 
             string argname = tb_customargument.Text.TrimEnd();
 
-            if(Regex.IsMatch(argname, @"-\w+"))
+            if (Regex.IsMatch(argname, @"-\w+"))
             {
                 settings.Arguments.Add(new Argument(argname, "Custom argument " + tb_customargument.Text, true, true));
-            }else
+            }
+            else
             {
                 MessageBox.Show($"Invalid Argument {argname}. Please check format ('-example')");
             }
@@ -1842,11 +1850,11 @@ namespace Gw2_Launchbuddy
         private void bt_argdelete_Click(object sender, RoutedEventArgs e)
         {
             var arg = (sender as Button).DataContext as Argument;
-            if(arg.DeleteAble)
+            if (arg.DeleteAble)
             {
                 AccountManager.EditAccount.Settings.Arguments.Remove(arg);
             }
-            
+
         }
 
         private void cb_gameclientbuttonpush_Click(object sender, RoutedEventArgs e)
@@ -1859,11 +1867,12 @@ namespace Gw2_Launchbuddy
         {
             dp_playlist.DataContext = (sender as ListView).SelectedItem as MusicPlaylist;
 
-            if(dp_playlist.DataContext == null)
+            if (dp_playlist.DataContext == null)
             {
                 dp_playlist.Visibility = Visibility.Collapsed;
                 dp_playlisthelp.Visibility = Visibility.Visible;
-            }else
+            }
+            else
             {
                 dp_playlist.Visibility = Visibility.Visible;
                 dp_playlisthelp.Visibility = Visibility.Collapsed;
@@ -1872,7 +1881,7 @@ namespace Gw2_Launchbuddy
 
         private void ListView_MouseEnter(object sender, MouseEventArgs e)
         {
-            var test =(sender as ListView).DataContext;
+            var test = (sender as ListView).DataContext;
             int i = 0;
         }
 
@@ -1884,11 +1893,11 @@ namespace Gw2_Launchbuddy
             {
                 if (fileDialog.FileName != "")
                 {
-                    foreach(string filename in fileDialog.FileNames)
+                    foreach (string filename in fileDialog.FileNames)
                     {
                         playlist.Add(new MusicSource(filename));
                     }
-                    
+
                 }
             });
 
@@ -1900,7 +1909,7 @@ namespace Gw2_Launchbuddy
         {
             var playlist = (sender as Button).DataContext as MusicPlaylist;
 
-            for(int i= lv_musicsourcelist.SelectedItems.Count-1; i>=0 ;i--)
+            for (int i = lv_musicsourcelist.SelectedItems.Count - 1; i >= 0; i--)
             {
                 playlist.Remove(lv_musicsourcelist.SelectedItems[i] as MusicSource);
             }
@@ -1935,9 +1944,15 @@ namespace Gw2_Launchbuddy
 
         }
 
+        private void cb_uselogindelays_Click(object sender, RoutedEventArgs e)
+        {
+            LBConfiguration.Config.uselogindelays = (bool)cb_uselogindelays.IsChecked;
+            LBConfiguration.Save();
+        }
+
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)
         {
-            PluginManager.UpdatePlugin(((sender as Button).DataContext as Plugin_Wrapper).Plugin,true);
+            PluginManager.UpdatePlugin(((sender as Button).DataContext as Plugin_Wrapper).Plugin, true);
 
         }
 

@@ -16,33 +16,51 @@ using System.Windows.Threading;
 
 namespace Gw2_Launchbuddy.Helpers
 {
-    /// <summary>
-    /// Interaktionslogik für BlockerInfo.xaml
-    /// </summary>
-    public partial class BlockerInfo : Window
+    public static class EmbeddedBlockerInfo
     {
         public static bool Done = false;
         private static Action function = null;
-        static BlockerInfo blockerinfo;
         static Thread blocker_thread;
 
-        private BlockerInfo()
-        {
-            InitializeComponent();
-        }
+        static Grid Blockergrid;
+        static Button Cancelbutton;
+        static TextBlock Messageblock;
 
-        public static void Run(string Title, string Message, Action blockerfunction, bool topmost = true)
+
+        public static void ShowBlocker (Grid blockergrid,Button cancelbutton,TextBlock messageblock, string Message, Action blockerfunction, bool topmost = true)
         {
-            blockerinfo = new BlockerInfo();
-            blockerinfo.Title = Title;
-            blockerinfo.tb_message.Text = Message;
+            Blockergrid = blockergrid;
+            Cancelbutton = cancelbutton;
+            Messageblock = messageblock;
+
+            blockergrid.Visibility = Visibility.Visible;
+            messageblock.Text = Message;
             function = blockerfunction;
-            blockerinfo.Topmost = topmost;
             Done = false;
             blocker_thread = new Thread(new ThreadStart(WaitForFunction));
             blocker_thread.Start();
-            blockerinfo.ShowDialog();
-            //blockerinfo.Focus();
+        }
+
+        public static void CloseBlocker()
+        {
+            try
+            {
+                Console.WriteLine("Aborting wait thread.");
+                blocker_thread.Suspend();
+                blocker_thread.Abort();
+                blocker_thread = null;
+                function = null;
+                Thread.Sleep(50);
+                Console.WriteLine("Wait Thread aborted");
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                Blockergrid.Visibility = Visibility.Collapsed;
+            }
         }
 
         private static void WaitForFunction()
@@ -58,19 +76,21 @@ namespace Gw2_Launchbuddy.Helpers
 
             try
             {
-                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => blockerinfo.Close()));
                 Done = true;
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => CloseBlocker()));
+                
             }
             catch (Exception e)
             {
             }
         }
 
-        private void bt_cancel_Click(object sender, RoutedEventArgs e)
+        private static void bt_cancel_Click(object sender, RoutedEventArgs e)
         {
-            blockerinfo.Close();
+            CloseBlocker();
         }
 
+        /*
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             try
@@ -92,15 +112,7 @@ namespace Gw2_Launchbuddy.Helpers
                 GC.Collect();
             }
         }
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            try { this.DragMove(); } catch { }
-        }
+        */
 
-        private void bt_hide_Click(object sender, RoutedEventArgs e)
-        {
-            this.WindowState = WindowState.Minimized;
-            this.Topmost = false;
-        }
     }
 }

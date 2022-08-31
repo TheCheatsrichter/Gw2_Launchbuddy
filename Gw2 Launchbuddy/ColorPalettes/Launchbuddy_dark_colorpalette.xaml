@@ -19,9 +19,9 @@
     <SolidColorBrush x:Key="Icon_Foreground" Color="White"/>
     <SolidColorBrush x:Key="Item_Highlight" Color="#57fa9b"/>
 
-    <SolidColorBrush x:Key="B1_Background" Color="#1c1c1c"/>
-    <SolidColorBrush x:Key="B2_Background" Color="#292828"/>
-    <SolidColorBrush x:Key="B3_Background" Color="#404040"/>
+    <SolidColorBrush x:Key="B1_Background" Color="#1c1c1c" />
+    <SolidColorBrush x:Key="B2_Background" Color="#292828" />
+    <SolidColorBrush x:Key="B3_Background" Color="#404040" />
 
     <SolidColorBrush x:Key="Enabled_False" Color="#e3e3e3"/>
 
