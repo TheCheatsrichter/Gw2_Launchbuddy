@@ -161,7 +161,7 @@ namespace Gw2_Launchbuddy.Modifiers
                 Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating a Loginfile. This window should automatically close when the launcher login is ready.", waitforlaunch);
 
                 //Needs a better way of telling when the loginwindow is actually up. dwmapi.dll gets loaded as last dll however this does not mean that the loginwindow is up!
-                Thread.Sleep(4000);
+                Thread.Sleep(5000);
 
                 try
                 {

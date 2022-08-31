@@ -647,9 +647,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     break;
             }
 
-            Action loginwait = () => { Thread.Sleep(timetowait); };
-            Helpers.BlockerInfo.Run("Delaying Login", $"Launchbuddy is currently delaying the login for {timetowait / 1000} sec(s). This is a safety measure to avoid triggering GW2 DDOS protection. Press cancel to skip.", loginwait,false);
-
+            if(LBConfiguration.Config.uselogindelays)
+            {
+                Action loginwait = () => { Thread.Sleep(timetowait); };
+                Helpers.BlockerInfo.Run("Delaying Login", $"Launchbuddy is currently delaying the login for {timetowait / 1000} sec(s). This is a safety measure to avoid triggering GW2 DDOS protection. Press cancel to skip.", loginwait, false);
+            }
+ 
             Loginfiller.PressLoginButton(Account);
         }
 
