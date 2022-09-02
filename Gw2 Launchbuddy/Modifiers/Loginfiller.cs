@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Gw2_Launchbuddy.Extensions;
 using Gw2_Launchbuddy.ObjectManagers;
 
 namespace Gw2_Launchbuddy.Modifiers
@@ -16,12 +17,12 @@ namespace Gw2_Launchbuddy.Modifiers
         [DllImport("user32.dll")]
         static extern bool PostMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
 
-        public static void Login(string email,string passwd,Process pro, bool clearfields = false)
+        public static async void Login(string email,string passwd,GwGameProcess pro, bool clearfields = false)
         {
             try
             {
                 pro.Refresh();
-                ModuleReader.WaitForModule("CoherentUI64.DLL", pro);
+                await pro.WaitForStateAsynch(GwGameProcess.GameStatus.loginwindow_prelogin);
                 //SetForegroundWindow(pro.MainWindowHandle);
                 Thread.Sleep(1000);
                 for (int i = 0; i < 100; i++) PressKeyDown(Keys.Back, pro, false); //Very unclean method, but modifiers onyl work on focus
@@ -40,9 +41,12 @@ namespace Gw2_Launchbuddy.Modifiers
 
         }
 
-        public static void PressLoginButton(Account acc)
+        public static async void PressLoginButton(Account acc)
         {
-            ModuleReader.WaitForModule("CoherentUI64.DLL", acc.Client.Process);
+            //acc.Client.Process.WaitForExit();
+
+            await acc.Client.Process.WaitForStateAsynch(Extensions.GwGameProcess.GameStatus.loginwindow_prelogin);
+
             Thread.Sleep(1000);
             if (!acc.Client.Process.HasExited)
             {

@@ -332,6 +332,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Extensions\Triggers\FileLockTrigger.cs" />
+    <Compile Include="Extensions\Triggers\FileSizeTrigger.cs" />
+    <Compile Include="Extensions\Triggers\ModuleTrigger.cs" />
+    <Compile Include="Extensions\ProcessSearchTrigger.cs" />
+    <Compile Include="Extensions\ProcessWatcher.cs" />
+    <Compile Include="Extensions\ProcessExtension.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Extensions\Triggers\SleepTrigger.cs" />
+    <Compile Include="Extensions\Triggers\WindowDimensionsTrigger.cs" />
     <Compile Include="Helpers\BlockerInfo.xaml.cs">
       <DependentUpon>BlockerInfo.xaml</DependentUpon>
     </Compile>
@@ -347,7 +357,6 @@
     </Compile>
     <Compile Include="Modifiers\CacheCleaner.cs" />
     <Compile Include="Modifiers\DLLInjector.cs" />
-    <Compile Include="Extensions\ProcessExtensions.cs" />
     <Compile Include="Extensions\XmlTextReaderExtensions.cs" />
     <Compile Include="Helpers\Builders.cs" />
     <Compile Include="Helpers\FileDialog.cs" />

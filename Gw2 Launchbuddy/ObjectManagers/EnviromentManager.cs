@@ -358,7 +358,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 MessageBox.Show("Please close all running Guild Wars 2 game instances to update the game.");
             }
 
-            Process pro = new Process();
+            GwGameProcess pro = new GwGameProcess();
             pro.StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath, Arguments = "-image" };
 
             try
@@ -372,72 +372,22 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
 
 
-
-            Action waitforlaunch = () => {
-            try
+            Action gameupdateprocess = () =>
             {
-                while (!pro.HasExited)
+                pro.WaitForExit();
+                if (pro.exitstatus == ProcessExtension.ExitStatus.self_update)
                 {
-                }
-            }
-            catch
-            {
-                //GetProcess crashes when process is null
-            }
-            };
-            
-            Helpers.BlockerInfo.Run("Game Update", "Launchbuddy waits for your game to be updated", waitforlaunch);
-
-            //When gameclient itself updates process will be closed. New client is stored in exename.tmp and will be loaded on next startup under new pid
-
-#if DEBUG
-            var starttime = DateTime.Now;
-#endif
-
-            Action waitforclientupdate = () => {
-                try
-                {
-                    for(int i = 0; i<100;i++)
+                    while (Process.GetProcessesByName(pro.ProcessName).Length <= 0)
                     {
-                        if (File.Exists(GwClientTmpPath))
-                        {
-                            Debug.Print("Gameclient tmp filesize:" + new FileInfo(GwClientTmpPath).Length);
-                            if (1 >= new FileInfo(GwClientTmpPath).Length)
-                            {
-                                break;
-                            }
-                        }
-                        Thread.Sleep(100);
+                        Thread.Sleep(10);
                     }
+                    Process newpro = Process.GetProcessesByName(pro.ProcessName)[0];
 
-                }
-                catch
-                {
-                    //GetProcess crashes when process is null
+                    newpro.WaitForExit();
                 }
             };
 
-            Helpers.BlockerInfo.Run("Game Update", "Launchbuddy waits for your game to be updated", waitforclientupdate);
-
-#if DEBUG
-            Debug.Print($"Gameclient exe got updated. Took:{(DateTime.Now - starttime).ToString()}");
-#endif
-
-            //Catch gameclient PID change. Happens when gameclient exe itself gets updated --> gets restarted under different PID
-            Action waitforlaunch2 = () => {
-                try
-                {
-                    while (Process.GetProcessesByName("*Gw2*.exe").Length >= 1)
-                    {
-                        Debug.Print("Gamclient updat is still running.");
-                    }
-                }
-                catch
-                {
-                }
-            };
-
-            Helpers.BlockerInfo.Run("Game Update", "Launchbuddy waits for your game to be updated", waitforlaunch2);
+            Helpers.BlockerInfo.Run("Gw2 Game Update", "Guild Wars 2 is updating. Please wait.", gameupdateprocess);
 
             /*
             //Overwrite xml file because -image does not update xml file

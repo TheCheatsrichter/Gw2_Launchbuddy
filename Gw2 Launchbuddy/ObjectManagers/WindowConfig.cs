@@ -70,6 +70,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             RECT rct;
             pro.Refresh();
+            if (pro.HasExited) return null;
             bool test = GetWindowRect(new HandleRef(pro,pro.MainWindowHandle), out rct);
             if (!GetWindowRect(new HandleRef(this, pro.MainWindowHandle), out rct))
             {

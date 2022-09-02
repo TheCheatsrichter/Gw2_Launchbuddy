@@ -1,4 +1,5 @@
-﻿using Gw2_Launchbuddy.ObjectManagers;
+﻿using Gw2_Launchbuddy.Extensions;
+using Gw2_Launchbuddy.ObjectManagers;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -100,8 +101,9 @@ namespace Gw2_Launchbuddy.Modifiers
 
         public static void UpdateLocalDat(LocalDatFile file)
         {
-            bool success = false;
+            if (file == null) return;
 
+            bool success = false;
             //Catch threads / processes spawned by gameclient which could block the loginfile
             Action waitforprocessclose = () =>
             {
@@ -116,31 +118,10 @@ namespace Gw2_Launchbuddy.Modifiers
                     MessageBox.Show("An unexpected Guild Wars 2 gameclient still is running. Please wait for the gameclient to update / close. Overwise close the gameclient manually");
                 }
             };
-
             Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy waits for the gameclient to be closed.", waitforprocessclose);
 
-            Action waitforprocoherentclose = () =>
-            {
-                int i = 0;
-                while (Process.GetProcessesByName("*CoherentUI_Host*.exe").Length == 1 && i <= 50)
-                {
-                    Thread.Sleep(100);
-                    i++;
-                }
-                if (i == 50)
-                {
-                    MessageBox.Show("An unexpected Guild Wars 2 gameclient still is running. Please wait for the gameclient to update / close. Overwise close the gameclient manually");
-                }
-            };
-
-            Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy waits for the gameclient coherentui service.", waitforprocoherentclose);
-
-
             if (!Apply(file)) return;
-
-
             string OldHash;
-
             try
             {
                 OldHash = String.Copy(file.MD5HASH);
@@ -149,51 +130,41 @@ namespace Gw2_Launchbuddy.Modifiers
             {
                 OldHash = "";
             }
-
             try
             {
                 
-                Process pro = new Process { StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } };
+                var pro = new GwGameProcess { StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } };
                 pro.Start();
                 pro.Refresh();
 
-                Action waitforlaunch = () => ModuleReader.WaitForModule("dwmapi.dll", pro);
-                Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating a Loginfile. This window should automatically close when the launcher login is ready.", waitforlaunch);
-
-                //Needs a better way of telling when the loginwindow is actually up. dwmapi.dll gets loaded as last dll however this does not mean that the loginwindow is up!
-                Thread.Sleep(5000);
-
-                try
+                Action waitforlaunch = () =>
                 {
-                    if (!pro.CloseMainWindow())
+                    pro.WaitForState(GwGameProcess.GameStatus.loginwindow_prelogin);
+                    pro.Stop();
+                    pro.WaitForExit();
+                    IORepeater.WaitForFileAvailability(file.Path);
+                    IORepeater.WaitForFileAvailability(EnviromentManager.GwLocaldatPath);
+
+                    if(pro.Exitstatus == ProcessExtension.ExitStatus.manual_close || pro.Exitstatus == ProcessExtension.ExitStatus.manual_mainwindow || pro.Exitstatus == ProcessExtension.ExitStatus.manual_kill)
                     {
-                        try { pro.Close(); } catch { }
+                        success = true;
                     }
-                }
-                catch
-                {
+                    else
+                    {
+                        MessageBox.Show($"Loginfile update did crash or was aborted by user.");
+                        success = false;
+                    }
+                };
+                Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is updating a Loginfile. This window should automatically close when the update is finished.", waitforlaunch);
 
-                }
-
-                Action waitAction = () => WaitForProcessClose(pro);
-                Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to be closed.", waitAction);
-
-                waitAction = () => IORepeater.WaitForFileAvailability(file.Path);
-                Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to save the updated loginfile.", waitAction);
-
-                waitAction = () => IORepeater.WaitForFileAvailability(EnviromentManager.GwLocaldatPath);
-                Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to release the loginfile.", waitAction);
             }
             catch (Exception e)
             {
                 throw new Exception("An error occured while updating the loginfile.\n" + EnviromentManager.Create_Environment_Report() + e.Message);
             }
-
             ToDefault(file);
-
-            success = file.ValidateUpdate(OldHash);
+            if(success) success = file.ValidateUpdate(OldHash);
             GC.Collect();
-
         }
 
         public static LocalDatFile CreateNewFile(string filename, string email = null, string password = null)
@@ -211,9 +182,8 @@ namespace Gw2_Launchbuddy.Modifiers
 
             string oldhash = FileUtil.GetFileHashMD5(EnviromentManager.GwLocaldatPath);
 
-            Process pro = new Process { StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath) };
+            var pro = new GwGameProcess { StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath) };
             pro.Start();
-            Thread.Sleep(500);
             pro.Refresh();
 #if DEBUG
             if(email ==null || password == null) Console.WriteLine("Loginfile Creation: No Email or Password given proceeding with manual creation.");
@@ -222,15 +192,13 @@ namespace Gw2_Launchbuddy.Modifiers
             {
 
                 // Autofiller
-                Action blockefunc = () => ModuleReader.WaitForModule("dwmapi.dll", pro, null);
-                Helpers.BlockerInfo.Run("Loginfile Creation", "LB is recreating your loginfile", blockefunc);
+                Action blockefunc = () => pro.WaitForState(GwGameProcess.GameStatus.loginwindow_prelogin);
+                Helpers.BlockerInfo.Run("Loginfile Creation", "LB is recreating your loginfile. Please wait for launchbuddy to automatically fill your login information", blockefunc);
                 if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with caution.");
 
-                Thread.Sleep(100);
                 Loginfiller.Login(email, password, pro, true);
-                Thread.Sleep(250);
 
-                blockefunc = () => ModuleReader.WaitForModule("DPAPI.dll", pro, null);
+                blockefunc = () => pro.WaitForState(GwGameProcess.GameStatus.loginwindow_authentication);
                 Helpers.BlockerInfo.Run("Loginfile Creation", "Please add additional Information if needed.", blockefunc);
                 if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with caution.");
 
@@ -238,10 +206,9 @@ namespace Gw2_Launchbuddy.Modifiers
             else
             {
                 // Manual creation
-                Action blockerfunc = () => ModuleReader.WaitForModule("DPAPI.dll", pro, null);
+                Action blockerfunc = () => pro.WaitForState(GwGameProcess.GameStatus.loginwindow_pressplay);
                 Helpers.BlockerInfo.Run("Loginfile Creation", "Please check remember email/password and press the login and play button. This window will be closed automatically on success.", blockerfunc);
                 if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with caution.");
-                Thread.Sleep(100);
             }
 
             //Wait for loginfile to be saved
@@ -256,68 +223,34 @@ namespace Gw2_Launchbuddy.Modifiers
                 Thread.Sleep(250);
             }
 
+            pro.Stop();
 
-            try
+            if(pro.Exitstatus == ProcessExtension.ExitStatus.manual_close || pro.Exitstatus == ProcessExtension.ExitStatus.manual_mainwindow || pro.Exitstatus== ProcessExtension.ExitStatus.manual_kill)
             {
-                if (!pro.CloseMainWindow())
+                Action waitAction = () =>
                 {
-                    try { pro.Close(); } catch { }
-//                    try { pro.Kill(); } catch { }
-                }
+                    pro.WaitForExit();
+                    IORepeater.WaitForFileAvailability(EnviromentManager.GwLocaldatPath);
+                };
+
+                waitAction = () => IORepeater.WaitForFileAvailability(EnviromentManager.GwLocaldatPath);
+                Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to be closed and to save the loginfile.", waitAction);
+
+                if (File.Exists(filepath)) IORepeater.FileDelete(filepath);
+                IORepeater.FileMove(EnviromentManager.GwLocaldatPath, filepath);
+
+                datfile.ValidateUpdate(null);
+
+                ToDefault(null);
+                GC.Collect();
+                return datfile;
             }
-            catch
+            else
             {
-
+                MessageBox.Show("Loginfile creation aborted. Gw2 Gameclient closed itself or was closed by user");
             }
+            return null;
 
-            Action waitAction = () => WaitForProcessClose(pro);
-            Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to be closed.", waitAction);
-
-            waitAction = () => IORepeater.WaitForFileAvailability(EnviromentManager.GwLocaldatPath);
-            Helpers.BlockerInfo.Run("Loginfile Update", "Launchbuddy is waiting for Gw2 to release the loginfile.", waitAction);
-
-            if (File.Exists(filepath)) IORepeater.FileDelete(filepath);
-            IORepeater.FileMove(EnviromentManager.GwLocaldatPath, filepath);
-
-            datfile.ValidateUpdate(null);
-
-            ToDefault(null);
-            GC.Collect();
-            return datfile;
-        }
-
-        private static bool WaitForProcessClose(Process pro)
-        {
-            try
-            {
-                uint timeout_repeats = 1800;
-                pro.Refresh();
-                int i = 0;
-                if (pro == null)
-                {
-                    Console.WriteLine("Process was null");
-                    return true;
-                }
-                while (i <= timeout_repeats && !pro.HasExited)
-                {
-                    Thread.Sleep(100);
-                    pro.Refresh();
-                    i++;
-                }
-                if(i>=timeout_repeats)
-                {
-                    MessageBox.Show("Gameclient timeout of 3 minutes was reached. If your game client still is updating / processing something please wait for completion. Only then press continue.");
-                }
-
-                return i < timeout_repeats;
-            }
-            catch(Exception e)
-            {
-#if DEBUG
-                MessageBox.Show(e.Message);
-#endif
-                return true;
-            }
         }
 
         private static bool LoginFileIsLocked(LocalDatFile file)
@@ -344,8 +277,6 @@ namespace Gw2_Launchbuddy.Modifiers
             }
             return false;
         }
-
-
         public static void ToDefault(LocalDatFile defaultfile)
         {
             try

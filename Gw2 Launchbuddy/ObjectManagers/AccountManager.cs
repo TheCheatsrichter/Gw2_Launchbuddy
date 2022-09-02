@@ -98,7 +98,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             foreach(Account acc in Accounts.Where<Account>(x=>x.Settings.Loginfile!=null))
             {
-                if(!acc.Settings.Loginfile.IsUpToDate)LocalDatManager.UpdateLocalDat(acc.Settings.Loginfile);
+                if (LBConfiguration.Config.forcegameclientupdate)   // Force update when gameclient is also forced
+                {
+                    LocalDatManager.UpdateLocalDat(acc.Settings.Loginfile);
+                    continue;
+                }
+
+
+                if (!acc.Settings.Loginfile.IsUpToDate)LocalDatManager.UpdateLocalDat(acc.Settings.Loginfile);
             }
             SaveAccounts();
         }
@@ -492,13 +499,18 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void SetLoginFile()
         {
-            Loginfile = LocalDatManager.CreateNewFile(AccountID.ToString());
+            var loginfile = LocalDatManager.CreateNewFile(AccountID.ToString());
+            if (loginfile != null) Loginfile = loginfile;
+            OnPropertyChanged("LoginfileOutdated");
+            OnPropertyChanged("HasLoginCredentials");  
         }
 
         public void RecreateLoginFile()
         {
             if (HasLoginBackupData)
                 Loginfile = LocalDatManager.CreateNewFile(AccountID.ToString(), Email, Password);
+            OnPropertyChanged("LoginfileOutdated");
+            OnPropertyChanged("HasLoginCredentials");
         }
 
 

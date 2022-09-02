@@ -12,6 +12,7 @@ using System.ComponentModel;
 using Gw2_Launchbuddy;
 using System.Windows.Threading;
 using Gw2_Launchbuddy.Modifiers;
+using Gw2_Launchbuddy.Extensions;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -104,10 +105,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     {
                         continue;
                     }
-                    Process pro;
+                    GwGameProcess pro;
                     try
                     {
-                        pro = Process.GetProcessById(Int32.Parse(line.Split(',')[2]));
+                        pro = Process.GetProcessById(Int32.Parse(line.Split(',')[2])) as GwGameProcess;
                     }
                     catch
                     {
@@ -147,7 +148,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
     {
         public readonly Account account;
         private ClientStatus status = ClientStatus.None;
-        public Process Process = new Process();
+        public GwGameProcess Process = new GwGameProcess();
         //public Process CoherentUIProcess;  Could be used to improve login timings; needs more testing
         public event EventHandler StatusChanged;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -207,7 +208,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             get { return status; }
         }
 
-        public void SetProcess(Process pro, ClientStatus prostatus)
+        public void SetProcess(GwGameProcess pro, ClientStatus prostatus)
         {
             Process = pro;
             try
@@ -411,10 +412,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
             new Thread (Th_Window_Init).Start();
         }
 
-        private void Th_Window_Init()
+        private async void Th_Window_Init()
         {
             // icm32.dll
-            ModuleReader.WaitForModule("icm32.dll", Process, null);
+            await Process.WaitForStateAsynch(GwGameProcess.GameStatus.game_charscreen);
             Console.WriteLine($"{account.Nickname} configuring Windowsize");
 
             Window_MoveTo_Default();
@@ -440,7 +441,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         private void ConfigureProcess()
         {
 
-            if (Process == null) Process = new Process();
+            if (Process == null) Process = new GwGameProcess();
             Process.EnableRaisingEvents = true;
             try { Process.Exited -= OnClientClose; } catch { };
             Process.Exited += OnClientClose;
@@ -658,11 +659,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private void WaitForLogin()
         {
-            Action blockefunc = () => ModuleReader.WaitForModule("WINSTA.dll", Process, null);
+            Action blockefunc = () => Process.WaitForState(GwGameProcess.GameStatus.loginwindow_authentication);
             Helpers.BlockerInfo.Run($"{account.Nickname} Login pending", $"{account.Nickname} Login requiring additional information.", blockefunc);
         }
 
-        public void Launch()
+        public async void Launch()
         {
 
             try
@@ -716,6 +717,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             break;
 
                         case var expression when (Status < ClientStatus.Login):
+
+                            if(!await Process.WaitForStateAsynch(GwGameProcess.GameStatus.loginwindow_prelogin))
+                            {
+                                Status = ClientStatus.Crash;
+                            }
+
                             if (Account.Settings.Loginfile != null)
                             {
                                 if(LBConfiguration.Config.pushgameclientbuttons) PressLoginButton();

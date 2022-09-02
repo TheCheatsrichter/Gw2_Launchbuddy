@@ -489,7 +489,7 @@
                                                     <Button DockPanel.Dock="Left" Name="bt_loginfile" Height="22" Width="200" Click="bt_loginfile_Click">Set Loginfile</Button>
                                                     <Label Foreground="Green" Content="Loginfile successfuly configured" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" />
                                                 </DockPanel>
-                                                <Button Margin="10" DockPanel.Dock="Left" Name="bt_loginfileupdate" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" Height="22" Width="200" HorizontalAlignment="Left" Click="bt_loginfileupdate_Click" ToolTip="Manually repair your Loginfile if the automated Update did not work">Repair Loginfile</Button>
+                                                <Button Margin="10" DockPanel.Dock="Left" Name="bt_loginfileupdate" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" Height="22" Width="200" HorizontalAlignment="Left" Click="bt_loginfileupdate_Click" ToolTip="Manually update your Loginfile if the automated Update did not work when a new gw2 build was released.">Manually Update Loginfile</Button>
                                                 <Expander DockPanel.Dock="Top" Margin="5,0,0,0" >
                                                     <Expander.Header>
                                                         <StackPanel Orientation="Horizontal">
