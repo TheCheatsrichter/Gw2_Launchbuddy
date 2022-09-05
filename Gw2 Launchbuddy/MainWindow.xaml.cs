@@ -16,6 +16,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using Gw2_Launchbuddy.Modifiers;
 using System.Windows.Navigation;
+using System.Collections.Generic;
 
 namespace Gw2_Launchbuddy
 {
@@ -39,6 +40,8 @@ namespace Gw2_Launchbuddy
         private bool cinemamode = false;
         private bool slideshowthread_isrunning = false;
         private int reso_x, reso_y;
+        private int last_selectedaccindex=0;
+        private bool accsel_shiftflag = false;
 
         public class CinemaImage
         {
@@ -1316,13 +1319,49 @@ namespace Gw2_Launchbuddy
 
         private void lv_accs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var accs = (sender as ListView).SelectedItems;
+            if (accsel_shiftflag) return;
+            ListView lv = (sender as ListView);
+
+            //Shift function
+            var accs = lv.SelectedItems.Cast<Account>().ToList();
+            if(e.AddedItems.Count>0)
+            {
+                int new_selection_index = lv.Items.IndexOf(e.AddedItems[0]);
+                if ((Keyboard.GetKeyStates(Key.LeftShift) & KeyStates.Down) > 0)
+                {
+                    accsel_shiftflag = true;
+                    for (int i=0;i<lv.Items.Count;i++)
+                    {
+                        if(last_selectedaccindex < new_selection_index)
+                        {
+                            if ((last_selectedaccindex <= i && i <= new_selection_index))
+                            {
+                                lv.SelectedItems.Add(lv.Items[i]);
+                            }
+                        }else
+                        {
+                            if ((last_selectedaccindex >= i && i >= new_selection_index))
+                            {
+                                lv.SelectedItems.Add(lv.Items[i]);
+                            }
+                        }
+                    }
+                    accsel_shiftflag = false;
+                }
+                last_selectedaccindex = new_selection_index;
+            }
+
+
+            accs = lv.SelectedItems.Cast<Account>().ToList();
+
+            // Normal Selection
+
             AccountManager.SwitchSelectionAll(false);
-            foreach (Account acc in accs)
+            foreach (Account acc in lv.SelectedItems)
             {
                 acc.IsEnabled = true;
             }
-            if (accs.Count > 0)
+            if (lv.SelectedItems.Count > 0)
             {
                 lb_acccountinfo.Content = $"Accounts ({accs.Count} selected):";
             }
