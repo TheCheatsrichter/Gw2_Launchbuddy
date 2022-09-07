@@ -55,6 +55,29 @@ namespace Gw2_Launchbuddy.Modifiers
             catch { }
         }
 
+        public static bool ApplyNullLoginfile()
+        {
+            IORepeater.WaitForFileAvailability(EnviromentManager.GwLocaldatPath);
+            ToDefault(null);
+            if (File.Exists(EnviromentManager.GwLocaldatPath)) IORepeater.FileMove(EnviromentManager.GwLocaldatPath, EnviromentManager.GwLocaldatBakPath);
+
+            string filepath = EnviromentManager.LBLocaldatsPath + "null.dat";
+            int i = 0;
+            while (File.Exists(filepath))
+            {
+                filepath = EnviromentManager.LBLocaldatsPath + $"null{i}.dat";
+            }
+
+            File.Copy(EnviromentManager.GwLocaldatBakPath, filepath);
+
+            if (!CreateSymbolicLinkExtended(EnviromentManager.GwLocaldatPath, filepath, SymbolicLink.File))
+            {
+                ToDefault(null);
+                return false;
+            }
+            return true;
+        }
+
         public static bool Apply(LocalDatFile file)
         {
             int step = 0;
@@ -303,8 +326,11 @@ namespace Gw2_Launchbuddy.Modifiers
                     }
                 }
             }
-            catch
+            catch(Exception e)
             {
+#if DEBUG
+                throw e;
+#endif
                 MessageBox.Show("An error araised when the loginfile was restored to its original form. Loginfile might not be set correctly now.");
             }
         }

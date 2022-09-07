@@ -177,6 +177,7 @@ namespace Gw2_Launchbuddy
             return ClearFileLock(Proc, File, ref temp);
         }
 
+
         /// <summary>
         /// Clears file locks on the specified file, from specified process.
         /// </summary>
@@ -197,11 +198,18 @@ namespace Gw2_Launchbuddy
 
             foreach (Process i in processList.Where(a => !excList.Contains(a.Id)).Where(a => a.ProcessName.Equals(ProcName, StringComparison.OrdinalIgnoreCase)))
             {
-                if (HandleManager.KillHandle(i, File, true))
-                {
-                    success = true;
-                    excProcIDs.Add(i.Id);
-                }
+                ClearFileLock(i,File);
+            }
+
+            return success;
+        }
+
+        public static bool ClearFileLock(Process pro, string File)
+        {
+            bool success = false;
+            if (HandleManager.KillHandle(pro, File, true))
+            {
+                success = true;
             }
 
             return success;

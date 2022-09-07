@@ -248,7 +248,7 @@ namespace Gw2_Launchbuddy.Extensions
         {
             while (IsRunning)
             {
-                if (gamestatus == status)
+                if ((int)gamestatus >= (int)status)
                 {
                     return true;
                 }

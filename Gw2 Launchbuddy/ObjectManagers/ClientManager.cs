@@ -542,6 +542,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
             if (account.Settings.Loginfile != null)
             {
                 LocalDatManager.Apply(account.Settings.Loginfile);
+            }else
+            {
+                LocalDatManager.ApplyNullLoginfile(); //Create symbolic link to local dat itself --> closes file handle on gamestart
             }
 
         }
@@ -668,28 +671,31 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             try
             {
-                Helpers.FileWatchDog localdatwatcher = new Helpers.FileWatchDog(EnviromentManager.GwLocaldatPath,4,count_negativeflank:true);
-                //localdatwatcher.StartWatching();
 
                 while (Status < ClientStatus.Running)
                 {
 
                     //Check if it crashed/closed in between a step
-                    if (Status > ClientStatus.Injected)
-                        if (!ProcessExists())
+                    if (!Process.IsRunning && Status > ClientStatus.Created)
+                    {
+                        try
                         {
-                            RestoreGameSettings();
-                            MessageBoxResult win = MessageBox.Show($"Client {account.Nickname} got closed or crashed before a clean Start (Errorcode: {Convert.ToString((int)Status, 16)}). Do you want to retry to start this Client?", "Client Retry", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                            if (win.ToString() == "Yes")
-                            {
-                                Status = ClientStatus.None;
-                            }
-                            else
-                            {
-                                Account.Settings.RelaunchesLeft = 0;
-                                Status = ClientStatus.Crash;
-                            }
+                            Process.Stop();
                         }
+                        catch { }
+
+                        RestoreGameSettings();
+                        MessageBoxResult win = MessageBox.Show($"Client {account.Nickname} got closed or crashed before a clean Start (Errorcode: {Convert.ToString((int)Status, 16)}). Do you want to retry to start this Client?", "Client Retry", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        if (win.ToString() == "Yes")
+                        {
+                            Status = ClientStatus.None;
+                        }
+                        else
+                        {
+                            Account.Settings.RelaunchesLeft = 0;
+                            Status = ClientStatus.Crash;
+                        }
+                    }
 
 
                     switch (Status)
@@ -707,6 +713,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             break;
 
                         case var expression when (Status < ClientStatus.Injected):
+                            Process.WaitForState(GwGameProcess.GameStatus.loginwindow_prelogin);
                             InjectDlls();
                             Status = ClientStatus.Injected;
                             break;
@@ -717,8 +724,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             break;
 
                         case var expression when (Status < ClientStatus.Login):
-
-                            if(!await Process.WaitForStateAsynch(GwGameProcess.GameStatus.loginwindow_prelogin))
+                            if(!Process.WaitForState(GwGameProcess.GameStatus.loginwindow_prelogin))
                             {
                                 Status = ClientStatus.Crash;
                             }
@@ -727,11 +733,17 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             {
                                 if(LBConfiguration.Config.pushgameclientbuttons) PressLoginButton();
                                 LocalDatManager.ToDefault(account.Settings.Loginfile);
+                            }else
+                            {
+                                LocalDatManager.ToDefault(null); // Reset symbolic link
                             }
+                            
                             Status = ClientStatus.Login;
                             break;
 
                         case var expression when (Status < ClientStatus.Running):
+                            Process.WaitForState(GwGameProcess.GameStatus.game_startup);
+
                             RestoreGFX();
                             SetProcessPriority();
                             Status = ClientStatus.Running;
