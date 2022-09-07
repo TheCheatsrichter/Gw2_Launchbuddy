@@ -40,6 +40,7 @@ namespace Gw2_Launchbuddy.Modifiers
             ObservableCollection<LocalDatFile> tmp_datfiles = new ObservableCollection<LocalDatFile>();
             foreach (Account acc in AccountManager.Accounts)
             {
+                if (acc.Settings.Loginfile == null) continue;
                 tmp_datfiles.Add(acc.Settings.Loginfile);
             }
             try
@@ -61,11 +62,11 @@ namespace Gw2_Launchbuddy.Modifiers
             ToDefault(null);
             if (File.Exists(EnviromentManager.GwLocaldatPath)) IORepeater.FileMove(EnviromentManager.GwLocaldatPath, EnviromentManager.GwLocaldatBakPath);
 
-            string filepath = EnviromentManager.LBLocaldatsPath + "null.dat";
+            string filepath = EnviromentManager.LBLocaldatsPath + "tmp.dat";
             int i = 0;
             while (File.Exists(filepath))
             {
-                filepath = EnviromentManager.LBLocaldatsPath + $"null{i}.dat";
+                filepath = EnviromentManager.LBLocaldatsPath + $"tmp{i}.dat";
             }
 
             File.Copy(EnviromentManager.GwLocaldatBakPath, filepath);

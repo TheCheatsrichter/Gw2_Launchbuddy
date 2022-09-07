@@ -742,8 +742,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             break;
 
                         case var expression when (Status < ClientStatus.Running):
-                            Process.WaitForState(GwGameProcess.GameStatus.game_startup);
-
                             RestoreGFX();
                             SetProcessPriority();
                             Status = ClientStatus.Running;
