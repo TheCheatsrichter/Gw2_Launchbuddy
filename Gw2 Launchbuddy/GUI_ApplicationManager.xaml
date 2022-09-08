@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:Gw2_Launchbuddy"
         mc:Ignorable="d"
         Name="myWindow"
-        Title="Game Instances" MaxHeight="300" MaxWidth="160" Width="160" Height="300" MinWidth="24" MinHeight="40"  WindowStartupLocation="Manual" Topmost="True" WindowStyle="None" Loaded="Window_Loaded" AllowsTransparency="True" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown" Icon="launchbuddy.ico" MouseEnter="myWindow_MouseEnter" MouseLeave="myWindow_MouseLeave">
+        Title="Game Instances" MaxHeight="300" MaxWidth="160" Width="160" Height="300" MinWidth="160" MinHeight="40"  WindowStartupLocation="Manual" Topmost="True" WindowStyle="None" Loaded="Window_Loaded" AllowsTransparency="True" Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown" Icon="launchbuddy.ico" MouseEnter="myWindow_MouseEnter" MouseLeave="myWindow_MouseLeave">
 
     <Window.Resources>
         <ResourceDictionary>

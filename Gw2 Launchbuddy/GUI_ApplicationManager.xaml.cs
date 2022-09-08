@@ -67,6 +67,18 @@ namespace Gw2_Launchbuddy
                 MessageBox.Show("Could not set Instange Manager Postion and Size. Reverting back to defaults.\n" + e.Message);
             }
 
+            if(!Helpers.WindowUtil.IsVisible(Left,Top))
+            {
+                Left = 0;
+                Top = 0;
+            }
+
+            if (!Helpers.WindowUtil.IsVisible(Left+MaxWidth, Top+MaxHeight))
+            {
+                MaxHeight = 300;
+                MaxWidth = 160;
+            }
+
             UpdateUIButtons();
         }
 

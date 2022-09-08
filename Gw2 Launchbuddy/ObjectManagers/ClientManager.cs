@@ -250,7 +250,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             //May need more gracefully close function
             if(Status> ClientStatus.Created)
             {
-                Process.Kill();
+                Process.Stop();
                 Account.Settings.RelaunchesLeft = 0;
                 Status = ClientStatus.Closed;
             }

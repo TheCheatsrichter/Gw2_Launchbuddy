@@ -154,16 +154,28 @@ namespace Gw2_Launchbuddy
             lab_path.Content = "Path: " + EnviromentManager.GwClientPath;
         }
 
+
+
         private void Mainwin_LoadSetup()
         {
-
             this.Top = LBConfiguration.Config.mainwin_pos_y;
             this.Left = LBConfiguration.Config.mainwin_pos_x;
 
+            if(!Helpers.WindowUtil.IsVisible((int)Left,(int)Top))
+            {
+                Top = 0;
+                Left = 0;
+            }
             if (LBConfiguration.Config.mainwin_size_x >= 100 && LBConfiguration.Config.mainwin_size_y >= 100)
             {
                 this.Height = LBConfiguration.Config.mainwin_size_y;
                 this.Width = LBConfiguration.Config.mainwin_size_x;
+
+                if(!Helpers.WindowUtil.IsVisible((int)(Left + Width),(int)(Top+Height)))
+                {
+                    Height = MinHeight;
+                    Width = MinWidth;
+                }
             }
         }
 
