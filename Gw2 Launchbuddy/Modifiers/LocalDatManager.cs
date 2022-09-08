@@ -49,7 +49,15 @@ namespace Gw2_Launchbuddy.Modifiers
                 {
                     if (!tmp_datfiles.Any<LocalDatFile>(f => f.Name == Path.GetFileNameWithoutExtension(file)))
                     {
-                        IORepeater.FileDelete(file);
+                        try
+                        {
+                            File.Delete(file);
+                        }
+                        catch
+                        {
+                            //Gameclient using this loginfile is open. Cleanup on next close is ok
+                        }
+                        
                     }
                 }
             }

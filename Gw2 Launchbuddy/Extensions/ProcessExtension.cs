@@ -159,6 +159,16 @@ namespace Gw2_Launchbuddy.Extensions
             //Console.WriteLine("EXTERNAL: State changed to " + (sender as ProcessState).Name);
         }
 
+        public GameStatus Status
+        {
+            get { return gamestatus; }
+        }
+
+        public bool ReachedState(GameStatus state)
+        {
+            return (int)gamestatus >= (int)state;
+        }
+
         ProcessPipeline CreateStates()
         {
 
@@ -248,7 +258,7 @@ namespace Gw2_Launchbuddy.Extensions
         {
             while (IsRunning)
             {
-                if ((int)gamestatus >= (int)status)
+                if (ReachedState(status))
                 {
                     return true;
                 }

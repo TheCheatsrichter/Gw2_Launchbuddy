@@ -302,7 +302,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             catch
             {
-                MessageBox.Show("Guild Wars 2 info file not found! Please choose the directory manually!");
+                MessageBox.Show("Guild Wars 2 info file not found! Please choose the directory manually / launch gw2 once!");
             }
 
             GwClientTmpPath = GwClientPath + GwClientExeName.Replace(".exe",".tmp");

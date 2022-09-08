@@ -13,6 +13,11 @@ namespace Gw2_Launchbuddy
 {
     public static class GFXManager
     {
+
+        //Header update!
+        //Reload GFX on client close
+        //Fix dat corrpution
+
         //Options to skip
         private static List<string> SkippedOptions = new List<string>
         {

@@ -1702,6 +1702,7 @@ namespace Gw2_Launchbuddy
         {
             AccountSettings settings = ((sender as Button).DataContext as AccountSettings);
             settings.RecreateLoginFile();
+            Focus();
         }
 
         private void bt_windowinfo_setup_Click(object sender, RoutedEventArgs e)
