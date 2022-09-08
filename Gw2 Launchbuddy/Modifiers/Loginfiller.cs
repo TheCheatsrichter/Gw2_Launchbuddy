@@ -91,9 +91,16 @@ namespace Gw2_Launchbuddy.Modifiers
             {
                 if (!acc.Client.Process.HasExited)
                 {
-                    MouseClickLeft(acc.Client.Process, pos_authemail_bt);
-                    Thread.Sleep(100);
                     MouseClickLeft(acc.Client.Process, pos_play_bt);
+
+                    if(!acc.Client.Process.WaitForState(GwGameProcess.GameStatus.game_startup, 500))
+                    {
+                        MouseClickLeft(acc.Client.Process, pos_authemail_bt);
+                        Thread.Sleep(100);
+                        MouseClickLeft(acc.Client.Process, pos_play_bt);
+                    }
+
+                    acc.Client.Process.WaitForState(GwGameProcess.GameStatus.game_startup, 3000);
                     /*
                     PressKeyDown(Keys.Enter, acc.Client.Process);
                     PressKeyUp(Keys.Enter, acc.Client.Process);

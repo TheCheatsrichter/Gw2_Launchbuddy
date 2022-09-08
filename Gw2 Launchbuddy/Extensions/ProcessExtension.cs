@@ -241,27 +241,45 @@ namespace Gw2_Launchbuddy.Extensions
             }
         }
 
-        public async Task<bool> WaitForStateAsynch(GameStatus status)
+        public async Task<bool> WaitForStateAsynch(GameStatus status, int timeout = -1)
         {
+            DateTime waitstart = DateTime.Now;
             while (IsRunning)
             {
                 if (gamestatus == status)
                 {
                     return true;
                 }
+                if (timeout > 0)
+                {
+                    if ((DateTime.Now - waitstart).TotalMilliseconds > timeout)
+                    {
+                        return false;
+                    }
+                }
                 await Task.Delay(10);
             }
             return false;
         }
 
-        public bool WaitForState(GameStatus status)
+        public bool WaitForState(GameStatus status,int timeout=-1)
         {
+            DateTime waitstart = DateTime.Now;
+
             while (IsRunning)
             {
                 if (ReachedState(status))
                 {
                     return true;
                 }
+                if(timeout>0)
+                {
+                    if((DateTime.Now- waitstart).TotalMilliseconds > timeout)
+                    {
+                        return false;
+                    }
+                }
+
                 Thread.Sleep(10);
             }
             return false;
