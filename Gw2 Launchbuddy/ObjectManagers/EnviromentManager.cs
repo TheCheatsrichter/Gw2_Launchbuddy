@@ -72,6 +72,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static string TMP_GFXConfig = GwAppdataPath + "TMP_GFX.xml";
         public static string TMP_BackupGFXConfig = GwAppdataPath + "TMP_GFX.bak";
+        public static string MASTER_GFXConfig = GwAppdataPath + "MASTER_GFX.xml";
+        public static string MASTER_Localdat = GwAppdataPath + "MASTER_Local.dat";
 
         public static string LBAddonPath = LBAppdataPath + "Addons.xml";
 
@@ -118,9 +120,62 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         }
 
+        private static bool CreateMasterFiles()
+        {
+            bool success = true;
+
+            try
+            {
+                if (File.Exists(MASTER_Localdat)) File.Delete(MASTER_Localdat);
+                IORepeater.FileCopy(GwLocaldatPath,MASTER_Localdat);
+            }
+            catch
+            {
+                success = false;
+            }
+
+            try
+            {
+                if (File.Exists(MASTER_GFXConfig)) File.Delete(MASTER_GFXConfig);
+                IORepeater.FileCopy(GwClientXmlPath, MASTER_GFXConfig);
+            }
+            catch
+            {
+                success = false;
+            }
+            return success;
+        }
+
+        private static bool RestoreMasterFiles()
+        {
+            bool success = true;
+            try
+            {
+                if (File.Exists(GwLocaldatPath)) File.Delete(GwLocaldatPath);
+                IORepeater.FileCopy( MASTER_Localdat, GwLocaldatPath);
+            }
+            catch
+            {
+                success = false;
+            }
+
+            try
+            {
+                if (File.Exists(GwClientXmlPath)) File.Delete(GwClientXmlPath);
+                IORepeater.FileCopy( MASTER_GFXConfig,GwClientXmlPath);
+            }
+            catch
+            {
+                success = false;
+            }
+            return success;
+        }
+
         public static void AfterUI_Inits()
         {
             CheckGwClientVersion();
+            //After Game Updates Create Master Files
+            CreateMasterFiles();
 
             if (LBConfiguration.Config.autoupdatedatfiles)
             {
@@ -147,7 +202,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Hotkeys.UnregisterAll();
             //Local Dat Cleanup
             LocalDatManager.CleanUp();
-
+            RestoreMasterFiles();
             PluginManager.OnLBClose(null);
         }
 

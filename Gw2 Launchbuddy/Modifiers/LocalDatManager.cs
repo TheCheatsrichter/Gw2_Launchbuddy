@@ -16,24 +16,6 @@ namespace Gw2_Launchbuddy.Modifiers
 
     public static class LocalDatManager
     {
-        [DllImport("Kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
-        static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, SymbolicLink dwFlags);
-
-        public enum SymbolicLink
-        {
-            File = 0x0,
-            Directory = 0x1
-        }
-
-        public static bool CreateSymbolicLinkExtended(string lpSymlinkFileName, string lpTargetFileName, SymbolicLink dwFlags)
-        {
-            if (!CreateSymbolicLink(lpSymlinkFileName, lpTargetFileName, SymbolicLink.File))
-            {
-                MessageBox.Show("Error: Unable to create symbolic link. " +"(Error Code: " + Marshal.GetLastWin32Error() + ")");
-            }
-            return true;
-        }
 
         public static void CleanUp()
         {
@@ -79,7 +61,7 @@ namespace Gw2_Launchbuddy.Modifiers
 
             File.Copy(EnviromentManager.GwLocaldatBakPath, filepath);
 
-            if (!CreateSymbolicLinkExtended(EnviromentManager.GwLocaldatPath, filepath, SymbolicLink.File))
+            if (!FileUtil.CreateSymbolicLinkExtended(EnviromentManager.GwLocaldatPath, filepath, FileUtil.SymbolicLink.File))
             {
                 ToDefault(null);
                 return false;
@@ -108,7 +90,7 @@ namespace Gw2_Launchbuddy.Modifiers
                 if (File.Exists(EnviromentManager.GwLocaldatPath)) IORepeater.FileMove(EnviromentManager.GwLocaldatPath, EnviromentManager.GwLocaldatBakPath);
 
                 step++;
-                if (!CreateSymbolicLinkExtended(EnviromentManager.GwLocaldatPath, file.Path, SymbolicLink.File))
+                if (!FileUtil.CreateSymbolicLinkExtended(EnviromentManager.GwLocaldatPath, file.Path, FileUtil.SymbolicLink.File))
                 {
                     ToDefault(file);
                     throw new Exception("Could not create symbolic link");

@@ -334,11 +334,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
         private Account account { get { return AccountManager.GetAccountByID(AccountID); } }
         [XmlIgnore]
         private WindowConfig winconfig;
-
+        [XmlIgnore]
+        private GFXConfig gfxfile;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public Arguments Arguments { get; set; }
-        public GFXConfig GFXFile { get; set; }
+        public GFXConfig GFXFile { get { return gfxfile; } set { OnPropertyChanged("GFXFile"); gfxfile = value; } }
         public ObservableCollection<string> DLLs { get; set; }
         private Icon icon;
         public ObservableCollection<AccountHotkey> AccHotkeys { set; get; }
@@ -349,6 +350,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         //Adavanced Settings
         [XmlIgnore]
         private uint relaunchesmax;
+
+
         public uint RelaunchesMax { set { relaunchesmax = value; RelaunchesLeft = value; } get { return relaunchesmax; } }
         public bool AlwaysUseCustomMumbleLink { get; set; }
         public bool StartTaco { get; set; }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Gw2_Launchbuddy.ObjectManagers;
 
 namespace Gw2_Launchbuddy.Extensions
 {
@@ -135,10 +136,6 @@ namespace Gw2_Launchbuddy.Extensions
     public class GwGameProcess : ProcessExtension
     {
         GameStatus gamestatus = GameStatus.none;
-
-        string exe_tmppath = @"D:\Guild Wars 2\Gw2-64.tmp";
-        string exe_name = "Gw2-64.exe";
-        string localdat_path = @"C:\Users\Adrian\AppData\Roaming\Guild Wars 2\Local.dat";
         public enum GameStatus
         {
             none = 0,
@@ -176,7 +173,7 @@ namespace Gw2_Launchbuddy.Extensions
             {
                 new ModuleTrigger("VERSION.dll",this),
                 new ModuleTrigger("WINMM.dll",this),
-                new FileLockTrigger(localdat_path,fileaccessmode:FileAccess.ReadWrite),
+                new FileLockTrigger(EnviromentManager.GwLocaldatPath,fileaccessmode:FileAccess.ReadWrite),
             };
 
             List<IProcessTrigger> pt_loginwindow_prelogin = new List<IProcessTrigger>
@@ -184,7 +181,7 @@ namespace Gw2_Launchbuddy.Extensions
                 new ModuleTrigger("dwmapi.dll",this),
                 new ModuleTrigger("CoherentUI64.dll",this),
                 new SleepTrigger(3000),
-                new FileSizeTrigger(@"D:\Guild Wars 2\Gw2-64.tmp",null,0),
+                new FileSizeTrigger(EnviromentManager.GwClientTmpPath,null,0),
                 //new WindowDimensionsTrigger(this,0,0,100,100)
             };
 
@@ -206,7 +203,7 @@ namespace Gw2_Launchbuddy.Extensions
             List<IProcessTrigger> pt_game_charscreen = new List<IProcessTrigger>
             {
                 new ModuleTrigger("icm32.dll",this),
-                new FileLockTrigger(localdat_path,positiveflank:false,fileaccessmode:FileAccess.ReadWrite), //Why is there still a filelock, LB solved this O_o?!
+                new FileLockTrigger(EnviromentManager.GwLocaldatPath,positiveflank:false,fileaccessmode:FileAccess.ReadWrite),
             };
 
             ProcessPipeline pipeline = new ProcessPipeline
@@ -234,7 +231,7 @@ namespace Gw2_Launchbuddy.Extensions
         public void OnExit(object sender, EventArgs e)
         {
             gamestatus = GameStatus.none;
-            if (new FileSizeTrigger(exe_tmppath, 0, null).IsActive)
+            if (new FileSizeTrigger(EnviromentManager.GwClientTmpPath, 0, null).IsActive)
             {
                 Console.WriteLine("Self updated detected");
                 exitstatus = ExitStatus.self_update;

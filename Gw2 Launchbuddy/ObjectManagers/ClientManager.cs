@@ -358,6 +358,21 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 Launch();
             }
             account.Settings.AccountInformation.SetLastClose();
+            GetNewGFXFile();
+        }
+
+        private bool GetNewGFXFile()
+        {
+            if (!(Process.Exitstatus == ProcessExtension.ExitStatus.self_close)) return false;
+
+            try
+            {
+                account.Settings.GFXFile = GFXManager.LoadFile(EnviromentManager.GwClientXmlPath);
+            }catch
+            {
+                return false;
+            }
+            return true;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -742,6 +757,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             break;
 
                         case var expression when (Status < ClientStatus.Running):
+
                             RestoreGFX();
                             SetProcessPriority();
                             Status = ClientStatus.Running;

@@ -4,9 +4,29 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
+using System.Windows;
 
 static public class FileUtil
 {
+    [DllImport("Kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
+    static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, SymbolicLink dwFlags);
+
+    public enum SymbolicLink
+    {
+        File = 0x0,
+        Directory = 0x1
+    }
+    public static bool CreateSymbolicLinkExtended(string lpSymlinkFileName, string lpTargetFileName, SymbolicLink dwFlags)
+    {
+        if (!CreateSymbolicLink(lpSymlinkFileName, lpTargetFileName, SymbolicLink.File))
+        {
+            MessageBox.Show("Error: Unable to create symbolic link. " + "(Error Code: " + Marshal.GetLastWin32Error() + ")");
+        }
+        return true;
+    }
+
+
     [StructLayout(LayoutKind.Sequential)]
     struct RM_UNIQUE_PROCESS
     {
