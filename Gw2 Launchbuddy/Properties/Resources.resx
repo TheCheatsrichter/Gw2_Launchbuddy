@@ -379,4 +379,28 @@
   <data name="window" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\icons\window.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="c_bladesworn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_bladesworn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_catalyst" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_catalyst.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_harbinger" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_harbinger.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_mechanist" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_mechanist.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_untamed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_untamed.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_vindicator" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_vindicator.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_virtuoso" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_virtuoso.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="c_willbender" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\classes\c_willbender.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

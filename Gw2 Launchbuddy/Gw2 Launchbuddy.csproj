@@ -647,6 +647,16 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\window.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Classes\c_bladesworn.png" />
+    <Resource Include="Resources\Icons\Classes\c_catalyst.png" />
+    <Resource Include="Resources\Icons\Classes\c_harbinger.png" />
+    <Resource Include="Resources\Icons\Classes\c_mechanist.png" />
+    <Resource Include="Resources\Icons\Classes\c_untamed.png" />
+    <Resource Include="Resources\Icons\Classes\c_vindicator.png" />
+    <Resource Include="Resources\Icons\Classes\c_virtuoso.png" />
+    <Resource Include="Resources\Icons\Classes\c_willbender.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">
     <ItemGroup>

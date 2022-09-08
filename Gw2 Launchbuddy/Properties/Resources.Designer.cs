@@ -123,6 +123,26 @@ namespace Gw2_Launchbuddy.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap c_bladesworn {
+            get {
+                object obj = ResourceManager.GetObject("c_bladesworn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap c_catalyst {
+            get {
+                object obj = ResourceManager.GetObject("c_catalyst", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap c_chronomancer {
             get {
                 object obj = ResourceManager.GetObject("c_chronomancer", resourceCulture);
@@ -213,6 +233,16 @@ namespace Gw2_Launchbuddy.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap c_harbinger {
+            get {
+                object obj = ResourceManager.GetObject("c_harbinger", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap c_herald {
             get {
                 object obj = ResourceManager.GetObject("c_herald", resourceCulture);
@@ -226,6 +256,16 @@ namespace Gw2_Launchbuddy.Properties {
         internal static System.Drawing.Bitmap c_holosmith {
             get {
                 object obj = ResourceManager.GetObject("c_holosmith", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap c_mechanist {
+            get {
+                object obj = ResourceManager.GetObject("c_mechanist", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -363,6 +403,36 @@ namespace Gw2_Launchbuddy.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap c_untamed {
+            get {
+                object obj = ResourceManager.GetObject("c_untamed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap c_vindicator {
+            get {
+                object obj = ResourceManager.GetObject("c_vindicator", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap c_virtuoso {
+            get {
+                object obj = ResourceManager.GetObject("c_virtuoso", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap c_warrior {
             get {
                 object obj = ResourceManager.GetObject("c_warrior", resourceCulture);
@@ -376,6 +446,16 @@ namespace Gw2_Launchbuddy.Properties {
         internal static System.Drawing.Bitmap c_weaver {
             get {
                 object obj = ResourceManager.GetObject("c_weaver", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap c_willbender {
+            get {
+                object obj = ResourceManager.GetObject("c_willbender", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
