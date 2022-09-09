@@ -13,6 +13,7 @@ using Gw2_Launchbuddy;
 using System.Windows.Threading;
 using Gw2_Launchbuddy.Modifiers;
 using Gw2_Launchbuddy.Extensions;
+using Gw2_Launchbuddy.Helpers;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -278,9 +279,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         static extern bool CloseHandle(IntPtr handle);
         [DllImport("kernel32.dll")]
         public static extern uint ResumeThread(IntPtr hThread);
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
 
         public void Suspend()
         {
@@ -303,16 +302,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void Minimize()
         {
-            if (ProcessIsClosed()) return;
-            Process.Refresh();
-            ShowWindow(Process.MainWindowHandle,0x6);
+            WindowUtil.Minimize(Process);
         }
 
         public void Maximize()
         {
-            if (ProcessIsClosed()) return;
-            Process.Refresh();
-            ShowWindow(Process.MainWindowHandle, 0x3);
+            WindowUtil.Maximize(Process);
         }
 
         public void Resume()
@@ -337,15 +332,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
 
-        public void Focus()
+        public bool Focus()
         {
-            if (ProcessIsClosed()) return;
-            Process.Refresh();
-            IntPtr hwndMain = Process.MainWindowHandle;
-            SetForegroundWindow(hwndMain);
+            return WindowUtil.Focus(Process);
         }
 
         protected virtual void OnClientClose(object sender, EventArgs e)
@@ -375,21 +365,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
             return true;
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RECT
-        {
-            public int left;
-            public int top;
-            public int right;
-            public int bottom;
-        }
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern bool GetWindowRect(IntPtr hWnd, ref RECT Rect);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int Width, int Height, bool Repaint);
-
         public void Window_MoveTo_Default()
         {
             WindowConfig config = account.Settings.WinConfig;
@@ -404,22 +379,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public void Window_Move(int posx,int posy)
         {
-            if (ProcessIsClosed()) return;
-            Process.Refresh();
-            IntPtr handle = Process.MainWindowHandle;
-            RECT Rect = new RECT();
-            if (GetWindowRect(handle, ref Rect))
-                MoveWindow(handle, posx, posy, Rect.right - Rect.left,Rect.bottom-Rect.top,true);
+            WindowUtil.MoveTo(Process,posx, posy);
         }
 
         public void Window_Scale(int width,int height)
         {
-            if (ProcessIsClosed()) return;
-            Process.Refresh();
-            IntPtr handle = Process.MainWindowHandle;
-            RECT Rect = new RECT();
-            if (GetWindowRect(handle, ref Rect))
-                MoveWindow(handle, Rect.left ,Rect.top, width, height, true);
+            WindowUtil.ScaleTo(Process,width,height);
         }
 
         private void Window_Init()
@@ -681,6 +646,20 @@ namespace Gw2_Launchbuddy.ObjectManagers
             Helpers.BlockerInfo.Run($"{account.Nickname} Login pending", $"{account.Nickname} Login requiring additional information.", blockefunc);
         }
 
+        private void ShowProcessStatusbar()
+        {
+            Thread statusbar = new Thread(() =>
+            {
+                UIStatusbar loginwindowblocker = new UIStatusbar(this, new Func<bool>(() => Process.ReachedState(GwGameProcess.GameStatus.game_startup)), EnviromentManager.GwLoginwindow_UIOffset);
+                loginwindowblocker.Show();
+
+                loginwindowblocker.Closed += (sender, e) => loginwindowblocker.Dispatcher.InvokeShutdown();
+                Dispatcher.Run();
+            });
+            statusbar.SetApartmentState(ApartmentState.STA);
+            statusbar.Start();
+        }
+
         public async void Launch()
         {
 
@@ -724,11 +703,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
                         case var expression when (Status < ClientStatus.Created):
                             Process.Start();
+                            ShowProcessStatusbar();
                             Status = ClientStatus.Created;
                             break;
 
                         case var expression when (Status < ClientStatus.Injected):
-                            Process.WaitForState(GwGameProcess.GameStatus.loginwindow_prelogin);
                             InjectDlls();
                             Status = ClientStatus.Injected;
                             break;

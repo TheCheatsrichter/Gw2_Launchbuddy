@@ -136,6 +136,7 @@ namespace Gw2_Launchbuddy.Extensions
     public class GwGameProcess : ProcessExtension
     {
         GameStatus gamestatus = GameStatus.none;
+        public EventHandler GameStatusChanged;
         public enum GameStatus
         {
             none = 0,
@@ -153,6 +154,7 @@ namespace Gw2_Launchbuddy.Extensions
             IntPtr hwndMain = base.MainWindowHandle;
 
             Enum.TryParse((sender as ProcessState).Name, out gamestatus);
+            GameStatusChanged?.Invoke(sender,e);
             //Console.WriteLine("EXTERNAL: State changed to " + (sender as ProcessState).Name);
         }
 

@@ -77,6 +77,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static string LBAddonPath = LBAppdataPath + "Addons.xml";
 
+        public static Rect GwLoginwindow_UIOffset = new Rect(20, 195, 0, 0);
+
         public static MainWindow MainWin = null;
 
         public static void Init()
