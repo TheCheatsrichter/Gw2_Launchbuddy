@@ -1,4 +1,4 @@
-Welcome to LB 3.0!
-Patch 3.0.5 is now available.
-This is the first patch to support the Gw2 gameclient changes for the steam release!
-More bugfixes coming soon!
+Big bugfixes are coming. 
+Over 12 major bugs fixed and 4 new features are coming with 3.1!
+Let's get these nasty loginfile update / creation bugs fixed. ;D
+Early access available for Patrons (Version 3.0.8).
