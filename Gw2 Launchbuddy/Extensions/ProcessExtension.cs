@@ -180,7 +180,6 @@ namespace Gw2_Launchbuddy.Extensions
 
             List<IProcessTrigger> pt_loginwindow_prelogin = new List<IProcessTrigger>
             {
-                new ModuleTrigger("dwmapi.dll",this),
                 new ModuleTrigger("CoherentUI64.dll",this),
                 new SleepTrigger(3000),
                 new FileSizeTrigger(EnviromentManager.GwClientTmpPath,null,0),
@@ -190,7 +189,6 @@ namespace Gw2_Launchbuddy.Extensions
             List<IProcessTrigger> pt_loginwindow_authentication = new List<IProcessTrigger>
             {
                 new ModuleTrigger("rsaenh.dll",this),
-                new ModuleTrigger("DPAPI.dll",this)
             };
 
             List<IProcessTrigger> pt_loginwindow_pressplay = new List<IProcessTrigger>
@@ -200,7 +198,7 @@ namespace Gw2_Launchbuddy.Extensions
 
             List<IProcessTrigger> pt_game_startup = new List<IProcessTrigger>
             {
-                new ModuleTrigger("atiu9p64.dll",this)
+                new ModuleTrigger("WINSTA.dll",this)
             };
             List<IProcessTrigger> pt_game_charscreen = new List<IProcessTrigger>
             {

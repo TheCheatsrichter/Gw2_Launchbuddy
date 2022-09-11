@@ -31,7 +31,15 @@ namespace Gw2_Launchbuddy.Modifiers
 
         private static bool UpdateDPIScale(IntPtr mainwindowhandle)
         {
-            dpiscale = GetDpiForWindow(mainwindowhandle) / 96;
+            try
+            {
+                dpiscale = GetDpiForWindow(mainwindowhandle) / 96;
+            }catch
+            {
+                dpiscale = 1;
+                return false;
+            }
+            
             return true;
         }
 
@@ -43,7 +51,6 @@ namespace Gw2_Launchbuddy.Modifiers
             //2way auth email remind later 290,550
             //playbtn 825,715
 
-            UpdateDPIScale(pro.MainWindowHandle);
 
             try
             {
@@ -145,6 +152,7 @@ namespace Gw2_Launchbuddy.Modifiers
 
         private static void MouseClickLeft(Process pro, int pos_x, int pos_y, bool delay = true)
         {
+            pro.Refresh();
             MouseDownLeft(pro, pos_x , pos_y);
             MouseUpLeft(pro, pos_x, pos_y);
             if (delay) Thread.Sleep(50);

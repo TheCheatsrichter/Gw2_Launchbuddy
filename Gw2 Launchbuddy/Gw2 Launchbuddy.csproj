@@ -335,7 +335,7 @@
     <Compile Include="Extensions\Triggers\FileLockTrigger.cs" />
     <Compile Include="Extensions\Triggers\FileSizeTrigger.cs" />
     <Compile Include="Extensions\Triggers\ModuleTrigger.cs" />
-    <Compile Include="Extensions\ProcessSearchTrigger.cs" />
+    <Compile Include="Extensions\Triggers\ProcessSearchTrigger.cs" />
     <Compile Include="Extensions\ProcessWatcher.cs" />
     <Compile Include="Extensions\ProcessExtension.cs">
       <SubType>Component</SubType>
