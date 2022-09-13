@@ -353,8 +353,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private bool GetNewGFXFile()
         {
-            if (!(Process.Exitstatus == ProcessExtension.ExitStatus.self_close)) return false;
-
             try
             {
                 account.Settings.GFXFile = GFXManager.LoadFile(EnviromentManager.GwClientXmlPath);
@@ -658,6 +656,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
             });
             statusbar.SetApartmentState(ApartmentState.STA);
             statusbar.Start();
+        }
+
+        public int LaunchProgress
+        {
+            get{
+                return (int)((float)Process.Status / (float)GwGameProcess.GameStatus.game_startup * 100);
+            }
         }
 
         public async void Launch()

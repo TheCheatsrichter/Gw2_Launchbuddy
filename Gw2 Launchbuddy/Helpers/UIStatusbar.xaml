@@ -5,9 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gw2_Launchbuddy.Helpers"
         mc:Ignorable="d"
-        Title="UITraceBlocker" x:Name="tracewindow" MaxHeight="40" MaxWidth="500" Height="40" Width="500" WindowStyle="None" Closing="Window_Closing" Visibility="Collapsed" Topmost="True" AllowsTransparency="True" Background="{StaticResource B1_Background}" Opacity="0.8">
-    <DockPanel Background="{StaticResource B1_Background}" HorizontalAlignment="Left" VerticalAlignment="Center">
-        <Image x:Name="img_accicon" Source="/Gw2 Launchbuddy;component/launchbuddy.ico"></Image>
-        <TextBlock x:Name="tb_infotext" Text="Powered by Launchbuddy:" VerticalAlignment="Center" />
-    </DockPanel>
+        Title="UITraceBlocker" x:Name="tracewindow" MaxHeight="40" MaxWidth="500" Height="40" Width="500" WindowStyle="None" Closing="Window_Closing" Visibility="Visible" Topmost="True" AllowsTransparency="True" Background="{StaticResource B1_Background}" Opacity="0.8">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100*"/>
+        </Grid.ColumnDefinitions>
+        <ProgressBar x:Name="pb_gameprogress" Value="0" Background="{StaticResource B1_Background}" Foreground="{StaticResource B3_Background}"/>
+        <DockPanel VerticalAlignment="Center">
+            <Image x:Name="img_accicon" Source="/Gw2 Launchbuddy;component/launchbuddy.ico"></Image>
+            <TextBlock x:Name="tb_infotext" Text="Powered by Launchbuddy:" VerticalAlignment="Center" />
+            <Label x:Name="lb_gameprogress" Content="0%" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        </DockPanel>
+    </Grid>
 </Window>

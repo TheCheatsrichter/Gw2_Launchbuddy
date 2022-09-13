@@ -189,11 +189,12 @@ namespace Gw2_Launchbuddy.Extensions
             List<IProcessTrigger> pt_loginwindow_authentication = new List<IProcessTrigger>
             {
                 new ModuleTrigger("rsaenh.dll",this),
+                new SleepTrigger(500), //Needs better trigger in the future, currently unknown delta between pre login and authentication pending
             };
 
             List<IProcessTrigger> pt_loginwindow_pressplay = new List<IProcessTrigger>
             {
-                new ModuleTrigger("rsaenh.dll",this)
+                new ModuleTrigger("DPAPI.dll",this)
             };
 
             List<IProcessTrigger> pt_game_startup = new List<IProcessTrigger>

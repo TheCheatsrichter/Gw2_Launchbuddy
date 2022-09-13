@@ -18,21 +18,18 @@ namespace Gw2_Launchbuddy.Modifiers
         [DllImport("user32.dll")]
         static extern bool PostMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
 
-        [DllImport("user32.dll")]
-        static extern uint GetDpiForWindow(IntPtr hWnd);
+        /*
+        [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
+        private static extern IntPtr GetWindowLongPtr32(IntPtr hWnd, int nIndex);
 
-        static (int,int) pos_email_tb = (480,430);
-        static (int, int) pos_passw_tb = (480, 510);
-        static (int, int) pos_login_bt = (100, 600);
-        static (int, int) pos_authemail_bt = (290, 550);
-        static (int, int) pos_play_bt = (825, 715);
-
-        static float dpiscale = 1;
+        [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr")]
+        private static extern IntPtr GetWindowLongPtr64(IntPtr hWnd, int nIndex);
 
         private static bool UpdateDPIScale(IntPtr mainwindowhandle)
         {
             try
             {
+                //TODO: Add user 32 bit dll support when win version < 10
                 dpiscale = GetDpiForWindow(mainwindowhandle) / 96;
             }catch
             {
@@ -42,6 +39,17 @@ namespace Gw2_Launchbuddy.Modifiers
             
             return true;
         }
+        */
+
+
+        static (int,int) pos_email_tb = (480,430);
+        static (int, int) pos_passw_tb = (480, 510);
+        static (int, int) pos_login_bt = (100, 600);
+        static (int, int) pos_authemail_bt = (290, 550);
+        static (int, int) pos_play_bt = (825, 715);
+
+        static float dpiscale = 1;
+
 
         public static async void Login(string email,string passwd,GwGameProcess pro, bool clearfields = false)
         {

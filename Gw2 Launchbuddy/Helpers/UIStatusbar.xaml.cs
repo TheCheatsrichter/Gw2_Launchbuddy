@@ -33,6 +33,7 @@ namespace Gw2_Launchbuddy.Helpers
         {
             InitializeComponent();
             this.client = client;
+            Visibility = Visibility.Collapsed;
             th_trace = new Thread(()=>Th_TraceProcess(client,defofdone,ui_offset));
             client.Process.Exited += OnClientClose;
             th_trace.Start();
@@ -90,6 +91,9 @@ namespace Gw2_Launchbuddy.Helpers
             try
             {
                 tb_infotext.Text = infoprefix + "\t " + client.account.Nickname;
+
+                lb_gameprogress.Content = client.LaunchProgress + "%";
+                pb_gameprogress.Value = client.LaunchProgress;
             }
             catch
             {

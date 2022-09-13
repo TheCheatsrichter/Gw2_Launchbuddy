@@ -22,11 +22,23 @@ public static class IORepeater
         return true;
     }
 
+    public static bool FileAvailabilityNoCatch(string source)
+    {
+        var file = new FileInfo(source);
+        if (!File.Exists(source)) return false;
+
+        using (FileStream stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None))
+        {
+            stream.Close();
+        }
+        return true;
+    }
+
     public static bool WaitForFileAvailability(string source)
     {
         try
         {
-            return TimeoutAction<bool>(() => FileAvailability(source));
+            return TimeoutAction<bool>(() => FileAvailabilityNoCatch(source));
         }
         catch (Exception e)
         {

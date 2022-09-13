@@ -42,6 +42,9 @@ namespace Gw2_Launchbuddy
             new CrashFilter(new string[] { "Client needs to be patched", "shareArchive", "or noPatch" }, "outdated_client"),
             new CrashFilter(new string[] { "Model", "leaks","detected" }, "model_leaks"),
             new CrashFilter(new string[] { "Raw manifest not found.","Is your archive up to date?","shareArchive","isRelaunch"}, "readonly_write"),
+            new CrashFilter(new string[] { "Need to patch","before using","-shareArchive","-noPatch"}, "readonly_write"),
+            new CrashFilter(new string[] { "Client needs to be patched first"}, "readonly_write"),
+            new CrashFilter(new string[] { "BgfxBuffer.cpp","BgfxUtils.cpp"}, "readonly_write"),
         };
 
         public static Dictionary<string, string> SolutionInfo = new Dictionary<string, string>
@@ -52,7 +55,8 @@ namespace Gw2_Launchbuddy
             { "mem_read","Cooo!\nSeems like a memory read error happended to you!\nQuaggan knows that this sometimes happens when your Gw2.dat file gets corrupted.\nSometimes using the -repair argument will help youuuu!" },
             { "outdated_client","Cooo!\nYour client seems to be outdated and you tried to launch the game with autologin!\n Quaggan would update your client for youu!" },
             { "mem_write","Cooo!\nSeems like a memory write error happended to you!\nQuaggan knows that this sometimes happens when your Gw2.dat file gets corrupted.\nSometimes using the -repair argument will help youuuu!" },
-            { "readonly_write","BooOOooo!\nIt looks like your client may have tried to update while in share mode!\nQuaggan needs to close all your clients and update them!" }
+            { "readonly_write","BooOOooo!\nIt looks like your client may have tried to update while in share mode!\nQuaggan needs to close all your clients and update them!" },
+            { "bgfx","BooOOooo!\nIt looks like your client has crashed because of a graphic error! Quaggan suggests you remove any third party software and try again!" }
         };
 
 
@@ -95,6 +99,9 @@ namespace Gw2_Launchbuddy
                 case "readonly_write":
                     readonly_write();
                     break;
+                case "bgfx":
+                    return;
+                    break;
             }
         }
 
@@ -127,13 +134,12 @@ namespace Gw2_Launchbuddy
 
         private static void readonly_write()
         {
-            /*
-            foreach(Client client in Client.GetClients())
+            
+            foreach(var client in ClientManager.ActiveClients)
             {
-                client.Stop();
+                client.Process.Stop();
             }
             outdated_client();
-            */
         }
 
         private static void Unhandled_Launch(string argus)

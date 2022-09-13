@@ -212,8 +212,8 @@ namespace Gw2_Launchbuddy.Modifiers
 
                 Loginfiller.Login(email, password, pro, true);
 
-                blockefunc = () => pro.WaitForState(GwGameProcess.GameStatus.loginwindow_authentication);
-                Helpers.BlockerInfo.Run("Loginfile Creation", "Please add additional Information if needed.", blockefunc);
+                blockefunc = () => pro.WaitForState(GwGameProcess.GameStatus.loginwindow_pressplay);
+                Helpers.BlockerInfo.Run("Loginfile Creation", "Please add additional information if needed and press the play button.", blockefunc);
                 if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with caution.");
 
             }
@@ -221,9 +221,12 @@ namespace Gw2_Launchbuddy.Modifiers
             {
                 // Manual creation
                 Action blockerfunc = () => pro.WaitForState(GwGameProcess.GameStatus.loginwindow_pressplay);
-                Helpers.BlockerInfo.Run("Loginfile Creation", "Please check remember email/password and press the login and play button. This window will be closed automatically on success.", blockerfunc);
+                Helpers.BlockerInfo.Run("Loginfile Creation", "1.Make sure that remember Email and Password is checked\n2.Press Login\nThis window will be closed automatically on success.", blockerfunc);
                 if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with caution.");
             }
+
+            //Wait for new Info to be saved, closing too early makes gw2 corrupt the login by itself
+            Thread.Sleep(50);
 
             //Wait for loginfile to be saved
             for (int i = 0; i<=20; i++)
@@ -314,6 +317,9 @@ namespace Gw2_Launchbuddy.Modifiers
                     if (defaultfile != null)
                     {
                         IORepeater.FileCopy(defaultfile.Path, EnviromentManager.GwLocaldatPath);
+                    }else
+                    {
+                        IORepeater.FileCopy(EnviromentManager.MASTER_Localdat, EnviromentManager.GwLocaldatPath);
                     }
                 }
             }

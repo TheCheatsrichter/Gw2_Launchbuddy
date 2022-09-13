@@ -529,8 +529,12 @@
                                             </StackPanel>
                                         </Expander.Header>
                                         <StackPanel>
-                                            <DockPanel>
-                                                <ListView Name="lv_accicon" ItemsSource="{Binding Path=Icons}" MinWidth="140" MaxHeight="400" SelectionChanged="lv_accicon_SelectionChanged" DockPanel.Dock="Right">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="30*"/>
+                                                    <ColumnDefinition Width="70*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <ListView Name="lv_accicon" ItemsSource="{Binding Path=Icons}" MinWidth="140" MaxHeight="400" SelectionChanged="lv_accicon_SelectionChanged" Grid.Column="1" Margin="10">
                                                     <ListView.ItemsPanel>
                                                         <ItemsPanelTemplate>
                                                             <UniformGrid MinWidth="128" Columns="5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -546,7 +550,7 @@
                                                     <Label Content="Current Icon:-" Style="{StaticResource H3}"/>
                                                     <Image MaxHeight="128" MinWidth="128" Source="{Binding Path=Icon.Image}"/>
                                                 </StackPanel>
-                                            </DockPanel>
+                                            </Grid>
                                             <StackPanel Orientation="Horizontal" Margin="0,5">
                                                 <Button Name="bt_addicon" Content="Add Icon" Width="100" Click="bt_addicon_Click"/>
                                                 <Button Name="bt_remicon" Content="Delete Icon" Width="100" Click="bt_remicon_Click"/>
