@@ -88,7 +88,7 @@ namespace Gw2_Launchbuddy.Modifiers
 
         }
 
-        public static async void PressLoginButton(Account acc)
+        public static void PressLoginButton(Account acc)
         {
             //acc.Client.Process.WaitForExit();
             if(!acc.Client.Process.ReachedState(GwGameProcess.GameStatus.loginwindow_authentication))
@@ -100,30 +100,52 @@ namespace Gw2_Launchbuddy.Modifiers
                 }
             }
             Thread.Sleep(1800);
+            PressPlayButton(acc);
+        }
 
+        public static void PressPlayButton(Account acc)
+        {
             int retries = 3;
-            while(retries >0 && !acc.Client.Process.ReachedState(GwGameProcess.GameStatus.game_startup))
+            switch (acc.Settings.AuthType)
             {
-                if (!acc.Client.Process.HasExited)
-                {
-                    MouseClickLeft(acc.Client.Process, pos_play_bt);
-
-                    if(!acc.Client.Process.WaitForState(GwGameProcess.GameStatus.game_startup, 500))
+                case AuthenticationType.none:
+                    while (retries > 0 && !acc.Client.Process.ReachedState(GwGameProcess.GameStatus.game_startup))
                     {
-                        MouseClickLeft(acc.Client.Process, pos_authemail_bt);
-                        Thread.Sleep(100);
-                        MouseClickLeft(acc.Client.Process, pos_play_bt);
+                        if (!acc.Client.Process.HasExited)
+                        {
+                            MouseClickLeft(acc.Client.Process, pos_play_bt);
+
+                            if (!acc.Client.Process.WaitForState(GwGameProcess.GameStatus.game_startup, 500))
+                            {
+                                MouseClickLeft(acc.Client.Process, pos_authemail_bt);
+                                Thread.Sleep(100);
+                                MouseClickLeft(acc.Client.Process, pos_play_bt);
+                            }
+
+                            acc.Client.Process.WaitForState(GwGameProcess.GameStatus.game_startup, 3000);
+                            /*
+                            PressKeyDown(Keys.Enter, acc.Client.Process);
+                            PressKeyUp(Keys.Enter, acc.Client.Process);
+                            */
+                        }
+                        retries--;
                     }
+                    break;
 
-                    acc.Client.Process.WaitForState(GwGameProcess.GameStatus.game_startup, 3000);
-                    /*
-                    PressKeyDown(Keys.Enter, acc.Client.Process);
-                    PressKeyUp(Keys.Enter, acc.Client.Process);
-                    */
-                }
-                retries--;
+                default: //TODO CHECK FOR OTHER AUTHENTICATION CLICKS
+                    dfgdfgdfg
+                    while (retries > 0 && !acc.Client.Process.ReachedState(GwGameProcess.GameStatus.game_startup))
+                    {
+                        if (!acc.Client.Process.HasExited)
+                        {
+                            MouseClickLeft(acc.Client.Process, pos_play_bt);
+                            acc.Client.Process.WaitForState(GwGameProcess.GameStatus.game_startup, 3000);
+                        }
+                        retries--;
+                    }
+                    break;
+
             }
-
         }
 
         private static int MakeLParam(int x, int y) => (y << 16) | (x & 0xFFFF);

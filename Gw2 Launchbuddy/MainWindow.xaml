@@ -490,6 +490,16 @@
                                                     <Label Foreground="Green" Content="Loginfile successfuly configured" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" />
                                                 </DockPanel>
                                                 <Button Margin="10" DockPanel.Dock="Left" Name="bt_loginfileupdate" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" Height="22" Width="200" HorizontalAlignment="Left" Click="bt_loginfileupdate_Click" ToolTip="Manually update your Loginfile if the automated Update did not work when a new gw2 build was released.">Manually Update Loginfile</Button>
+                                                <DockPanel Margin="10">
+                                                    <Label Content="Two Way Authentication:"/>
+                                                    <ComboBox x:Name="cb_accauth" ItemsSource="{Binding Path=AuthTypes}" SelectedItem="{Binding Path=AuthType}" Width="150" HorizontalAlignment="Left">
+                                                        <ComboBox.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <TextBlock Foreground="Black" Text="{Binding .}"/>
+                                                            </DataTemplate>
+                                                        </ComboBox.ItemTemplate>
+                                                    </ComboBox>
+                                                </DockPanel>
                                                 <Expander DockPanel.Dock="Top" Margin="5,0,0,0" >
                                                     <Expander.Header>
                                                         <StackPanel Orientation="Horizontal">

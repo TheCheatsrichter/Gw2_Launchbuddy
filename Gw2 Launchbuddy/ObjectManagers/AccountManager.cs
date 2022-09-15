@@ -345,8 +345,15 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public ObservableCollection<AccountHotkey> AccHotkeys { set; get; }
         public LocalDatFile Loginfile { set; get; }
         public WindowConfig WinConfig { set { winconfig = value; OnPropertyChanged("HasWindowConfig"); } get { return winconfig; } }
-        public AuthenticationType AuthType { set; get; }
         public AccountInformation AccountInformation { set; get; }
+
+
+        public AuthenticationType AuthType { set; get; }
+        [XmlIgnore]
+        private ObservableCollection<AuthenticationType> authtypes = new ObservableCollection<AuthenticationType>(Enum.GetValues(typeof(AuthenticationType)).Cast<AuthenticationType>());
+        [XmlIgnore]
+        public ObservableCollection<AuthenticationType> AuthTypes { get { return authtypes; } }
+
 
         //Adavanced Settings
         [XmlIgnore]
