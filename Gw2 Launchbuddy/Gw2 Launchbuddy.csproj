@@ -352,6 +352,7 @@
       <DependentUpon>UIStatusbar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\WindowUtil.cs" />
+    <Compile Include="Modifiers\AuthenticationType.cs" />
     <Compile Include="Modifiers\IORepeater.cs" />
     <Compile Include="Helpers\WindowInfo_Grabber.xaml.cs">
       <DependentUpon>WindowInfo_Grabber.xaml</DependentUpon>

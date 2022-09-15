@@ -345,6 +345,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public ObservableCollection<AccountHotkey> AccHotkeys { set; get; }
         public LocalDatFile Loginfile { set; get; }
         public WindowConfig WinConfig { set { winconfig = value; OnPropertyChanged("HasWindowConfig"); } get { return winconfig; } }
+        public AuthenticationType AuthType { set; get; }
         public AccountInformation AccountInformation { set; get; }
 
         //Adavanced Settings

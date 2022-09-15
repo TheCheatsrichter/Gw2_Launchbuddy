@@ -75,6 +75,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 filewriter.WriteLine(client.account.Nickname + "," + (int)client.Status + "," + client.Process.Id + "," + client.Process.StartTime.ToString());
             }
             filewriter.Close();
+
         }
 
         private static bool SearchForeignClients()
@@ -106,10 +107,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     {
                         continue;
                     }
-                    GwGameProcess pro;
+                    Process pro;
                     try
                     {
-                        pro = Process.GetProcessById(Int32.Parse(line.Split(',')[2])) as GwGameProcess;
+                        pro = Process.GetProcessById(Int32.Parse(line.Split(',')[2]));
                     }
                     catch
                     {
@@ -129,7 +130,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                         if (processStartTime == line.Split(',')[3])
                         {
                             Client.ClientStatus status = (Client.ClientStatus)Int32.Parse(line.Split(',')[1]);
-                            acc.Client.SetProcess(pro,status);
+                            acc.Client.SetProcess(pro as GwGameProcess,status); // This is a Downcast __> >:(
                             if (status.HasFlag(Client.ClientStatus.Running)) ActiveClients.Add(acc.Client);
                         }
                         else
