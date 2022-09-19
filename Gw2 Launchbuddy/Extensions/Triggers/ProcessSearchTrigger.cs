@@ -23,7 +23,7 @@ namespace Gw2_Launchbuddy.Extensions
 
                 if(pros.Length!=0)
                 {
-                    found_process = pros[0] as ProcessExtension;
+                    found_process = new ProcessExtension(pros[0]);
                     return true;
                 }
                 return false;

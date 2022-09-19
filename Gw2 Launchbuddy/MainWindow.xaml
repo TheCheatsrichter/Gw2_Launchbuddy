@@ -377,6 +377,11 @@
                                                 <ImageBrush ImageSource="Resources/Icons/injection.png"/>
                                             </Rectangle.OpacityMask>
                                         </Rectangle>
+                                        <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}" DockPanel.Dock="Right" Visibility="{Binding Path=Settings.IsSteamAccount, Converter={StaticResource BoolToVis}}" ToolTip="Is a steam account">
+                                            <Rectangle.OpacityMask>
+                                                <ImageBrush ImageSource="Resources/Icons/steam_icon.png"/>
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
                                         <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}" DockPanel.Dock="Right" Visibility="{Binding Path=Settings.HasAdvancedSettings, Converter={StaticResource BoolToVis}}" ToolTip="Uses Advanced Settings">
                                             <Rectangle.OpacityMask>
                                                 <ImageBrush ImageSource="Resources/Icons/feature.png"/>
@@ -484,23 +489,55 @@
                                             </StackPanel>
                                         </Expander.Header>
                                         <DockPanel>
-                                            <StackPanel>
-                                                <DockPanel Margin="10">
-                                                    <Button DockPanel.Dock="Left" Name="bt_loginfile" Height="22" Width="200" Click="bt_loginfile_Click">Set Loginfile</Button>
-                                                    <Label Foreground="Green" Content="Loginfile successfuly configured" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" />
-                                                </DockPanel>
-                                                <Button Margin="10" DockPanel.Dock="Left" Name="bt_loginfileupdate" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" Height="22" Width="200" HorizontalAlignment="Left" Click="bt_loginfileupdate_Click" ToolTip="Manually update your Loginfile if the automated Update did not work when a new gw2 build was released.">Manually Update Loginfile</Button>
-                                                <DockPanel Margin="10">
-                                                    <Label Content="Two Way Authentication:"/>
-                                                    <ComboBox x:Name="cb_accauth" ItemsSource="{Binding Path=AuthTypes}" SelectedItem="{Binding Path=AuthType}" Width="150" HorizontalAlignment="Left">
+                                            <DockPanel Margin="10"  DockPanel.Dock="Top" Visibility="{Binding Path=SteamAccountAvailable, Converter={StaticResource BoolToVis}}" >
+                                                <Label Content="Account Type:" Style="{StaticResource H2}" VerticalAlignment="Center" Margin="-10,0,0,0" DockPanel.Dock="Top"/>
+                                                <DockPanel>
+                                                    <ComboBox x:Name="cb_logintype" ItemsSource="{Binding Path=LoginTypes}" Height="25" SelectedItem="{Binding Path=LoginType}" Width="200" HorizontalAlignment="Left" SelectionChanged="cb_logintype_SelectionChanged">
                                                         <ComboBox.ItemTemplate>
                                                             <DataTemplate>
                                                                 <TextBlock Foreground="Black" Text="{Binding .}"/>
                                                             </DataTemplate>
                                                         </ComboBox.ItemTemplate>
                                                     </ComboBox>
+                                                    <TextBlock TextWrapping="Wrap" Margin="10"> Select if this account was aquired via ArenaNet or Steam. Only one steam account is possible!</TextBlock>
                                                 </DockPanel>
-                                                <Expander DockPanel.Dock="Top" Margin="5,0,0,0" >
+                                                
+                                            </DockPanel>
+
+                                            <StackPanel>
+                                                <Label Content="Loginfile Setup" Style="{StaticResource H2}"/>
+                                                <DockPanel>
+                                                    <Button DockPanel.Dock="Left" Name="bt_loginfile" Height="22" Width="200" Click="bt_loginfile_Click" HorizontalAlignment="Left" Margin="10">Set Loginfile</Button>
+                                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                        <Label Content="Loginfilestatus:"/>
+                                                        <TextBlock Foreground="Green" Text="Loginfile successfuly configured" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" VerticalAlignment="Center" />
+                                                    </StackPanel>
+                                                </DockPanel>
+                                                <DockPanel Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}">
+                                                    <Button Margin="10" DockPanel.Dock="Left" Name="bt_loginfileupdate" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" Height="22" Width="200" HorizontalAlignment="Left" Click="bt_loginfileupdate_Click" ToolTip="Manually update your Loginfile if the automated Update did not work when a new gw2 build was released.">Manually Update Loginfile</Button>
+                                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
+                                                    </StackPanel>
+                                                </DockPanel>
+                                                <DockPanel Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}">
+                                                    <Button Margin="10" DockPanel.Dock="Left" Name="bt_loginfiledelete" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}" Height="22" Width="200" HorizontalAlignment="Left"  ToolTip="Delte the saved loginfile for this account" Click="bt_loginfiledelete_Click">Delete Loginfile</Button>
+                                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
+                                                    </StackPanel>
+                                                </DockPanel>
+                                                <DockPanel Margin="10" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}">
+                                                    <StackPanel Orientation="Vertical">
+                                                        <Label Content="Two Way Authentication:" Style="{StaticResource H3}" VerticalAlignment="Center"/>
+                                                        <ComboBox x:Name="cb_accauth" ItemsSource="{Binding Path=AuthTypes}" Height="25" SelectedItem="{Binding Path=AuthType}" Width="200" HorizontalAlignment="Left">
+                                                            <ComboBox.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <TextBlock Foreground="Black" Text="{Binding .}"/>
+                                                                </DataTemplate>
+                                                            </ComboBox.ItemTemplate>
+                                                        </ComboBox>
+                                                    </StackPanel>
+                                                    <TextBlock TextWrapping="Wrap" Margin="10">Info: If any 2 way authentication is active make sure that remember this network is selected. Otherwise some LB settings like GFX settings cannot be applied.</TextBlock>
+                                                </DockPanel>
+
+                                                <Expander DockPanel.Dock="Top" Margin="10,0,10,6" Visibility="{Binding Path=IsArenaNetAccount, Converter={StaticResource BoolToVis}}" >
                                                     <Expander.Header>
                                                         <StackPanel Orientation="Horizontal">
                                                             <Label Style="{StaticResource H3}">Optional: Add Backup information</Label>
@@ -544,10 +581,10 @@
                                                     <ColumnDefinition Width="30*"/>
                                                     <ColumnDefinition Width="70*"/>
                                                 </Grid.ColumnDefinitions>
-                                                <ListView Name="lv_accicon" ItemsSource="{Binding Path=Icons}" MinWidth="140" MaxHeight="400" SelectionChanged="lv_accicon_SelectionChanged" Grid.Column="1" Margin="10">
+                                                <ListView Name="lv_accicon" ItemsSource="{Binding Path=Icons}" MinWidth="140" MaxWidth="380" MaxHeight="360" SelectionChanged="lv_accicon_SelectionChanged" Grid.Column="1" Margin="10">
                                                     <ListView.ItemsPanel>
                                                         <ItemsPanelTemplate>
-                                                            <UniformGrid MinWidth="128" Columns="5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            <UniformGrid MinWidth="128" Columns="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                         </ItemsPanelTemplate>
                                                     </ListView.ItemsPanel>
                                                     <ListView.ItemTemplate>
@@ -658,8 +695,8 @@
                                             <ListView x:Name="lv_gfx" Grid.ColumnSpan="2" Grid.Row="1" MinHeight="64" ItemsSource="{Binding Path=GFXFile.Config}" ItemContainerStyle="{StaticResource ListViewItem_NoFocus}">
                                                 <ListView.View>
                                                     <GridView>
-                                                        <GridViewColumn Header="Parameter" Width="230"  DisplayMemberBinding="{Binding Name}"/>
-                                                        <GridViewColumn Header="Setup" Width="250">
+                                                        <GridViewColumn Header="Parameter" Width="200"  DisplayMemberBinding="{Binding Name}"/>
+                                                        <GridViewColumn Header="Setup" Width="180">
                                                             <GridViewColumn.CellTemplate>
                                                                 <DataTemplate>
                                                                     <ComboBox ItemsSource="{Binding Path=IEOptions}" SelectedValue="{Binding Path=Value}" Width="200">
@@ -672,7 +709,7 @@
                                                                 </DataTemplate>
                                                             </GridViewColumn.CellTemplate>
                                                         </GridViewColumn>
-                                                        <GridViewColumn Header="Previous" Width="180"  DisplayMemberBinding="{Binding Path=OldValue}"/>
+                                                        <GridViewColumn Header="Previous" Width="170"  DisplayMemberBinding="{Binding Path=OldValue}"/>
                                                     </GridView>
                                                 </ListView.View>
                                             </ListView>
@@ -778,16 +815,15 @@
                                                 
                                             </StackPanel>
                                         </Expander.Header>
-                                        <ScrollViewer>
-                                            <StackPanel>
+                                        <Grid>
+                                            <StackPanel Margin="20">
                                                 <Label Style="{StaticResource H3}" Content="Window Settings:"/>
-                                                <WrapPanel>
-                                                    <Button Content="Configure Windowsettings" MaxWidth="200" Name="bt_windowinfo_setup" MinWidth="150" Click="bt_windowinfo_setup_Click"/>
-                                                    <Button Content="Delete Windowsettings" IsEnabled="{Binding HasWindowConfig}" MaxWidth="200" Name="bt_windowinfo_delete" MinWidth="150" Click="bt_windowinfo_delete_Click"/>
+                                                <WrapPanel Height="50">
+                                                    <Button Content="Configure Windowsettings" MaxWidth="200" Name="bt_windowinfo_setup" MinWidth="150" Click="bt_windowinfo_setup_Click" Margin="10"/>
+                                                    <Button Content="Delete Windowsettings" IsEnabled="{Binding HasWindowConfig}" MaxWidth="200" Name="bt_windowinfo_delete" MinWidth="150" Click="bt_windowinfo_delete_Click" Margin="10"/>
                                                 </WrapPanel>
-                                                <Separator Margin="10"/>
                                             </StackPanel>
-                                        </ScrollViewer>
+                                        </Grid>
                                     </Expander>
                                     <Expander ToolTip="Settings for Geeks." Style="{StaticResource Bordered}">
                                         <Expander.Header>
@@ -800,7 +836,7 @@
                                                 <Label Style="{StaticResource H2}">Advanced Settings</Label>
                                             </StackPanel>
                                         </Expander.Header>
-                                        <ScrollViewer>
+                                        <Grid Margin="10">
                                             <StackPanel>
                                                 <Label Style="{StaticResource H3}" Content="Additional Settings:"/>
                                                 <DockPanel>
@@ -834,7 +870,7 @@
                                                     <Label Content="(Caution: This can cause problems with other applications that use the Gw2 Mumble Link.)" VerticalAlignment="Top" Foreground="Red" HorizontalAlignment="Left" Margin="0,-12,0,0"/>
                                                 </DockPanel>
                                             </StackPanel>
-                                        </ScrollViewer>
+                                        </Grid>
                                     </Expander>
                                 </StackPanel>
                             </ScrollViewer>

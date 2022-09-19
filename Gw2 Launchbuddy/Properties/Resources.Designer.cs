@@ -103,6 +103,16 @@ namespace Gw2_Launchbuddy.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap arenanet {
+            get {
+                object obj = ResourceManager.GetObject("arenanet", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap bin {
             get {
                 object obj = ResourceManager.GetObject("bin", resourceCulture);
@@ -956,6 +966,16 @@ namespace Gw2_Launchbuddy.Properties {
         internal static System.Drawing.Bitmap speaker_mute {
             get {
                 object obj = ResourceManager.GetObject("speaker_mute", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap steam_icon {
+            get {
+                object obj = ResourceManager.GetObject("steam_icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

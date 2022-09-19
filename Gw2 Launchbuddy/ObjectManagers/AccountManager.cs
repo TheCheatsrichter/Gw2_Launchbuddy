@@ -347,6 +347,18 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public WindowConfig WinConfig { set { winconfig = value; OnPropertyChanged("HasWindowConfig"); } get { return winconfig; } }
         public AccountInformation AccountInformation { set; get; }
 
+        [XmlIgnore]
+        public bool IsArenaNetAccount { get { return LoginType == LoginType.ArenaNet; } }
+        [XmlIgnore]
+        public bool IsSteamAccount { get { return LoginType == LoginType.Steam; } }
+        [XmlIgnore]
+        public bool SteamAccountAvailable { get { return !AccountManager.Accounts.Any(a=>a.Settings.LoginType==LoginType.Steam) || IsSteamAccount; } }
+
+        public LoginType LoginType { set; get; }
+        [XmlIgnore]
+        private ObservableCollection<LoginType> logintypes = new ObservableCollection<LoginType>(Enum.GetValues(typeof(LoginType)).Cast<LoginType>());
+        [XmlIgnore]
+        public ObservableCollection<LoginType> LoginTypes { get { return logintypes; } }
 
         public AuthenticationType AuthType { set; get; }
         [XmlIgnore]
@@ -508,6 +520,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public bool BlishValid { get { return LBBlish.IsValid && account.Client.Status.HasFlag(Client.ClientStatus.Running); } }
 
 
+        public void SetLoginType(LoginType type)
+        {
+            OnPropertyChanged("LoginType");
+            OnPropertyChanged("IsSteamAccount");
+            OnPropertyChanged("IsArenaNetAccount");
+        }
+
         public void SetLoginFile()
         {
             var loginfile = LocalDatManager.CreateNewFile(AccountID.ToString());
@@ -524,6 +543,17 @@ namespace Gw2_Launchbuddy.ObjectManagers
             OnPropertyChanged("HasLoginCredentials");
         }
 
+        public void DeleteLoginfile()
+        {
+            try
+            {
+                File.Delete(Loginfile.Path);
+            }
+            catch { }
+            Loginfile = null;
+            OnPropertyChanged("Loginfile");
+            OnPropertyChanged("HasLoginCredentials");
+        }
 
         #region Plugininterface
 

@@ -332,14 +332,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Extensions\Triggers\ChildProcessSearchTrigger.cs" />
     <Compile Include="Extensions\Triggers\FileLockTrigger.cs" />
     <Compile Include="Extensions\Triggers\FileSizeTrigger.cs" />
     <Compile Include="Extensions\Triggers\ModuleTrigger.cs" />
     <Compile Include="Extensions\Triggers\ProcessSearchTrigger.cs" />
     <Compile Include="Extensions\ProcessWatcher.cs" />
-    <Compile Include="Extensions\ProcessExtension.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Extensions\ProcessExtension.cs" />
     <Compile Include="Extensions\Triggers\SleepTrigger.cs" />
     <Compile Include="Extensions\Triggers\WindowDimensionsTrigger.cs" />
     <Compile Include="Helpers\BlockerInfo.xaml.cs">
@@ -371,6 +370,7 @@
     <Compile Include="Modifiers\EmbeddedAssembly.cs" />
     <Compile Include="Modifiers\LocalDatManager.cs" />
     <Compile Include="Modifiers\Loginfiller.cs" />
+    <Compile Include="Modifiers\LoginTypes.cs" />
     <Compile Include="Modifiers\ModuleReader.cs" />
     <Compile Include="ObjectManagers\Hotkeys.cs" />
     <Compile Include="ObjectManagers\LBConfiguration.cs" />
@@ -664,6 +664,12 @@
     <Resource Include="Resources\Icons\Classes\c_vindicator.png" />
     <Resource Include="Resources\Icons\Classes\c_virtuoso.png" />
     <Resource Include="Resources\Icons\Classes\c_willbender.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\steam_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\arenanet.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">

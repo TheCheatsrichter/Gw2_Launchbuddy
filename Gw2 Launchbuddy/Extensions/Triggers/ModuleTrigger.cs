@@ -24,7 +24,7 @@ namespace Gw2_Launchbuddy.Extensions
         {
             get
             {
-                return CollectModules(pro).Any<Module>(m => m.ModuleName == modulename.ToLower());
+                return CollectModules(pro.GetProcess()).Any<Module>(m => m.ModuleName == modulename.ToLower());
             }
         }
 

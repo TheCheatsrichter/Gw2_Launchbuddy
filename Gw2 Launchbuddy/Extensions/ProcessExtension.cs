@@ -5,15 +5,16 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Gw2_Launchbuddy.Helpers;
 using Gw2_Launchbuddy.ObjectManagers;
 
 namespace Gw2_Launchbuddy.Extensions
 {
-    public class ProcessExtension : Process
+    public class ProcessExtension
     {
-
         bool started = false;
         int timeout_close = 5000;
+        private Process pro;
 
         public ExitStatus exitstatus = ExitStatus.none;
         public enum ExitStatus
@@ -27,6 +28,45 @@ namespace Gw2_Launchbuddy.Extensions
             manual_kill = 6
         }
 
+        public ProcessExtension(Process pro,bool allreadystarted=false)
+        {
+            this.pro = pro;
+            started = allreadystarted;
+        }
+
+        public Process GetProcess() { return pro; }
+
+        #region Facade
+
+        //Redirect calls to Process. This enables "normal" usage + full control over accesses. Otherwise finding process via ID wont work.
+        public int Id { get { return pro.Id; } }
+        public bool HasExited { get { return pro.HasExited; } }
+        public DateTime ExitTime { get { return pro.ExitTime; } }
+        public DateTime StartTime { get { return pro.StartTime; } }
+        public bool EnableRaisingEvents { set { pro.EnableRaisingEvents = value; } get { return pro.EnableRaisingEvents; } }
+        public int ExitCode { get { return pro.ExitCode; } }
+        public bool CloseMainWindow(){ return pro.CloseMainWindow();}
+        public bool WaitForExit(int ms) { return pro.WaitForExit(ms); }
+        public void WaitForExit() { pro.WaitForExit(); }
+        public void Refresh() => pro.Refresh();
+        public IntPtr MainWindowHandle { get { return pro.MainWindowHandle; } }
+        public EventHandler Exited;
+        public ProcessThreadCollection Threads { get { return pro.Threads; } }
+        public ProcessStartInfo StartInfo { get { return pro.StartInfo; } set { pro.StartInfo = value; } }
+        public ProcessPriorityClass PriorityClass { get { return pro.PriorityClass; } set { pro.PriorityClass = value; } }
+        public string ProcessName { get { return pro.ProcessName; } }
+
+        #endregion
+
+
+        public bool MigrateProcess(Process target)
+        {
+            started = true;
+            pro = target;
+            pro.EnableRaisingEvents = true;
+            pro.Exited += OnExitedSelf;
+            return true;
+        }
         public bool IsRunning
         {
             get
@@ -52,23 +92,21 @@ namespace Gw2_Launchbuddy.Extensions
         {
             get { return ExitTime - StartTime; }
         }
-
         public virtual new bool Start()
         {
             this.EnableRaisingEvents = true;
             started = true;
 
-            base.Exited += OnExitedSelf;
-            return base.Start();
+            pro.Exited += OnExitedSelf;
+            return pro.Start();
         }
 
         public virtual void OnExitedSelf(object sender, EventArgs e)
         {
-
             if (exitstatus == ExitStatus.self_update) return;
             if (!HasExited) return;
 
-            switch (base.ExitCode)
+            switch (ExitCode)
             {
                 case 0:
                     exitstatus = ExitStatus.self_close;
@@ -77,31 +115,32 @@ namespace Gw2_Launchbuddy.Extensions
                     exitstatus = ExitStatus.self_crash;
                     break;
             }
+            Exited?.Invoke(sender,e);
         }
 
         public virtual bool Stop()
         {
-            if (base.HasExited)
+            if (HasExited)
             {
                 return false;
             }
-            base.Exited -= OnExitedSelf;
+            pro.Exited -= OnExitedSelf;
             exitstatus = ExitStatus.manual_mainwindow;
-            if (!base.CloseMainWindow())
+            if (!CloseMainWindow())
             {
-                base.WaitForExit(timeout_close);
-                if (!base.HasExited)
+                WaitForExit(timeout_close);
+                if (!HasExited)
                 {
-                    base.Close();
-                    base.WaitForExit(timeout_close);
+                    pro.Close();
+                    WaitForExit(timeout_close);
                     exitstatus = ExitStatus.manual_close;
-                    if (!base.HasExited)
+                    if (!HasExited)
                     {
-                        base.Kill();
+                        pro.Kill();
                         exitstatus = ExitStatus.manual_kill;
                         Refresh();
-                        base.WaitForExit(timeout_close);
-                        if (!base.HasExited)
+                        WaitForExit(timeout_close);
+                        if (!HasExited)
                         {
                             return false;
                         }
@@ -113,7 +152,7 @@ namespace Gw2_Launchbuddy.Extensions
         public string CalculateProcessMD5()
         {
             var md5 = System.Security.Cryptography.MD5.Create();
-            var inputBytes = Encoding.ASCII.GetBytes(this.StartTime.ToString() + this.Id.ToString());
+            var inputBytes = Encoding.ASCII.GetBytes(this.StartTime.ToString() + Id.ToString());
             var hash = md5.ComputeHash(inputBytes);
 
             var sb = new StringBuilder();
@@ -148,9 +187,20 @@ namespace Gw2_Launchbuddy.Extensions
             game_charscreen = 6
         }
 
+        public GwGameProcess (Process pro):base(pro)
+        {
+
+        }
+
+        public GwGameProcess(Process pro,bool started=false) : base(pro,started)
+        {
+
+        }
+
         public void OnStateChange(object sender, EventArgs e)
         {
             base.Refresh();
+            if (base.HasExited) return;
             IntPtr hwndMain = base.MainWindowHandle;
 
             Enum.TryParse((sender as ProcessState).Name, out gamestatus);
@@ -225,7 +275,7 @@ namespace Gw2_Launchbuddy.Extensions
         {
             ProcessWatcher prow = new ProcessWatcher(this, CreateStates());
             prow.Run();
-            base.Exited += OnExit;
+            Exited += OnExit;
             return base.Start();
         }
 
@@ -281,6 +331,36 @@ namespace Gw2_Launchbuddy.Extensions
                 Thread.Sleep(10);
             }
             return false;
+        }
+    }
+
+    public class SteamGwGameProcess:GwGameProcess
+    {
+        Process steamprocess;
+        public SteamGwGameProcess(Process pro,Process steamprocess) :base(pro)
+        {
+            this.steamprocess = steamprocess;
+        }
+
+        public override bool Start()
+        {
+            steamprocess.Start();
+
+            Action waitforgame = () =>
+            {
+                while (ClientManager.SearchForeignClients(true).Count<=0)
+                {
+                    Thread.Sleep(10);
+                }
+            };
+            BlockerInfo.Run("Waiting for steam","Launchbuddy is waiting for steam to launch gw2",waitforgame);
+
+            if(!BlockerInfo.Done)
+            {
+                return false;
+            }
+
+            return MigrateProcess(ClientManager.SearchForeignClients(true)[0]);
         }
     }
 

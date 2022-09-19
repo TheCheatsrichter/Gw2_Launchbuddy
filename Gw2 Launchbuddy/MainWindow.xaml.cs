@@ -2002,6 +2002,18 @@ namespace Gw2_Launchbuddy
             LBConfiguration.Save();
         }
 
+        private void bt_loginfiledelete_Click(object sender, RoutedEventArgs e)
+        {
+            AccountSettings settings = ((sender as Button).DataContext as AccountSettings);
+            settings.DeleteLoginfile();
+        }
+
+        private void cb_logintype_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            AccountSettings settings = ((sender as ComboBox).DataContext as AccountSettings);
+            settings.SetLoginType((LoginType)(sender as ComboBox).SelectedItem);
+        }
+
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)
         {
             PluginManager.UpdatePlugin(((sender as Button).DataContext as Plugin_Wrapper).Plugin, true);

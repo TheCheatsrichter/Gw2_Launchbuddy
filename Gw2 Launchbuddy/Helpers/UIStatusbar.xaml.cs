@@ -63,8 +63,8 @@ namespace Gw2_Launchbuddy.Helpers
                     {
                         CalcDpi(ref dpifactor_x, ref dpifactor_y);
                         RevertScaleDPI();
-                        TraceProcess(client.Process, ui_offset);
-                        SetVisibility(client.Process);
+                        TraceProcess(client.Process.GetProcess(), ui_offset);
+                        SetVisibility(client.Process.GetProcess());
                         RefreshHeader(client);
                     });
                     isdone = defofdone();

@@ -67,6 +67,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public static string GwCacheFoldersPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Temp\";
 
+        public static string GwSteamLaunchLink = "steam://rungameid/1284210//";
+
         public static string LBLocaldatsPath = LBAppdataPath +"Loginfiles\\";
 
 
@@ -128,8 +130,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             try
             {
-                if (File.Exists(MASTER_Localdat)) File.Delete(MASTER_Localdat);
-                IORepeater.FileCopy(GwLocaldatPath,MASTER_Localdat);
+                if (File.Exists(EnviromentManager.GwLocaldatPath))
+                {
+                    if (File.Exists(MASTER_Localdat)) File.Delete(MASTER_Localdat);
+                    IORepeater.FileCopy(GwLocaldatPath, MASTER_Localdat);
+                }
             }
             catch
             {
@@ -138,8 +143,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             try
             {
-                if (File.Exists(MASTER_GFXConfig)) File.Delete(MASTER_GFXConfig);
-                IORepeater.FileCopy(GwClientXmlPath, MASTER_GFXConfig);
+                if(File.Exists(GwClientXmlPath))
+                {
+                    if (File.Exists(MASTER_GFXConfig)) File.Delete(MASTER_GFXConfig);
+                    IORepeater.FileCopy(GwClientXmlPath, MASTER_GFXConfig);
+                }
             }
             catch
             {
@@ -415,8 +423,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 MessageBox.Show("Please close all running Guild Wars 2 game instances to update the game.");
             }
 
-            GwGameProcess pro = new GwGameProcess();
-            pro.StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath, Arguments = "-image" };
+            GwGameProcess pro = new GwGameProcess(new Process { StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath, Arguments = "-image" } });
 
             try
             {

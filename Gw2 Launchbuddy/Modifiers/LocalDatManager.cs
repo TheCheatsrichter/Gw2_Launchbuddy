@@ -147,7 +147,7 @@ namespace Gw2_Launchbuddy.Modifiers
             try
             {
                 
-                var pro = new GwGameProcess { StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } };
+                var pro = new GwGameProcess (new Process{ StartInfo = new ProcessStartInfo { FileName = EnviromentManager.GwClientExePath } });
                 pro.Start();
                 pro.Refresh();
 
@@ -196,7 +196,7 @@ namespace Gw2_Launchbuddy.Modifiers
 
             string oldhash = FileUtil.GetFileHashMD5(EnviromentManager.GwLocaldatPath);
 
-            var pro = new GwGameProcess { StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath) };
+            var pro = new GwGameProcess (new Process { StartInfo = new ProcessStartInfo(EnviromentManager.GwClientExePath) });
             pro.Start();
             pro.Refresh();
 #if DEBUG

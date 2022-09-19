@@ -83,7 +83,7 @@ public static class IORepeater
         }
     }
 
-    private static bool TimeoutAction<T>(Func<object> method,int timeout=20000)
+    private static bool TimeoutAction<T>(Func<object> method,int timeout=10000)
     {
         var starttime= DateTime.UtcNow;
         while((DateTime.UtcNow - starttime).TotalMilliseconds < timeout)
