@@ -13,6 +13,8 @@ using System.Reflection;
 using Gw2_Launchbuddy.Modifiers;
 using System.Threading;
 using CommandLine;
+using Gw2_Launchbuddy.Helpers;
+using WizardTest;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -20,7 +22,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class EnviromentManager
     {
-        public static Version LBVersion = new Version("3.0.10");
+        public static Version LBVersion = new Version("3.0.13");
         public static LaunchOptions LaunchOptions;
 
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
@@ -186,6 +188,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             CheckGwClientVersion();
             //After Game Updates Create Master Files
             CreateMasterFiles();
+            WizardCollection.Init(MainWin);
 
             if (LBConfiguration.Config.autoupdatedatfiles)
             {

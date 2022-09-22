@@ -12,7 +12,7 @@
 
 
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
-        Title="Gw2 Launchbuddy V 3.0.10" MinHeight="570" MinWidth="600" Height="600" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None" Background="{StaticResource B1_Background}" AllowsTransparency="True">
+        Title="Gw2 Launchbuddy V 3.0.13" MinHeight="570" MinWidth="600" Height="600" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None" Background="{StaticResource B1_Background}" AllowsTransparency="True">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="5"/>
     </WindowChrome.WindowChrome>
@@ -241,7 +241,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 3.0.10 ALPHA" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 3.0.13 ALPHA" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
@@ -269,6 +269,13 @@
                     </Border.OpacityMask>
                 </Border>
             </Button>
+            <Button x:Name="bt_helpwiz" Width="40"  BorderThickness="0" Style="{StaticResource WindowButton}" Click="bt_helpwiz_Click" >
+                <Border Background="{StaticResource Icon_Foreground}" Width="20" Height="20">
+                    <Border.OpacityMask>
+                        <ImageBrush ImageSource="Resources/Icons/question.png"/>
+                    </Border.OpacityMask>
+                </Border>
+            </Button>
             <Button x:Name="bt_minimize" Width="40" Click="bt_minimize_Click" BorderThickness="0" Style="{StaticResource WindowButton}" >
                 <Border Background="{StaticResource Icon_Foreground}" Width="20" Height="20">
                     <Border.OpacityMask>
@@ -287,12 +294,16 @@
 
 
         <Grid  x:Name="SettingsGrid" Grid.Row="1"  Grid.RowSpan="3" Grid.ColumnSpan="3" Background="{StaticResource B1_Background}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="743*"/>
+                <ColumnDefinition Width="57*"/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="100*"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
 
-            <TabControl x:Name="tab_options" Grid.Row="0" TabStripPlacement="Left"  BorderBrush="{StaticResource B3_Background}" Background="{StaticResource B2_Background}">
+            <TabControl x:Name="tab_options" Grid.Row="0" TabStripPlacement="Left"  BorderBrush="{StaticResource B3_Background}" Background="{StaticResource B2_Background}" Grid.ColumnSpan="2">
                 <TabItem x:Name="tab_home" MouseEnter="tab_home_MouseEnter">
                     <TabItem.Header>
                         <StackPanel>
@@ -323,8 +334,7 @@
                             </Button>
                             -->
 
-                            <StackPanel Grid.Column="1" Grid.Row="1">
-
+                            <StackPanel Grid.Column="1" Grid.Row="1" x:Name="sp_lbnews">
                                 <Label Content="Launchbuddy News:" Style="{StaticResource H2}"/>
                                 <TextBlock x:Name="tb_newsletter" TextWrapping="Wrap"/>
                             </StackPanel>
@@ -421,7 +431,7 @@
                     </DockPanel>
                 </TabItem>
 
-                <TabItem >
+                <TabItem x:Name="tab_accs">
                     <TabItem.Header>
                         <StackPanel>
                             <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
@@ -456,14 +466,12 @@
                                 </ListView.ItemContainerStyle>
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid>
-                                            <Image Source="{Binding Path=Settings.Icon.Image}" VerticalAlignment="Center" MaxHeight="64" HorizontalAlignment="Center"/>
-                                            <Label Content="{Binding Path=Nickname}" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#43000000" FontWeight="Bold" FontSize="14" Foreground="White">
-                                                <Label.OpacityMask>
-                                                    <ImageBrush ImageSource="Resources/acc_opacitymask.png"/>
-                                                </Label.OpacityMask>
-                                            </Label>
-                                        </Grid>
+                                        <Border BorderThickness="1" BorderBrush="{StaticResource B1_Background}" CornerRadius="4">
+                                            <Grid Background="#66000000">
+                                                <Image Source="{Binding Path=Settings.Icon.Image}" VerticalAlignment="Center" MaxHeight="64" HorizontalAlignment="Center"/>
+                                                <Label Content="{Binding Path=Nickname}" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#43000000" FontWeight="Bold" FontSize="14" Foreground="White"/>
+                                            </Grid>
+                                        </Border>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
@@ -477,7 +485,7 @@
                                     <ImageBrush ImageSource="{Binding Path=Icon.Image}" Opacity="0.05"/>
                                 </ScrollViewer.Background>
                                 <StackPanel Background="{StaticResource B1_Background}">
-                                    <Expander ToolTip="Set up Login Data for an automated Login" Style="{StaticResource Bordered}">
+                                    <Expander x:Name="exp_accloginfile" ToolTip="Set up Login Data for an automated Login" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
@@ -489,7 +497,7 @@
                                             </StackPanel>
                                         </Expander.Header>
                                         <DockPanel>
-                                            <DockPanel Margin="10"  DockPanel.Dock="Top" Visibility="{Binding Path=SteamAccountAvailable, Converter={StaticResource BoolToVis}}" >
+                                            <!--DockPanel Margin="10"  DockPanel.Dock="Top" Visibility="{Binding Path=SteamAccountAvailable, Converter={StaticResource BoolToVis}}" >
                                                 <Label Content="Account Type:" Style="{StaticResource H2}" VerticalAlignment="Center" Margin="-10,0,0,0" DockPanel.Dock="Top"/>
                                                 <DockPanel>
                                                     <ComboBox x:Name="cb_logintype" ItemsSource="{Binding Path=LoginTypes}" Height="25" SelectedItem="{Binding Path=LoginType}" Width="200" HorizontalAlignment="Left" SelectionChanged="cb_logintype_SelectionChanged">
@@ -502,7 +510,7 @@
                                                     <TextBlock TextWrapping="Wrap" Margin="10"> Select if this account was aquired via ArenaNet or Steam. Only one steam account is possible!</TextBlock>
                                                 </DockPanel>
                                                 
-                                            </DockPanel>
+                                            </-->
 
                                             <StackPanel>
                                                 <Label Content="Loginfile Setup" Style="{StaticResource H2}"/>
@@ -525,7 +533,7 @@
                                                 </DockPanel>
                                                 <DockPanel Margin="10" Visibility="{Binding Path=HasLoginCredentials, Converter={StaticResource BoolToVis}}">
                                                     <StackPanel Orientation="Vertical">
-                                                        <Label Content="Two Way Authentication:" Style="{StaticResource H3}" VerticalAlignment="Center"/>
+                                                        <Label Content="Two Factor Authentication:" Style="{StaticResource H3}" VerticalAlignment="Center"/>
                                                         <ComboBox x:Name="cb_accauth" ItemsSource="{Binding Path=AuthTypes}" Height="25" SelectedItem="{Binding Path=AuthType}" Width="200" HorizontalAlignment="Left">
                                                             <ComboBox.ItemTemplate>
                                                                 <DataTemplate>
@@ -534,7 +542,7 @@
                                                             </ComboBox.ItemTemplate>
                                                         </ComboBox>
                                                     </StackPanel>
-                                                    <TextBlock TextWrapping="Wrap" Margin="10">Info: If any 2 way authentication is active make sure that remember this network is selected. Otherwise some LB settings like GFX settings cannot be applied.</TextBlock>
+                                                    <TextBlock TextWrapping="Wrap" Margin="10">Info: If any 2 factor authentication is active make sure that remember this network is selected. Otherwise some LB settings like GFX settings cannot be applied.</TextBlock>
                                                 </DockPanel>
 
                                                 <Expander DockPanel.Dock="Top" Margin="10,0,10,6" Visibility="{Binding Path=IsArenaNetAccount, Converter={StaticResource BoolToVis}}" >
@@ -564,7 +572,7 @@
 
                                         </DockPanel>
                                     </Expander>
-                                    <Expander ToolTip="Choose an icon for this account" Style="{StaticResource Bordered}">
+                                    <Expander x:Name="exp_accicon" ToolTip="Choose an icon for this account" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
@@ -605,7 +613,7 @@
                                             </StackPanel>
                                         </StackPanel>
                                     </Expander>
-                                    <Expander ToolTip="Choose Gw2 launch arguments" Style="{StaticResource Bordered}">
+                                    <Expander x:Name="exp_accargs" ToolTip="Choose Gw2 launch arguments" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
@@ -662,7 +670,7 @@
                                             </-->
                                         </Grid>
                                     </Expander>
-                                    <Expander ToolTip="Set up a custom Graphic Configuration for this account" Style="{StaticResource Bordered}">
+                                    <Expander x:Name="exp_accgfx" ToolTip="Set up a custom Graphic Configuration for this account" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
@@ -716,7 +724,7 @@
                                             <Button ToolTip="Configure your ingame graphic settings or create a graphic configuration file for a specific account" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
                                         </Grid>
                                     </Expander>
-                                    <Expander ToolTip="Add 3rd Party injected software for this account" Style="{StaticResource Bordered}">
+                                    <Expander x:Name="exp_accinjection" ToolTip="Add 3rd Party injected software for this account" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
@@ -744,7 +752,7 @@
                                             </StackPanel>
                                         </Grid>
                                     </Expander>
-                                    <Expander ToolTip="Add 3rd Party injected software for this account" Style="{StaticResource Bordered}">
+                                    <Expander x:Name="exp_tacoblish" ToolTip="Add 3rd Party injected software for this account" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
@@ -774,7 +782,7 @@
                                             </StackPanel>
                                         </ScrollViewer>
                                     </Expander>
-                                    <Expander ToolTip="Configure Hotkeys for quick Clientcontrol" Style="{StaticResource Bordered}">
+                                    <Expander x:Name="exp_acchotkeys" ToolTip="Configure Hotkeys for quick Clientcontrol" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
@@ -792,7 +800,13 @@
                                                     <DataTemplate>
                                                         <StackPanel Orientation="Horizontal">
                                                             <TextBox Name="tb_hotkey" Text="{Binding Path=KeyAsString,Mode=OneWay}" Width="100" PreviewKeyDown="tb_hotkey_PreviewKeyDown" PreviewKeyUp="tb_hotkey_PreviewKeyUp" />
-                                                            <ComboBox ItemsSource="{Binding Path=Commands}" SelectedItem="{Binding Path=Command}" Width="100"/>
+                                                            <ComboBox ItemsSource="{Binding Path=Commands}" SelectedItem="{Binding Path=Command}" Width="100">
+                                                                <ComboBox.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <TextBlock Foreground="Black" Text="{Binding .}"/>
+                                                                    </DataTemplate>
+                                                                </ComboBox.ItemTemplate>
+                                                            </ComboBox>
                                                         </StackPanel>
                                                     </DataTemplate>
                                                 </ListView.ItemTemplate>
@@ -803,7 +817,7 @@
                                             </DockPanel>
                                         </StackPanel>
                                     </Expander>
-                                    <Expander ToolTip="Gamewindow Settings" Style="{StaticResource Bordered}">
+                                    <Expander x:Name="exp_accwindow" ToolTip="Gamewindow Settings" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
@@ -812,7 +826,7 @@
                                                     </Rectangle.OpacityMask>
                                                 </Rectangle>
                                                 <Label Style="{StaticResource H2}">Gamewindow Settings</Label>
-                                                
+
                                             </StackPanel>
                                         </Expander.Header>
                                         <Grid>
@@ -825,7 +839,7 @@
                                             </StackPanel>
                                         </Grid>
                                     </Expander>
-                                    <Expander ToolTip="Settings for Geeks." Style="{StaticResource Bordered}">
+                                    <Expander x:Name="exp_accadvancedset" ToolTip="Settings for Geeks." Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
                                                 <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
@@ -878,7 +892,7 @@
                     </DockPanel>
 
                 </TabItem>
-                <TabItem>
+                <TabItem x:Name="tab_music">
                     <TabItem.Header>
                         <StackPanel>
                             <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
@@ -890,7 +904,7 @@
                         </StackPanel>
                     </TabItem.Header>
                     <DockPanel>
-                        <ListView Name="lv_musicplaylists" DockPanel.Dock="Left" Width="120" SelectionChanged="lv_musicplaylists_SelectionChanged">
+                        <ListView x:Name="lv_musicplaylists" DockPanel.Dock="Left" Width="120" SelectionChanged="lv_musicplaylists_SelectionChanged">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -904,7 +918,7 @@
                         </DockPanel>
                         <DockPanel x:Name="dp_playlist" DockPanel.Dock="Top" Margin="10" Visibility="Collapsed">
                             <Label Content="{Binding Path=Name}" Style="{StaticResource H1}" DockPanel.Dock="Top"/>
-                            <CheckBox Content="Enable this playlist" DockPanel.Dock="Top" IsChecked="{Binding Path=Enabled}"/>
+                            <CheckBox x:Name="cb_enableplaylist" Content="Enable this playlist" DockPanel.Dock="Top" IsChecked="{Binding Path=Enabled}"/>
                             <TextBlock Text="{Binding Path=Description}" Margin="5" MinHeight="80" DockPanel.Dock="Top" TextWrapping="Wrap"/>
                             <Label Content="Used Songs:"  Style="{StaticResource H1}" DockPanel.Dock="Top"/>
                             <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" Height="30">
@@ -1543,7 +1557,7 @@
                 </TabItem>
                 <TabItem Visibility="Hidden" Height="10"/>
             </TabControl>
-            <DockPanel Margin="20,5" Grid.Row="2">
+            <DockPanel Margin="20,5,20,5" Grid.Row="1" Grid.ColumnSpan="2">
                 <Button x:Name="bt_launch" Style="{StaticResource LaunchButton}"  Click="bt_launch_Click" BorderThickness="0" BorderBrush="{x:Null}" Foreground="{x:Null}">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -1568,7 +1582,7 @@
                     </Grid>
                 </Button>
             </DockPanel>
-            <Grid x:Name="gr_blockerpanel" Grid.RowSpan="2" Background="{StaticResource B1_Background}" Visibility="Collapsed" >
+            <Grid x:Name="gr_blockerpanel" Grid.RowSpan="2" Background="{StaticResource B1_Background}" Visibility="Collapsed" Grid.ColumnSpan="2" >
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="100">
                     <TextBlock x:Name="tb_blockerinfotext" TextWrapping="Wrap">
                         Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.

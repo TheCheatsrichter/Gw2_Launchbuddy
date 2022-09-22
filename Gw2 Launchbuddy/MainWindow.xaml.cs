@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using Gw2_Launchbuddy.Modifiers;
 using System.Windows.Navigation;
 using System.Collections.Generic;
+using WizardTest;
 
 namespace Gw2_Launchbuddy
 {
@@ -940,8 +941,8 @@ namespace Gw2_Launchbuddy
         {
             try
             {
-                Videomode.Visibility = Visibility.Collapsed;
-                Slideshow.Visibility = Visibility.Visible;
+                //Videomode.Visibility = Visibility.Collapsed;
+                //Slideshow.Visibility = Visibility.Visible;
                 LBConfiguration.Config.cinema_video = false;
                 LBConfiguration.Config.cinema_slideshow = true;
                 LBConfiguration.Save();
@@ -1934,7 +1935,6 @@ namespace Gw2_Launchbuddy
         private void ListView_MouseEnter(object sender, MouseEventArgs e)
         {
             var test = (sender as ListView).DataContext;
-            int i = 0;
         }
 
         private void bt_addsong_Click(object sender, RoutedEventArgs e)
@@ -2012,6 +2012,11 @@ namespace Gw2_Launchbuddy
         {
             AccountSettings settings = ((sender as ComboBox).DataContext as AccountSettings);
             settings.SetLoginType((LoginType)(sender as ComboBox).SelectedItem);
+        }
+
+        private void bt_helpwiz_Click(object sender, RoutedEventArgs e)
+        {
+            WizardCollection.LaunchHelp((TabItem)tab_options.SelectedItem);
         }
 
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)

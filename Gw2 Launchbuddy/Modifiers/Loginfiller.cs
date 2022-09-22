@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Gw2_Launchbuddy.Extensions;
+using Gw2_Launchbuddy.Helpers;
 using Gw2_Launchbuddy.ObjectManagers;
 
 namespace Gw2_Launchbuddy.Modifiers
@@ -43,17 +44,6 @@ namespace Gw2_Launchbuddy.Modifiers
 
         //base offset 20-200
 
-        static (int,int) pos_email_tb = (480,430);
-        static (int, int) pos_passw_tb = (480, 510);
-        static (int, int) pos_login_bt = (100, 600);
-        static (int, int) pos_authemail_bt = (290, 550);
-        static (int, int) pos_play_bt = (825, 715);
-        static (int, int) pos_authcode = (170, 500);
-        static (int, int) pos_authcode_remnetwork = (65, 545);
-
-        static float dpiscale = 1;
-
-
         public static async void Login(string email,string passwd,GwGameProcess pro, bool clearfields = false)
         {
             //email 480,430
@@ -61,6 +51,7 @@ namespace Gw2_Launchbuddy.Modifiers
             //login 100,600
             //2way auth email remind later 290,550
             //playbtn 825,715
+            GwUIPoints.UpdateDPIFactor(WindowUtil.GetWindowDPIFactor(pro.MainWindowHandle));
 
 
             try
@@ -69,12 +60,12 @@ namespace Gw2_Launchbuddy.Modifiers
                 await pro.WaitForStateAsynch(GwGameProcess.GameStatus.loginwindow_prelogin);
                 //SetForegroundWindow(pro.MainWindowHandle);
                 Thread.Sleep(1000);
-                MouseClickLeft(pro.GetProcess(), pos_email_tb);
+                MouseClickLeft(pro.GetProcess(), GwUIPoints.pos_email_tb);
                 for (int i = 0; i < 100; i++) PressKeyDown(Keys.Back, pro.GetProcess(), false); //Very unclean method, but modifiers onyl work on focus
                 Thread.Sleep(50);
                 TypeString(email, pro.GetProcess());
                 //PressKeyDown(Keys.Tab, pro);
-                MouseClickLeft(pro.GetProcess(), pos_passw_tb);
+                MouseClickLeft(pro.GetProcess(), GwUIPoints.pos_passw_tb);
                 TypeString(passwd, pro.GetProcess());
                 /*
                 PressKeyDown(Keys.Tab, pro);
@@ -82,7 +73,7 @@ namespace Gw2_Launchbuddy.Modifiers
                 PressKeyDown(Keys.Tab, pro);
                 PressKeyDown(Keys.Enter, pro);
                 */
-                MouseClickLeft(pro.GetProcess(), pos_login_bt);
+                MouseClickLeft(pro.GetProcess(), GwUIPoints.pos_login_bt);
             }
             catch (InvalidOperationException e)
             {
@@ -93,13 +84,15 @@ namespace Gw2_Launchbuddy.Modifiers
 
         public static void PressLoginButton(Account acc)
         {
+            GwUIPoints.UpdateDPIFactor(WindowUtil.GetWindowDPIFactor(acc.Client.Process.MainWindowHandle));
+
             //acc.Client.Process.WaitForExit();
-            if(!acc.Client.Process.ReachedState(GwGameProcess.GameStatus.loginwindow_authentication))
+            if (!acc.Client.Process.ReachedState(GwGameProcess.GameStatus.loginwindow_authentication))
             {
                 acc.Client.Process.WaitForState(Extensions.GwGameProcess.GameStatus.loginwindow_prelogin);
                 if (!acc.Client.Process.HasExited)
                 {
-                    MouseClickLeft(acc.Client.Process.GetProcess(), pos_login_bt);
+                    MouseClickLeft(acc.Client.Process.GetProcess(), GwUIPoints.pos_login_bt);
                 }
             }
             Thread.Sleep(1800);
@@ -108,6 +101,8 @@ namespace Gw2_Launchbuddy.Modifiers
 
         public static void PressPlayButton(Account acc)
         {
+            GwUIPoints.UpdateDPIFactor(WindowUtil.GetWindowDPIFactor(acc.Client.Process.MainWindowHandle));
+
             int retries = 3;
             switch (acc.Settings.AuthType)
             {
@@ -116,13 +111,13 @@ namespace Gw2_Launchbuddy.Modifiers
                     {
                         if (!acc.Client.Process.HasExited)
                         {
-                            MouseClickLeft(acc.Client.Process.GetProcess(), pos_play_bt);
+                            MouseClickLeft(acc.Client.Process.GetProcess(), GwUIPoints.pos_play_bt);
 
                             if (!acc.Client.Process.WaitForState(GwGameProcess.GameStatus.game_startup, 500))
                             {
-                                MouseClickLeft(acc.Client.Process.GetProcess(), pos_authemail_bt);
+                                MouseClickLeft(acc.Client.Process.GetProcess(), GwUIPoints.pos_authemail_bt);
                                 Thread.Sleep(100);
-                                MouseClickLeft(acc.Client.Process.GetProcess(), pos_play_bt);
+                                MouseClickLeft(acc.Client.Process.GetProcess(), GwUIPoints.pos_play_bt);
                             }
 
                             acc.Client.Process.WaitForState(GwGameProcess.GameStatus.game_startup, 3000);
@@ -135,36 +130,15 @@ namespace Gw2_Launchbuddy.Modifiers
                     }
                     break;
 
-                case AuthenticationType.authenticator:
-
-                    if (!acc.Client.Process.HasExited)
-                    {
-                        MouseClickLeft(acc.Client.Process.GetProcess(), pos_play_bt);
-
-                        if (!acc.Client.Process.WaitForState(GwGameProcess.GameStatus.game_startup, 500))
-                        {
-                            MouseClickLeft(acc.Client.Process.GetProcess(), pos_authcode_remnetwork);
-                            Thread.Sleep(50);
-                            MouseClickLeft(acc.Client.Process.GetProcess(), pos_authcode);
-                        }
-
-                        acc.Client.Process.WaitForState(GwGameProcess.GameStatus.game_startup, 3000);
-                        /*
-                        PressKeyDown(Keys.Enter, acc.Client.Process);
-                        PressKeyUp(Keys.Enter, acc.Client.Process);
-                        */
-                    }
-
-                    break;
 
                 default:
                     if (!acc.Client.Process.HasExited)
                     {
-                        MouseClickLeft(acc.Client.Process.GetProcess(), pos_play_bt);
+                        MouseClickLeft(acc.Client.Process.GetProcess(), GwUIPoints.pos_play_bt);
 
                         if (!acc.Client.Process.WaitForState(GwGameProcess.GameStatus.game_startup, 800))
                         {
-                            MouseClickLeft(acc.Client.Process.GetProcess(), pos_play_bt);
+                            MouseClickLeft(acc.Client.Process.GetProcess(), GwUIPoints.pos_play_bt);
                         }
                     }
                     break;
@@ -173,11 +147,12 @@ namespace Gw2_Launchbuddy.Modifiers
 
         public static void SteamPlayButtonPress(Process pro)
         {
+            GwUIPoints.UpdateDPIFactor(WindowUtil.GetWindowDPIFactor(pro.MainWindowHandle));
             if (pro.HasExited)
             {
-                MouseClickLeft(pro, pos_play_bt);
+                MouseClickLeft(pro, GwUIPoints.pos_play_bt);
                 Thread.Sleep(100);
-                MouseClickLeft(pro, pos_play_bt);
+                MouseClickLeft(pro, GwUIPoints.pos_play_bt);
             }
         }
 
@@ -215,15 +190,20 @@ namespace Gw2_Launchbuddy.Modifiers
 
         private static void MouseClickLeft(Process pro, int pos_x, int pos_y, bool delay = true)
         {
+#if DEBUG
+            var window = WindowUtil.GetDimensions(pro);
+            //new Helpers.UIPointer(new System.Windows.Point(window.left+ pos_x, window.right+pos_y)).Show();
+            new Helpers.UIPointer(new System.Windows.Point( pos_x+window.left, pos_y+window.right)).Show();
+#endif
             pro.Refresh();
             MouseDownLeft(pro, pos_x , pos_y);
             MouseUpLeft(pro, pos_x, pos_y);
             if (delay) Thread.Sleep(50);
         }
 
-        private static void MouseClickLeft(Process pro, (int,int) pos, bool delay = true)
+        private static void MouseClickLeft(Process pro, UIPoint point, bool delay = true)
         {
-            MouseClickLeft(pro, pos.Item1, pos.Item2, delay);
+            MouseClickLeft(pro, point.X, point.Y, delay);
             if (delay) Thread.Sleep(50);
         }
 
@@ -242,6 +222,50 @@ namespace Gw2_Launchbuddy.Modifiers
             }
             Thread.Sleep(50);
         }
+    }
+
+    class UIPoint
+    {
+        int x=0, y = 0;
+        double dpiscale = 1;
+
+        public int X { get { return (int)(x * dpiscale); } }
+        public int Y { get { return (int)(y * dpiscale); } }
+
+        public UIPoint(int x,int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+
+        public (int,int) DPIConverted(double DPIScale)
+        {
+            dpiscale = DPIScale;
+            return (X,Y);
+        }
+    }
+
+    static class GwUIPoints
+    {
+        public static UIPoint pos_email_tb = new UIPoint(480, 430);
+        public static UIPoint pos_passw_tb = new UIPoint(480, 510);
+        public static UIPoint pos_login_bt = new UIPoint(100, 600);
+        public static UIPoint pos_authemail_bt = new UIPoint(290, 550);
+        public static UIPoint pos_play_bt = new UIPoint(825, 715);
+        public static UIPoint pos_authcode = new UIPoint(170, 500);
+        public static UIPoint pos_authcode_remnetwork = new UIPoint(65, 545);
+
+        public static void UpdateDPIFactor(double factor)
+        {
+            pos_email_tb.DPIConverted(factor);
+            pos_passw_tb.DPIConverted(factor);
+            pos_login_bt.DPIConverted(factor);
+            pos_authemail_bt.DPIConverted(factor);
+            pos_play_bt.DPIConverted(factor);
+            pos_authcode.DPIConverted(factor);
+            pos_authcode_remnetwork.DPIConverted(factor);
+        }
+
     }
 }
 

@@ -36,6 +36,8 @@ namespace Gw2_Launchbuddy.Extensions
 
         public Process GetProcess() { return pro; }
 
+        public double DPIFactor { get { return WindowUtil.GetWindowDPIFactor(MainWindowHandle); } }
+
         #region Facade
 
         //Redirect calls to Process. This enables "normal" usage + full control over accesses. Otherwise finding process via ID wont work.
@@ -49,7 +51,22 @@ namespace Gw2_Launchbuddy.Extensions
         public bool WaitForExit(int ms) { return pro.WaitForExit(ms); }
         public void WaitForExit() { pro.WaitForExit(); }
         public void Refresh() => pro.Refresh();
-        public IntPtr MainWindowHandle { get { return pro.MainWindowHandle; } }
+        public IntPtr MainWindowHandle { get {
+                //Handling issue https://stackoverflow.com/questions/60342879/process-mainwindowhandle-is-non-zero-in-net-framework-but-zero-in-net-core-unl
+                int i = 0;
+                while (Process.GetProcessById(pro.Id).MainWindowHandle==IntPtr.Zero)
+                {
+                    if (HasExited) return IntPtr.Zero;
+                    Thread.Sleep(50);
+                    if(i>=200)
+                    {
+                        throw new Exception("MainWindowhandle timeout was reached");
+                    }
+                    i++;
+                }
+                pro.Refresh();
+                return pro.MainWindowHandle;
+            } }
         public EventHandler Exited;
         public ProcessThreadCollection Threads { get { return pro.Threads; } }
         public ProcessStartInfo StartInfo { get { return pro.StartInfo; } set { pro.StartInfo = value; } }
@@ -231,7 +248,7 @@ namespace Gw2_Launchbuddy.Extensions
             List<IProcessTrigger> pt_loginwindow_prelogin = new List<IProcessTrigger>
             {
                 new ModuleTrigger("CoherentUI64.dll",this),
-                new SleepTrigger(3000),
+                new SleepTrigger(1000),
                 new FileSizeTrigger(EnviromentManager.GwClientTmpPath,null,0),
                 //new WindowDimensionsTrigger(this,0,0,100,100)
             };

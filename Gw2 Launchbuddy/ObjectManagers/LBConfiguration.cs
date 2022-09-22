@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Xml.Serialization;
 using System.Windows.Forms;
+using System.Net;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -112,6 +113,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public bool autoupdatedatfiles = true;
         public string taco_path;
         public string blish_path;
+        public string last_ipaddress;
 
         public bool pushgameclientbuttons = true;
         public bool uselogindelays = true;

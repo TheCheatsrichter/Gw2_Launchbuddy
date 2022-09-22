@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Gw2_Launchbuddy.Extensions
 {
@@ -43,11 +44,11 @@ namespace Gw2_Launchbuddy.Extensions
             waitHandle.Set();
         }
 
-        public void Th_Watcher()
+        public async void Th_Watcher()
         {
             while(!pro.IsRunning)
             {
-                Thread.Sleep(10);
+                Thread.Sleep(50);
             }
 
             while (!pipeline.Done())
@@ -60,6 +61,7 @@ namespace Gw2_Launchbuddy.Extensions
                     Console.WriteLine($"Process reached state: {pipeline.CurrentState().Name}");
                     pipeline.Next();
                 }
+                await Task.Delay(50);
             }
 
         }

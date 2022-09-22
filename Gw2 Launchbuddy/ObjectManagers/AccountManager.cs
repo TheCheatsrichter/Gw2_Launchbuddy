@@ -205,7 +205,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
-            public static Account GetAccountByName(string nickname)
+        public static Account GetAccountByName(string nickname)
         {
             if (Accounts.Any<Account>(a => a.Nickname == nickname)) return Accounts.First<Account>(a => a.Nickname == nickname);
             return null;
@@ -398,7 +398,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             if (DLLs == null) DLLs = new ObservableCollection<string>();
             if (AccHotkeys == null) AccHotkeys = new ObservableCollection<AccountHotkey>();
-            if (RelaunchesMax == null) RelaunchesMax = 0;
             if (AccountInformation == null) this.AccountInformation = new AccountInformation();
             RelaunchesLeft = RelaunchesMax;
         }
@@ -473,6 +472,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 try
                 {
+                    if (Email == null) return null;
                     return Email.Substring(0, 2) + "*****@****" + Email.Substring(Email.Length - 3);
                 }
                 catch

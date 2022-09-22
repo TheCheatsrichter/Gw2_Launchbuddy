@@ -16,6 +16,10 @@ namespace Gw2_Launchbuddy.Helpers
         [DllImport("user32.dll")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
 
+
+        [DllImport("user32.dll")]
+        static extern int GetDpiForWindow(IntPtr hWnd);
+
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
@@ -47,6 +51,17 @@ namespace Gw2_Launchbuddy.Helpers
                 }
             }
             return false;
+        }
+
+        public static double GetWindowDPIFactor(IntPtr winhandle)
+        {
+            if (System.Environment.OSVersion.Version < new Version(10,0, 1607)) return 1;
+
+            if (winhandle == IntPtr.Zero)
+            {
+                return 1;
+            }
+            return (double)GetDpiForWindow(winhandle) / 96;
         }
 
         public static bool IsVisible(double x, double y)
@@ -120,11 +135,11 @@ namespace Gw2_Launchbuddy.Helpers
             {
                 MoveTo(pro.MainWindowHandle, posx, posy);
                 return true;
-            }catch
+            } catch
             {
                 return false;
             }
-            
+
         }
 
 
@@ -135,14 +150,14 @@ namespace Gw2_Launchbuddy.Helpers
                 MoveWindow(handle, posx, posy, Rect.right - Rect.left, Rect.bottom - Rect.top, true);
         }
 
-        public static void ScaleTo(Process pro,int width, int height)
+        public static void ScaleTo(Process pro, int width, int height)
         {
             if (pro.HasExited || pro.MainWindowHandle == IntPtr.Zero) return;
             pro.Refresh();
-            ScaleTo(pro.MainWindowHandle,width,height);
+            ScaleTo(pro.MainWindowHandle, width, height);
         }
 
-        public static void ScaleTo(IntPtr handle, int width,int height)
+        public static void ScaleTo(IntPtr handle, int width, int height)
         {
             RECT Rect = new RECT();
             if (GetWindowRect(handle, ref Rect))
@@ -173,7 +188,7 @@ namespace Gw2_Launchbuddy.Helpers
             {
                 return false;
             }
-            
+
         }
 
         public static bool HasFocus(IntPtr winhandle)
@@ -181,4 +196,5 @@ namespace Gw2_Launchbuddy.Helpers
             return winhandle == GetForegroundWindow();
         }
     }
+
 }

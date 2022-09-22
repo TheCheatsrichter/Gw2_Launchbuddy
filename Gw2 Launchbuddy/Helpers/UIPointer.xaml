@@ -1,0 +1,23 @@
+﻿<Window x:Class="Gw2_Launchbuddy.Helpers.UIPointer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gw2_Launchbuddy.Helpers"
+        mc:Ignorable="d"
+        Title="UIPointer" Height="64" Width="64" AllowsTransparency="True" Background="Transparent" WindowStyle="None" ShowInTaskbar="False" Opacity="0.8" Topmost="True">
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetName="UIArrow" Storyboard.TargetProperty="Opacity" From="1.0" To="0.0" Duration="0:0:2"  Completed="OnFadeoutDone"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+    <Grid Name="UIArrow" Background="Lime">
+        <Grid.OpacityMask>
+            <ImageBrush ImageSource="/Resources/Icons/arrow.png"/>
+        </Grid.OpacityMask>
+    </Grid>
+</Window>

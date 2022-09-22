@@ -357,9 +357,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 Launch();
             }
             account.Settings.AccountInformation.SetLastClose();
-            GetNewGFXFile();
+            //GetNewGFXFile();
         }
 
+        /*
+         * Disabled. Oversight: Gw2 does periodically save to the gfx xml file for this to work a symlink must be created at launch
+         * 
         private bool GetNewGFXFile()
         {
             try
@@ -371,6 +374,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             return true;
         }
+        */
 
         public void Window_MoveTo_Default()
         {
@@ -614,36 +618,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private void PressLoginButton()
         {
-            //Wait between clients
 
-            int timetowait = 0;
-
-            //Get all accounts that were active in the last 4 hours
-
-            int active_accounts = AccountManager.Accounts.Count(x => x.Settings.AccountInformation.HadLoginInPastMinutes(240) == true);
-
-            switch (active_accounts)
-            {
-                case int _ when active_accounts >= 36:
-                    timetowait = 120 * 1000;
-                    break;
-
-                case int _ when active_accounts >= 31:
-                    timetowait = 60 * 1000;
-                    break;
-
-                case int _ when active_accounts >= 21:
-                    timetowait = 40 * 1000;
-                    break;
-
-                case int _ when active_accounts >= 13:
-                    timetowait = 20 * 1000;
-                    break;
-
-                default:
-                    timetowait = 1800 + (active_accounts * active_accounts * 80);
-                    break;
-            }
+            int timetowait = DDOSDelays.GetWaitTime();
 
             if(LBConfiguration.Config.uselogindelays)
             {
@@ -705,6 +681,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             try
             {
+                var starttime = DateTime.Now;
 
                 while (Status < ClientStatus.Running)
                 {
@@ -731,6 +708,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                         }
                     }
 
+                    
 
                     switch (Status)
                     {
@@ -742,55 +720,52 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             break;
 
                         case var expression when (Status < ClientStatus.Created):
+                            Console.WriteLine($"{Status.ToString()} {DateTime.Now - starttime}");
                             StartProcess();
                             ShowProcessStatusbar();
                             Status = ClientStatus.Created;
                             break;
 
                         case var expression when (Status < ClientStatus.Injected):
+                            Console.WriteLine($"{Status.ToString()} {DateTime.Now - starttime}");
+                            if (!Process.WaitForState(GwGameProcess.GameStatus.loginwindow_prelogin))
+                            {
+                                Status = ClientStatus.Crash;
+                            }
+                            Console.WriteLine($"{Status.ToString()} {DateTime.Now - starttime}");
                             InjectDlls();
                             Status = ClientStatus.Injected;
                             break;
 
                         case var expression when (Status < ClientStatus.MutexClosed):
+                            Console.WriteLine($"{Status.ToString()} {DateTime.Now - starttime}");
                             CloseMutex();
                             Status = ClientStatus.MutexClosed;
                             break;
 
                         case var expression when (Status < ClientStatus.Login):
-
-                            if(account.Settings.IsArenaNetAccount)
+                            Console.WriteLine($"{Status.ToString()} {DateTime.Now - starttime}");
+                            if (Account.Settings.Loginfile != null)
                             {
-                                if (!Process.WaitForState(GwGameProcess.GameStatus.loginwindow_prelogin))
-                                {
-                                    Status = ClientStatus.Crash;
-                                }
-
-                                if (Account.Settings.Loginfile != null)
-                                {
-                                    if (LBConfiguration.Config.pushgameclientbuttons) PressLoginButton();
-                                    LocalDatManager.ToDefault(account.Settings.Loginfile);
-                                }
-                                else
-                                {
-                                    LocalDatManager.ToDefault(null); // Reset symbolic link
-                                }
-                                
+                                if (LBConfiguration.Config.pushgameclientbuttons) PressLoginButton();
+                                LocalDatManager.ToDefault(account.Settings.Loginfile);
                             }
                             else
                             {
-                                Loginfiller.SteamPlayButtonPress(Process.GetProcess());
+                                LocalDatManager.ToDefault(null); // Reset symbolic link
                             }
-                            
+
+
                             Status = ClientStatus.Login;
                             break;
 
                         case var expression when (Status < ClientStatus.Running):
+                            Console.WriteLine($"{Status.ToString()} {DateTime.Now - starttime}");
                             RestoreGFX();
                             SetProcessPriority();
                             Status = ClientStatus.Running;
                             try { Focus(); } catch { }
-                            try {if(account.Settings.WinConfig!=null)new Thread(Window_Init).Start();} catch { }
+                            try { if (account.Settings.WinConfig != null) new Thread(Window_Init).Start(); } catch { }
                             account.Settings.AccountInformation.SetLastLogin();
 
                             // Launch TacO & BlisH
@@ -798,8 +773,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             {
                                 if (account.Settings.StartBlish) LBBlish.LaunchBlishInstance(account);
                                 if (account.Settings.StartTaco) LBTacO.LaunchTacoInstance(account);
-                            } catch { }
-                            
+                            }
+                            catch { }
+
                             break;
                     }
                 }
