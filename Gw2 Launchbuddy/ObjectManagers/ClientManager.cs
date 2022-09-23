@@ -358,6 +358,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             account.Settings.AccountInformation.SetLastClose();
             //GetNewGFXFile();
+            
+            foreach(Process addpro in account.AdditionalSoftware)
+            {
+                addpro.Close();
+            }
+            account.AdditionalSoftware.Clear();
         }
 
         /*

@@ -195,6 +195,12 @@ namespace Gw2_Launchbuddy.Helpers
         {
             return winhandle == GetForegroundWindow();
         }
+
+
+        public bool SetDpiAwarness()
+        {
+
+        }
     }
 
 }

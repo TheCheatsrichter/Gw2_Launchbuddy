@@ -13,6 +13,7 @@ using Gw2_Launchbuddy.Modifiers;
 using System.Threading;
 using PluginContracts;
 using static Gw2_Launchbuddy.ObjectManagers.AccountSettings;
+using System.Collections.Generic;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
@@ -324,7 +325,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
         [XmlIgnore]
         public AccPluginCalls PluginCalls;
 
-
+        [XmlIgnore]
+        public List<Process> AdditionalSoftware = new List<Process>();
     }
 
     public class AccountSettings : INotifyPropertyChanged

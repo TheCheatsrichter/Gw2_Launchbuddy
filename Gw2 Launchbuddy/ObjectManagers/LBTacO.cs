@@ -65,7 +65,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 string args = "-forcenewinstance";
                 if (acc.CustomMumbleLink) args += $" -mumble GW2MumbleLink{acc.ID}";
                 proinfo.Arguments = args;
-                Process.Start(proinfo);
+                acc.AdditionalSoftware.Add(Process.Start(proinfo));
 
                 Action sleep = () => Thread.Sleep(1500);
                 Helpers.BlockerInfo.Run("TacO Launch", $"TacO is launched for account {acc.Nickname}.", sleep);

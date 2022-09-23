@@ -66,7 +66,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 string args = $"--pid {acc.Client?.Process?.Id}";
                 if (acc.CustomMumbleLink) args += $" --mumble GW2MumbleLink{acc.ID}";
                 proinfo.Arguments = args;
-                Process.Start(proinfo);
+                acc.AdditionalSoftware.Add(Process.Start(proinfo));
 
                 Action sleep = () => Thread.Sleep(1500);
                 Helpers.BlockerInfo.Run("BlishHUD Launch", $"BlishHUD is launched for account {acc.Nickname}.", sleep);
