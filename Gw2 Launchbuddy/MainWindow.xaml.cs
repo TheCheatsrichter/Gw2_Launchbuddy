@@ -1177,7 +1177,6 @@ namespace Gw2_Launchbuddy
                         if (tmp != null)
                         {
                             accsettings.GFXFile = tmp;
-                            lv_gfx.ItemsSource = accsettings.GFXFile.Config;
                         }
                         else
                         {
