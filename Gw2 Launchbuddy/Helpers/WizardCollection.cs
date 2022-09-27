@@ -23,6 +23,7 @@ namespace WizardTest
         static List<HelpWizardStep> hp_network;
         static List<HelpWizardStep> hp_plugins;
         static List<HelpWizardStep> hp_addons;
+        static List<HelpWizardStep> hp_whatsnew;
         public static void Init(MainWindow window)
         {
             win = window;
@@ -57,6 +58,7 @@ namespace WizardTest
 
         private static void SetupWizards()
         {
+
             hp_launching = new List<HelpWizardStep>
         {
             new HelpWizardStep(win.tab_home,"Home Screen","At the homescreen of Launchbuddy you get a general overview of your configured accounts and some general information"),
@@ -79,13 +81,13 @@ namespace WizardTest
             new HelpWizardStep(win.exp_acchotkeys,"Account Settings Overview","Hotkeys can be used to set specific keyboard shortcuts to something like launching or focusing (bring window to foreground) this account"),
             new HelpWizardStep(win.exp_accwindow,"Account Settings Overview","Gamewindow settings are here to specify a place and size for this account's game window. Really usefull to minimize a cluster of gamewindows when many accounts are launched"),
             new HelpWizardStep(win.exp_accadvancedset,"Account Settings Overview","Spicy stuff is contained here. If you feel like you know what you are doing these settings are for you. CAUTION: Some settings can cause trouble!"),
-            new HelpWizardStep(win.tab_accs,"Account Settings Overview","End of the account settings tour. I hope this tour gave you a small overview of what is available in the account specific settings.")
+            new HelpWizardStep(win.bt_accsave,"Account Settings Overview","All done! Let's save our changes.\nEnd of the account settings tour. I hope this tour gave you a small overview of what is available in the account specific settings.")
         };
 
             hp_music = new List<HelpWizardStep>
         {
             new HelpWizardStep(win.tab_music,"Custom Ingame Music","Launchbuddy can enable you to listen to your favorite music while ingame! But what does make this so special? These playlists are dynamically implemented into the game itself. This means that each playlist will react to your ingame actions."),
-            new HelpWizardStep(win.lv_musicplaylists,"Custom Ingame Music","On the left you can see a list of game states in which each playlists gets played. Let's add your favorite catchy tune to the battle playlist."),
+            new HelpWizardStep(win.lv_musicplaylists,"Custom Ingame Music","On the left you can see a list of game states in which each playlists gets played. Let's add your favorite catchy tune to the battle playlist by clicking on it."),
             new HelpWizardStep(win.bt_addsong,"Custom Ingame Music","To add a song to the playlist simply click on the Add Song button. Afterwards it will be imported and shown in the list. You can listen to tracks by clicking on the play icon right next to them"),
             new HelpWizardStep(win.cb_enableplaylist,"Custom Ingame Music","Last but not least click on the Enable this Playlist checkbox to enable this playlist when you game is launched. You have now successfully created your custom ingame playlist! These playlists do scale with the ingame music volume setting.")
         };

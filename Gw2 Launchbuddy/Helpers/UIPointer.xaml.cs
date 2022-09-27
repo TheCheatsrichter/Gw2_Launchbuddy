@@ -20,11 +20,11 @@ namespace Gw2_Launchbuddy.Helpers
     /// </summary>
     public partial class UIPointer : Window
     {
-        public UIPointer(Point targetpoint)
+        public UIPointer(Point targetpoint,double dpifactor=1)
         {
             InitializeComponent();
-            Left = targetpoint.X;
-            Top = targetpoint.Y - (Height/2);
+            Left = targetpoint.X/ dpifactor;
+            Top = targetpoint.Y/dpifactor - (Height/2);
         }
 
         private void OnFadeoutDone(object sender, EventArgs e)

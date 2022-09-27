@@ -1,4 +1,5 @@
 ﻿using Gw2_Launchbuddy.Extensions;
+using Gw2_Launchbuddy.Modifiers;
 using Gw2_Launchbuddy.ObjectManagers;
 using System;
 using System.Collections.Generic;
@@ -28,13 +29,13 @@ namespace Gw2_Launchbuddy.Helpers
         bool isdone = false;
         string infoprefix = "Powered by Launchbuddy";
         Client client;
-        double dpifactor_x = 1, dpifactor_y = 1;
-        public UIStatusbar(Client client,Func<bool> defofdone,Rect? ui_offset=null)
+        public UIStatusbar(Client client,Func<bool> defofdone,UIPoint anchorpoint)
         {
             InitializeComponent();
             this.client = client;
             Visibility = Visibility.Collapsed;
-            th_trace = new Thread(()=>Th_TraceProcess(client,defofdone,ui_offset));
+
+            th_trace = new Thread(()=>Th_TraceProcess(client,defofdone,anchorpoint));
             client.Process.Exited += OnClientClose;
             th_trace.Start();
         }
@@ -43,28 +44,25 @@ namespace Gw2_Launchbuddy.Helpers
         {
             
             isdone = true;
+            th_trace.Abort();
             this.Dispatcher.Invoke(() => Close());
         }
 
-        void CalcDpi(ref double x, ref double y)
-        {
-            dpifactor_x = System.Windows.PresentationSource.FromVisual(this).CompositionTarget.TransformToDevice.M11;
-            dpifactor_y = System.Windows.PresentationSource.FromVisual(this).CompositionTarget.TransformToDevice.M22;
-        }
 
-        void Th_TraceProcess(Client client, Func<bool> defofdone, Rect? ui_offset)
+        void Th_TraceProcess(Client client, Func<bool> defofdone, UIPoint anchor)
         {
+
             while (!isdone)
             {
                 try
                 {
-
+                    
                     this.Dispatcher.Invoke(() =>
                     {
-                        CalcDpi(ref dpifactor_x, ref dpifactor_y);
-                        RevertScaleDPI();
-                        TraceProcess(client.Process.GetProcess(), ui_offset);
-                        SetVisibility(client.Process.GetProcess());
+                        //RevertScaleDPI();
+                        anchor.DPIConverted(WindowUtil.GetWindowDPIFactor(client.Process.MainWindowHandle));
+                        TraceProcess(client.Process.MainWindowHandle, anchor);
+                        SetVisibility(client.Process.MainWindowHandle);
                         RefreshHeader(client);
                     });
                     isdone = defofdone();
@@ -101,17 +99,20 @@ namespace Gw2_Launchbuddy.Helpers
             }
         }
 
-        public void SetVisibility(Process pro)
+        public void SetVisibility(IntPtr winhandle)
         {
-            if(WindowUtil.HasFocus(pro))
+            if (WindowUtil.HasFocus(winhandle))
             {
                 Visibility = Visibility.Visible;
+                Topmost = true;
             }
             else
             {
                 if (!WindowUtil.HasFocus(new WindowInteropHelper(this).Handle))
                 {
-                    Visibility = Visibility.Collapsed;
+                    Visibility = Visibility.Hidden;
+                    Topmost = false;
+                    Console.WriteLine("Hidden");
                 }
             }
         }
@@ -126,28 +127,32 @@ namespace Gw2_Launchbuddy.Helpers
         }
         */
 
+        /*
         public void RevertScaleDPI()
         {
             Width = MaxWidth/dpifactor_x;
             Height = MaxHeight/dpifactor_y;
         }
+        */
 
-        public void TraceProcess(Process pro,Rect? ui_offset)
+        public void TraceProcess(IntPtr winhandle,UIPoint ui_offset)
         {
-            if (pro.HasExited) return;
-            var winsize = WindowUtil.GetDimensions(pro);
-            //Console.WriteLine($"X:{winsize.left} Y:{winsize.top} Width:{winsize.right - winsize.left} Height:{winsize.bottom - winsize.top}");
+            try
+            {
+                var winsize = WindowUtil.GetDimensions(winhandle);
+                //Console.WriteLine($"X:{winsize.left} Y:{winsize.top} Width:{winsize.right - winsize.left} Height:{winsize.bottom - winsize.top}");
 
-            if(ui_offset!=null)
+                //GetDimensions returns position * dpi scale
+                if (ui_offset != null)
+                {
+                    Left = (winsize.left / ui_offset.DPIScale) + ui_offset.UnscaledX;
+                    Top = (winsize.top / ui_offset.DPIScale) + ui_offset.UnscaledY;
+                }
+            }catch
             {
-                var ui_off = (Rect)ui_offset;
-                Left = (winsize.left) / (dpifactor_x) + (ui_off.Left/dpifactor_x );
-                Top = (winsize.top) / (dpifactor_y) + (ui_off.Top / dpifactor_y);
-            }else
-            {
-                Left = (winsize.left) / (dpifactor_x);
-                Top = (winsize.top) / (dpifactor_y);
+                this.Close();
             }
+
 
         }
 

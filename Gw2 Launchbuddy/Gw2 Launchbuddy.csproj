@@ -347,10 +347,12 @@
     <Compile Include="Helpers\EmbeddedBlockerInfo.cs" />
     <Compile Include="Helpers\FileUtil.cs" />
     <Compile Include="Helpers\FileWatchDog.cs" />
+    <Compile Include="Helpers\GwUIPoints.cs" />
     <Compile Include="Helpers\HelpWizard.xaml.cs">
       <DependentUpon>HelpWizard.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\PublicIPFetcher.cs" />
+    <Compile Include="Helpers\UIPoint.cs" />
     <Compile Include="Helpers\UIPointer.xaml.cs">
       <DependentUpon>UIPointer.xaml</DependentUpon>
     </Compile>

@@ -193,13 +193,10 @@ namespace Gw2_Launchbuddy.Helpers
 
         public static bool HasFocus(IntPtr winhandle)
         {
+#if DEBUG
+            //Console.WriteLine($"{winhandle} \t{GetForegroundWindow()}");
+#endif
             return winhandle == GetForegroundWindow();
-        }
-
-
-        public bool SetDpiAwarness()
-        {
-
         }
     }
 

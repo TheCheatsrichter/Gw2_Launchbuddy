@@ -22,7 +22,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class EnviromentManager
     {
-        public static Version LBVersion = new Version("3.0.13");
+        public static Version LBVersion = new Version("3.1.0");
         public static LaunchOptions LaunchOptions;
 
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
@@ -80,8 +80,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public static string MASTER_Localdat = GwAppdataPath + "MASTER_Local.dat";
 
         public static string LBAddonPath = LBAppdataPath + "Addons.xml";
-
-        public static Rect GwLoginwindow_UIOffset = new Rect(20, 195, 0, 0);
 
         public static MainWindow MainWin = null;
 
@@ -444,12 +442,15 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 pro.WaitForExit();
                 if (pro.exitstatus == ProcessExtension.ExitStatus.self_update)
                 {
-                    while (Process.GetProcessesByName(pro.ProcessName).Length <= 0)
+                    Thread.Sleep(1000);
+                    List<Process> pros = new List<Process>(); 
+                    while (pros.Count <= 0)
                     {
-                        Thread.Sleep(10);
+                        Console.WriteLine(EnviromentManager.GwClientExeNameWithoutExtension);
+                        pros = Process.GetProcessesByName(EnviromentManager.GwClientExeNameWithoutExtension).ToList<Process>();
+                        Thread.Sleep(100);
                     }
-                    Process newpro = Process.GetProcessesByName(pro.ProcessName)[0];
-
+                    Process newpro = pros[0];
                     newpro.WaitForExit();
                 }
             };

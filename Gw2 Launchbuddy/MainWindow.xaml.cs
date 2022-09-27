@@ -365,8 +365,6 @@ namespace Gw2_Launchbuddy
             {
                 MessageBox.Show("Video File for Video Mode could not be found! \nPath: " + videopath + "\n" + err.Message);
             }
-            if (videomode && !slideshowmode) rb_cinemavideomode.IsChecked = true;
-            if (!videomode && slideshowmode) rb_cinemaslideshowmode.IsChecked = true;
             ClrPcker_Background.SelectedColor = backgroundcolor;
             lab_loginwindowpath.Content = "Current Login Window: " + Path.GetFileNameWithoutExtension(loginwindowpath);
             sl_logoendpos.Value = LBConfiguration.Config.cinema_slideshowendpos;
@@ -937,32 +935,6 @@ namespace Gw2_Launchbuddy
             }
         }
 
-        private void rb_slideshowmode(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                //Videomode.Visibility = Visibility.Collapsed;
-                //Slideshow.Visibility = Visibility.Visible;
-                LBConfiguration.Config.cinema_video = false;
-                LBConfiguration.Config.cinema_slideshow = true;
-                LBConfiguration.Save();
-            }
-            catch { }
-        }
-
-        private void rb_videomode(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Slideshow.Visibility = Visibility.Collapsed;
-                Videomode.Visibility = Visibility.Visible;
-                LBConfiguration.Config.cinema_video = true;
-                LBConfiguration.Config.cinema_slideshow = false;
-                LBConfiguration.Save();
-            }
-            catch { }
-        }
-
         private void bt_cinema_setvideo_Click(object sender, RoutedEventArgs e)
         {
             cinema_videoplayback.Stop();
@@ -1056,12 +1028,12 @@ namespace Gw2_Launchbuddy
 
         private void Window_LostKeyboardFocus(Object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
-            if (cinemamode || rb_cinemavideomode.IsChecked == true) { Cinema_MediaPlayer.Pause(); }
+            if (cinemamode) { Cinema_MediaPlayer.Pause(); }
         }
 
         private void Window_GotKeyboardFocus(Object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
-            if (cinemamode || rb_cinemavideomode.IsChecked == true) { Cinema_MediaPlayer.Play(); }
+            if (cinemamode) { Cinema_MediaPlayer.Play(); }
         }
 
         private void myWindow_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -1756,8 +1728,6 @@ namespace Gw2_Launchbuddy
             System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WKHYFSBMK6TQE&source=url");
         }
 
-        #region Plugins
-
         public void AddTabPlugin(TabItem UIContent)
         {
             if (UIContent != null)
@@ -2018,13 +1988,27 @@ namespace Gw2_Launchbuddy
             WizardCollection.LaunchHelp((TabItem)tab_options.SelectedItem);
         }
 
+        private void tab_cinemamodeselection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((sender as TabControl).SelectedItem == tab_cinslideshowmode)
+            {
+                LBConfiguration.Config.cinema_video = false;
+                LBConfiguration.Config.cinema_slideshow = true;
+                LBConfiguration.Save();
+            }
+            else
+            {
+                LBConfiguration.Config.cinema_video = true;
+                LBConfiguration.Config.cinema_slideshow = false;
+                LBConfiguration.Save();
+            }
+        }
+
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)
         {
             PluginManager.UpdatePlugin(((sender as Button).DataContext as Plugin_Wrapper).Plugin, true);
 
         }
 
-
-        #endregion Plugins
     }
 }

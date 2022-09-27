@@ -54,9 +54,13 @@ namespace Gw2_Launchbuddy.Extensions
         public IntPtr MainWindowHandle { get {
                 //Handling issue https://stackoverflow.com/questions/60342879/process-mainwindowhandle-is-non-zero-in-net-framework-but-zero-in-net-core-unl
                 int i = 0;
-                while (Process.GetProcessById(pro.Id).MainWindowHandle==IntPtr.Zero)
+                if (HasExited) return IntPtr.Zero;
+                while (!HasExited)
                 {
-                    if (HasExited) return IntPtr.Zero;
+                    if (!(Process.GetProcessById(pro.Id).MainWindowHandle == IntPtr.Zero))
+                    {
+                        break;
+                    }
                     Thread.Sleep(50);
                     if(i>=200)
                     {
@@ -64,8 +68,15 @@ namespace Gw2_Launchbuddy.Extensions
                     }
                     i++;
                 }
-                pro.Refresh();
-                return pro.MainWindowHandle;
+                try
+                {
+                    pro.Refresh();
+                    return pro.MainWindowHandle;
+                }
+                catch
+                {
+                    return IntPtr.Zero;
+                }
             } }
         public EventHandler Exited;
         public ProcessThreadCollection Threads { get { return pro.Threads; } }
@@ -248,15 +259,15 @@ namespace Gw2_Launchbuddy.Extensions
             List<IProcessTrigger> pt_loginwindow_prelogin = new List<IProcessTrigger>
             {
                 new ModuleTrigger("CoherentUI64.dll",this),
-                new SleepTrigger(1000),
+                new SleepTrigger(2500),
                 new FileSizeTrigger(EnviromentManager.GwClientTmpPath,null,0),
                 //new WindowDimensionsTrigger(this,0,0,100,100)
             };
 
             List<IProcessTrigger> pt_loginwindow_authentication = new List<IProcessTrigger>
             {
-                new ModuleTrigger("rsaenh.dll",this),
-                new SleepTrigger(500), //Needs better trigger in the future, currently unknown delta between pre login and authentication pending
+                new ModuleTrigger("DPAPI.dll",this),
+                new SleepTrigger(700), //Needs better trigger in the future, currently unknown delta between pre login and authentication pending
             };
 
             List<IProcessTrigger> pt_loginwindow_pressplay = new List<IProcessTrigger>

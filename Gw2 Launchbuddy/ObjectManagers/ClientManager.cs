@@ -647,7 +647,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             if (account.Settings.LoginType == LoginType.Steam) return;
             Thread statusbar = new Thread(() =>
             {
-                UIStatusbar loginwindowblocker = new UIStatusbar(this, new Func<bool>(() => Process.ReachedState(GwGameProcess.GameStatus.game_startup)), EnviromentManager.GwLoginwindow_UIOffset);
+                UIStatusbar loginwindowblocker = new UIStatusbar(this, new Func<bool>(() => Process.ReachedState(GwGameProcess.GameStatus.game_startup)), GwUIPoints.pos_loginwindow_offset);
                 loginwindowblocker.Show();
 
                 loginwindowblocker.Closed += (sender, e) => loginwindowblocker.Dispatcher.InvokeShutdown();
@@ -682,7 +682,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             */
         }
 
-        public async void Launch()
+        public  void Launch()
         {
 
             try

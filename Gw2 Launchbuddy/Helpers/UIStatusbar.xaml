@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Gw2_Launchbuddy.Helpers"
         mc:Ignorable="d"
-        Title="UITraceBlocker" x:Name="tracewindow" MaxHeight="40" MaxWidth="500" Height="40" Width="500" WindowStyle="None" Closing="Window_Closing" Visibility="Visible" Topmost="True" AllowsTransparency="True" Background="{StaticResource B1_Background}" Opacity="0.8">
+        Title="UITraceBlocker" x:Name="tracewindow" MaxHeight="40" MaxWidth="500" Height="40" Width="500" WindowStyle="None" Closing="Window_Closing" Visibility="Collapsed" Topmost="True" AllowsTransparency="True" Background="{StaticResource B1_Background}" Opacity="0.8" ShowInTaskbar="False">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100*"/>

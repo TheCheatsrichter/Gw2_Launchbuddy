@@ -12,7 +12,7 @@
 
 
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
-        Title="Gw2 Launchbuddy V 3.0.13" MinHeight="570" MinWidth="600" Height="600" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None" Background="{StaticResource B1_Background}" AllowsTransparency="True">
+        Title="Gw2 Launchbuddy V 3.1.0" MinHeight="570" MinWidth="600" Height="600" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None" Background="{StaticResource B1_Background}" AllowsTransparency="True">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="5"/>
     </WindowChrome.WindowChrome>
@@ -241,7 +241,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 3.0.13 ALPHA" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 3.1.0 ALPHA" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
@@ -1243,15 +1243,10 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="90"/>
-                            <RowDefinition Height="24"/>
                             <RowDefinition Height="30*"/>
                         </Grid.RowDefinitions>
                         <Label Content="Cinema Mode (Changes may require restart): " Grid.Row="0" Style="{StaticResource H1}"/>
                         <Button ToolTip="Create a custom launcher UI with an animated slideshow or video background" Grid.Row="0" ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="100000" Grid.Column="99" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Width="20" Content="?"   FontWeight="Bold"></Button>
-                        <DockPanel Margin="0,5,0,0" Grid.Row="2">
-                            <RadioButton x:Name="rb_cinemaslideshowmode" Content="Slideshow Mode" DockPanel.Dock="Left" Checked="rb_slideshowmode" IsChecked="True" FontWeight="Bold" FontSize="14" ToolTip="Use the slideshow version of the cinemamode." HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <RadioButton x:Name="rb_cinemavideomode" Content="Video Mode" DockPanel.Dock="Left" Checked="rb_videomode" Margin="5,0,0,0" FontSize="14" FontWeight="Bold" ToolTip="Use the video mode of cinemamode" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </DockPanel >
                         <StackPanel Grid.Row="1" Margin="0,3">
                             <Separator/>
                             <Grid>
@@ -1278,139 +1273,143 @@
                             </Grid>
                             <Separator Margin="0,5,0,0"/>
                         </StackPanel>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="4" Margin="5">
-                            <StackPanel x:Name="Slideshow" >
-                                <Expander >
-                                    <Expander.Header>
-                                        <Label Content="Imagefolder" Style="{StaticResource H2}"/>
-                                    </Expander.Header>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="50*"/>
-                                            <ColumnDefinition Width="50*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="30"/>
-                                            <RowDefinition Height="50*" MaxHeight="300"/>
-                                            <RowDefinition Height="30"/>
-                                        </Grid.RowDefinitions>
-                                        <Label Content="Imagefolder:" Style="{StaticResource H3}"/>
+                        <TabControl Grid.Row="2" x:Name="tab_cinemamodeselection" SelectionChanged="tab_cinemamodeselection_SelectionChanged" Background="{StaticResource B2_Background}">
+                            <TabItem x:Name="tab_cinslideshowmode" Header="Slideshow Mode" Background="{StaticResource B2_Background}">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="4" Margin="5" Background="{StaticResource B2_Background}">
+                                    <StackPanel x:Name="Slideshow" >
+                                        <Expander >
+                                            <Expander.Header>
+                                                <Label Content="Imagefolder" Style="{StaticResource H2}"/>
+                                            </Expander.Header>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="50*"/>
+                                                    <ColumnDefinition Width="50*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="30"/>
+                                                    <RowDefinition Height="50*" MaxHeight="300"/>
+                                                    <RowDefinition Height="30"/>
+                                                </Grid.RowDefinitions>
+                                                <Label Content="Imagefolder:" Style="{StaticResource H3}"/>
 
-                                        <Image x:Name="img_imagepreview" Grid.Row="1" Grid.Column="1" Source="Resources/noimg.png" MaxHeight="300"/>
-                                        <Grid Margin="0,5" Grid.Row="1">
-                                            <ListView x:Name="lv_cinema_images" Grid.Row="1" MaxHeight="300"  SelectionChanged="lv_cinema_images_SelectionChanged">
-                                                <ListView.View>
-                                                    <GridView>
-                                                        <GridViewColumn HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
-                                                            <GridViewColumnHeader Tag="Name" Content="Image Name"/>
-                                                        </GridViewColumn>
-                                                        <GridViewColumn HeaderStringFormat=""  DisplayMemberBinding="{Binding Path}">
-                                                            <GridViewColumnHeader Tag="Path" Content="Path"/>
-                                                        </GridViewColumn>
-                                                    </GridView>
-                                                </ListView.View>
-                                            </ListView>
-                                        </Grid>
-                                        <Button Content="Set Imagefolder" x:Name="bt_cinema_setimagefolder" Grid.Row="2" Grid.Column="0" Click="bt_cinema_setimagefolder_Click" ToolTip="Choose the folder where your pictures for the slidshow should be imported from" />
+                                                <Image x:Name="img_imagepreview" Grid.Row="1" Grid.Column="1" Source="Resources/noimg.png" MaxHeight="300"/>
+                                                <Grid Margin="0,5" Grid.Row="1">
+                                                    <ListView x:Name="lv_cinema_images" Grid.Row="1" MaxHeight="300"  SelectionChanged="lv_cinema_images_SelectionChanged">
+                                                        <ListView.View>
+                                                            <GridView>
+                                                                <GridViewColumn HeaderStringFormat="" Width="150" DisplayMemberBinding="{Binding Name}">
+                                                                    <GridViewColumnHeader Tag="Name" Content="Image Name"/>
+                                                                </GridViewColumn>
+                                                                <GridViewColumn HeaderStringFormat=""  DisplayMemberBinding="{Binding Path}">
+                                                                    <GridViewColumnHeader Tag="Path" Content="Path"/>
+                                                                </GridViewColumn>
+                                                            </GridView>
+                                                        </ListView.View>
+                                                    </ListView>
+                                                </Grid>
+                                                <Button Content="Set Imagefolder" x:Name="bt_cinema_setimagefolder" Grid.Row="2" Grid.Column="0" Click="bt_cinema_setimagefolder_Click" ToolTip="Choose the folder where your pictures for the slidshow should be imported from" />
 
-                                        <Label x:Name="lab_imagepreview" Content="Current Image: -" Grid.Row="2" Grid.Column="1" FontWeight="Bold"/>
-                                    </Grid>
-                                </Expander>
-                                <Expander>
-                                    <Expander.Header>
-                                        <Label Content="Music" Style="{StaticResource H2}"/>
-                                    </Expander.Header>
-                                    <DockPanel>
-                                        <Label x:Name="lab_musicpath" Content="Current Music file: -" FontWeight="Bold" ToolTip="The path to your currently selected music file." DockPanel.Dock="Top"/>
-                                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-                                            <Button x:Name="bt_setmusic" Content="Set Music" Grid.Column="0" Click="bt_setmusic_Click" VerticalAlignment="Center" Height="30" ToolTip="Choose the music for slideshow mode." Width="100"/>
-                                            <Button x:Name="bt_musicstart" Content="Test Music" Click="bt_musicstart_Click" Margin="5,0" Width="100"/>
-                                            <Button x:Name="bt_musicstop" Content="Stop Music" Click="bt_musicstop_Click" Margin="5,0" Width="100"/>
-                                        </StackPanel>
-                                    </DockPanel>
-                                </Expander>
-                                <Expander>
-                                    <Expander.Header>
-                                        <Label Content="Animation" Style="{StaticResource H2}"/>
-                                    </Expander.Header>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="50*"/>
-                                            <ColumnDefinition Width="50*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="30"/>
-                                            <RowDefinition Height="30"/>
-                                        </Grid.RowDefinitions>
-                                        <Label Content="Image EndPosition Horizontal:" FontWeight="Bold"/>
-                                        <Slider x:Name="sl_logoendpos" Grid.Column="1" Maximum="100" Minimum="-100" Value="30" ValueChanged="sl_logoendpos_ValueChanged" Thumb.DragCompleted="sl_logoendpos_DragCompleted" ToolTip="Configure the endposition (lower=left,higher=right) of the images."/>
+                                                <Label x:Name="lab_imagepreview" Content="Current Image: -" Grid.Row="2" Grid.Column="1" FontWeight="Bold"/>
+                                            </Grid>
+                                        </Expander>
+                                        <Expander>
+                                            <Expander.Header>
+                                                <Label Content="Music" Style="{StaticResource H2}"/>
+                                            </Expander.Header>
+                                            <DockPanel>
+                                                <Label x:Name="lab_musicpath" Content="Current Music file: -" FontWeight="Bold" ToolTip="The path to your currently selected music file." DockPanel.Dock="Top"/>
+                                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+                                                    <Button x:Name="bt_setmusic" Content="Set Music" Grid.Column="0" Click="bt_setmusic_Click" VerticalAlignment="Center" Height="30" ToolTip="Choose the music for slideshow mode." Width="100"/>
+                                                    <Button x:Name="bt_musicstart" Content="Test Music" Click="bt_musicstart_Click" Margin="5,0" Width="100"/>
+                                                    <Button x:Name="bt_musicstop" Content="Stop Music" Click="bt_musicstop_Click" Margin="5,0" Width="100"/>
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </Expander>
+                                        <Expander>
+                                            <Expander.Header>
+                                                <Label Content="Animation" Style="{StaticResource H2}"/>
+                                            </Expander.Header>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="50*"/>
+                                                    <ColumnDefinition Width="50*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="30"/>
+                                                    <RowDefinition Height="30"/>
+                                                </Grid.RowDefinitions>
+                                                <Label Content="Image EndPosition Horizontal:" FontWeight="Bold"/>
+                                                <Slider x:Name="sl_logoendpos" Grid.Column="1" Maximum="100" Minimum="-100" Value="30" ValueChanged="sl_logoendpos_ValueChanged" Thumb.DragCompleted="sl_logoendpos_DragCompleted" ToolTip="Configure the endposition (lower=left,higher=right) of the images."/>
 
-                                        <Label x:Name="lab_endscaleX" Content="Image EndScale:" FontWeight="Bold" Grid.Row="1"/>
-                                        <Slider x:Name="sl_logoendscaleX" Grid.Column="1" Grid.Row="1" Value="30" ValueChanged="sl_logoendscaleX_ValueChanged" Thumb.DragCompleted="sl_logoendscaleX_DragCompleted" Maximum="5" Minimum="0.2" LargeChange="0.1" ToolTip="Configure the scale/size of the pictures during the slideshow."/>
-                                    </Grid>
-                                </Expander>
-                                <Expander>
-                                    <Expander.Header>
-                                        <Label Content="Mask" Style="{StaticResource H2}"/>
-                                    </Expander.Header>
-                                    <Grid Margin="0,5">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="50*"/>
-                                            <ColumnDefinition Width="50*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="100*"/>
-                                            <RowDefinition Height="30"/>
-                                        </Grid.RowDefinitions>
-                                        <TextBlock Grid.Row="0" Grid.Column="0" x:Name="tb_maskinfo" TextWrapping="Wrap" FontSize="14.667">
+                                                <Label x:Name="lab_endscaleX" Content="Image EndScale:" FontWeight="Bold" Grid.Row="1"/>
+                                                <Slider x:Name="sl_logoendscaleX" Grid.Column="1" Grid.Row="1" Value="30" ValueChanged="sl_logoendscaleX_ValueChanged" Thumb.DragCompleted="sl_logoendscaleX_DragCompleted" Maximum="5" Minimum="0.2" LargeChange="0.1" ToolTip="Configure the scale/size of the pictures during the slideshow."/>
+                                            </Grid>
+                                        </Expander>
+                                        <Expander>
+                                            <Expander.Header>
+                                                <Label Content="Mask" Style="{StaticResource H2}"/>
+                                            </Expander.Header>
+                                            <Grid Margin="0,5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="50*"/>
+                                                    <ColumnDefinition Width="50*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="100*"/>
+                                                    <RowDefinition Height="30"/>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Grid.Row="0" Grid.Column="0" x:Name="tb_maskinfo" TextWrapping="Wrap" FontSize="14.667">
                                         Instructions:
                                         <LineBreak />
                                         Set the Maskimage by using a png image with transparent background. Draw the logo/ image with any choosen color, the alpha channel however determines which part of the mask will be visible! Press Set MaskImage and check in the Preview if the mask is imported correctly
-                                        </TextBlock>
-                                        <Button Content="Set Maskimage" x:Name="bt_cinema_setmask" Grid.Row="1" Click="bt_cinema_setmask_Click" ToolTip="Your current used masked for the slideshow pictures."/>
-                                        <Label x:Name="lab_maskpreview" Content="Current Mask: Default" Grid.Row="1" Grid.Column="1" FontWeight="Bold"/>
-                                        <Image x:Name="img_maskpreview" Grid.Row="0" Grid.Column="1" Source="Resources/logo_hq_mask.png" MaxHeight="180"/>
+                                                </TextBlock>
+                                                <Button Content="Set Maskimage" x:Name="bt_cinema_setmask" Grid.Row="1" Click="bt_cinema_setmask_Click" ToolTip="Your current used masked for the slideshow pictures."/>
+                                                <Label x:Name="lab_maskpreview" Content="Current Mask: Default" Grid.Row="1" Grid.Column="1" FontWeight="Bold"/>
+                                                <Image x:Name="img_maskpreview" Grid.Row="0" Grid.Column="1" Source="Resources/logo_hq_mask.png" MaxHeight="180"/>
+                                            </Grid>
+                                        </Expander>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </TabItem>
+                            <TabItem x:Name="tab_cinvideomode" Header="Video Mode" Background="{StaticResource B2_Background}">
+                                <StackPanel x:Name="Videomode" IsEnabled="True" Grid.Row="4" Margin="5">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="50*"/>
+                                            <ColumnDefinition Width="50*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="200*"/>
+                                            <RowDefinition Height="30"/>
+                                        </Grid.RowDefinitions>
+
+                                        <StackPanel>
+                                            <Label Content="Videomode Info:" FontSize="16" FontWeight="Bold"/>
+                                            <Label x:Name="lab_videoname" Content="Videoname:"/>
+                                            <Label x:Name="lab_videopath" Content="Path:"/>
+                                            <Label x:Name="lab_videoresolution" Content="Resolution:"/>
+                                            <Label x:Name="lab_videoformat" Content="Format:"/>
+                                            <Label x:Name="lab_videolength" Content="Length:"/>
+                                        </StackPanel>
+                                        <MediaElement x:Name="cinema_videoplayback" Grid.Row="0" Grid.Column="1" Margin="5,0" LoadedBehavior="Manual" UnloadedBehavior="Manual" Loaded="cinema_videoplayback_Loaded" MediaOpened="cinema_videoplayback_MediaOpened"/>
+
+                                        <Grid Grid.Row="1" Grid.Column="1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50*"/>
+                                                <ColumnDefinition Width="50*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button x:Name="bt_cinema_videoplay" Content="&gt;" Grid.Row="0" Grid.Column="0"  Margin="5,0"  Click="bt_cinema_videoplay_Click"/>
+                                            <Button x:Name="bt_cinema_videostop" Content="Stop" Grid.Row="0" Grid.Column="1"  Margin="5,0" BorderThickness="5" Click="bt_cinema_videostop_Click"/>
+                                        </Grid>
+                                        <Button x:Name="bt_cinema_setvideo" Content="Set Video" Grid.Row="1" Margin="5,0" Click="bt_cinema_setvideo_Click" ToolTip="Choose the videofile used for video mode.&#x0a;This video will be played in the background."/>
                                     </Grid>
-                                </Expander>
-                            </StackPanel>
-                        </ScrollViewer>
-                        <StackPanel x:Name="Videomode" Visibility="Collapsed" IsEnabled="True" Grid.Row="4" Margin="5">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50*"/>
-                                    <ColumnDefinition Width="50*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="200*"/>
-                                    <RowDefinition Height="30"/>
-                                </Grid.RowDefinitions>
 
-                                <StackPanel>
-                                    <Label Content="Videomode Info:" FontSize="16" FontWeight="Bold"/>
-                                    <Label x:Name="lab_videoname" Content="Videoname:"/>
-                                    <Label x:Name="lab_videopath" Content="Path:"/>
-                                    <Label x:Name="lab_videoresolution" Content="Resolution:"/>
-                                    <Label x:Name="lab_videoformat" Content="Format:"/>
-                                    <Label x:Name="lab_videolength" Content="Length:"/>
                                 </StackPanel>
-                                <MediaElement x:Name="cinema_videoplayback" Grid.Row="0" Grid.Column="1" Margin="5,0" LoadedBehavior="Manual" UnloadedBehavior="Manual" Loaded="cinema_videoplayback_Loaded" MediaOpened="cinema_videoplayback_MediaOpened"/>
-
-                                <Grid Grid.Row="1" Grid.Column="1">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50*"/>
-                                        <ColumnDefinition Width="50*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Button x:Name="bt_cinema_videoplay" Content="&gt;" Grid.Row="0" Grid.Column="0"  Margin="5,0"  Click="bt_cinema_videoplay_Click"/>
-                                    <Button x:Name="bt_cinema_videostop" Content="Stop" Grid.Row="0" Grid.Column="1"  Margin="5,0" BorderThickness="5" Click="bt_cinema_videostop_Click"/>
-                                </Grid>
-                                <Button x:Name="bt_cinema_setvideo" Content="Set Video" Grid.Row="1" Margin="5,0" Click="bt_cinema_setvideo_Click" ToolTip="Choose the videofile used for video mode.&#x0a;This video will be played in the background."/>
-                            </Grid>
-
-                        </StackPanel>
+                            </TabItem>
+                        </TabControl>
                     </Grid>
-
                 </TabItem>
-
                 <TabItem x:Name="tab_clientfix">
                     <TabItem.Header>
                         <StackPanel>

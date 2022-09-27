@@ -193,7 +193,7 @@ namespace Gw2_Launchbuddy.Modifiers
 #if DEBUG
             var window = WindowUtil.GetDimensions(pro);
             //new Helpers.UIPointer(new System.Windows.Point(window.left+ pos_x, window.right+pos_y)).Show();
-            new Helpers.UIPointer(new System.Windows.Point( pos_x+window.left, pos_y+window.right)).Show();
+            new Helpers.UIPointer(new System.Windows.Point( pos_x+window.left, pos_y+window.top),WindowUtil.GetWindowDPIFactor(pro.MainWindowHandle)).Show();
 #endif
             pro.Refresh();
             MouseDownLeft(pro, pos_x , pos_y);
@@ -224,48 +224,5 @@ namespace Gw2_Launchbuddy.Modifiers
         }
     }
 
-    class UIPoint
-    {
-        int x=0, y = 0;
-        double dpiscale = 1;
-
-        public int X { get { return (int)(x * dpiscale); } }
-        public int Y { get { return (int)(y * dpiscale); } }
-
-        public UIPoint(int x,int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-
-        public (int,int) DPIConverted(double DPIScale)
-        {
-            dpiscale = DPIScale;
-            return (X,Y);
-        }
-    }
-
-    static class GwUIPoints
-    {
-        public static UIPoint pos_email_tb = new UIPoint(480, 430);
-        public static UIPoint pos_passw_tb = new UIPoint(480, 510);
-        public static UIPoint pos_login_bt = new UIPoint(100, 600);
-        public static UIPoint pos_authemail_bt = new UIPoint(290, 550);
-        public static UIPoint pos_play_bt = new UIPoint(825, 715);
-        public static UIPoint pos_authcode = new UIPoint(170, 500);
-        public static UIPoint pos_authcode_remnetwork = new UIPoint(65, 545);
-
-        public static void UpdateDPIFactor(double factor)
-        {
-            pos_email_tb.DPIConverted(factor);
-            pos_passw_tb.DPIConverted(factor);
-            pos_login_bt.DPIConverted(factor);
-            pos_authemail_bt.DPIConverted(factor);
-            pos_play_bt.DPIConverted(factor);
-            pos_authcode.DPIConverted(factor);
-            pos_authcode_remnetwork.DPIConverted(factor);
-        }
-
-    }
 }
 
