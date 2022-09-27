@@ -1,4 +1,4 @@
-Big bugfixes are coming. 
-Over 12 major bugs fixed and 4 new features are coming with 3.1!
-Let's get these nasty loginfile update / creation bugs fixed. ;D
-Early access available for Patrons (Version 3.0.10).
+3.1.0 is finished and early access available at Patreon!
+Nearly 4000 lines of code have been edited and overhauled.
+Fixing over 14 major bugs (focus on game updates), several new features
+and more!
