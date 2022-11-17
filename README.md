@@ -1,6 +1,6 @@
-![Preview Image](https://i.imgur.com/IANRST5.png)
+![Preview Image](https://i.imgur.com/OprDAzx.png)
 
-# Gw2_Launchbuddy V 2.#.#
+# Gw2_Launchbuddy V 3.#.#
 # The following FAQ ony applies to the above version number!
 Custom launcher generator for the video game Guild Wars 2.
 TheCheatsrichter. All rights reserved.
