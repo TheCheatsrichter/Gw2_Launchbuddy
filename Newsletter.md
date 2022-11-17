@@ -1,4 +1,4 @@
-3.1.0 is finished and early access available at Patreon!
-Nearly 4000 lines of code have been edited and overhauled.
-Fixing over 14 major bugs (focus on game updates), several new features
-and more!
+3.2.0 is finished and early access available at Patreon!
+Steam account support is now available, new Game Link feature,
+several QOL changes and bugfixes. Stay tuned and get the latest releases early
+at the Launchbuddy patreon website.
