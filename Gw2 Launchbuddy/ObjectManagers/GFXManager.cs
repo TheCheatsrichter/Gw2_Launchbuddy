@@ -101,7 +101,7 @@ namespace Gw2_Launchbuddy
             }
             catch (Exception e)
             {
-                throw new Exception(EnviromentManager.Create_Environment_Report() + "\n" + e.Message);
+                throw new Exception(CrashReporter.Create_Environment_Report() + "\n" + e.Message);
             }
 
         }
@@ -121,7 +121,7 @@ namespace Gw2_Launchbuddy
 
             catch (Exception e)
             {
-                throw new Exception(EnviromentManager.Create_Environment_Report() + "\n" + e.Message);
+                throw new Exception(CrashReporter.Create_Environment_Report() + "\n" + e.Message);
             }
         }
 

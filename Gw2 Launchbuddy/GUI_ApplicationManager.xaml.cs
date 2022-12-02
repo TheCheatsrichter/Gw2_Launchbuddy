@@ -1,5 +1,7 @@
 ﻿using Gw2_Launchbuddy.ObjectManagers;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -204,6 +206,13 @@ namespace Gw2_Launchbuddy
                 row_settings.Height = new GridLength(0);
             }
 
+        }
+
+        private void bt_sort_Click(object sender, RoutedEventArgs e)
+        {
+            var instances = ClientManager.ActiveClients;
+            ClientManager.ActiveClients = new ObservableCollection<Client>(instances.OrderBy(a => a.account.ListRank));
+            lv_instances.ItemsSource = ClientManager.ActiveClients;
         }
 
         private void UpdateUIButtons()

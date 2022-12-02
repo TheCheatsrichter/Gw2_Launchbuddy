@@ -363,6 +363,9 @@
     <Compile Include="Helpers\WizardCollection.cs" />
     <Compile Include="Modifiers\AuthenticationType.cs" />
     <Compile Include="Modifiers\DDOSDelays.cs" />
+    <Compile Include="Modifiers\GameDataLinker.xaml.cs">
+      <DependentUpon>GameDataLinker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Modifiers\IORepeater.cs" />
     <Compile Include="Helpers\WindowInfo_Grabber.xaml.cs">
       <DependentUpon>WindowInfo_Grabber.xaml</DependentUpon>
@@ -383,6 +386,7 @@
     <Compile Include="Modifiers\Loginfiller.cs" />
     <Compile Include="Modifiers\LoginTypes.cs" />
     <Compile Include="Modifiers\ModuleReader.cs" />
+    <Compile Include="Modifiers\PProtection.cs" />
     <Compile Include="ObjectManagers\Hotkeys.cs" />
     <Compile Include="ObjectManagers\LBConfiguration.cs" />
     <Compile Include="ObjectManagers\LBBlish.cs" />
@@ -405,6 +409,7 @@
     <Compile Include="ObjectManagers\EnviromentManager.cs" />
     <Compile Include="ObjectManagers\IconManager.cs" />
     <Compile Include="ObjectManagers\PluginManager.cs" />
+    <Compile Include="ObjectManagers\ProcessAffinityManager.cs" />
     <Compile Include="ObjectManagers\ServerManager.cs" />
     <Compile Include="ObjectManagers\WindowConfig.cs" />
     <Compile Include="Popup.xaml.cs">
@@ -424,6 +429,9 @@
       <DependentUpon>TextBoxPopUp.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\VersionSwitcher.cs" />
+    <Compile Include="UIControls\PContent.xaml.cs">
+      <DependentUpon>PContent.xaml</DependentUpon>
+    </Compile>
     <Page Include="ColorPalettes\Launchbuddy_bright_colorpalette.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -488,6 +496,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Modifiers\GameDataLinker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Popup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -495,6 +507,10 @@
     <Page Include="TextBoxPopUp.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UIControls\PContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -649,7 +665,6 @@
     <Resource Include="Resources\Icons\pinned.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UIManagers\" />
     <Folder Include="Wrappers\" />
   </ItemGroup>
   <ItemGroup>
@@ -695,6 +710,24 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\sort.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ToDo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\lock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="HashStash\phash.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\benchmarking.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Classes\c_specter.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">

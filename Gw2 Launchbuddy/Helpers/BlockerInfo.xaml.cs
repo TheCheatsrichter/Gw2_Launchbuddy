@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gw2_Launchbuddy.ObjectManagers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,7 @@ namespace Gw2_Launchbuddy.Helpers
         private BlockerInfo()
         {
             InitializeComponent();
+            if (!LBConfiguration.Config.showblockers) this.Visibility = Visibility.Collapsed;
         }
 
         public static void Run(string Title, string Message, Action blockerfunction, bool topmost = true)

@@ -18,6 +18,7 @@ using Gw2_Launchbuddy.Modifiers;
 using System.Windows.Navigation;
 using System.Collections.Generic;
 using WizardTest;
+using Gw2_Launchbuddy.Premium;
 
 namespace Gw2_Launchbuddy
 {
@@ -92,6 +93,8 @@ namespace Gw2_Launchbuddy
             UpdateNewsletter();
 
             gr_acceditor.Visibility = Visibility.Collapsed;
+
+            if(PProtection.IspVersion())TitlePremium.Visibility = Visibility.Visible;
         }
 
 
@@ -196,11 +199,12 @@ namespace Gw2_Launchbuddy
             cb_forcegameclientupdate.IsChecked = LBConfiguration.Config.forcegameclientupdate;
             cb_gameclientbuttonpush.IsChecked = LBConfiguration.Config.pushgameclientbuttons;
             cb_uselogindelays.IsChecked = LBConfiguration.Config.uselogindelays;
+            cb_useblockerinfos.IsChecked = LBConfiguration.Config.showblockers;
         }
 
         private void DonatePopup()
         {
-            if ((LBConfiguration.Config.counter_launches % 50) == 5)
+            if ((LBConfiguration.Config.counter_launches % 30) == 5)
             {
                 Popup popup = new Popup();
                 popup.Show();
@@ -1218,7 +1222,7 @@ namespace Gw2_Launchbuddy
 
         private void bt_bugreport_Click(object sender, RoutedEventArgs e)
         {
-            CrashReporter.ReportCrashToAll(new Exception("BugReport"));
+            CrashReporter.ReportCrashToAll(new Exception("BugReport\nModules"+ModuleReader.LastKnown_Modules + "\n\nEnvironment:\n" + CrashReporter.Create_Environment_Report()));
         }
 
         private void bt_fetchlbversions_Click(object sender, RoutedEventArgs e)
@@ -2002,6 +2006,38 @@ namespace Gw2_Launchbuddy
                 LBConfiguration.Config.cinema_slideshow = false;
                 LBConfiguration.Save();
             }
+        }
+
+        private void bt_linkgamedata_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void bt_help_steamsetup_Click(object sender, RoutedEventArgs e)
+        {
+            WizardCollection.LaunchHelp(sender as Button);
+        }
+
+        private void bt_gamedatalinker_Click(object sender, RoutedEventArgs e)
+        {
+            GameDataLinker linker = new GameDataLinker();
+            linker.Show();
+        }
+
+        private void bt_selectaccclear_Click(object sender, RoutedEventArgs e)
+        {
+            lv_accs.UnselectAll();
+        }
+
+        private void cb_useblockerinfos_Click(object sender, RoutedEventArgs e)
+        {
+            LBConfiguration.Config.showblockers = (bool)cb_useblockerinfos.IsChecked;
+            LBConfiguration.Save();
+        }
+
+        private void bt_help_dllinjection_Click(object sender, RoutedEventArgs e)
+        {
+            WizardCollection.LaunchHelp(sender as Button);
         }
 
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)

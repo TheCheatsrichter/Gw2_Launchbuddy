@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="Gw2_Launchbuddy.UIControls.PContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Gw2_Launchbuddy.UIControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Name="ContentLocker">
+    <Grid x:Name="contentgrid">
+        <ContentPresenter x:Name="actualcontent" Content="{Binding LockedContent, ElementName=ContentLocker}"/>
+        <Grid x:Name="blockericon" MouseDown="Grid_MouseDown">
+            <Grid Background="#7F328B33" />
+            <Grid Background="White" Width="75" Height="75">
+                <Grid.OpacityMask>
+                    <ImageBrush ImageSource="pack://application:,,,/Gw2 Launchbuddy;component/Resources/Icons/lock.png"/>
+                </Grid.OpacityMask>
+            </Grid>
+            <TextBlock Background="#BF001706" FontSize="24" Foreground="LimeGreen" Text="Supporter exclusive" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+        </Grid>
+    </Grid>
+</UserControl>

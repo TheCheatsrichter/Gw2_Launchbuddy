@@ -117,6 +117,7 @@ namespace Gw2_Launchbuddy.Helpers
 
         public void CleanUp()
         {
+            if (element == null) return;
             switch (element.GetType().Name)
             {
                 case nameof(ComboBox):
@@ -131,6 +132,7 @@ namespace Gw2_Launchbuddy.Helpers
 
         public void Highlight()
         {
+            if (element == null) return;
             if (element.Focusable)
             {
                 element.Focus();

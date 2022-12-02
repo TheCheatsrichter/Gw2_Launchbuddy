@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -56,6 +57,19 @@ namespace Gw2_Launchbuddy.Modifiers
 
     public static class ModuleReader
     {
+        private static List<Module> lastknown_modules = new List<Module>();
+        public static string LastKnown_Modules
+        {
+            get
+            {
+                string outpt = "";
+                foreach(Module module in lastknown_modules)
+                {
+                    outpt += module.ModuleName+"\n";
+                }
+                return outpt;
+            }
+        }
 
         public static void WaitForModule(string name, Process pro, int? timeout=1000)
         {
@@ -157,7 +171,7 @@ namespace Gw2_Launchbuddy.Modifiers
             {
 
             }
-
+            lastknown_modules = collectedModules;
             return collectedModules;
         }
     }

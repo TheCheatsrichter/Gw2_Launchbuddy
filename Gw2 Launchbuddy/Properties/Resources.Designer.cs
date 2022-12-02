@@ -63,6 +63,16 @@ namespace Gw2_Launchbuddy.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _lock {
+            get {
+                object obj = ResourceManager.GetObject("lock", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap acc_opacitymask {
             get {
                 object obj = ResourceManager.GetObject("acc_opacitymask", resourceCulture);
@@ -116,6 +126,16 @@ namespace Gw2_Launchbuddy.Properties {
         internal static System.Drawing.Bitmap arrow {
             get {
                 object obj = ResourceManager.GetObject("arrow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap benchmarking {
+            get {
+                object obj = ResourceManager.GetObject("benchmarking", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -386,6 +406,16 @@ namespace Gw2_Launchbuddy.Properties {
         internal static System.Drawing.Bitmap c_soulbeast {
             get {
                 object obj = ResourceManager.GetObject("c_soulbeast", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap c_specter {
+            get {
+                object obj = ResourceManager.GetObject("c_specter", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -966,6 +996,16 @@ namespace Gw2_Launchbuddy.Properties {
         internal static System.Drawing.Bitmap shortdragonhead {
             get {
                 object obj = ResourceManager.GetObject("shortdragonhead", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sort {
+            get {
+                object obj = ResourceManager.GetObject("sort", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

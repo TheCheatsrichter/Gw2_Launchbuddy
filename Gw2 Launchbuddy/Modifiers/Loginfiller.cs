@@ -84,6 +84,8 @@ namespace Gw2_Launchbuddy.Modifiers
 
         public static void PressLoginButton(Account acc)
         {
+            //if (acc.Settings.IsSteamAccount) return;
+
             GwUIPoints.UpdateDPIFactor(WindowUtil.GetWindowDPIFactor(acc.Client.Process.MainWindowHandle));
 
             //acc.Client.Process.WaitForExit();
@@ -113,10 +115,19 @@ namespace Gw2_Launchbuddy.Modifiers
                         {
                             MouseClickLeft(acc.Client.Process.GetProcess(), GwUIPoints.pos_play_bt);
 
-                            if (!acc.Client.Process.WaitForState(GwGameProcess.GameStatus.game_startup, 500))
+                            if (!acc.Client.Process.WaitForState(GwGameProcess.GameStatus.game_startup, 2000))
                             {
-                                MouseClickLeft(acc.Client.Process.GetProcess(), GwUIPoints.pos_authemail_bt);
-                                Thread.Sleep(100);
+                                //MouseClickLeft(acc.Client.Process.GetProcess(), GwUIPoints.pos_authemail_bt);
+                                //Thread.Sleep(100);
+
+                                for(int i =0;i<11;i++)
+                                {
+                                    PressKeyDown(Keys.Tab, acc.Client.Process.GetProcess(), false);
+                                    PressKeyUp(Keys.Tab, acc.Client.Process.GetProcess(), true);
+                                }
+                                PressKeyDown(Keys.Return, acc.Client.Process.GetProcess(), true);
+                                PressKeyUp(Keys.Return, acc.Client.Process.GetProcess(), true);
+
                                 MouseClickLeft(acc.Client.Process.GetProcess(), GwUIPoints.pos_play_bt);
                             }
 

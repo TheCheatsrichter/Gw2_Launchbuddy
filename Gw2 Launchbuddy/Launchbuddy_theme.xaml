@@ -299,6 +299,13 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <ControlTemplate x:Key="PBlock" TargetType="ContentControl">
+        <Grid Background="Black" Opacity="0.5">
+            <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40">Available in Premium Version</Label>
+            <ContentPresenter/>
+        </Grid>
+    </ControlTemplate>
     
 
 </ResourceDictionary>

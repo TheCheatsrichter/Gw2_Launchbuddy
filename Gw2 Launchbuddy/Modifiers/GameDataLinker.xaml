@@ -1,0 +1,47 @@
+﻿<Window x:Class="Gw2_Launchbuddy.Modifiers.GameDataLinker"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Gw2_Launchbuddy.Modifiers"
+        mc:Ignorable="d"
+        Title="GameDataLinker" Height="420" Width="530" Background="{StaticResource B1_Background}" WindowStyle="SingleBorderWindow">
+    <StackPanel>
+        <TextBlock Margin="15" TextWrapping="Wrap">
+            How it works:
+            The Game Data Linker is used to link two existing game installs with each other.<LineBreak/> This benefits you that only one of these two installs has to be regulary updated.<LineBreak/> Filesize is also reduced as only one gamedata instance has to be managed.<LineBreak/>Suggestion: Use your vanilla game install as source and the steam game folder as target.
+        </TextBlock>
+        <StackPanel Margin="15">
+            <Label Style="{StaticResource H2}">Source Folder Path:</Label>
+            <TextBox x:Name="tb_source" Focusable="False" TextChanged="tb_source_TextChanged"></TextBox>
+            <Button Width="150" HorizontalAlignment="Left" x:Name="bt_sourcefolderset" Click="bt_sourcefolderset_Click">Set Source Folder Path</Button>
+        </StackPanel>
+        <StackPanel Margin="15">
+            <Label Style="{StaticResource H2}">Target Folder Path:</Label>
+            <TextBox x:Name="tb_target" Focusable="False" TextChanged="tb_target_TextChanged"></TextBox>
+            <Button Width="150" HorizontalAlignment="Left" x:Name="bt_targetfolderset" Click="bt_targetfolderset_Click" >Set Target Folder Path</Button>
+        </StackPanel>
+        <Separator Margin="10"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label x:Name="lb_sourcedisplay">Source</Label>
+            <Grid Height="30" Width="30" Background="{StaticResource H1_Foreground}">
+                <Grid.OpacityMask>
+                    <ImageBrush ImageSource="/Resources/Icons/arrow.png">
+                        <ImageBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                <SkewTransform CenterX="0.5" CenterY="0.5"/>
+                                <RotateTransform Angle="180" CenterX="0.5" CenterY="0.5"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </ImageBrush.RelativeTransform>
+                    </ImageBrush>
+                </Grid.OpacityMask>
+            </Grid>
+            <Label x:Name="lb_targetdisplay">Target</Label>
+        </StackPanel>
+
+        <Button x:Name="bt_createlink" Click="bt_createlink_Click">Create Link</Button>
+    </StackPanel>
+</Window>

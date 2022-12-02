@@ -73,6 +73,7 @@ namespace Gw2_Launchbuddy.Helpers
         public static bool Focus(Process pro)
         {
             pro.Refresh();
+            if (pro.HasExited) return false;
             return Focus(pro.MainWindowHandle);
         }
         public static bool Focus(IntPtr winhandle)
@@ -152,7 +153,8 @@ namespace Gw2_Launchbuddy.Helpers
 
         public static void ScaleTo(Process pro, int width, int height)
         {
-            if (pro.HasExited || pro.MainWindowHandle == IntPtr.Zero) return;
+            if (pro.HasExited) return;
+            if (pro.MainWindowHandle == IntPtr.Zero) return;
             pro.Refresh();
             ScaleTo(pro.MainWindowHandle, width, height);
         }

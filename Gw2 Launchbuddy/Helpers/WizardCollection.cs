@@ -23,7 +23,8 @@ namespace WizardTest
         static List<HelpWizardStep> hp_network;
         static List<HelpWizardStep> hp_plugins;
         static List<HelpWizardStep> hp_addons;
-        static List<HelpWizardStep> hp_whatsnew;
+        static List<HelpWizardStep> hp_thirdpartydll;
+        static List<HelpWizardStep> hp_steamsetup;
         public static void Init(MainWindow window)
         {
             win = window;
@@ -52,7 +53,9 @@ namespace WizardTest
             {win.tab_home.GetHashCode() , hp_launching },
             {win.tab_music.GetHashCode() , hp_music },
             {win.tab_server.GetHashCode() , hp_network },
-            {win.tab_plugins.GetHashCode() , hp_plugins }
+            {win.tab_plugins.GetHashCode() , hp_plugins },
+            {win.bt_help_steamsetup.GetHashCode(),hp_steamsetup },
+            {win.bt_help_dllinjection.GetHashCode(),hp_thirdpartydll }
         };
         }
 
@@ -117,6 +120,24 @@ namespace WizardTest
             new HelpWizardStep(win.cb_AddonRunAsAdmin,"Addons","Should the addon be launched as normal current user or have admin privileges?"),
             new HelpWizardStep(win.bt_AddAddon,"Addons","And to finish it all press the Add button. This will open a filedialog for you to select the .exe file"),
             new HelpWizardStep(win.cb_AddonRunAsAdmin,"Addons","Tutorial for Addons has been completed"),
+        };
+
+
+            hp_steamsetup = new List<HelpWizardStep>
+        {
+            new HelpWizardStep(null,"Steam Account Setup","In order to make your steam account Launchbuddy ready a few steps have to be made. This is the guide on how to make this possible WITHOUT linking game files. This method has a few drawbacks however lets you keep two independent game installs"),
+            new HelpWizardStep(null,"Steam Account Setup","Before we start a few things to consider: 1. You must not launch the game client from any other folder than the steam folder. 2. You must not update the game client from any other folder than the steam folder. If you cannot work with these requirements please use the Game Data Linker option in the Account settings. If you still want to proceed press next."),
+            new HelpWizardStep(null,"Steam Account Setup","First of we have to make sure that your steam client is up to date. Please launch Gw2 manually with steam and let it update. Login until you see the charcter selection screen. Then close the game"),
+            new HelpWizardStep(win.tab_lbsettings,"Steam Account Setup","With your steam version updated Launchbuddy should now update your gamefolder correctly. This either can be set manually in the settings tab or can automatically be achieved when Launchbuddy is restarted"),
+            new HelpWizardStep(win.lab_path,"Steam Account Setup","Keep in mind that Launchbuddy will now use the steam gamedata to launch all your accounts! If you use other game installs the steam setup has to be made again!"),
+        };
+
+            hp_thirdpartydll = new List<HelpWizardStep>
+        {
+            new HelpWizardStep(null,"Injected Software Setup","This is the help wizard for setting up third party injected software (e.g arcdps,blishhud,...) which are not natively supported"),
+            new HelpWizardStep(null,"Injected Software Setup","First make sure that you have a clean gw2 install WITHOUT any third party programs installed. To achieve this make sure that no .dll file (mainly named d3d11.dll) is in your gw2 game folder"),
+            new HelpWizardStep(win.lv_accssettings,"Injected Software Setup","Select an account which should use the third party injected software"),
+            new HelpWizardStep(win.bt_AddDll,"Injected Software Setup","Now you can add the dll files to the accounts which actually should use the specific software."),
         };
         }
 

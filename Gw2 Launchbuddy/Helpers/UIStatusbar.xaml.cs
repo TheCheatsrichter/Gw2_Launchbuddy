@@ -112,7 +112,7 @@ namespace Gw2_Launchbuddy.Helpers
                 {
                     Visibility = Visibility.Hidden;
                     Topmost = false;
-                    Console.WriteLine("Hidden");
+                    //Console.WriteLine("Hidden");
                 }
             }
         }
@@ -163,6 +163,10 @@ namespace Gw2_Launchbuddy.Helpers
         }
 
         private void bt_close_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+        private void bt_hide_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }

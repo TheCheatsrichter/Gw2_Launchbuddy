@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Windows;
+using System.Windows.Forms;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 static public class FileUtil
 {
@@ -19,7 +21,7 @@ static public class FileUtil
     }
     public static bool CreateSymbolicLinkExtended(string lpSymlinkFileName, string lpTargetFileName, SymbolicLink dwFlags)
     {
-        if (!CreateSymbolicLink(lpSymlinkFileName, lpTargetFileName, SymbolicLink.File))
+        if (!CreateSymbolicLink(lpSymlinkFileName, lpTargetFileName, dwFlags))
         {
             MessageBox.Show("Error: Unable to create symbolic link. " + "(Error Code: " + Marshal.GetLastWin32Error() + ")");
         }
@@ -200,5 +202,25 @@ static public class FileUtil
         }
 
         return null;
+    }
+
+    public static string FolderDialog()
+    {
+        using (var fbd = new FolderBrowserDialog())
+        {
+            DialogResult result = fbd.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+            {
+                if (Directory.Exists(fbd.SelectedPath)) return fbd.SelectedPath;
+            }
+        }
+        return null;
+    }
+
+    public static bool IsSymbolic(string path)
+    {
+        FileInfo pathInfo = new FileInfo(path);
+        return pathInfo.Attributes.HasFlag(FileAttributes.ReparsePoint);
     }
 }

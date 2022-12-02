@@ -15,16 +15,15 @@ using Gw2_Launchbuddy.Modifiers;
 using Gw2_Launchbuddy.Extensions;
 using Gw2_Launchbuddy.Helpers;
 using System.Collections.Generic;
+using PluginContracts.ObjectInterfaces;
 
 namespace Gw2_Launchbuddy.ObjectManagers
 {
 
     public static class ClientManager
     {
-        public static Client.ClientStatus ActiveStatus_Threshold = Client.ClientStatus.Running;
-
         public static ObservableCollection<Client> Clients = new ObservableCollection<Client>();
-        public static readonly ObservableCollection<Client> ActiveClients = new ObservableCollection<Client>(); //initialize one instance, get{} would create a new instance every statusupdate (bad for ui)
+        public static ObservableCollection<Client> ActiveClients = new ObservableCollection<Client>(); //initialize one instance, get{} would create a new instance every statusupdate (bad for ui)
 
         public static void Add(Client client)
         {
@@ -43,25 +42,18 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
             Console.WriteLine(client.account.Nickname + " status changed to: " + client.Status + " = " + ((int)client.Status).ToString());
 
-            if (ActiveClients.Contains(client) && client.Status < ActiveStatus_Threshold)
-            {
-                Application.Current.Dispatcher.BeginInvoke(
+            Application.Current.Dispatcher.BeginInvoke(
                 DispatcherPriority.Background,
                   new Action(() =>
                   {
-                      ActiveClients.Remove(client);
-                  }));
-            }
-            if (!ActiveClients.Contains(client) && (client.Status.HasFlag(ActiveStatus_Threshold)))
-            {
-                Application.Current.Dispatcher.BeginInvoke(
-                DispatcherPriority.Background,
-                  new Action(() =>
-                  {
-                      ActiveClients.Add(client);
+                      ActiveClients.Clear();
+                      foreach(var cl in Clients)
+                      {
+                          if(cl.IsActive) ActiveClients.Add(cl);
+                          if (!cl.IsActive && ActiveClients.Contains(cl)) ActiveClients.Remove(cl);
+                      }
                       SaveActiveClients();
                   }));
-            }
         }
 
         private static void SaveActiveClients()
@@ -79,18 +71,25 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         }
 
-        public static List<Process> SearchForeignClients(bool silent =false)
+        public static List<Process> SearchForeignClients(bool silent =false, Client.ClientStatus minstatus = Client.ClientStatus.Running)
         {
 
             List<Process> newprocesses = new List<Process>();
 
             foreach (Process pro in Process.GetProcessesByName(EnviromentManager.GwClientExeNameWithoutExtension))
             {
-                if (ActiveClients.Where<Client>(c => c.Process.Id == pro.Id).Count<Client>() == 0)
+                try
                 {
-                    newprocesses.Add(pro);
-                    
+                    if (Clients.Where<Client>(c=>c.Status > minstatus).Where<Client>(c => c.Process.Id == pro.Id).Count<Client>() == 0)
+                    {
+                        newprocesses.Add(pro);
+                    }
+                }catch
+                {
+                    //pro is null
+                    continue;
                 }
+
             }
             if (!silent && newprocesses.Count > 0)
             {
@@ -192,6 +191,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
+        public bool IsActive
+        {
+            get { return Status >= Client.ClientStatus.Running; }
+        }
+
         [Flags]
         public enum ClientStatus
         {
@@ -249,7 +253,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             if (Process.HasExited)
             {
-                this.status = ClientStatus.None;
+                this.status = ClientStatus.Closed;
                 return true;
             }
             return false;
@@ -439,8 +443,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             if (Process == null) Process = new GwGameProcess(new Process());
             Process.EnableRaisingEvents = true;
-            try { Process.Exited -= OnClientClose; } catch { };
-            Process.Exited += OnClientClose;
 
             string args = "";
 
@@ -524,6 +526,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
             {
                 this.Process = new SteamGwGameProcess(Process.GetProcess(),new Process{ StartInfo = new ProcessStartInfo(EnviromentManager.GwSteamLaunchLink + " " + args) });
             }
+
+            //Sub to events after process has been configured. Otherwise process migration (steam) wont work
+
+            try { Process.Exited -= OnClientClose; } catch { };
+            Process.Exited += OnClientClose;
         }
 
         private void SetProcessPriority()
@@ -541,9 +548,17 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
+        private void SetProcessAffinity()
+        {
+            if (account.Settings.ProcessAffinityConfig != null)
+            {
+                Process.ProcessorAffinity = account.Settings.ProcessAffinityConfig.MaskAsPtr;
+            }
+        }
+
         private void SwapLocalDat()
         {
-            if (account.Settings.Loginfile != null)
+            if (account.Settings.Loginfile != null && account.Settings.IsArenaNetAccount)
             {
                 LocalDatManager.Apply(account.Settings.Loginfile);
             }else
@@ -644,7 +659,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         private void ShowProcessStatusbar()
         {
-            if (account.Settings.LoginType == LoginType.Steam) return;
+            //if (account.Settings.LoginType == LoginType.Steam) return;
             Thread statusbar = new Thread(() =>
             {
                 UIStatusbar loginwindowblocker = new UIStatusbar(this, new Func<bool>(() => Process.ReachedState(GwGameProcess.GameStatus.game_startup)), GwUIPoints.pos_loginwindow_offset);
@@ -667,7 +682,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         private void StartProcess()
         {
             Process.Start();
-            /*
+            
             if(account.Settings.IsSteamAccount)
             {
                 Action waitforgame = () => { Process.WaitForState(GwGameProcess.GameStatus.loginwindow_prelogin); };
@@ -679,7 +694,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     MessageBox.Show("Steam gamelaunch aborted. The gw2 gamelaunch with steam got closed.");
                 }
             }
-            */
+            
         }
 
         public  void Launch()
@@ -751,7 +766,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
                         case var expression when (Status < ClientStatus.Login):
                             Console.WriteLine($"{Status.ToString()} {DateTime.Now - starttime}");
-                            if (Account.Settings.Loginfile != null)
+
+                            if(Account.Settings.IsSteamAccount)
+                            {
+                                if (LBConfiguration.Config.pushgameclientbuttons) PressLoginButton();
+                            }
+
+                            if (Account.Settings.IsArenaNetAccount && Account.Settings.Loginfile != null)
                             {
                                 if (LBConfiguration.Config.pushgameclientbuttons) PressLoginButton();
                                 LocalDatManager.ToDefault(account.Settings.Loginfile);
@@ -760,8 +781,6 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             {
                                 LocalDatManager.ToDefault(null); // Reset symbolic link
                             }
-
-
                             Status = ClientStatus.Login;
                             break;
 
@@ -769,11 +788,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             Console.WriteLine($"{Status.ToString()} {DateTime.Now - starttime}");
                             RestoreGFX();
                             SetProcessPriority();
+                            SetProcessAffinity();
                             Status = ClientStatus.Running;
-                            try { Focus(); } catch { }
                             try { if (account.Settings.WinConfig != null) new Thread(Window_Init).Start(); } catch { }
                             account.Settings.AccountInformation.SetLastLogin();
-
+                            Process.WaitForState(GwGameProcess.GameStatus.game_charscreen);
                             // Launch TacO & BlisH
                             try
                             {

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="BlockerInfo" Height="280" Width="280" Icon="/Gw2 Launchbuddy;component/launchbuddy.ico" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Closing="Window_Closing" MouseDown="Window_MouseDown" >
     <Window.Background>
-        <ImageBrush Opacity="0.6"  ImageSource="/Gw2 Launchbuddy;component/launchbuddy.ico"/>
+        <ImageBrush Opacity="0.3"  ImageSource="/Gw2 Launchbuddy;component/launchbuddy.ico"/>
     </Window.Background>
     <Window.OpacityMask>
         <ImageBrush ImageSource="/Gw2 Launchbuddy;component/launchbuddy.ico"/>

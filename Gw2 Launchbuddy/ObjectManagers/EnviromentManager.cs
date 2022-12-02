@@ -22,7 +22,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class EnviromentManager
     {
-        public static Version LBVersion = new Version("3.1.0");
+        public static Version LBVersion = new Version("3.2.2");
         public static LaunchOptions LaunchOptions;
 
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
@@ -368,7 +368,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
             catch
             {
-                MessageBox.Show("Guild Wars 2 info file not found! Please choose the directory manually / launch gw2 once!");
+                MessageBox.Show("Guild Wars 2 info file not found! Please choose the directory manually / launch gw2 once! Then restart Launchbuddy");
             }
 
             GwClientTmpPath = GwClientPath + GwClientExeName.Replace(".exe",".tmp");
@@ -489,37 +489,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
-        public static string Create_Environment_Report()
-        {
-            string report = "";
-
-            report += "\n\n########LB Folder########\n";
-            report += "Path:" + LBAppdataPath+"\n";
-            report += DirectoryFilesToString(LBAppdataPath);
-            report += "#########################\n";
-
-            report += "########GW Folder########\n";
-            report += "Path:" + GwAppdataPath + "\n";
-            report += DirectoryFilesToString(GwAppdataPath);
-            report += "#########################\n\n";
-
-            try
-            {
-                report += FileUtil.WhoIsLockingAsString(GwLocaldatPath);
-                report += FileUtil.WhoIsLockingAsString(GwLocaldatBakPath);
-                report += FileUtil.WhoIsLockingAsString(GwClientXmlPath);
-                report += FileUtil.WhoIsLockingAsString(GwClientPath);
-            }catch
-            {
-                report += "Could not fetch file handle protocol.";
-                report += "#########################\n\n";
-            }
-
-
-            return report;
-        }
-
-        private static string DirectoryFilesToString(string path)
+        public static string DirectoryFilesToString(string path)
         {
             string report = "";
             if (Directory.Exists(path))

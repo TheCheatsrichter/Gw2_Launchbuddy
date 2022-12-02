@@ -119,6 +119,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public bool uselogindelays = true;
         // Defaultvalue should be changed to false when API works again
         public bool forcegameclientupdate = false;
+        public bool showblockers = true;
     }
 }
 

@@ -11,9 +11,11 @@
             <ColumnDefinition Width="100*"/>
         </Grid.ColumnDefinitions>
         <ProgressBar x:Name="pb_gameprogress" Value="0" Background="{StaticResource B1_Background}" Foreground="{StaticResource B3_Background}"/>
-        <DockPanel VerticalAlignment="Center">
+        <DockPanel VerticalAlignment="Center" LastChildFill="False">
             <Image x:Name="img_accicon" Source="/Gw2 Launchbuddy;component/launchbuddy.ico"></Image>
             <TextBlock x:Name="tb_infotext" Text="Powered by Launchbuddy:" VerticalAlignment="Center" />
+            <!--Button x:Name="bt_relaunch" Height="30" Click="bt_relaunch_Click" >Relaunch</Button-->
+            <Button x:Name="bt_hide" Height="20" Width="20" DockPanel.Dock="Right" Click="bt_hide_Click" >X</Button>
             <Label x:Name="lb_gameprogress" Content="0%" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         </DockPanel>
     </Grid>

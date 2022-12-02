@@ -48,7 +48,10 @@ namespace Gw2_Launchbuddy.Modifiers
 
         public static bool ApplyNullLoginfile()
         {
-            IORepeater.WaitForFileAvailability(EnviromentManager.GwLocaldatPath);
+            if(File.Exists(EnviromentManager.GwLocaldatPath))
+            {
+                IORepeater.WaitForFileAvailability(EnviromentManager.GwLocaldatPath);
+            }
             ToDefault(null);
             if (File.Exists(EnviromentManager.GwLocaldatPath)) IORepeater.FileMove(EnviromentManager.GwLocaldatPath, EnviromentManager.GwLocaldatBakPath);
 
@@ -56,6 +59,7 @@ namespace Gw2_Launchbuddy.Modifiers
             int i = 0;
             while (File.Exists(filepath))
             {
+                i++;
                 filepath = EnviromentManager.LBLocaldatsPath + $"tmp{i}.dat";
             }
 
@@ -107,7 +111,7 @@ namespace Gw2_Launchbuddy.Modifiers
                 ToDefault(file);
                 GC.Collect();
 
-                throw new Exception($"An error occured while swaping the Login file. Errorcode {step}\n" + EnviromentManager.Create_Environment_Report() + e.Message);
+                throw new Exception($"An error occured while swaping the Login file. Errorcode {step}\n" + CrashReporter.Create_Environment_Report() + e.Message);
                 return false;
             }
             return true;
@@ -174,7 +178,7 @@ namespace Gw2_Launchbuddy.Modifiers
             }
             catch (Exception e)
             {
-                throw new Exception("An error occured while updating the loginfile.\n" + EnviromentManager.Create_Environment_Report() + e.Message);
+                throw new Exception("An error occured while updating the loginfile.\n" + CrashReporter.Create_Environment_Report() + e.Message);
             }
             ToDefault(file);
             if(success) success = file.ValidateUpdate(OldHash);

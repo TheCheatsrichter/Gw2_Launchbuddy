@@ -2,6 +2,8 @@
 using System;
 using System.Linq;
 using System.Net.Mail;
+using Gw2_Launchbuddy.ObjectManagers;
+using Gw2_Launchbuddy.Premium;
 
 namespace Gw2_Launchbuddy
 {
@@ -50,7 +52,6 @@ namespace Gw2_Launchbuddy
 
             ReportCrash reportCrash = new ReportCrash(emails.FirstOrDefault(a => a.DisplayName == targetname).Address);
             reportCrash.DoctorDumpSettings = Settings;
-
             reportCrash.Send(err);
         }
 
@@ -64,6 +65,38 @@ namespace Gw2_Launchbuddy
                 reportCrash.DoctorDumpSettings = Settings;
                 reportCrash.Send(err);
             }
+        }
+
+
+        public static string Create_Environment_Report()
+        {
+            string report = "";
+            report += PProtection.GetCurrentHash();
+            report += "\n is Premium:" + PProtection.IspVersion().ToString();
+
+            report += "\n\n########LB Folder########\n";
+            report += "Path:" + EnviromentManager.LBAppdataPath + "\n";
+            report += EnviromentManager.DirectoryFilesToString(EnviromentManager.LBAppdataPath);
+            report += "#########################\n";
+
+            report += "########GW Folder########\n";
+            report += "Path:" + EnviromentManager.GwAppdataPath + "\n";
+            report += EnviromentManager.DirectoryFilesToString(EnviromentManager.GwAppdataPath);
+            report += "#########################\n\n";
+
+            try
+            {
+                report += FileUtil.WhoIsLockingAsString(EnviromentManager.GwLocaldatPath);
+                report += FileUtil.WhoIsLockingAsString(EnviromentManager.GwLocaldatBakPath);
+                report += FileUtil.WhoIsLockingAsString(EnviromentManager.GwClientXmlPath);
+                report += FileUtil.WhoIsLockingAsString(EnviromentManager.GwClientPath);
+            }
+            catch
+            {
+                report += "Could not fetch file handle protocol.";
+                report += "#########################\n\n";
+            }
+            return report;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿<Window
+﻿<Window xmlns:UIControls="clr-namespace:Gw2_Launchbuddy.UIControls" 
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -12,7 +12,7 @@
 
 
         mc:Ignorable="d" LostKeyboardFocus="Window_LostKeyboardFocus" GotKeyboardFocus="Window_GotKeyboardFocus"
-        Title="Gw2 Launchbuddy V 3.1.0" MinHeight="570" MinWidth="600" Height="600" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None" Background="{StaticResource B1_Background}" AllowsTransparency="True">
+        Title="Gw2 Launchbuddy V 3.2.2" MinHeight="570" MinWidth="600" Height="600" Width="800" Icon="launchbuddy.ico" Closing="Window_Closing" MouseLeftButtonDown="myWindow_MouseLeftButtonDown_1" ResizeMode="CanResizeWithGrip" WindowStyle="None" Background="{StaticResource B1_Background}" AllowsTransparency="True">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="5"/>
     </WindowChrome.WindowChrome>
@@ -231,7 +231,7 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Image Source="Resources/header_dragonhead.png" HorizontalAlignment="Left"  RenderTransformOrigin="0.5,0.5">
+            <Image Source="Resources/header_dragonhead.png" HorizontalAlignment="Left"  RenderTransformOrigin="0.5,0.5" Margin="15,0,0,0">
                 <Image.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform ScaleX="-1"/>
@@ -241,7 +241,11 @@
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>
-            <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 3.1.0 ALPHA" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 3.2.2" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+                <TextBlock x:Name="TitlePremium"  Grid.Row="0" Text="PREMIUM" FontSize="16" FontWeight="Bold" Foreground="Lime" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </StackPanel>
+            
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.ColumnSpan="5" x:Name="WindowOptionsColum"  Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#CC000000">
@@ -356,6 +360,7 @@
                             <Label Name="lb_acccountinfo" Content="Accounts:" Style="{StaticResource H1}" DockPanel.Dock="Left"/>
                             <Button Name="bt_selectdailylogins" Content="Daily Logins" DockPanel.Dock="Right" ToolTip="Selects all accounts which have not been launched on the current date" Click="bt_selectdailylogins_Click"/>
                             <Button Name="bt_selectallaccs" Content="Select All" DockPanel.Dock="Right" Click="bt_selectallaccs_Click"/>
+                            <Button Name="bt_selectaccclear" Content="Clear" DockPanel.Dock="Right" Click="bt_selectaccclear_Click"/>
                             <Label Content="Quick Select:" DockPanel.Dock="Right" Style="{StaticResource H2}"/>
                         </DockPanel>
 
@@ -497,21 +502,6 @@
                                             </StackPanel>
                                         </Expander.Header>
                                         <DockPanel>
-                                            <!--DockPanel Margin="10"  DockPanel.Dock="Top" Visibility="{Binding Path=SteamAccountAvailable, Converter={StaticResource BoolToVis}}" >
-                                                <Label Content="Account Type:" Style="{StaticResource H2}" VerticalAlignment="Center" Margin="-10,0,0,0" DockPanel.Dock="Top"/>
-                                                <DockPanel>
-                                                    <ComboBox x:Name="cb_logintype" ItemsSource="{Binding Path=LoginTypes}" Height="25" SelectedItem="{Binding Path=LoginType}" Width="200" HorizontalAlignment="Left" SelectionChanged="cb_logintype_SelectionChanged">
-                                                        <ComboBox.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <TextBlock Foreground="Black" Text="{Binding .}"/>
-                                                            </DataTemplate>
-                                                        </ComboBox.ItemTemplate>
-                                                    </ComboBox>
-                                                    <TextBlock TextWrapping="Wrap" Margin="10"> Select if this account was aquired via ArenaNet or Steam. Only one steam account is possible!</TextBlock>
-                                                </DockPanel>
-                                                
-                                            </-->
-
                                             <StackPanel>
                                                 <Label Content="Loginfile Setup" Style="{StaticResource H2}"/>
                                                 <DockPanel>
@@ -543,6 +533,33 @@
                                                         </ComboBox>
                                                     </StackPanel>
                                                     <TextBlock TextWrapping="Wrap" Margin="10">Info: If any 2 factor authentication is active make sure that remember this network is selected. Otherwise some LB settings like GFX settings cannot be applied.</TextBlock>
+                                                </DockPanel>
+                                                <UIControls:PContent>
+                                                    <UIControls:PContent.LockedContent>
+                                                        <DockPanel Margin="10" DockPanel.Dock="Top" Visibility="{Binding Path=SteamAccountAvailable, Converter={StaticResource BoolToVis}}" >
+                                                            <Label Content="Account Type:" Style="{StaticResource H2}" VerticalAlignment="Center" Margin="-10,0,0,0" DockPanel.Dock="Top"/>
+                                                            <DockPanel DockPanel.Dock="Top">
+                                                                <ComboBox ItemsSource="{Binding Path=LoginTypes}" Height="25" SelectedItem="{Binding Path=LoginType}" Width="200" HorizontalAlignment="Left" SelectionChanged="cb_logintype_SelectionChanged">
+                                                                    <ComboBox.ItemTemplate>
+                                                                        <DataTemplate>
+                                                                            <TextBlock Foreground="Black" Text="{Binding .}"/>
+                                                                        </DataTemplate>
+                                                                    </ComboBox.ItemTemplate>
+                                                                </ComboBox>
+                                                                <TextBlock TextWrapping="Wrap" Margin="10"> Select if this account was aquired via ArenaNet or Steam. This will enable you to launch steam accounts</TextBlock>
+                                                            </DockPanel>
+                                                            <DockPanel DockPanel.Dock="Bottom">
+                                                                <!--Button x:Name="bt_linkgamedata" Click="bt_linkgamedata_Click">Link Game Data</Button-->
+                                                            </DockPanel>
+                                                        </DockPanel>
+                                                    </UIControls:PContent.LockedContent>
+                                                </UIControls:PContent>
+                                                <DockPanel Margin="10,0,10,0"  DockPanel.Dock="Top" Visibility="{Binding Path=IsSteamAccount, Converter={StaticResource BoolToVis}}" >
+                                                    <TextBlock DockPanel.Dock="Top" Foreground="Orange" TextWrapping="Wrap">
+                                                        ATTENTION: In order to use your steam account Launchbuddy ready please use either the GameData Linker or the Non Linked Guide.
+                                                    </TextBlock>
+                                                    <Button DockPanel.Dock="Bottom" Width="200" Height="30" HorizontalAlignment="Left" x:Name="bt_help_steamsetup" Click="bt_help_steamsetup_Click">No Link Setup Guide</Button>
+                                                    <Button DockPanel.Dock="Bottom" Width="200" Height="30" HorizontalAlignment="Left" x:Name="bt_gamedatalinker" Click="bt_gamedatalinker_Click">GameData Linker</Button>
                                                 </DockPanel>
 
                                                 <Expander DockPanel.Dock="Top" Margin="10,0,10,6" Visibility="{Binding Path=IsArenaNetAccount, Converter={StaticResource BoolToVis}}" >
@@ -737,6 +754,7 @@
                                         </Expander.Header>
                                         <Grid>
                                             <Grid.RowDefinitions>
+                                                <RowDefinition Height="40"/>
                                                 <RowDefinition Height="150*"/>
                                                 <RowDefinition Height="40"/>
                                             </Grid.RowDefinitions>
@@ -744,9 +762,10 @@
                                                 <ColumnDefinition Width="50*"/>
                                                 <ColumnDefinition Width="50*"/>
                                             </Grid.ColumnDefinitions>
-                                            <ListView x:Name="lv_InjectDlls" Grid.Row="0" Grid.ColumnSpan="2" MinHeight="120" ItemsSource="{Binding Path=DLLs}">
+                                            <Button x:Name="bt_help_dllinjection" Height="30" Grid.Column="1" Width="100" HorizontalAlignment="Right" Click="bt_help_dllinjection_Click">Tutorial</Button>
+                                            <ListView x:Name="lv_InjectDlls" Grid.Row="1" Grid.ColumnSpan="2" MinHeight="120" ItemsSource="{Binding Path=DLLs}">
                                             </ListView>
-                                            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left">
+                                            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left">
                                                 <Button x:Name="bt_AddDll" Content="Add DLL" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_AddDll_Click" />
                                                 <Button x:Name="bt_RemDll" Content="Remove DLL" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="5,0" Click="bt_RemDll_Click" />
                                             </StackPanel>
@@ -817,6 +836,44 @@
                                             </DockPanel>
                                         </StackPanel>
                                     </Expander>
+                                    <Expander x:Name="exp_accperformance" ToolTip="Performance Settings" Style="{StaticResource Bordered}">
+                                        <Expander.Header>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
+                                                    <Rectangle.OpacityMask>
+                                                        <ImageBrush ImageSource="Resources/Icons/benchmarking.png"/>
+                                                    </Rectangle.OpacityMask>
+                                                </Rectangle>
+                                                <Label Style="{StaticResource H2}">Performance</Label>
+
+                                            </StackPanel>
+                                        </Expander.Header>
+                                        <StackPanel>
+                                            
+                                            <DockPanel>
+                                                <Label x:Name="cb_propriority" Content="Set Process Priority" VerticalAlignment="Center"/>
+                                                <DockPanel  DockPanel.Dock="Right">
+                                                    <ComboBox Text="0" Width="80" DockPanel.Dock="Right" VerticalAlignment="Center" ItemsSource="{Binding ProcessPriorities}" SelectedItem="{Binding ProcessPriority}">
+                                                        <ComboBox.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <TextBlock Foreground="Black" Text="{Binding .}"/>
+                                                            </DataTemplate>
+                                                        </ComboBox.ItemTemplate>
+                                                    </ComboBox>
+                                                    <Label Content="Priority:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+                                                </DockPanel>
+                                            </DockPanel>
+                                            <UIControls:PContent>
+                                                <UIControls:PContent.LockedContent>
+                                                    <StackPanel Margin="10">
+                                                        <Label Style="{StaticResource H2}">CPU Affinity / Used CPUs</Label>
+                                                        <TextBlock TextWrapping="Wrap">Used to define on which CPUs this account's game client should run. This for example can be used to make your primary account run better than your other game instances</TextBlock>
+                                                        <ListView ItemsSource="{Binding ProcessAffinityConfig.UIBoxes}" MaxHeight="100"/>
+                                                    </StackPanel>
+                                                </UIControls:PContent.LockedContent>
+                                            </UIControls:PContent>
+                                        </StackPanel>
+                                    </Expander>
                                     <Expander x:Name="exp_accwindow" ToolTip="Gamewindow Settings" Style="{StaticResource Bordered}">
                                         <Expander.Header>
                                             <StackPanel Orientation="Horizontal">
@@ -850,41 +907,30 @@
                                                 <Label Style="{StaticResource H2}">Advanced Settings</Label>
                                             </StackPanel>
                                         </Expander.Header>
-                                        <Grid Margin="10">
-                                            <StackPanel>
-                                                <Label Style="{StaticResource H3}" Content="Additional Settings:"/>
-                                                <DockPanel>
-                                                    <Label  Content="Relaunch Client when it closes/crashes" VerticalAlignment="Center"/>
-                                                    <DockPanel  DockPanel.Dock="Right">
-                                                        <TextBox Name="tb_relaunches" Text="{Binding RelaunchesMax}" Width="80" DockPanel.Dock="Right" VerticalAlignment="Center" LostFocus="tb_relaunches_LostFocus"/>
-                                                        <Label Content="Maximum Relaunches:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+                                        <StackPanel>
+                                            <Grid Margin="10">
+                                                <StackPanel>
+                                                    <Label Style="{StaticResource H3}" Content="Additional Settings:"/>
+                                                    <DockPanel>
+                                                        <Label  Content="Relaunch Client when it closes/crashes" VerticalAlignment="Center"/>
+                                                        <DockPanel  DockPanel.Dock="Right">
+                                                            <TextBox Name="tb_relaunches" Text="{Binding RelaunchesMax}" Width="80" DockPanel.Dock="Right" VerticalAlignment="Center" LostFocus="tb_relaunches_LostFocus"/>
+                                                            <Label Content="Maximum Relaunches:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+                                                        </DockPanel>
                                                     </DockPanel>
-                                                </DockPanel>
-                                                <DockPanel>
-                                                    <Label x:Name="cb_propriority" Content="Set Process Priority" VerticalAlignment="Center"/>
-                                                    <DockPanel  DockPanel.Dock="Right">
-                                                        <ComboBox Text="0" Width="80" DockPanel.Dock="Right" VerticalAlignment="Center" ItemsSource="{Binding ProcessPriorities}" SelectedItem="{Binding ProcessPriority}">
-                                                            <ComboBox.ItemTemplate>
-                                                                <DataTemplate>
-                                                                    <TextBlock Foreground="Black" Text="{Binding .}"/>
-                                                                </DataTemplate>
-                                                            </ComboBox.ItemTemplate>
-                                                        </ComboBox>
-                                                        <Label Content="Priority:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+                                                    <DockPanel>
+                                                        <Label Content="This will force every client to use a custom mumble-link" VerticalAlignment="Center"/>
+                                                        <DockPanel  DockPanel.Dock="Right">
+                                                            <CheckBox Name="cb_cmumble" Width="80" VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Right" IsChecked="{Binding Path=Settings.AlwaysUseCustomMumbleLink}" Click="cb_cmumble_Click"/>
+                                                            <Label Content="Use Custom Mumble-Link:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+                                                        </DockPanel>
                                                     </DockPanel>
-                                                </DockPanel>
-                                                <DockPanel>
-                                                    <Label Content="This will force every client to use a custom mumble-link" VerticalAlignment="Center"/>
-                                                    <DockPanel  DockPanel.Dock="Right">
-                                                        <CheckBox Name="cb_cmumble" Width="80" VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Right" IsChecked="{Binding Path=Settings.AlwaysUseCustomMumbleLink}" Click="cb_cmumble_Click"/>
-                                                        <Label Content="Use Custom Mumble-Link:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+                                                    <DockPanel>
+                                                        <Label Content="(Caution: This can cause problems with other applications that use the Gw2 Mumble Link.)" VerticalAlignment="Top" Foreground="Red" HorizontalAlignment="Left" Margin="0,-12,0,0"/>
                                                     </DockPanel>
-                                                </DockPanel>
-                                                <DockPanel>
-                                                    <Label Content="(Caution: This can cause problems with other applications that use the Gw2 Mumble Link.)" VerticalAlignment="Top" Foreground="Red" HorizontalAlignment="Left" Margin="0,-12,0,0"/>
-                                                </DockPanel>
-                                            </StackPanel>
-                                        </Grid>
+                                                </StackPanel>
+                                            </Grid>
+                                        </StackPanel>
                                     </Expander>
                                 </StackPanel>
                             </ScrollViewer>
@@ -1471,8 +1517,7 @@
 
                 </TabItem>
 
-
-                <TabItem>
+                <TabItem x:Name="tab_lbsettings">
                     <TabItem.Header>
                         <StackPanel>
                             <Rectangle Height="32" Width="32" Fill="{StaticResource H1_Foreground}">
@@ -1504,6 +1549,7 @@
                             <CheckBox x:Name="cb_forcegameclientupdate" Content="Force gameclient update on startup (needed when Gw2 API is bugged)" Margin="5"  ToolTip="If the Gw2 API is bugged or not up to date please use this setting to minimize errors" Checked="cb_forcegameclientupdate_Checked" Click="cb_forcegameclientupdate_Click" />
                             <CheckBox x:Name="cb_gameclientbuttonpush" Content="Press gameclient 'Login Button' on gamestart. (When disabled: GFX settings might not work)" Margin="5"  ToolTip="Should the gameclient loginwindow login button be pressed when an account is launched?" Click="cb_gameclientbuttonpush_Click"/>
                             <CheckBox x:Name="cb_uselogindelays" Content="Delay account logins to prevent DDOS protection triggers at login servers" Margin="5"  ToolTip="Login button press gets delayed based on the amount of launched accounts. Should be used when more than 3 accounts get launched quickly one after another" Click="cb_uselogindelays_Click" />
+                            <CheckBox x:Name="cb_useblockerinfos" Content="Show information popups. Use with caution as you no longer see what LB is doing" Margin="5" Click="cb_useblockerinfos_Click"   />
                             <Button x:Name="bt_resetpropertysettings" Content="Reset ALL LB Settings"  Height="30" Width="250" MaxWidth="250" HorizontalAlignment="Left" Margin="10,0,0,0" Click="Bt_resetpropertysettings_Click"/>
                             <Button x:Name="bt_resetinstanceguisettings" Content="Reset Game Instance Manager Settings" Width="250"  Height="30" MaxWidth="250" HorizontalAlignment="Left" Margin="10,0,0,0" Click="Bt_resetinstanceguisettings_Click"/>
                             <Button x:Name="debug_setcolorpalette" Content="Set colorpalette" Click="debug_setcolorpalette_Click" Visibility="Collapsed"/>

@@ -265,6 +265,8 @@ namespace Gw2_Launchbuddy.ObjectManagers
     {
         public int ID { get; set; }
         public string Nickname { get; set; }
+
+        public int ListRank { get { return AccountManager.Accounts.IndexOf(this); } }
         [XmlIgnore]
         public bool IsEnabled = false;
         [XmlIgnore]
@@ -348,6 +350,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
         public LocalDatFile Loginfile { set; get; }
         public WindowConfig WinConfig { set { winconfig = value; OnPropertyChanged("HasWindowConfig"); } get { return winconfig; } }
         public AccountInformation AccountInformation { set; get; }
+        public ProcessAffinityConfig ProcessAffinityConfig { set; get; }
 
         [XmlIgnore]
         public bool IsArenaNetAccount { get { return LoginType == LoginType.ArenaNet; } }
@@ -401,6 +404,10 @@ namespace Gw2_Launchbuddy.ObjectManagers
             if (DLLs == null) DLLs = new ObservableCollection<string>();
             if (AccHotkeys == null) AccHotkeys = new ObservableCollection<AccountHotkey>();
             if (AccountInformation == null) this.AccountInformation = new AccountInformation();
+            if (ProcessAffinityConfig == null)
+            {
+                ProcessAffinityConfig = new ProcessAffinityConfig();
+            }
             RelaunchesLeft = RelaunchesMax;
         }
 

@@ -9,14 +9,19 @@ using System.Threading;
 
 namespace Gw2_Launchbuddy.Extensions
 {
-
     class ModuleTrigger : IProcessTrigger
     {
         ProcessExtension pro;
-        string modulename;
+        string[] modulenames;
+        public ModuleTrigger(string[] modulenames, ProcessExtension pro)
+        {
+            this.modulenames = modulenames;
+            this.pro = pro;
+        }
+
         public ModuleTrigger(string modulename, ProcessExtension pro)
         {
-            this.modulename = modulename;
+            this.modulenames = new string[] { modulename };
             this.pro = pro;
         }
 
@@ -24,7 +29,16 @@ namespace Gw2_Launchbuddy.Extensions
         {
             get
             {
-                return CollectModules(pro.GetProcess()).Any<Module>(m => m.ModuleName == modulename.ToLower());
+                bool isdone = false;
+                var modules = CollectModules(pro.GetProcess());
+                foreach (var searchedmodule in modulenames)
+                {
+                    if(modules.Any<Module>(m => m.ModuleName.ToLower() == searchedmodule.ToLower()))
+                    {
+                        isdone = true;
+                    }
+                }
+                return isdone;
             }
         }
 

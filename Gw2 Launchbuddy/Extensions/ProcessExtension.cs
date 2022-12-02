@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Gw2_Launchbuddy.Helpers;
 using Gw2_Launchbuddy.ObjectManagers;
+using PluginContracts.ObjectInterfaces;
 
 namespace Gw2_Launchbuddy.Extensions
 {
@@ -42,10 +43,12 @@ namespace Gw2_Launchbuddy.Extensions
 
         //Redirect calls to Process. This enables "normal" usage + full control over accesses. Otherwise finding process via ID wont work.
         public int Id { get { return pro.Id; } }
-        public bool HasExited { get { return pro.HasExited; } }
+        public bool HasExited { get { try { return pro.HasExited; } catch { return true; } } }
         public DateTime ExitTime { get { return pro.ExitTime; } }
         public DateTime StartTime { get { return pro.StartTime; } }
         public bool EnableRaisingEvents { set { pro.EnableRaisingEvents = value; } get { return pro.EnableRaisingEvents; } }
+
+        public IntPtr ProcessorAffinity { set { pro.ProcessorAffinity = value; } get { return pro.ProcessorAffinity; } }
         public int ExitCode { get { return pro.ExitCode; } }
         public bool CloseMainWindow(){ return pro.CloseMainWindow();}
         public bool WaitForExit(int ms) { return pro.WaitForExit(ms); }
@@ -89,6 +92,16 @@ namespace Gw2_Launchbuddy.Extensions
 
         public bool MigrateProcess(Process target)
         {
+            if(pro!=null)
+            {
+                try
+                {
+                    pro.Exited -= OnExitedSelf;
+                }
+                catch { }
+                
+            }
+
             started = true;
             pro = target;
             pro.EnableRaisingEvents = true;
@@ -233,7 +246,7 @@ namespace Gw2_Launchbuddy.Extensions
 
             Enum.TryParse((sender as ProcessState).Name, out gamestatus);
             GameStatusChanged?.Invoke(sender,e);
-            //Console.WriteLine("EXTERNAL: State changed to " + (sender as ProcessState).Name);
+            //Console.WriteLine("State changed to " + (sender as ProcessState).Name);
         }
 
         public GameStatus Status
@@ -246,11 +259,12 @@ namespace Gw2_Launchbuddy.Extensions
             return (int)gamestatus >= (int)state;
         }
 
-        ProcessPipeline CreateStates()
+        internal ProcessPipeline CreateStates()
         {
 
             List<IProcessTrigger> pt_selfupdate = new List<IProcessTrigger>
             {
+                //20%
                 new ModuleTrigger("VERSION.dll",this),
                 new ModuleTrigger("WINMM.dll",this),
                 new FileLockTrigger(EnviromentManager.GwLocaldatPath,fileaccessmode:FileAccess.ReadWrite),
@@ -258,6 +272,7 @@ namespace Gw2_Launchbuddy.Extensions
 
             List<IProcessTrigger> pt_loginwindow_prelogin = new List<IProcessTrigger>
             {
+                //40%
                 new ModuleTrigger("CoherentUI64.dll",this),
                 new SleepTrigger(2500),
                 new FileSizeTrigger(EnviromentManager.GwClientTmpPath,null,0),
@@ -266,18 +281,22 @@ namespace Gw2_Launchbuddy.Extensions
 
             List<IProcessTrigger> pt_loginwindow_authentication = new List<IProcessTrigger>
             {
-                new ModuleTrigger("DPAPI.dll",this),
+                //60%
+                new ModuleTrigger(new string[]{"DPAPI.dll","dcomp.dll" },this),
+                //dcomp.dll
                 new SleepTrigger(700), //Needs better trigger in the future, currently unknown delta between pre login and authentication pending
             };
 
             List<IProcessTrigger> pt_loginwindow_pressplay = new List<IProcessTrigger>
             {
-                new ModuleTrigger("DPAPI.dll",this)
+                //80%
+                new ModuleTrigger(new string[]{"DPAPI.dll","dcomp.dll" },this),
             };
 
             List<IProcessTrigger> pt_game_startup = new List<IProcessTrigger>
             {
-                new ModuleTrigger("WINSTA.dll",this)
+                //new ModuleTrigger("WINSTA.dll",this)
+                new ModuleTrigger(new string[]{ "WINSTA.dll", "mscms.dll" },this)
             };
             List<IProcessTrigger> pt_game_charscreen = new List<IProcessTrigger>
             {
@@ -378,17 +397,81 @@ namespace Gw2_Launchbuddy.Extensions
             {
                 while (ClientManager.SearchForeignClients(true).Count<=0)
                 {
-                    Thread.Sleep(10);
+                    Thread.Sleep(100);
                 }
             };
-            BlockerInfo.Run("Waiting for steam","Launchbuddy is waiting for steam to launch gw2",waitforgame);
+            BlockerInfo.Run("Waiting for steam", "Launchbuddy is waiting for steam to launch GW2. Make sure to confirm any steam pop ups regarding the gamestart", waitforgame);
 
             if(!BlockerInfo.Done)
             {
                 return false;
             }
 
-            return MigrateProcess(ClientManager.SearchForeignClients(true)[0]);
+            bool migratepro = MigrateProcess(ClientManager.SearchForeignClients(true,Client.ClientStatus.Created)[0]);
+            ProcessWatcher prow = new ProcessWatcher(this, CreateStates());
+            prow.Run();
+            Exited += OnExit;
+            return migratepro;
+        }
+
+        new internal ProcessPipeline CreateStates()
+        {
+
+            List<IProcessTrigger> pt_selfupdate = new List<IProcessTrigger>
+            {
+                //20%
+                new ModuleTrigger("VERSION.dll",this),
+                new ModuleTrigger("WINMM.dll",this),
+                new FileLockTrigger(EnviromentManager.GwLocaldatPath,fileaccessmode:FileAccess.ReadWrite),
+            };
+
+            List<IProcessTrigger> pt_loginwindow_prelogin = new List<IProcessTrigger>
+            {
+                //40%
+                new ModuleTrigger("CoherentUI64.dll",this),
+                new SleepTrigger(2500),
+                new FileSizeTrigger(EnviromentManager.GwClientTmpPath,null,0),
+                //new WindowDimensionsTrigger(this,0,0,100,100)
+            };
+
+            List<IProcessTrigger> pt_loginwindow_authentication = new List<IProcessTrigger>
+            {
+                //60%
+                //dcomp.dll
+                new ModuleTrigger(new string[]{"steamclient64.dll" },this),
+                new SleepTrigger(1000), //Needs better trigger in the future, currently unknown delta between pre login and authentication pending
+            };
+
+            List<IProcessTrigger> pt_loginwindow_pressplay = new List<IProcessTrigger>
+            {
+                //80%
+                new ModuleTrigger(new string[]{"steamclient64.dll" },this),
+                new SleepTrigger(1000),
+            };
+
+            List<IProcessTrigger> pt_game_startup = new List<IProcessTrigger>
+            {
+                new ModuleTrigger(new string[]{ "WINSTA.dll", "mscms.dll" },this),
+                new SleepTrigger(100),
+            };
+            List<IProcessTrigger> pt_game_charscreen = new List<IProcessTrigger>
+            {
+                new ModuleTrigger("icm32.dll",this),
+                new FileLockTrigger(EnviromentManager.GwLocaldatPath,positiveflank:false,fileaccessmode:FileAccess.ReadWrite),
+            };
+
+            ProcessPipeline pipeline = new ProcessPipeline
+            {
+                new ProcessState(((GameStatus)1).ToString(), this, pt_selfupdate),
+                new ProcessState(((GameStatus)2).ToString(), this, pt_loginwindow_prelogin),
+                new ProcessState(((GameStatus)3).ToString(), this, pt_loginwindow_authentication),
+                new ProcessState(((GameStatus)4).ToString(), this, pt_loginwindow_pressplay),
+                new ProcessState(((GameStatus)5).ToString(), this, pt_game_startup),
+                new ProcessState(((GameStatus)6).ToString(), this, pt_game_charscreen)
+            };
+
+            pipeline.StateChanged += OnStateChange;
+            return pipeline;
         }
     }
 

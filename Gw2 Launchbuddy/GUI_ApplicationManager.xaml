@@ -64,11 +64,17 @@
             </Grid.RowDefinitions>
             <Slider Grid.Row="1" Maximum="1.0" Minimum="0.1" Value="{Binding ElementName=myWindow,Path=Opacity}"/>
             <Thumb Grid.Row="3" DragDelta="Thumb_DragDelta" HorizontalAlignment="Right" Margin="1" Width="30" Cursor="SizeNWSE" Opacity="0" DragCompleted="Thumb_DragCompleted"/>
-            <Label Content="Game Instances" FontSize="12" FontStyle="Italic" Foreground="White" VerticalAlignment="Top"/>
+            <Label Content="Game Clients" FontSize="12" FontStyle="Italic" Foreground="White" VerticalAlignment="Top"/>
             <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
                 <Button x:Name="bt_settings" Style="{StaticResource WindowButtonLite}" Click="bt_settings_Click" Visibility="Collapsed">
                     <Button.OpacityMask>
                         <ImageBrush ImageSource="Resources/Icons/settings.png"/>
+                    </Button.OpacityMask>
+                    <Button.ToolTip>Pin</Button.ToolTip>
+                </Button>
+                <Button x:Name="bt_sort" Style="{StaticResource WindowButtonLite}" Click="bt_sort_Click" >
+                    <Button.OpacityMask>
+                        <ImageBrush ImageSource="Resources/Icons/sort.png"/>
                     </Button.OpacityMask>
                     <Button.ToolTip>Pin</Button.ToolTip>
                 </Button>
