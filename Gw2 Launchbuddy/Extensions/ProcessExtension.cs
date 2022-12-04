@@ -300,8 +300,10 @@ namespace Gw2_Launchbuddy.Extensions
             };
             List<IProcessTrigger> pt_game_charscreen = new List<IProcessTrigger>
             {
-                new ModuleTrigger("icm32.dll",this),
+                //new ModuleTrigger("icm32.dll",this),
+                new ModuleTrigger(new string[]{ "icm32.dll", "USERENV.dll","ColorAdapterClient.dll" },this),
                 new FileLockTrigger(EnviromentManager.GwLocaldatPath,positiveflank:false,fileaccessmode:FileAccess.ReadWrite),
+                new SleepTrigger(1500)
             };
 
             ProcessPipeline pipeline = new ProcessPipeline

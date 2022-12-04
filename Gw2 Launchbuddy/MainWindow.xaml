@@ -242,7 +242,7 @@
                 </Image.RenderTransform>
             </Image>
             <StackPanel Orientation="Horizontal" Grid.Row="0">
-                <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 3.2.2" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+                <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 3.2.3" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
                 <TextBlock x:Name="TitlePremium"  Grid.Row="0" Text="PREMIUM" FontSize="16" FontWeight="Bold" Foreground="Lime" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </StackPanel>
             
