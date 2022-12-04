@@ -552,7 +552,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
         {
             if (account.Settings.ProcessAffinityConfig != null)
             {
-                Process.ProcessorAffinity = account.Settings.ProcessAffinityConfig.MaskAsPtr;
+                try
+                {
+                    Process.ProcessorAffinity = account.Settings.ProcessAffinityConfig.MaskAsPtr;
+                }
+                catch { }
             }
         }
 
