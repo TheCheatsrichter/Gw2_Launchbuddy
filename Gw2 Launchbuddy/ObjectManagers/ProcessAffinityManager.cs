@@ -25,14 +25,28 @@ namespace Gw2_Launchbuddy.ObjectManagers
                 {
                     sum += (procMask[i]? 1:0) << i;
                 }
+                
+                if(sum == new IntPtr(0))
+                {
+                    for (int i = 0; i < ProcMask.Length; i++)
+                    {
+                        sum += 1 << i;
+                    }
+                }
+                
                 return sum;
             }
         }
 
         public ProcessAffinityConfig()
         {
-            var cpus=new bool[Environment.ProcessorCount];
-            for(int i=0;i<cpus.Length; i++)
+            SetupBitArray();
+        }
+
+        private void SetupBitArray()
+        {
+            var cpus = new bool[Environment.ProcessorCount];
+            for (int i = 0; i < cpus.Length; i++)
             {
                 cpus[i] = true;
             }
