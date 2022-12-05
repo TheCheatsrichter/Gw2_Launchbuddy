@@ -733,7 +733,11 @@ namespace Gw2_Launchbuddy.ObjectManagers
                         }
                     }
 
-                    
+                    if (Status.HasFlag(ClientStatus.Closed))
+                    {
+                        Status = ClientStatus.None;
+                        return;
+                    }
 
                     switch (Status)
                     {
@@ -793,10 +797,9 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             RestoreGFX();
                             SetProcessPriority();
                             SetProcessAffinity();
-                            Status = ClientStatus.Running;
                             try { if (account.Settings.WinConfig != null) new Thread(Window_Init).Start(); } catch { }
                             account.Settings.AccountInformation.SetLastLogin();
-                            Process.WaitForState(GwGameProcess.GameStatus.game_charscreen);
+                            
                             // Launch TacO & BlisH
                             try
                             {
@@ -805,6 +808,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             }
                             catch { }
 
+                            if(Process.WaitForState(GwGameProcess.GameStatus.game_charscreen))
+                            {
+                                Status = ClientStatus.Running;
+                            }else
+                            {
+                                Status = ClientStatus.Crash;
+                            }
+                            
                             break;
                     }
                 }
