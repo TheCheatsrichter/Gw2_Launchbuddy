@@ -89,15 +89,17 @@ namespace Gw2_Launchbuddy.Modifiers
             GwUIPoints.UpdateDPIFactor(WindowUtil.GetWindowDPIFactor(acc.Client.Process.MainWindowHandle));
 
             //acc.Client.Process.WaitForExit();
-            if (!acc.Client.Process.ReachedState(GwGameProcess.GameStatus.loginwindow_authentication))
+            int maxtries = 5;
+            while (!acc.Client.Process.ReachedState(GwGameProcess.GameStatus.loginwindow_pressplay) && maxtries>0)
             {
                 acc.Client.Process.WaitForState(Extensions.GwGameProcess.GameStatus.loginwindow_prelogin);
                 if (!acc.Client.Process.HasExited)
                 {
                     MouseClickLeft(acc.Client.Process.GetProcess(), GwUIPoints.pos_login_bt);
                 }
+                maxtries--;
+                Thread.Sleep(2000);
             }
-            Thread.Sleep(1800);
             PressPlayButton(acc);
         }
 
@@ -171,6 +173,7 @@ namespace Gw2_Launchbuddy.Modifiers
 
         private static void PressKeyDown(Keys key, Process pro,bool delay=true)
         {
+            if (pro.HasExited) return;
             const uint WM_KEYDOWN = 0x0100;
             PostMessage(pro.MainWindowHandle, WM_KEYDOWN, (int)key, 0);
             if (delay)Thread.Sleep(50);
@@ -178,6 +181,7 @@ namespace Gw2_Launchbuddy.Modifiers
 
         private static void PressKeyUp(Keys key, Process pro, bool delay = true)
         {
+            if (pro.HasExited) return;
             const uint WM_KEYUP = 0x0101;
             PostMessage(pro.MainWindowHandle, WM_KEYUP, (int)key, 0);
             if(delay)Thread.Sleep(50);
@@ -206,6 +210,7 @@ namespace Gw2_Launchbuddy.Modifiers
             //new Helpers.UIPointer(new System.Windows.Point(window.left+ pos_x, window.right+pos_y)).Show();
             new Helpers.UIPointer(new System.Windows.Point( pos_x+window.left, pos_y+window.top),WindowUtil.GetWindowDPIFactor(pro.MainWindowHandle)).Show();
 #endif
+            if (pro.HasExited) return;
             pro.Refresh();
             MouseDownLeft(pro, pos_x , pos_y);
             MouseUpLeft(pro, pos_x, pos_y);

@@ -274,17 +274,17 @@ namespace Gw2_Launchbuddy.Extensions
             {
                 //40%
                 new ModuleTrigger("CoherentUI64.dll",this),
-                new SleepTrigger(2500),
+                new SleepTrigger(300),
                 new FileSizeTrigger(EnviromentManager.GwClientTmpPath,null,0),
-                //new WindowDimensionsTrigger(this,0,0,100,100)
+                new WindowDimensionsTrigger(this.GetProcess(),300,int.MaxValue,300,int.MaxValue)
             };
 
             List<IProcessTrigger> pt_loginwindow_authentication = new List<IProcessTrigger>
             {
                 //60%
-                new ModuleTrigger(new string[]{"DPAPI.dll","dcomp.dll" },this),
+                new ModuleTrigger(new string[]{"DPAPI.dll"},this),
                 //dcomp.dll
-                new SleepTrigger(700), //Needs better trigger in the future, currently unknown delta between pre login and authentication pending
+                new SleepTrigger(1500), //Needs better trigger in the future, currently unknown delta between pre login and authentication pending
             };
 
             List<IProcessTrigger> pt_loginwindow_pressplay = new List<IProcessTrigger>
@@ -301,8 +301,7 @@ namespace Gw2_Launchbuddy.Extensions
             List<IProcessTrigger> pt_game_charscreen = new List<IProcessTrigger>
             {
                 //new ModuleTrigger("icm32.dll",this),
-                new ModuleTrigger(new string[]{ "icm32.dll", "USERENV.dll","ColorAdapterClient.dll" },this),
-                new FileLockTrigger(EnviromentManager.GwLocaldatPath,positiveflank:false,fileaccessmode:FileAccess.ReadWrite),
+                new ModuleTrigger(new string[]{ "icm32.dll" },this),
                 new SleepTrigger(1500)
             };
 
