@@ -20,13 +20,13 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
         public IntPtr MaskAsPtr {get
             {
-                IntPtr sum = new IntPtr(0);
+                IntPtr sum = IntPtr.Zero;
                 for(int i=0;i<ProcMask.Length;i++)
                 {
                     sum += (procMask[i]? 1:0) << i;
                 }
                 
-                if(sum == new IntPtr(0))
+                if(sum == IntPtr.Zero)
                 {
                     for (int i = 0; i < ProcMask.Length; i++)
                     {

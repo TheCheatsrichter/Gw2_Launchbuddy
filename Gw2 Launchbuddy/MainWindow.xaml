@@ -242,7 +242,7 @@
                 </Image.RenderTransform>
             </Image>
             <StackPanel Orientation="Horizontal" Grid.Row="0">
-                <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 3.2.3" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
+                <Label x:Name="Title" Grid.Row="0" Content="Gw2 Launchbuddy 3.2.4" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left"/>
                 <TextBlock x:Name="TitlePremium"  Grid.Row="0" Text="PREMIUM" FontSize="16" FontWeight="Bold" Foreground="Lime" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </StackPanel>
             
@@ -556,7 +556,7 @@
                                                 </UIControls:PContent>
                                                 <DockPanel Margin="10,0,10,0"  DockPanel.Dock="Top" Visibility="{Binding Path=IsSteamAccount, Converter={StaticResource BoolToVis}}" >
                                                     <TextBlock DockPanel.Dock="Top" Foreground="Orange" TextWrapping="Wrap">
-                                                        ATTENTION: In order to use your steam account Launchbuddy ready please use either the GameData Linker or the Non Linked Guide.
+                                                        ATTENTION: In order to make your steam account Launchbuddy ready, please use either the GameData Linker or the Non Linked Guide.
                                                     </TextBlock>
                                                     <Button DockPanel.Dock="Bottom" Width="200" Height="30" HorizontalAlignment="Left" x:Name="bt_help_steamsetup" Click="bt_help_steamsetup_Click">No Link Setup Guide</Button>
                                                     <Button DockPanel.Dock="Bottom" Width="200" Height="30" HorizontalAlignment="Left" x:Name="bt_gamedatalinker" Click="bt_gamedatalinker_Click">GameData Linker</Button>

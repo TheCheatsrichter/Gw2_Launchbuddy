@@ -22,7 +22,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
     public static class EnviromentManager
     {
-        public static Version LBVersion = new Version("3.2.3");
+        public static Version LBVersion = new Version("3.2.4");
         public static LaunchOptions LaunchOptions;
 
         public static string LBAppdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Gw2 Launchbuddy\";
@@ -365,13 +365,14 @@ namespace Gw2_Launchbuddy.ObjectManagers
                             break;
                     }
                 }
+
+                GwClientTmpPath = GwClientPath + GwClientExeName.Replace(".exe", ".tmp");
             }
             catch
             {
                 MessageBox.Show("Guild Wars 2 info file not found! Please choose the directory manually / launch gw2 once! Then restart Launchbuddy");
             }
-
-            GwClientTmpPath = GwClientPath + GwClientExeName.Replace(".exe",".tmp");
+            
         }
 
         public static void CheckGwClientVersion()
