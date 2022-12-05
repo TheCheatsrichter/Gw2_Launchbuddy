@@ -41,7 +41,6 @@ namespace Gw2_Launchbuddy.Extensions
                 real_windowrect = new Rectangle(0,0, windowrect.Width - windowrect.X, windowrect.Height - windowrect.Y);
 
                 bool isvalid = true;
-
                 if(real_windowrect.Size.Width < width_lowerlimit) isvalid=false;
                 if(real_windowrect.Size.Width > width_upperlimit) isvalid = false;
                 if(real_windowrect.Size.Height > height_upperlimit) isvalid = false;

@@ -29,6 +29,7 @@ namespace Gw2_Launchbuddy.Extensions
         {
             get
             {
+
                 bool isdone = false;
                 var modules = CollectModules(pro.GetProcess());
                 foreach (var searchedmodule in modulenames)
