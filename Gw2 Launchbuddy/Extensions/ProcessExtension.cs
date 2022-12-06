@@ -274,9 +274,9 @@ namespace Gw2_Launchbuddy.Extensions
             {
                 //40%
                 new ModuleTrigger("CoherentUI64.dll",this),
-                new SleepTrigger(300),
                 new FileSizeTrigger(EnviromentManager.GwClientTmpPath,null,0),
-                new WindowDimensionsTrigger(this.GetProcess(),300,int.MaxValue,300,int.MaxValue)
+                new WindowDimensionsTrigger(this.GetProcess(),800,int.MaxValue,800,int.MaxValue),
+                new SleepTrigger(300),
             };
 
             List<IProcessTrigger> pt_loginwindow_authentication = new List<IProcessTrigger>

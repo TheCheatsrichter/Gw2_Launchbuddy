@@ -782,24 +782,23 @@
                                                 <Label Style="{StaticResource H2}">TacO + BlishHUD</Label>
                                             </StackPanel>
                                         </Expander.Header>
-                                        <ScrollViewer>
-                                            <StackPanel>
-                                                <DockPanel>
-                                                    <Label Content="Start TacO automatically with this account" VerticalAlignment="Center"/>
-                                                    <DockPanel  DockPanel.Dock="Right">
-                                                        <CheckBox Name="cb_tacO" Width="40" VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Right" IsChecked="{Binding Path=Settings.StartTaco}" Click="cb_taco_Click"/>
-                                                        <Label Content="Start TacO:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
-                                                    </DockPanel>
+                                        <StackPanel>
+                                            <Button Width="100" Height="30" HorizontalAlignment="Right" x:Name="bt_helpnativeapps" Click="bt_helpnativeapps_Click">Tutorial</Button>
+                                            <DockPanel>
+                                                <Label Content="Start TacO automatically with this account" VerticalAlignment="Center"/>
+                                                <DockPanel  DockPanel.Dock="Right">
+                                                    <CheckBox Name="cb_tacO" Width="40" VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Right" IsChecked="{Binding Path=Settings.StartTaco}" Click="cb_taco_Click"/>
+                                                    <Label Content="Start TacO:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
                                                 </DockPanel>
-                                                <DockPanel>
-                                                    <Label Content="Start BlishHUD automatically with this account" VerticalAlignment="Center"/>
-                                                    <DockPanel  DockPanel.Dock="Right">
-                                                        <CheckBox Name="cb_blish" Width="40" VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Right" IsChecked="{Binding Path=Settings.StartBlish}" Click="cb_blish_Click"/>
-                                                        <Label Content="Start Blish:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
-                                                    </DockPanel>
+                                            </DockPanel>
+                                            <DockPanel>
+                                                <Label Content="Start BlishHUD automatically with this account" VerticalAlignment="Center"/>
+                                                <DockPanel  DockPanel.Dock="Right">
+                                                    <CheckBox Name="cb_blish" Width="40" VerticalAlignment="Center" HorizontalAlignment="Center" DockPanel.Dock="Right" IsChecked="{Binding Path=Settings.StartBlish}" Click="cb_blish_Click"/>
+                                                    <Label Content="Start Blish:" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
                                                 </DockPanel>
-                                            </StackPanel>
-                                        </ScrollViewer>
+                                            </DockPanel>
+                                        </StackPanel>
                                     </Expander>
                                     <Expander x:Name="exp_acchotkeys" ToolTip="Configure Hotkeys for quick Clientcontrol" Style="{StaticResource Bordered}">
                                         <Expander.Header>
@@ -1213,7 +1212,7 @@
                         </StackPanel>
                     </Grid>
                 </TabItem>
-                <TabItem>
+                <TabItem x:Name="tab_nativeapps">
                     <TabItem.Header>
                         <StackPanel>
                             <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">

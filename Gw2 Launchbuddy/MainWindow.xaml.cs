@@ -2040,6 +2040,11 @@ namespace Gw2_Launchbuddy
             WizardCollection.LaunchHelp(sender as Button);
         }
 
+        private void bt_helpnativeapps_Click(object sender, RoutedEventArgs e)
+        {
+            WizardCollection.LaunchHelp(sender as Button);
+        }
+
         private void bt_updateplugin_Click(object sender, RoutedEventArgs e)
         {
             PluginManager.UpdatePlugin(((sender as Button).DataContext as Plugin_Wrapper).Plugin, true);

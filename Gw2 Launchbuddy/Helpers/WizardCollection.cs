@@ -25,6 +25,7 @@ namespace WizardTest
         static List<HelpWizardStep> hp_addons;
         static List<HelpWizardStep> hp_thirdpartydll;
         static List<HelpWizardStep> hp_steamsetup;
+        static List<HelpWizardStep> hp_nativeapps;
         public static void Init(MainWindow window)
         {
             win = window;
@@ -35,10 +36,11 @@ namespace WizardTest
         public static void LaunchHelp(FrameworkElement target)
         {
             List<HelpWizardStep> steps;
-            if(helpredirect.TryGetValue(target.GetHashCode(),out steps))
+            if (helpredirect.TryGetValue(target.GetHashCode(), out steps))
             {
                 new HelpWizard(steps).Show();
-            }else
+            }
+            else
             {
                 MessageBox.Show("No help for this page implemented yet");
             }
@@ -55,7 +57,9 @@ namespace WizardTest
             {win.tab_server.GetHashCode() , hp_network },
             {win.tab_plugins.GetHashCode() , hp_plugins },
             {win.bt_help_steamsetup.GetHashCode(),hp_steamsetup },
-            {win.bt_help_dllinjection.GetHashCode(),hp_thirdpartydll }
+            {win.bt_help_dllinjection.GetHashCode(),hp_thirdpartydll },
+            {win.tab_nativeapps.GetHashCode(),hp_nativeapps },
+            {win.bt_helpnativeapps.GetHashCode(),hp_nativeapps },
         };
         }
 
@@ -134,12 +138,27 @@ namespace WizardTest
 
             hp_thirdpartydll = new List<HelpWizardStep>
         {
-            new HelpWizardStep(null,"Injected Software Setup","This is the help wizard for setting up third party injected software (e.g arcdps,blishhud,...) which are not natively supported"),
+            new HelpWizardStep(null,"Injected Software Setup","This is the help wizard for setting up third party injected software (e.g arcdps,radial mount,...) which are not natively supported"),
             new HelpWizardStep(null,"Injected Software Setup","First make sure that you have a clean gw2 install WITHOUT any third party programs installed. To achieve this make sure that no .dll file (mainly named d3d11.dll) is in your gw2 game folder"),
             new HelpWizardStep(win.lv_accssettings,"Injected Software Setup","Select an account which should use the third party injected software"),
             new HelpWizardStep(win.bt_AddDll,"Injected Software Setup","Now you can add the dll files to the accounts which actually should use the specific software."),
         };
-        }
 
+
+            hp_nativeapps = new List<HelpWizardStep>
+        {
+            new HelpWizardStep(null,"Taco / Blish Hud Support","Launchbuddy natively supports Taco and Blish Hud. First step to get these two running is to download the newest version of Taco and/or Blish Hud and save them anywhere on your PC"),
+            new HelpWizardStep(win.tab_nativeapps,"Taco / Blish Hud Support","Let's add the executeables (.exe) files to Launchbuddy. Settings for Blish Hud and Taco can be changed in the Taco/BlishHud Tab"),
+            new HelpWizardStep(win.bt_setblishpath,"Taco / Blish Hud Support","Press 'Set Path' to the software you want to configure. Please keep in mind that if you change your location of the .exe file you have to redo this process"),
+            new HelpWizardStep(win.tab_home,"Taco / Blish Hud Support","Now that everything is set up correctly we can either launch these softwares by clicking on the Taco/Blish Hud icons when a account is running (only visible when an account is allready launched) ..."),
+            new HelpWizardStep(win.tab_accs,"Taco / Blish Hud Support","Or we can set up an automated launch in the account settings tab"),
+            new HelpWizardStep(win.lv_accs,"Taco / Blish Hud Support","Select an account which should automatically launch the software"),
+            new HelpWizardStep(win.exp_tacoblish,"Taco / Blish Hud Support","And check the boxes for which software you would like to use"),
+        };
+
+        }
     }
 }
+
+    
+

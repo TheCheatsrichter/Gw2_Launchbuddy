@@ -548,6 +548,12 @@ namespace Gw2_Launchbuddy.ObjectManagers
             }
         }
 
+        private bool IsAutomatedClient { get
+            {
+                if (account.Settings.IsSteamAccount) return true;
+                return account.Settings.HasLoginCredentials;
+            } }
+
         private void SetProcessAffinity()
         {
             if (account.Settings.ProcessAffinityConfig != null)
@@ -743,7 +749,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                     {
                         case var expression when (Status < ClientStatus.Configured):
                             ConfigureProcess();
-                            SwapGFX();
+                            if(IsAutomatedClient) SwapGFX();
                             SwapLocalDat();
                             Status = ClientStatus.Configured;
                             break;
@@ -751,7 +757,7 @@ namespace Gw2_Launchbuddy.ObjectManagers
                         case var expression when (Status < ClientStatus.Created):
                             Console.WriteLine($"{Status.ToString()} {DateTime.Now - starttime}");
                             StartProcess();
-                            ShowProcessStatusbar();
+                            if (IsAutomatedClient) ShowProcessStatusbar();
                             Status = ClientStatus.Created;
                             break;
 
@@ -794,28 +800,39 @@ namespace Gw2_Launchbuddy.ObjectManagers
 
                         case var expression when (Status < ClientStatus.Running):
                             Console.WriteLine($"{Status.ToString()} {DateTime.Now - starttime}");
-                            RestoreGFX();
+                            if (IsAutomatedClient) RestoreGFX();
                             SetProcessPriority();
                             SetProcessAffinity();
                             try { if (account.Settings.WinConfig != null) new Thread(Window_Init).Start(); } catch { }
                             account.Settings.AccountInformation.SetLastLogin();
-                            
-                            // Launch TacO & BlisH
-                            try
-                            {
-                                if (account.Settings.StartBlish) LBBlish.LaunchBlishInstance(account);
-                                if (account.Settings.StartTaco) LBTacO.LaunchTacoInstance(account);
-                            }
-                            catch { }
 
-                            if(Process.WaitForState(GwGameProcess.GameStatus.game_charscreen))
+
+                            new Thread(
+                                () =>
+                                {
+                                    // Launch TacO & BlisH
+                                    try
+                                    {
+                                        if (account.Settings.StartBlish) LBBlish.LaunchBlishInstance(account);
+                                        if (account.Settings.StartTaco) LBTacO.LaunchTacoInstance(account);
+                                    }
+                                    catch { }
+                                }).Start();
+
+                            if(IsAutomatedClient)
                             {
-                                Status = ClientStatus.Running;
+                                if (Process.WaitForState(GwGameProcess.GameStatus.game_charscreen))
+                                {
+                                    Status = ClientStatus.Running;
+                                }
+                                else
+                                {
+                                    Status = ClientStatus.Crash;
+                                }
                             }else
                             {
-                                Status = ClientStatus.Crash;
+                                Status = ClientStatus.Running;
                             }
-                            
                             break;
                     }
                 }
