@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Management;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,7 +48,6 @@ namespace Gw2_Launchbuddy.Extensions
         public DateTime ExitTime { get { return pro.ExitTime; } }
         public DateTime StartTime { get { return pro.StartTime; } }
         public bool EnableRaisingEvents { set { pro.EnableRaisingEvents = value; } get { return pro.EnableRaisingEvents; } }
-
         public IntPtr ProcessorAffinity { set { pro.ProcessorAffinity = value; } get { return pro.ProcessorAffinity; } }
         public int ExitCode { get { return pro.ExitCode; } }
         public bool CloseMainWindow(){ return pro.CloseMainWindow();}
@@ -89,6 +89,19 @@ namespace Gw2_Launchbuddy.Extensions
 
         #endregion
 
+        public IEnumerable<Process> GetChildProcesses()
+        {
+            Process process = GetProcess();
+            List<Process> children = new List<Process>();
+            ManagementObjectSearcher mos = new ManagementObjectSearcher(String.Format("Select * From Win32_Process Where ParentProcessID={0}", process.Id));
+
+            foreach (ManagementObject mo in mos.Get())
+            {
+                children.Add(Process.GetProcessById(Convert.ToInt32(mo["ProcessID"])));
+            }
+
+            return children;
+        }
 
         public bool MigrateProcess(Process target)
         {
@@ -276,7 +289,8 @@ namespace Gw2_Launchbuddy.Extensions
                 new ModuleTrigger("CoherentUI64.dll",this),
                 new FileSizeTrigger(EnviromentManager.GwClientTmpPath,null,0),
                 new WindowDimensionsTrigger(this.GetProcess(),800,int.MaxValue,800,int.MaxValue),
-                new SleepTrigger(300),
+                new ChildProcessSearchTrigger("CoherentUI_Host",this),
+                new SleepTrigger(1000)
             };
 
             List<IProcessTrigger> pt_loginwindow_authentication = new List<IProcessTrigger>

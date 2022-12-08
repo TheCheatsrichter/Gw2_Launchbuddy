@@ -214,6 +214,7 @@ namespace Gw2_Launchbuddy.Modifiers
                 Helpers.BlockerInfo.Run("Loginfile Creation", "LB is recreating your loginfile. Please wait for launchbuddy to automatically fill your login information", blockefunc);
                 if (!Helpers.BlockerInfo.Done) MessageBox.Show("No Clean Login. Loginfile might be not set correctly! Proceed with caution.");
 
+                Loginfiller.EnableCheckboxes(pro);
                 Loginfiller.Login(email, password, pro, true);
 
                 blockefunc = () => pro.WaitForState(GwGameProcess.GameStatus.loginwindow_pressplay);

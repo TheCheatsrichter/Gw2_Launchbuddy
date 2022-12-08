@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -16,7 +17,6 @@ namespace Gw2_Launchbuddy.Helpers
         [DllImport("user32.dll")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
 
-
         [DllImport("user32.dll")]
         static extern int GetDpiForWindow(IntPtr hWnd);
 
@@ -24,12 +24,26 @@ namespace Gw2_Launchbuddy.Helpers
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
+        [DllImport("gdi32.dll")]
+        static extern IntPtr CreateRectRgn(int nLeftRect, int nTopRect, int nRightRect, int nBottomRect);
+
+        [DllImport("user32.dll")]
+        static extern int GetWindowRgn(IntPtr hWnd, IntPtr hRgn);
 
         [DllImport("user32.dll", SetLastError = true)]
         static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int Width, int Height, bool Repaint);
 
         [DllImport("user32.dll", SetLastError = true)]
         static extern bool GetWindowRect(IntPtr hWnd, ref RECT Rect);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool PrintWindow(IntPtr hwnd, IntPtr hDC, PrintWindowFlags flags);
+
+        enum PrintWindowFlags : uint
+        {
+            PW_RENDERFULLCONTENT = 0x00000002
+        }
 
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT
@@ -199,6 +213,32 @@ namespace Gw2_Launchbuddy.Helpers
             //Console.WriteLine($"{winhandle} \t{GetForegroundWindow()}");
 #endif
             return winhandle == GetForegroundWindow();
+        }
+
+        public static Bitmap PrintWindow(IntPtr hwnd)
+        {
+            RECT rc = new RECT();
+            GetWindowRect(hwnd, ref rc);
+
+            Bitmap bmp = new Bitmap(rc.right - rc.left, rc.bottom - rc.top, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            Graphics gfxBmp = Graphics.FromImage(bmp);
+            IntPtr hdcBitmap = gfxBmp.GetHdc();
+            bool succeeded = PrintWindow(hwnd, hdcBitmap, PrintWindowFlags.PW_RENDERFULLCONTENT);
+            gfxBmp.ReleaseHdc(hdcBitmap);
+            if (!succeeded)
+            {
+                gfxBmp.FillRectangle(new SolidBrush(Color.Gray), new Rectangle(Point.Empty, bmp.Size));
+            }
+            IntPtr hRgn = CreateRectRgn(0, 0, 0, 0);
+            GetWindowRgn(hwnd, hRgn);
+            Region region = Region.FromHrgn(hRgn);
+            if (!region.IsEmpty(gfxBmp))
+            {
+                gfxBmp.ExcludeClip(region);
+                gfxBmp.Clear(Color.Transparent);
+            }
+            gfxBmp.Dispose();
+            return bmp;
         }
     }
 

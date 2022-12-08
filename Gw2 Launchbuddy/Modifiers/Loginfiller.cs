@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media.Animation;
 using Gw2_Launchbuddy.Extensions;
 using Gw2_Launchbuddy.Helpers;
 using Gw2_Launchbuddy.ObjectManagers;
@@ -16,6 +17,9 @@ namespace Gw2_Launchbuddy.Modifiers
 {
     public static class Loginfiller
     {
+
+        static int default_delayms = 5;
+
         [DllImport("user32.dll")]
         static extern bool PostMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
 
@@ -80,6 +84,36 @@ namespace Gw2_Launchbuddy.Modifiers
                 MessageBox.Show("Could not perform automated login. Gameclient seems to have crashed / be closed before the login data could be filled in." + e.Message);
             }
 
+        }
+
+
+        public static bool EnableCheckboxes(GwGameProcess process)
+        {
+
+            Bitmap screenshot;
+            try
+            {
+                screenshot = WindowUtil.PrintWindow(process.MainWindowHandle);
+            }catch
+            {
+                return false;
+            }
+
+            if (screenshot != null)
+            {
+                var unchecked_checkboxes= ScreenAnalyser.FindElements(screenshot, Gw2_Launchbuddy.Properties.Resources.template_checkbox, WindowUtil.GetWindowDPIFactor(process.MainWindowHandle));
+                unchecked_checkboxes.Sort((x,y)=> x.Y.CompareTo(y.Y));
+
+                foreach(var checkbox in unchecked_checkboxes)
+                {
+                    MouseClickLeft(process.GetProcess(),new UIPoint(checkbox.X,checkbox.Y),false);
+                }
+
+                unchecked_checkboxes = ScreenAnalyser.FindElements(screenshot, Gw2_Launchbuddy.Properties.Resources.template_checkbox, WindowUtil.GetWindowDPIFactor(process.MainWindowHandle));
+
+                return unchecked_checkboxes.Count<0;
+            }
+            return false;
         }
 
         public static void PressLoginButton(Account acc)
@@ -176,7 +210,7 @@ namespace Gw2_Launchbuddy.Modifiers
             if (pro.HasExited) return;
             const uint WM_KEYDOWN = 0x0100;
             PostMessage(pro.MainWindowHandle, WM_KEYDOWN, (int)key, 0);
-            if (delay)Thread.Sleep(50);
+            if (delay)Thread.Sleep(default_delayms);
         }
 
         private static void PressKeyUp(Keys key, Process pro, bool delay = true)
@@ -184,7 +218,7 @@ namespace Gw2_Launchbuddy.Modifiers
             if (pro.HasExited) return;
             const uint WM_KEYUP = 0x0101;
             PostMessage(pro.MainWindowHandle, WM_KEYUP, (int)key, 0);
-            if(delay)Thread.Sleep(50);
+            if(delay)Thread.Sleep(default_delayms);
         }
 
         private static void MouseDownLeft(Process pro,int pos_x,int pos_y,bool delay=true)
@@ -192,7 +226,7 @@ namespace Gw2_Launchbuddy.Modifiers
             const int WM_LBUTTONDOWN = 0x0201;
 
             PostMessage(pro.MainWindowHandle, WM_LBUTTONDOWN, 1, MakeLParam(pos_x,pos_y));
-            if (delay) Thread.Sleep(50);
+            if (delay) Thread.Sleep(default_delayms);
         }
 
         private static void MouseUpLeft(Process pro, int pos_x, int pos_y, bool delay = true)
@@ -200,7 +234,7 @@ namespace Gw2_Launchbuddy.Modifiers
             const int WM_LBUTTONUP = 0x0202;
 
             PostMessage(pro.MainWindowHandle, WM_LBUTTONUP, 1, MakeLParam(pos_x, pos_y));
-            if (delay) Thread.Sleep(50);
+            if (delay) Thread.Sleep(default_delayms);
         }
 
         private static void MouseClickLeft(Process pro, int pos_x, int pos_y, bool delay = true)
@@ -214,13 +248,13 @@ namespace Gw2_Launchbuddy.Modifiers
             pro.Refresh();
             MouseDownLeft(pro, pos_x , pos_y);
             MouseUpLeft(pro, pos_x, pos_y);
-            if (delay) Thread.Sleep(50);
+            if (delay) Thread.Sleep(default_delayms);
         }
 
         private static void MouseClickLeft(Process pro, UIPoint point, bool delay = true)
         {
             MouseClickLeft(pro, point.X, point.Y, delay);
-            if (delay) Thread.Sleep(50);
+            if (delay) Thread.Sleep(default_delayms);
         }
 
         private static void PressCMD(Keys key , Process pro)

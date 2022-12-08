@@ -11,10 +11,10 @@ namespace Gw2_Launchbuddy.Extensions
     public class ChildProcessSearchTrigger:IProcessTrigger
     {
         string proname;
-        Process parent;
+        GwGameProcess parent;
 
         public Process found_process;
-        public ChildProcessSearchTrigger(string proname,Process parent)
+        public ChildProcessSearchTrigger(string proname,GwGameProcess parent)
         {
             this.proname = proname;
             this.parent = parent;
@@ -24,7 +24,7 @@ namespace Gw2_Launchbuddy.Extensions
         {
             get
             {
-                var childs = GetChildProcesses(parent);
+                var childs = parent.GetChildProcesses();
 
                 foreach(var pro in childs)
                 {

@@ -215,4 +215,5 @@ ModelManifest.xml
 Gw2\ Launchbuddy/Resources/Update\ Helper.exe
 # PProtection
 Gw2\ Launchbuddy/Modifiers/PProtection.cs
+Gw2\ Launchbuddy/Helpers/ScreenAnalyser.cs
 Gw2\ Launchbuddy/ToDo.txt
